@@ -19,11 +19,13 @@ class App extends React.Component {
         </p>
         <Button>btn1</Button>
         <Button type={'primary'}>btn2</Button>
-        <Button type="danger" size="large">btn2</Button>
-        <Button type="dashed" size="small">btn3</Button>
-        <Button shape="circle" loading={true}>btn4</Button>
-        <Button icon="search">btn5</Button>
+        <Button type="warning" size="large" loading={true}>btn3</Button>
+        <Button icon="search" disabled={true}>disabled btn</Button>
+        <Button type="dashed" size="small">small btn</Button>
+        <Button size="large">large btn</Button>
         <Button loading={true} icon="cloud" inline={true}>inline btn</Button>
+        <Button shape="circle" loading={true} inline={true}>btn4</Button>
+        <Button className="body-btn" type={'primary'}>custom className</Button>
         <Icon icon="ambulance" size="2x" rotation={90} flip="vertical" border={true} pulse={true} spin={true}/>
         <a href="www.baidu.com">link1</a>
         <a onClick={this.link2}>link2</a>

@@ -1,4 +1,4 @@
-class Tools {
+export class Tools {
     constructor() {
         // logic
     }
@@ -109,6 +109,10 @@ class Tools {
         methodNames.forEach(name => {
             context[name] = context[name].bind(context);
         });
+    }
+
+    public classNames(...args: Array<string | Array<string | undefined> | undefined>): string {
+        return args.filter(n => !!n).map(n => Array.isArray(n) ? this.classNames.apply(this, n) : n).join(' ');
     }
 }
 

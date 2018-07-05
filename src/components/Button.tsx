@@ -2,20 +2,23 @@ import { MouseEventHandler } from 'react';
 import * as React from 'react';
 import cssModule from './Button.scss';
 import Icon from './Icon';
+import TouchFeedback from './TouchFeedback';
+import Tools from '../utils/Tools';
 
+const prefixCls = 'btn';
 enum IconTypeEnum {
-    'cloud' =  'cloud',
-    'cloud-download' =  'cloud-download-alt',
-    'cloud-upload' =  'cloud-upload-alt',
-    'download' =  'download',
-    'loading' =  'spinner',
-    'power-off' =  'power-off',
-    'search' =  'search',
+    'cloud' = 'cloud',
+    'cloud-download' = 'cloud-download-alt',
+    'cloud-upload' = 'cloud-upload-alt',
+    'download' = 'download',
+    'loading' = 'spinner',
+    'power-off' = 'power-off',
+    'search' = 'search',
 };
 type IconType = 'cloud' | 'cloud-download' | 'cloud-upload' | 'download' | 'loading' | 'power-off' | 'search';
 type SizeType = 'small' | 'default' | 'large';
 type ShapeType = 'circle';
-type ButtonType = 'primary' | 'dashed' | 'danger';
+type ButtonType = 'primary' | 'dashed' | 'warning';
 export interface IButtonProps {
     className?: string;
     activeClassName?: string;
@@ -48,39 +51,19 @@ class Button extends React.PureComponent<IButtonProps> {
             { children, className, disabled, icon, inline, loading, shape, style, size, type } = props,
             presetIcon = IconTypeEnum[icon + ''];
 
-        if (!className) {
-            className = cssModule.btn;
-        }
-
-        if (type) {
-            className = className + ' ' + cssModule[type];
-        }
-
-        if (size) {
-            className = className + ' ' + cssModule[size];
-        }
-
-        if (shape) {
-            className = className + ' ' + cssModule[shape];
-        }
-
         if (loading) {
             presetIcon = IconTypeEnum.loading;
         }
 
-        if (disabled) {
-            className = className + ' ' + cssModule.disabled;
-        }
-
-        if (inline) {
-            className += ' ' + cssModule.inline;
-        }
+        className = Tools.classNames(cssModule.btn, [type, disabled && 'disabled', inline && 'inline', size, shape].map(n => cssModule[`${prefixCls}-${n}`]), className);
 
         return (
-            <a style={style} className={className} onClick={this.handleClick}>
-                {presetIcon ? <Icon icon={presetIcon} className={cssModule.icon} spin={loading}/> : null}
-                {children !== undefined ? <React.Fragment><span>{children}</span></React.Fragment> : null}
-            </a>
+            <TouchFeedback activeClassName={cssModule[`${prefixCls}-active`]} disabled={disabled}>
+                <a style={style} className={className} onClick={this.handleClick}>
+                    {presetIcon ? <Icon icon={presetIcon} className={cssModule[`${prefixCls}-icon`]} spin={loading} /> : null}
+                    {children !== undefined ? <React.Fragment><span>{children}</span></React.Fragment> : null}
+                </a>
+            </TouchFeedback>
         );
     }
 
@@ -94,7 +77,7 @@ class Button extends React.PureComponent<IButtonProps> {
 
         let { props } = this,
             { onClick, disabled } = props;
-        
+
         if (disabled) {
             return;
         }
