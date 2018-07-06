@@ -3,7 +3,7 @@
   "rules": {
     "one-variable-per-declaration": false,
     "prefer-const": false,
-    "no-unused-vars": true,
+    "no-unused-variable": false,
     "ordered-imports": false
   },
   "linterOptions": {

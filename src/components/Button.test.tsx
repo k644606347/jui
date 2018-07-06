@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as enzyme from 'enzyme';
 import Button from './Button';
+import { solid_AddressBook, solid_Search, regular_ArrowAltCircleUp } from './FontAweSomeMap';
 
 it('render: <Button />', () => {
   enzyme.shallow(<Button />);
@@ -20,13 +21,8 @@ it('render: <Button shape />', () => {
 
 it('render: <Button icon />', () => {
     enzyme.shallow(<div>
-      <Button icon="cloud" />
-      <Button icon="cloud-download" />
-      <Button icon="cloud-upload" />
-      <Button icon="download" />
-      <Button icon="loading" />
-      <Button icon="power-off" />
-      <Button icon="search" />
+      <Button icon={solid_AddressBook} />
+      <Button icon={solid_Search} />
     </div>);
 });
 
@@ -88,7 +84,7 @@ it('render onClick', () => {
 });
 it('render all props and child', () => {
   enzyme.shallow(<div>
-    <Button icon="cloud" loading={true} type="warning" className="cls1" activeClassName="activeCls1" style={{color: 'green'}} disabled={true} inline={true} shape="circle">
+    <Button icon={regular_ArrowAltCircleUp} loading={true} type="warning" className="cls1" activeClassName="activeCls1" style={{color: 'green'}} disabled={true} inline={true} shape="circle">
     {'btn1'}
     </Button>
 </div>);

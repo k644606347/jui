@@ -1,7 +1,4 @@
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons';
-// import { far } from '@fortawesome/free-regular-svg-icons';
-// import { fab } from '@fortawesome/free-brands-svg-icons';
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -15,9 +12,8 @@ import {
 } from '@fortawesome/fontawesome-svg-core'
 import * as React from 'react';
 import { CSSProperties } from 'react';
-
 export interface IProps {
-  icon: IconProp
+  icon: IconDefinition
   mask?: IconProp
   className?: string
   color?: string
@@ -35,8 +31,8 @@ export interface IProps {
   symbol?: FaSymbol
   style?: CSSProperties
 }
+export * from './FontAweSomeMap';
 
-library.add(fas);
 export default function Icon(props: IProps): JSX.Element{
     let { icon, style, className, size, spin, border, flip, pulse, rotation, transform } = props;
     return <FontAwesomeIcon icon={icon} style={style} className={className} size={size} spin={spin} border={border} flip={flip} pulse={pulse} rotation={rotation} transform={transform}/>
