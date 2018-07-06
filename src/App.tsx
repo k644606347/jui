@@ -24,7 +24,7 @@ class App extends React.Component {
         <Button type="dashed" size="small">small btn</Button>
         <Button size="large">large btn</Button>
         <Button loading={true} icon="cloud" inline={true}>inline btn</Button>
-        <Button shape="circle" loading={true} inline={true}>btn4</Button>
+        <Button shape="circle" loading={true} inline={true} size="large">btn4</Button>
         <Button className="body-btn" type={'primary'}>custom className</Button>
         <Icon icon="ambulance" size="2x" rotation={90} flip="vertical" border={true} pulse={true} spin={true}/>
         <a href="www.baidu.com">link1</a>

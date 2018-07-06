@@ -13,25 +13,20 @@ $btnName: btn;
   font-size: $button-font-size;
   height: $button-height;
   line-height: $button-height;
-
   overflow: hidden;
   text-overflow: ellipsis;
   word-break: break-word;
-  white-space: nowrap;
-
+  white-space: nowrap; 
   // default
   color: $color-text-base;
   background-color: $fill-base;
-
-  @include hairline(all, $border-color-base, $radius-md);
-
+  @include hairline(all, $border-color-base, $radius-md); 
   // Multiple buttons inline arranged, the last one border-right may not display
   // &-borderfix {
   //   &:before {
   //     transform: scale(0.49)!important;
   //   }
   // }
-
   &-active {
     background-color: $fill-tap;
   }
@@ -39,12 +34,10 @@ $btnName: btn;
     color: transparentize($color-text-base, .3);
     opacity: 0.6;
   }
-
   &-primary {
     color: $color-text-base-inverse;
     background-color: $primary-button-fill;
     @include hairline(all, $primary-button-fill, $radius-md);
-
     &.btn-active {
       color: transparentize($color-text-base-inverse, .3);
       background-color: $primary-button-fill-tap;
@@ -54,12 +47,10 @@ $btnName: btn;
       opacity: 0.4;
     }
   }
-
   &-ghost {
     color: $ghost-button-color;
     background-color: transparent;
     @include hairline(all, $ghost-button-color, $radius-md);
-
     &.btn-active {
       color: $ghost-button-fill-tap;
       background-color: transparent;
@@ -71,11 +62,9 @@ $btnName: btn;
       opacity: 1; // override default opacity: 0.6
     }
   }
-
   &-warning {
     color: $color-text-base-inverse;
     background-color: $warning-button-fill;
-
     &.btn-active {
       color: transparentize($color-text-base-inverse, .3);
       background-color: $warning-button-fill-tap;
@@ -85,219 +74,32 @@ $btnName: btn;
       opacity: 0.4;
     }
   }
-
   &-inline {
     display: inline-block;
     padding: 0 $h-spacing-lg;
   }
-
   &-small {
     font-size: $button-font-size-sm;
     height: $button-height-sm;
     line-height: $button-height-sm;
     padding: 0 $h-spacing-lg;
   }
-
-  &-icon {
-    margin-right: .5em;
+  &-icon + span{
+    margin-left: .5em;
   }
-
   &-circle {
     width: $button-height;
     height: $button-height;
     @include hairline(all, $border-color-base, 50%);
-  }
-  &-circle &-large{
-    width: $button-height-lg;
-    height: $button-height-lg;
-  }
-  &-circle &-small{
-    width: $button-height-sm;
-    height: $button-height-sm;
+    &.btn-large {
+      width: $button-height-lg;
+      height: $button-height-lg;
+      line-height: $button-height-lg;
+    }
+    &.btn-small {
+      width: $button-height-sm;
+      height: $button-height-sm;
+      line-height: $button-height-sm;
+    }
   }
 }
-
-// .btn {
-//   height: 47px;
-//   line-height: 47px;
-//   font-size: 18px;
-//   display: inline-block;
-//   font-weight: 400;
-//   text-align: center;
-//   touch-action: manipulation;
-//   cursor: pointer;
-//   border: 1px solid #d9d9d9;
-//   white-space: nowrap;
-//   padding: 0 15px;
-//   border-radius: 4px;
-//   user-select: none;
-//   transition: all .3s cubic-bezier(0.65, 0.05, 0.36, 1);
-//   position: relative;
-//   color: rgba(0, 0, 0, .65);
-//   background: #fff none;
-//   display: block;
-//   outline: 0;
-//   &:active, &:focus {
-//     outline: 0;
-//   }
-//   &:focus, &:hover {
-//     color: #40a9ff;
-//     background-color: #fff;
-//     border-color: #40a9ff;
-//   }
-//   &.large {
-//     height: 64px;
-//     line-height: 64px;
-//     font-size: 24px;
-//   }
-//   &.small {
-//     height: 30px;
-//     line-height: 30px;
-//     font-size: 13px;
-//   }
-//   &.inline {
-//     display: inline-block;
-//   }
-//   &.active, &:active {
-//     color: #096dd9;
-//     background-color: #fff;
-//     border-color: #096dd9;
-//   }
-// }
-
-// .btn.disabled:active {
-//   outline: 0;
-//   transition: none;
-// }
-
-// .btn.disabled{
-//   cursor: not-allowed;
-// }
-
-// .btn.disabled, .btn.disabled.active, .btn.disabled:active, .btn.disabled:focus, .btn.disabled:hover {
-//   color: rgba(0, 0, 0, .25);
-//   background-color: #f5f5f5;
-//   border-color: #d9d9d9;
-// }
-
-// .primary {
-//   color: #fff;
-//   background-color: #1890ff;
-//   border-color: #1890ff;
-// }
-
-// .primary:focus, .primary:hover {
-//   color: #fff;
-//   background-color: #40a9ff;
-//   border-color: #40a9ff;
-// }
-
-// .primary.active, .primary:active {
-//   color: #fff;
-//   background-color: #096dd9;
-//   border-color: #096dd9;
-// }
-
-// .danger {
-//   color: #f5222d;
-//   background-color: #f5f5f5;
-//   border-color: #d9d9d9
-// }
-
-// .danger:hover {
-//   color: #fff;
-//   background-color: #ff4d4f;
-//   border-color: #ff4d4f
-// }
-
-// .danger:focus {
-//   color: #ff4d4f;
-//   background-color: #fff;
-//   border-color: #ff4d4f
-// }
-
-// .danger.active, .danger:active {
-//   color: #fff;
-//   background-color: #cf1322;
-//   border-color: #cf1322
-// }
-
-// .danger.clicked:after {
-//   border-color: #f5222d
-// }
-
-// .dashed {
-//   color: rgba(0, 0, 0, .65);
-//   background-color: #fff;
-//   border:1px dashed #d9d9d9;
-// }
-
-// .dashed:focus, .dashed:hover {
-//   color: #40a9ff;
-//   background-color: #fff;
-//   border-color: #40a9ff
-// }
-
-// .dashed.active, .dashed:active {
-//   color: #096dd9;
-//   background-color: #fff;
-//   border-color: #096dd9
-// }
-
-// .icon {
-//   display: inline-block;
-//   font-style: normal;
-//   vertical-align: baseline;
-//   text-align: center;
-//   text-transform: none;
-//   line-height: 1;
-//   text-rendering: optimizeLegibility;
-//   -webkit-font-smoothing: antialiased;
-//   -moz-osx-font-smoothing: grayscale;
-// }
-// .icon + span, .btn > span + .icon {
-//   margin-left: 8px;
-// }
-
-// .circle {
-//   width: 32px;
-//   height: 32px;
-//   padding: 0;
-//   font-size: 16px;
-//   border-radius: 50%;
-// }
-// .circle.large {
-//   width: 40px;
-//   height: 40px;
-//   font-size: 18px;
-// }
-// .circle.small {
-//   width: 24px;
-//   height: 24px;
-//   font-size: 14px;
-// }
-
-// .clicked:after {
-//   content: "";
-//   position: absolute;
-//   top: -1px;
-//   left: -1px;
-//   bottom: -1px;
-//   right: -1px;
-//   border-radius: inherit;
-//   border: 0 solid #1890ff;
-//   opacity: .4;
-//   animation: buttonEffect .4s;
-//   display: block
-// }
-
-// @keyframes buttonEffect {
-//   to {
-//     opacity: 0;
-//     top: -6px;
-//     left: -6px;
-//     bottom: -6px;
-//     right: -6px;
-//     border-width: 6px
-//   }
-// }

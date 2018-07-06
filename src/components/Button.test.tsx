@@ -3,11 +3,11 @@ import * as enzyme from 'enzyme';
 import Button from './Button';
 
 it('render: <Button />', () => {
-  const btn = enzyme.shallow(<Button />);
+  enzyme.shallow(<Button />);
 });
 
 it('render: <Button type />', () => {
-  const btn = enzyme.shallow(<div>
+  enzyme.shallow(<div>
     <Button type="primary"/>
     <Button type="warning"/>
     <Button type="dashed"/>
@@ -15,7 +15,7 @@ it('render: <Button type />', () => {
 });
 
 it('render: <Button shape />', () => {
-  const btn = enzyme.shallow(<Button shape="circle"/>);
+  enzyme.shallow(<Button shape="circle"/>);
 });
 
 it('render: <Button icon />', () => {
