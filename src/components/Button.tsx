@@ -1,11 +1,10 @@
 import { MouseEventHandler } from 'react';
 import * as React from 'react';
 import cssModule from './Button.scss';
-import Icon from './Icon';
+import Icon, { iconSpinner } from './Icon';
 import TouchFeedback from './TouchFeedback';
 import Tools from '../utils/Tools';
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { solid_Spinner } from './FontAweSomeMap';
+import { IconGroup } from './icons/IconGroup';
 
 const prefixCls = 'btn';
 // enum IconTypeEnum {
@@ -27,7 +26,7 @@ export interface IButtonProps {
     inline?: boolean;
     type?: ButtonType;
     size?: SizeType;
-    icon?: IconDefinition;
+    icon?: IconGroup;
     shape?: ShapeType;
     disabled?: boolean;
     loading?: boolean;
@@ -53,7 +52,7 @@ class Button extends React.PureComponent<IButtonProps> {
             { children, className, disabled, icon, inline, loading, shape, style, size, type } = props;
 
         if (loading) {
-            icon = solid_Spinner;
+            icon = iconSpinner;
         }
 
         className = Tools.classNames(cssModule.btn, [type, disabled && 'disabled', inline && 'inline', size, shape].map(n => cssModule[`${prefixCls}-${n}`]), className);
