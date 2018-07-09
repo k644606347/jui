@@ -1,6 +1,6 @@
 /**
  * @author jiangyu3
- * 用于将fontawesome
+ * 用于构建icon pack，依赖fontawesome
  */
 const fs = require('fs');
 const path = require('path');
