@@ -1,7 +1,6 @@
 import * as React from 'react';
 import * as enzyme from 'enzyme';
 import Button from './Button';
-import { iconAccusoft } from './icons/FasIconPack';
 
 it('render: <Button />', () => {
   enzyme.shallow(<Button />);
@@ -19,12 +18,12 @@ it('render: <Button shape />', () => {
   enzyme.shallow(<Button shape="circle"/>);
 });
 
-// it('render: <Button icon />', () => {
-//     enzyme.shallow(<div>
-//       <Button icon={iconSpinner} />
-//       <Button icon={iconSpinner} />
-//     </div>);
-// });
+it('render: <Button icon />', () => {
+    enzyme.shallow(<div>
+      <Button icon='cloud' />
+      <Button icon='check-circle-o' />
+    </div>);
+});
 
 it('render <Button size />', () => {
   enzyme.shallow(<div>
@@ -84,7 +83,7 @@ it('render onClick', () => {
 });
 it('render all props and child', () => {
   enzyme.shallow(<div>
-    <Button icon={iconAccusoft} loading={true} type="warning" className="cls1" activeClassName="activeCls1" style={{color: 'green'}} disabled={true} inline={true} shape="circle">
+    <Button icon='cloud' loading={true} type="warning" className="cls1" activeClassName="activeCls1" style={{color: 'green'}} disabled={true} inline={true} shape="circle">
     {'btn1'}
     </Button>
 </div>);

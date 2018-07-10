@@ -46,7 +46,7 @@ const buildDifineByIconPack = (iconPack) => {
 
     return content;
 }
-let content = `import { IconGroup } from './IconGroup';
+let content = `import { SolidIcon, RegularIcon, BrandIcon, IconGroup1 } from './IconGroup';
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 `;
 content += buildDifineByIconPack(fas);
