@@ -1,0 +1,55 @@
+@charset "UTF-8";
+@import './style/themes/default';
+
+$section-title-height: 2em;
+$odd-header-bgcolor: rgb(248, 89, 26);
+$even-header-bgcolor: rgb(88, 144, 255);
+$header-color: #fff;
+.list {
+    display: block;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    .list-item {
+        display: block;
+        &:nth-child(odd) {
+            .section-header {
+                background-color: $odd-header-bgcolor;
+                color: $header-color;
+            }
+        }
+        &:nth-child(even) {
+            .section-header {
+                background-color: $even-header-bgcolor;
+                color: $header-color;
+            }
+        }
+        .section {
+            display: block;
+            .section-header {
+                display: block;
+                font-size: 20px;
+                height: $section-title-height;
+                line-height: $section-title-height;
+                &.section-header-sticky {
+                    position: sticky;
+                    top: 0;
+                }
+            }
+            .section-body {
+                display: block;
+            }
+        }
+        .row {
+            background-color: #fff;
+            border-top: 1px solid #ececed;
+            display: block;
+        }
+        .row-separator {
+            background-color: rgb(245, 245, 249);
+            height: 8px;
+            border-top: 1px solid #ececed;
+            border-bottom: 1px solid #ececed;
+        }
+    }
+}

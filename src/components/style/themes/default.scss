@@ -1,3 +1,6 @@
+@charset "UTF-8";
+@import './normalize';
+
 $hd: 1px; // 基本单位
 
 // copy自antd-mobile(支付宝钱包默认主题)
@@ -130,9 +133,9 @@ $modal-button-font-size: 18 * $hd; // 按钮字号
 $modal-button-height: 50 * $hd; // 按钮高度
 
 // list
-$list-title-height: 30 * $hd;
-$list-item-height-sm: 35 * $hd;
-$list-item-height: 44 * $hd;
+// $list-title-height: 30 * $hd;
+// $list-item-height-sm: 35 * $hd;
+// $list-item-height: 44 * $hd;
 
 // input
 $input-label-width: 17 * $hd;       // InputItem、TextareaItem 文字长度基础值
