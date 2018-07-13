@@ -118,7 +118,12 @@ function getSCSSConfig(env, options) {
     return {
         test: /\.scss$/,
         use: [
-            require.resolve("style-loader"),
+            {
+                loader: require.resolve("style-loader"),
+                options: {
+                    singleton: true,
+                }
+            },
             {
                 loader: require.resolve("css-loader"),
                 options: {

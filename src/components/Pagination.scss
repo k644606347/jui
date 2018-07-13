@@ -1,0 +1,13 @@
+@charset "UTF-8";
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    &.disabled {
+        opacity: .4;
+    }
+    .current {
+        color: #108ee9;
+    }
+}

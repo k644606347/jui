@@ -1,4 +1,6 @@
 import * as React from 'react';
+import './components/style/common.scss';
+
 import './App.css';
 import Hello from './components/Hello';
 
@@ -8,6 +10,7 @@ import Icon from './components/Icon';
 import { icon500px_brand, iconAccessibleIcon_brand, iconAddressBook_solid } from './components/icons/FontAwesomeMap';
 import List from './components/List';
 import favoriteIcon from './favicon.ico';
+import Pagination from './components/Pagination';
 class App extends React.Component {
   public render() {
     return (
@@ -31,6 +34,8 @@ class App extends React.Component {
         <Icon icon={icon500px_brand} size="2x" rotation={90} flip="vertical" border={true} pulse={true} spin={true}/>
         <Icon icon={iconAccessibleIcon_brand} size="2x" rotation={90} flip="vertical" border={true} pulse={true} spin={true}/>
         <Icon icon={iconAddressBook_solid} size="2x" rotation={90} flip="vertical" border={true} pulse={true} spin={true}/>
+        <Pagination current={1} total={20} disabled={true}/>
+        <Pagination current={21} total={20} disabled={true}/>
         <List dataSource={[
           {
             type: 'section',
