@@ -2,6 +2,8 @@ import Button from "./Button";
 
 export interface IChangeEvent {
     current: number;
+    total: number;
+    action: string;
 }
 export interface IPaginationProps {
     current: number;
@@ -11,7 +13,7 @@ export interface IPaginationProps {
     className?: string;
     prevBtn?: Button;
     nextBtn?: Button;
-    prevBtnText?: string;
-    nextBtnText?: string;
+    prevText?: string;
+    nextText?: string;
     onChange?: (e: IChangeEvent) => void;
 }

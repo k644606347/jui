@@ -5,6 +5,12 @@ import Button from "./Button";
 import Tools from "../utils/Tools";
 
 export default class Pagination extends React.PureComponent<IPaginationProps, any> {
+    public static defaultProps: IPaginationProps = {
+        current: 1,
+        total: 1,
+        prevText: '上一页',
+        nextText: '下一页',
+    };
     constructor(props: IPaginationProps) {
         super(props);
 
@@ -14,23 +20,23 @@ export default class Pagination extends React.PureComponent<IPaginationProps, an
     }
     public render() {
         let { props } = this,
-            { current, total, disabled, prevBtn, nextBtn } = props;
+            { current, total, disabled, prevBtn, nextBtn, prevText, nextText } = props;
 
         return (<div className={Tools.classNames(cssModules.pagination, cssModules.disabled)}>
-            {prevBtn ? prevBtn : <Button icon="left" inline={true} onClick={this.handlePrev} disabled={disabled}>上一页</Button>}
+            {prevBtn ? prevBtn : <Button icon="left" inline={true} onClick={this.handlePrev} disabled={disabled}>{prevText}</Button>}
             <div><span className={cssModules.current}>{current}</span> / <span>{total}</span></div>
-            {nextBtn ? nextBtn : <Button icon="right" inline={true} onClick={this.handleNext} disabled={disabled}>下一页</Button>}
+            {nextBtn ? nextBtn : <Button icon="right" inline={true} onClick={this.handleNext} disabled={disabled}>{nextText}</Button>}
         </div>);
     }
     public handlePrev() {
-        let { current } = this.props;
+        let { current, total } = this.props;
     
-        this.handleChange({ current: current - 1});
+        this.handleChange({ current: current - 1, total, action: 'prev'});
     }
     public handleNext() {
-        let { current } = this.props;
+        let { current, total } = this.props;
         
-        this.handleChange({ current: current + 1});
+        this.handleChange({ current: current + 1, total, action: 'next'});
     }
     public handleChange(e: IChangeEvent) {
         let { onChange } = this.props;
