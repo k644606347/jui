@@ -1,4 +1,10 @@
-export class Tools {
+export default class Tools {
+    public static getInstace() {
+        const instances = Tools.instances;
+        
+        return instances.length === 0 ? new Tools() : instances[0];
+    }
+    private static instances: Tools[];
     constructor() {
         // logic
     }
@@ -115,5 +121,3 @@ export class Tools {
         return args.filter(n => !!n).map(n => Array.isArray(n) ? this.classNames.apply(this, n) : n).join(' ');
     }
 }
-
-export default new Tools();

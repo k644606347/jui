@@ -6,6 +6,7 @@ import TouchFeedback from './TouchFeedback';
 import Tools from '../utils/Tools';
 import { iconEllipsisH_solid, iconEllipsisV_solid, iconChevronUp_solid, iconChevronRight_solid, iconChevronDown_solid, iconChevronLeft_solid } from './icons/FontAwesomeMap';
 
+const tools = Tools.getInstace();
 const prefixCls = 'btn';
 interface IButtonIcons {
     cloud: IconDefinition;
@@ -94,7 +95,7 @@ class Button extends React.PureComponent<IButtonProps> {
             }
         }
 
-        className = Tools.classNames(cssModule.btn, [type, disabled && 'disabled', inline && 'inline', size, shape].map(n => cssModule[`${prefixCls}-${n}`]), className);
+        className = tools.classNames(cssModule.btn, [type, disabled && 'disabled', inline && 'inline', size, shape].map(n => cssModule[`${prefixCls}-${n}`]), className);
 
         return (
             <TouchFeedback activeClassName={cssModule[`${prefixCls}-active`]} disabled={disabled}>

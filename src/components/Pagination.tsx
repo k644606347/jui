@@ -4,6 +4,7 @@ import cssModules from './Pagination.scss';
 import Button from "./Button";
 import Tools from "../utils/Tools";
 
+const tools = Tools.getInstace();
 export default class Pagination extends React.PureComponent<IPaginationProps, any> {
     public static defaultProps: IPaginationProps = {
         current: 1,
@@ -22,7 +23,7 @@ export default class Pagination extends React.PureComponent<IPaginationProps, an
         let { props } = this,
             { current, total, disabled, prevBtn, nextBtn, prevText, nextText } = props;
 
-        return (<div className={Tools.classNames(cssModules.pagination, cssModules.disabled)}>
+        return (<div className={tools.classNames(cssModules.pagination, cssModules.disabled)}>
             {prevBtn ? prevBtn : <Button icon="left" inline={true} onClick={this.handlePrev} disabled={disabled}>{prevText}</Button>}
             <div><span className={cssModules.current}>{current}</span> / <span>{total}</span></div>
             {nextBtn ? nextBtn : <Button icon="right" inline={true} onClick={this.handleNext} disabled={disabled}>{nextText}</Button>}
