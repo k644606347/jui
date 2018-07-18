@@ -4,6 +4,8 @@ import cssModules from './List.scss';
 import Tools from '../utils/Tools';
 
 export * from './ListType';
+
+const tools = Tools.getInstance();
 export default class List extends React.PureComponent<IListProps, any> {
     public static defaultProps: IListProps = {
         dataSource: [],
@@ -23,7 +25,7 @@ export default class List extends React.PureComponent<IListProps, any> {
         let { props, state } = this,
             { dataSource, style, className } = props;
 
-        return (<ul style={style} className={Tools.classNames(cssModules.list, className)}>{
+        return (<ul style={style} className={tools.classNames(cssModules.list, className)}>{
             dataSource.map((dGroup: any, i) => {
                 let result,
                     classNames = [cssModules['list-item']];
@@ -38,7 +40,7 @@ export default class List extends React.PureComponent<IListProps, any> {
                     result = '';
                 }
 
-                return <li className={Tools.classNames(classNames)} key={i}>{ result }</li>;
+                return <li className={tools.classNames(classNames)} key={i}>{ result }</li>;
             })
         }</ul>);
     }
@@ -55,9 +57,9 @@ export default class List extends React.PureComponent<IListProps, any> {
     private renderSectionHeader(data: ISectionData): JSX.Element {
         let { renderSectionHeader, sectionHeaderSticky } = this.props,
             headerContent = renderSectionHeader ? renderSectionHeader(data) : data.title,
-            classNames = Tools.classNames(cssModules['section-header'], sectionHeaderSticky && cssModules['section-header-sticky']);
+            classNames = tools.classNames(cssModules['section-header'], sectionHeaderSticky && cssModules['section-header-sticky']);
 
-        return headerContent ? <div className={Tools.classNames(classNames)}>{ headerContent }</div> : <React.Fragment />;
+        return headerContent ? <div className={tools.classNames(classNames)}>{ headerContent }</div> : <React.Fragment />;
     }
     private renderSectionBody(data: ISectionData) {
         let { renderSectionBodyWrapper } = this.props,

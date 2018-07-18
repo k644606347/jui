@@ -1,0 +1,11 @@
+@charset "UTF-8";
+
+$menu-name: menu;
+.#{$menu-name}-btn {
+
+}
+.#{$menu-name}-items-wrap {
+    position: absolute;
+    height: 0;
+    top: 0;
+}

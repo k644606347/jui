@@ -6,7 +6,7 @@ import TouchFeedback from './TouchFeedback';
 import Tools from '../utils/Tools';
 import { iconEllipsisH_solid, iconEllipsisV_solid, iconChevronUp_solid, iconChevronRight_solid, iconChevronDown_solid, iconChevronLeft_solid } from './icons/FontAwesomeMap';
 
-const tools = Tools.getInstace();
+const tools = Tools.getInstance();
 const prefixCls = 'btn';
 interface IButtonIcons {
     cloud: IconDefinition;

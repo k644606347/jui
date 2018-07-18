@@ -4,7 +4,7 @@ import cssModules from './Pagination.scss';
 import Button from "./Button";
 import Tools from "../utils/Tools";
 
-const tools = Tools.getInstace();
+const tools = Tools.getInstance();
 export default class Pagination extends React.PureComponent<IPaginationProps, any> {
     public static defaultProps: IPaginationProps = {
         current: 1,

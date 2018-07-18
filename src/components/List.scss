@@ -5,12 +5,14 @@ $section-title-height: 2em;
 $odd-header-bgcolor: rgb(248, 89, 26);
 $even-header-bgcolor: rgb(88, 144, 255);
 $header-color: #fff;
-.list {
+
+$list-name: list;
+.#{$list-name} {
     display: block;
     list-style: none;
     margin: 0;
     padding: 0;
-    .list-item {
+    .#{$list-name}-item {
         display: block;
         &:nth-child(odd) {
             .section-header {

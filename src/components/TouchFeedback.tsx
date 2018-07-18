@@ -1,5 +1,7 @@
 import * as React from 'react';
 import Tools from '../utils/Tools';
+
+const tools = Tools.getInstance();
 export interface ITouchProps {
     disabled?: boolean;
     activeClassName?: string;
@@ -95,7 +97,7 @@ export default class TouchFeedback extends React.PureComponent<ITouchProps, ITou
             if (activeStyle) {
                 style = Object.assign({}, style, activeStyle);
             }
-            className = Tools.classNames(className, activeClassName);
+            className = tools.classNames(className, activeClassName);
 
             extraProps = Object.assign({ className, style }, events);
         }

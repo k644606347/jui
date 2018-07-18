@@ -1,10 +1,10 @@
 export default class Tools {
-    public static getInstace() {
+    public static getInstance() {
         const instances = Tools.instances;
         
         return instances.length === 0 ? new Tools() : instances[0];
     }
-    private static instances: Tools[];
+    private static instances: Tools[] = [];
     constructor() {
         // logic
     }

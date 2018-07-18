@@ -1,8 +1,9 @@
 @charset "UTF-8";
 @import './style/themes/default';
 @import './style/mixins/hairline';
-$btnName: btn;
-.btn {
+$btn-name: btn;
+
+.#{$btn-name} {
   // do not use width:100%, can not set margin
   display: block;
   outline: 0 none;
@@ -38,11 +39,11 @@ $btnName: btn;
     color: $color-text-base-inverse;
     background-color: $primary-button-fill;
     @include hairline(all, $primary-button-fill, $radius-md);
-    &.btn-active {
+    &.#{$btn-name}-active {
       color: transparentize($color-text-base-inverse, .3);
       background-color: $primary-button-fill-tap;
     }
-    &.btn-disabled {
+    &.#{$btn-name}-disabled {
       color: transparentize($color-text-base-inverse, .6);
       opacity: 0.4;
     }
@@ -51,12 +52,12 @@ $btnName: btn;
     color: $ghost-button-color;
     background-color: transparent;
     @include hairline(all, $ghost-button-color, $radius-md);
-    &.btn-active {
+    &.#{$btn-name}-active {
       color: $ghost-button-fill-tap;
       background-color: transparent;
       @include hairline(all, $ghost-button-fill-tap, $radius-md);
     }
-    &.btn-disabled {
+    &.#{$btn-name}-disabled {
       color: transparentize($color-text-base, .1);
       @include hairline(all, transparentize($color-text-base, .1), $radius-md);
       opacity: 1; // override default opacity: 0.6
@@ -65,11 +66,11 @@ $btnName: btn;
   &-warning {
     color: $color-text-base-inverse;
     background-color: $warning-button-fill;
-    &.btn-active {
+    &.#{$btn-name}-active {
       color: transparentize($color-text-base-inverse, .3);
       background-color: $warning-button-fill-tap;
     }
-    &.btn-disabled {
+    &.#{$btn-name}-disabled {
       color: transparentize($color-text-base-inverse, .6);
       opacity: 0.4;
     }
@@ -91,12 +92,12 @@ $btnName: btn;
     width: $button-height;
     height: $button-height;
     @include hairline(all, $border-color-base, 50%);
-    &.btn-large {
+    &.#{$btn-name}-large {
       width: $button-height-lg;
       height: $button-height-lg;
       line-height: $button-height-lg;
     }
-    &.btn-small {
+    &.#{$btn-name}-small {
       width: $button-height-sm;
       height: $button-height-sm;
       line-height: $button-height-sm;
