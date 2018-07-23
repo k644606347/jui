@@ -37,10 +37,10 @@ export default class Tools {
         return Array.isArray(v);
     }
 
-    public genID(prefix: string) {
+    public genID(prefix?: string) {
         let randomStr = () => this.randomInt(100000, 10000000).toString(16).substr(-5);
 
-        return prefix + randomStr() + randomStr();
+        return (prefix !== undefined ? prefix : '') + randomStr() + randomStr();
     }
     /**
      * demo randomInt(1, 9) => 1 ~ 9的随机整数，包含1和9
