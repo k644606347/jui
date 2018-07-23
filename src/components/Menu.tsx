@@ -1,69 +1,90 @@
-import { IMenuProps, ItemGroupData, ItemData } from "./Menu";
+import { IMenuProps, IMenuState } from "./MenuType";
 import * as React from "react";
 import cssModules from './Menu.scss';
 import Tools from "../utils/Tools";
 import Icon from "./Icon";
-import { iconChevronRight_solid } from "./icons/FontAwesomeMap";
 import * as ReactDOM from "react-dom";
 import MenuItems from "./MenuItems";
 
 const tools = Tools.getInstance();
-export default class Menu extends React.PureComponent<IMenuProps, any> {
-    private itemsWrapTag: HTMLElement;
-    private itemsTag: JSX.Element;
+export default class Menu extends React.PureComponent<IMenuProps, IMenuState> {
+    private static defaultProps: IMenuProps = {
+        name: tools.genID(),
+        label: '',
+        items: [],
+        showItems: false,
+        level: 1,
+        multiple: false,
+        activeIndex: 0,
+    };
     constructor(props: IMenuProps) {
         super(props);
 
+        this.state = {
+            showItems: props.showItems || false,
+            itemsRect: {
+                top: 0,
+                left: 0,
+            },
+        };
+
+        this.handleBtnClick = this.handleBtnClick.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
     public render() {
-        let { props } = this,
-            { items, className, style, icon } = props;
+        let { props, state } = this,
+            { name, label, className, style, icon, items, level, activeIndex } = props,
+            { itemsRect, showItems } = state;
 
         return <React.Fragment>
-            <div ref='menuBtn' style={style} className={tools.classNames(cssModules['menu-btn'], className)}>{
-                icon ? <Icon icon={icon} /> : ''
-            }</div>
+            <div className={cssModules['menu-wrap']}>
+                <div ref='menuBtn' style={style} className={tools.classNames(cssModules['menu-btn'], className)} onClick={this.handleBtnClick}>{Icon.renderIcon(icon)}{label}</div>
+                <div className={cssModules['menu-items-root']} style={{display: showItems ? 'block' : 'none'}}>
+                    <div style={itemsRect} className={cssModules['menu-items-wrap']}>
+                        <MenuItems name={name} label={label} level={level} items={items} activeIndex={activeIndex} onChange={this.handleChange} />
+                    </div>
+                    <div className={cssModules['menu-items-wrap-backdrop']}></div>
+                </div>
+            </div>
         </React.Fragment>;
     }
     public componentDidMount() {
-        this.buildItemsWrap();
-        this.calcItemsPosition();
+        this.setItemsPosition();
     }
     public componentDidUpdate() {
-        this.buildItemsWrap();
-        this.calcItemsPosition();
-    }
-    public buildItemsWrap() {
-        let { items } = this.props,
-            itemsTag = this.itemsTag,
-            itemsWrapTag = this.itemsWrapTag;
+        let { showItems } = this.state;
 
-        if (itemsTag) {
-            itemsTag = React.cloneElement(itemsTag, { items });
-        } else {
-            itemsTag = <MenuItems items={items} onChange={this.handleChange}/>;
-            itemsWrapTag =  document.createElement('div');
-
-            itemsWrapTag.classList.add(cssModules['menu-items-wrap']);
-            document.body.appendChild(itemsWrapTag);
-            ReactDOM.render(itemsTag, itemsWrapTag);
-
-            this.itemsWrapTag = itemsWrapTag;
+        if (showItems) {
+            this.setItemsPosition();
         }
-        this.itemsTag = itemsTag;
     }
-    public calcItemsPosition() {
-        let { items, menuBtn } = this.refs,
-            menuBtnRect = (menuBtn as HTMLElement).getBoundingClientRect(),
-            itemsStyle;
+    public setItemsPosition() {
+        let menuBtnRect = this.getMenuBtnRect(),
+            xOffset = 0 - menuBtnRect.left,
+            yOffset = 0,
+            { itemsRect } = this.state;
 
-        itemsStyle = (items as HTMLElement).style;
-        itemsStyle.top = menuBtnRect.top + 'px';
-        // itemsStyle.left = menuBtnRect.left + 'px';
+        if (itemsRect.top === yOffset && itemsRect.left === xOffset) {
+            return;
+        }
+        
+        this.setState({
+            itemsRect: {
+                top: yOffset,
+                left: xOffset,
+            },
+        });
     }
-    public handleChange(e: Event) {
+    public getMenuBtnRect() {
+        return (this.refs.menuBtn as HTMLElement).getBoundingClientRect()
+    }
+    public handleChange(e: any) {
         let { onChange } = this.props;
 
-        onChange && onChange({});
+        // window.console.log('Menu handleChange event',e);
+        onChange && onChange(e);
+    }
+    private handleBtnClick(e: React.MouseEvent | React.KeyboardEvent) {
+        this.setState({ showItems: !this.state.showItems });
     }
 }

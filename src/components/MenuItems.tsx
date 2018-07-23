@@ -1,49 +1,84 @@
 import * as React from "react";
-import { IMenuItemsProps, ItemGroupData, ItemData } from "./Menu";
+import { IMenuItemsProps } from "./MenuItemsType";
 import cssModules from './Menu.scss';
 import Tools from "../utils/Tools";
 import Icon, { iconChevronRight_solid } from "./Icon";
+import MenuItem from "./MenuItem";
+import { IMenuItemChangeEvent } from "./MenuItemType";
 
 const tools = Tools.getInstance();
+// todo checked mutiple
 export default class MenuItems extends React.PureComponent<IMenuItemsProps, any> {
+    private static defaultProps: IMenuItemsProps = {
+        name: tools.genID(),
+        label: '',
+        items: [],
+        multiple: false,
+        level: 1,
+        activeIndex: 0,
+    };
     constructor(props: IMenuItemsProps) {
         super(props);
+        
+        this.handleChange = this.handleChange.bind(this);
+        this.handleGroupChange = this.handleGroupChange.bind(this);
     }
     public render() {
         let { props } = this,
-            { items } = props;
+            { items, level, activeIndex } = props;
 
-        return <div ref='items' className={cssModules['menu-items']}>
-        {
-            items.map((item, i) => {
-                return <div key={i} className={cssModules['menu-item']}>{
-                    tools.isArray((item as ItemGroupData).items) ? this.renderItemGroup(item as ItemGroupData) : this.renderItem(item as ItemData)
-                }</div>;
-            })
+        if (activeIndex === undefined) {
+            activeIndex = MenuItems.defaultProps.activeIndex;
+        } else if (activeIndex >= items.length) {
+            activeIndex = items.length - 1;
         }
-    </div>;
+        
+        let activeItem = items[activeIndex as number],
+            activeItemGroup = (activeItem && tools.isArray((activeItem as IMenuItemsProps).items)) ? (activeItem as IMenuItemsProps) : undefined;
+
+        return <React.Fragment>
+            <div className={cssModules['menu-items-level-wrap']}>{
+                items.map((item, i) => {
+                    let active = activeIndex === i;
+
+                    return <React.Fragment key={i}>{
+                        tools.isArray((item as IMenuItemsProps).items) ? this.renderItemGroup(item as IMenuItemsProps, active) : 
+                            <MenuItem {...item} onChange={this.handleChange} />
+                    }</React.Fragment>;
+                })
+            }</div>
+            {
+                level === 2 ? <div className={cssModules['menu-items-level-wrap']}>{
+                    activeItemGroup && this.renderActiveItemGroupItems(activeItemGroup)
+                }</div> : null
+            }
+            </React.Fragment>
     }
-    public renderItemGroup(itemGroup: ItemGroupData): JSX.Element {
-        let { className, style, render, label } = itemGroup;
+    public renderActiveItemGroupItems(activeItemGroup: IMenuItemsProps): JSX.Element {
+        let { items, multiple, activeIndex } = activeItemGroup;
 
-        return <div className={tools.classNames(cssModules['menu-item-group'], className)} style={style}>{
-            render ? render(itemGroup) : <React.Fragment>{label}<Icon icon={iconChevronRight_solid} /></React.Fragment>
-        }</div>;
+        return <MenuItems name={activeItemGroup.name} label={activeItemGroup.label} items={items} multiple={multiple} activeIndex={activeIndex} onChange={this.handleGroupChange}/>;
+    }
+    public renderItemGroup(itemGroup: IMenuItemsProps, actived: boolean = false): JSX.Element {
+        let { className, style, label, icon, multiple } = itemGroup;
+
+        if (multiple === undefined) {
+            multiple = this.props.multiple;
+        }
+
+        return <div className={tools.classNames(cssModules['menu-item-group'], actived && cssModules['active-item'], className)} style={style}>
+            {Icon.renderIcon(icon)}{label}<Icon icon={iconChevronRight_solid} />
+        </div>;
     }
 
-    // todo add onChange logic
-    public renderItem(item: ItemData): JSX.Element {
-        let { className, style, render, label } = item;
+    public handleGroupChange(e: any) {
+        let { name, onChange } = this.props;
 
-        return <div className={tools.classNames(cssModules['menu-item'], className)} style={style}>{
-            render ? render(item) : <React.Fragment>{label}</React.Fragment>
-        }</div>
+        onChange && onChange({name, value: [e]});
     }
+    public handleChange(e: IMenuItemChangeEvent) {
+        let { name, onChange } = this.props;
 
-    // todo improve onChange params
-    public handleChange(e: Event) {
-        let { onChange } = this.props;
-
-        onChange && onChange(e);
+        onChange && onChange({name, value: [e]});
     }
 }
