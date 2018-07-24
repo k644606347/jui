@@ -3,11 +3,18 @@ import * as React from "react";
 import cssModules from './Menu.scss';
 import Tools from "../utils/Tools";
 import Icon from "./Icon";
-import * as ReactDOM from "react-dom";
 import MenuItems from "./MenuItems";
 
 const tools = Tools.getInstance();
 export default class Menu extends React.PureComponent<IMenuProps, IMenuState> {
+    public static handleWindowResize() {
+        Menu.instances.forEach(instance => {
+            let { showItems } = instance.state;
+
+            showItems && instance.updateItemsLayout();
+        });
+    }
+    private static instances: Menu[] = [];
     private static defaultProps: IMenuProps = {
         name: tools.genID(),
         label: '',
@@ -49,16 +56,24 @@ export default class Menu extends React.PureComponent<IMenuProps, IMenuState> {
         </React.Fragment>;
     }
     public componentDidMount() {
-        this.setItemsPosition();
+        this.updateItemsLayout();
+        Menu.instances.push(this);
+    }
+    public componentWillUnmount() {
+        let index = Menu.instances.findIndex(instance => instance === this);
+
+        if (index !== -1) {
+            Menu.instances.splice(index, 1);
+        }
     }
     public componentDidUpdate() {
         let { showItems } = this.state;
 
         if (showItems) {
-            this.setItemsPosition();
+            this.updateItemsLayout();
         }
     }
-    public setItemsPosition() {
+    public updateItemsLayout() {
         let menuBtnRect = this.getMenuBtnRect(),
             xOffset = 0 - menuBtnRect.left,
             yOffset = 0,
@@ -88,3 +103,5 @@ export default class Menu extends React.PureComponent<IMenuProps, IMenuState> {
         this.setState({ showItems: !this.state.showItems });
     }
 }
+
+window.addEventListener('resize', Menu.handleWindowResize.bind(Menu), false);
