@@ -2,7 +2,7 @@
 $menu-btn-bgcolor: #008AE6;
 $menu-btn-color: #fff;
 $menu-name: menu;
-$menu-btn-font-size: 1.5rem;
+$menu-btn-font-size: 18px;
 .#{$menu-name}-wrap {
     display: inline-block;
 }
@@ -13,8 +13,8 @@ $menu-btn-font-size: 1.5rem;
     text-align: center;
     font-size: $menu-btn-font-size;
     padding: 5px 10px;
-    height: 1.5rem;
-    line-height: 1.5rem;
+    height: 1.5em;
+    line-height: 1.5em;
     overflow: hidden;
     text-overflow: ellipsis;
     word-break: break-word;
@@ -46,15 +46,6 @@ $menu-btn-font-size: 1.5rem;
     background-color: rgba(0, 0, 0, .4);
     z-index: 10;
 }
-.#{$menu-name}-items-level-wrap {
-    flex: 1 1 auto;
-}
-.#{$menu-name}-item-group, .#{$menu-name}-item {
-    height: 2rem;
-    line-height: 2rem;
-    padding-left: 20px;
-    font-size: 16px;
-    &.active-item {
-        background-color: #fff;
-    }
-}
+// .#{$menu-name}-items-level-wrap {
+//     flex: 1 1 auto;
+// }

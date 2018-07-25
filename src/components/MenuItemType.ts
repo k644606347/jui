@@ -1,16 +1,20 @@
 import { IconProps, IconDefinition } from "./Icon";
 
 export interface IMenuItemChangeEvent {
-    name: string;
+    value: string;
     checked: boolean;
 }
 export interface IMenuItemProps {
-    name: string;
     label: string | JSX.Element;
+    value: string;
+    name: string; 
+    checked?: boolean;
     className?: string;
     style?: React.CSSProperties;
     icon?: React.ReactElement<IconProps> | IconDefinition;
-    checked?: boolean;
-    active?: boolean;
+    multiSelect?: boolean;
     onChange?: (e: IMenuItemChangeEvent) => void;
+}
+export interface IMenuItemState {
+    clicked: boolean;
 }

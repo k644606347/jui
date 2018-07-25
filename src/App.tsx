@@ -21,40 +21,67 @@ class App extends React.Component<any, any> {
         super(props);
 
         this.state = {
-            menuItems: [
-                { name: 'item1', label: 'item1', checked: false },
-                { name: 'items1', label: 'items1', items: [{ name: 'item2', label: 'item2', checked: false }] }
-            ],
+            menu: {
+                activeIndex: 1,
+                items: [
+                    { value: 'item1', label: 'item1', checked: false },
+                    {
+                        id: 'items1', label: 'items1', 
+                        items: [
+                                { value: 'item2', label: 'item2', checked: false },
+                                { value: 'item3', label: 'item3', checked: false }
+                            ] 
+                    }
+                ],
+            }
         };
 
         this.handleMenuChange = this.handleMenuChange.bind(this);
     }
     public handleMenuChange(e: any) {
-        let { menuItems } = this.state;
+        let { menu } = this.state;
 
-        function setItems(items: any, value: any) {
-            value.forEach((v: any) => {
-                let name = v.name,
-                    item = items.find((itm: any) => itm.name === name);
+        // tslint:disable-next-line:no-shadowed-variable
+        function setItems(menu: any, event: any) {
+            let itemIsModified = false,
+                { items } = menu,
+                { checked } = event;
+
+            checked.forEach((v: any) => {
+                let id = v.id || v.value,
+                    item = items.find((itm: any) => itm.id === id || itm.value === id);
 
                 if (item === undefined) {
                     return;
                 }
-                if (tools.isArray(v.value)) {
-                    setItems(item.items, v.value);
+                if (tools.isArray(v.checked)) {
+                    let result = setItems(item, v);
+                    if (item !== result) {
+                        itemIsModified = true;
+                    }
                 } else {
                     item.checked = v.checked;
+                    item = {...item};
+                    itemIsModified = true;
+                    window.console.log(item);
                 }
             });
+            if (itemIsModified) {
+                menu.items = [...menu.items];
+                menu = {...menu};
+            }
+            menu.activeIndex = event.activeIndex;
+            
+            return menu;
         }
 
         window.console.log(e);
 
-        setItems(menuItems, e.value);
-        this.setState({ menuItems });
+        menu = setItems(menu, e);
+        this.setState({ menu });
     }
     public render() {
-        let { menuItems } = this.state;
+        let { menu } = this.state;
 
         return (
             <div className="App">
@@ -66,7 +93,7 @@ class App extends React.Component<any, any> {
                     To get started, edit <code>src/App.tsx</code> and save to reload.
         </p>
                 {/* <input type="text" style={{position: 'fixed', zIndex: 30  }} /> */}
-                <Menu name={'menu1'} label={'ddd'} level={2} activeIndex={1} items={menuItems} onChange={this.handleMenuChange} />
+                <Menu id={'menu1'} multiSelect={true} label={'ddd'} level={2} {...menu} onChange={this.handleMenuChange} />
                 <Button>btn1</Button>
                 <Button type={'primary'}>btn2</Button>
                 <Button type="warning" size="large" loading={true}>btn3</Button>

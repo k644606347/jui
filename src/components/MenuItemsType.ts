@@ -2,11 +2,11 @@ import { IconProps, IconDefinition } from "./Icon";
 import { IMenuItemChangeEvent, IMenuItemProps } from "./MenuItemType";
 
 export interface IMenuItemsProps {
-    name: string;
+    id: string;
     label: string | JSX.Element;
     items: Array<IMenuItemProps | IMenuItemsProps>;
-    value?: any;
-    multiple?: boolean;
+    checked?: IMenuItemChangeEvent[];
+    multiSelect?: boolean;
     level?: 1 | 2;
     activeIndex?: number;
     className?: string;

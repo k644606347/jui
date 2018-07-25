@@ -4,14 +4,14 @@ import { IMenuItemProps } from "./MenuItemType";
 import { IMenuItemsProps } from "./MenuItemsType";
 
 export interface IMenuProps {
-    name: string;
+    id: string;
     label: string | JSX.Element;
     items: Array<IMenuItemsProps | IMenuItemProps>;
     showItems?: boolean;
     icon?: React.ReactElement<IconProps> | IconDefinition;
     className?: string;
     style?: React.CSSProperties;
-    multiple?: boolean;
+    multiSelect?: boolean;
     onChange?: (e: any) => void;
     level?: 1 | 2;
     activeIndex?: number;

@@ -16,12 +16,12 @@ export default class Menu extends React.PureComponent<IMenuProps, IMenuState> {
     }
     private static instances: Menu[] = [];
     private static defaultProps: IMenuProps = {
-        name: tools.genID(),
+        id: tools.genID(),
         label: '',
         items: [],
         showItems: false,
         level: 1,
-        multiple: false,
+        multiSelect: false,
         activeIndex: 0,
     };
     constructor(props: IMenuProps) {
@@ -40,7 +40,7 @@ export default class Menu extends React.PureComponent<IMenuProps, IMenuState> {
     }
     public render() {
         let { props, state } = this,
-            { name, label, className, style, icon, items, level, activeIndex } = props,
+            { id, label, className, style, icon, items, level, activeIndex, multiSelect } = props,
             { itemsRect, showItems } = state;
 
         return <React.Fragment>
@@ -48,7 +48,7 @@ export default class Menu extends React.PureComponent<IMenuProps, IMenuState> {
                 <div ref='menuBtn' style={style} className={tools.classNames(cssModules['menu-btn'], className)} onClick={this.handleBtnClick}>{Icon.renderIcon(icon)}{label}</div>
                 <div className={cssModules['menu-items-root']} style={{display: showItems ? 'block' : 'none'}}>
                     <div style={itemsRect} className={cssModules['menu-items-wrap']}>
-                        <MenuItems name={name} label={label} level={level} items={items} activeIndex={activeIndex} onChange={this.handleChange} />
+                        <MenuItems id={id} label={label} level={level} items={items} multiSelect={multiSelect} activeIndex={activeIndex} onChange={this.handleChange} />
                     </div>
                     <div className={cssModules['menu-items-wrap-backdrop']}></div>
                 </div>
@@ -73,7 +73,7 @@ export default class Menu extends React.PureComponent<IMenuProps, IMenuState> {
             this.updateItemsLayout();
         }
     }
-    public updateItemsLayout() {
+    private updateItemsLayout() {
         let menuBtnRect = this.getMenuBtnRect(),
             xOffset = 0 - menuBtnRect.left,
             yOffset = 0,
@@ -90,10 +90,10 @@ export default class Menu extends React.PureComponent<IMenuProps, IMenuState> {
             },
         });
     }
-    public getMenuBtnRect() {
+    private getMenuBtnRect() {
         return (this.refs.menuBtn as HTMLElement).getBoundingClientRect()
     }
-    public handleChange(e: any) {
+    private handleChange(e: any) {
         let { onChange } = this.props;
 
         // window.console.log('Menu handleChange event',e);

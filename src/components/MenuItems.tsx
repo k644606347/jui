@@ -1,19 +1,20 @@
 import * as React from "react";
 import { IMenuItemsProps } from "./MenuItemsType";
-import cssModules from './Menu.scss';
+import cssModules from './MenuItems.scss';
 import Tools from "../utils/Tools";
 import Icon, { iconChevronRight_solid } from "./Icon";
 import MenuItem from "./MenuItem";
-import { IMenuItemChangeEvent } from "./MenuItemType";
+import { IMenuItemChangeEvent, IMenuItemProps } from "./MenuItemType";
 
 const tools = Tools.getInstance();
 // todo checked mutiple
 export default class MenuItems extends React.PureComponent<IMenuItemsProps, any> {
     private static defaultProps: IMenuItemsProps = {
-        name: tools.genID(),
+        id: tools.genID(),
         label: '',
+        checked: [],
         items: [],
-        multiple: false,
+        multiSelect: false,
         level: 1,
         activeIndex: 0,
     };
@@ -25,7 +26,7 @@ export default class MenuItems extends React.PureComponent<IMenuItemsProps, any>
     }
     public render() {
         let { props } = this,
-            { items, level, activeIndex } = props;
+            { id, items, level, activeIndex, multiSelect } = props;
 
         if (activeIndex === undefined) {
             activeIndex = MenuItems.defaultProps.activeIndex;
@@ -34,51 +35,61 @@ export default class MenuItems extends React.PureComponent<IMenuItemsProps, any>
         }
         
         let activeItem = items[activeIndex as number],
-            activeItemGroup = (activeItem && tools.isArray((activeItem as IMenuItemsProps).items)) ? (activeItem as IMenuItemsProps) : undefined;
+            activeItemGroup = (activeItem && tools.isArray((activeItem as IMenuItemsProps).items)) ? (activeItem as IMenuItemsProps) : undefined,
+            inputTagName = `${id}_${tools.genID()}`;
 
         return <React.Fragment>
-            <div className={cssModules['menu-items-level-wrap']}>{
+            <div className={cssModules.items}>{
                 items.map((item, i) => {
                     let active = activeIndex === i;
 
                     return <React.Fragment key={i}>{
                         tools.isArray((item as IMenuItemsProps).items) ? this.renderItemGroup(item as IMenuItemsProps, active) : 
-                            <MenuItem {...item} onChange={this.handleChange} />
+                            <MenuItem {...(item as IMenuItemProps)} onChange={this.handleChange} name={inputTagName} multiSelect={multiSelect}/>
                     }</React.Fragment>;
                 })
             }</div>
             {
-                level === 2 ? <div className={cssModules['menu-items-level-wrap']}>{
-                    activeItemGroup && this.renderActiveItemGroupItems(activeItemGroup)
-                }</div> : null
+                activeItemGroup ? 
+                    <div className={cssModules.items}>{
+                        this.renderActiveGroup(activeItemGroup)
+                    }</div> : ''
             }
             </React.Fragment>
     }
-    public renderActiveItemGroupItems(activeItemGroup: IMenuItemsProps): JSX.Element {
-        let { items, multiple, activeIndex } = activeItemGroup;
+    public renderActiveGroup(activeItemGroup: IMenuItemsProps): JSX.Element {
+        let { id, items, multiSelect, activeIndex } = activeItemGroup;
 
-        return <MenuItems name={activeItemGroup.name} label={activeItemGroup.label} items={items} multiple={multiple} activeIndex={activeIndex} onChange={this.handleGroupChange}/>;
-    }
-    public renderItemGroup(itemGroup: IMenuItemsProps, actived: boolean = false): JSX.Element {
-        let { className, style, label, icon, multiple } = itemGroup;
-
-        if (multiple === undefined) {
-            multiple = this.props.multiple;
+        if (multiSelect === undefined) {
+            multiSelect = this.props.multiSelect;
         }
 
-        return <div className={tools.classNames(cssModules['menu-item-group'], actived && cssModules['active-item'], className)} style={style}>
+        return <MenuItems id={id} label={activeItemGroup.label} items={items} multiSelect={multiSelect} activeIndex={activeIndex} onChange={this.handleGroupChange}/>;
+    }
+    public renderItemGroup(itemGroup: IMenuItemsProps, actived: boolean = false): JSX.Element {
+        let { className, style, label, icon, multiSelect } = itemGroup;
+
+        return <div className={tools.classNames(cssModules['item-group'], actived && cssModules['active-item-group'], className)} style={style}>
             {Icon.renderIcon(icon)}{label}<Icon icon={iconChevronRight_solid} />
         </div>;
     }
 
     public handleGroupChange(e: any) {
-        let { name, onChange } = this.props;
+        let { id, items, onChange } = this.props;
 
-        onChange && onChange({name, value: [e]});
+        onChange && onChange({
+            id, 
+            checked: [e], 
+            activeIndex: items.findIndex(item => (item as IMenuItemsProps).id === e.id)
+        });
     }
     public handleChange(e: IMenuItemChangeEvent) {
-        let { name, onChange } = this.props;
+        let { id, items, onChange } = this.props;
 
-        onChange && onChange({name, value: [e]});
+        onChange && onChange({
+            id, 
+            checked: [e], 
+            activeIndex: items.findIndex(item => (item as IMenuItemProps).value === e.value)
+        });
     }
 }
