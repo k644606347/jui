@@ -5,12 +5,14 @@ import Tools from "../utils/Tools";
 import Icon, { iconChevronRight_solid } from "./Icon";
 import MenuItem from "./MenuItem";
 import { IMenuItemChangeEvent, IMenuItemProps } from "./MenuItemType";
+import MenuItemGroup from "./MenuItemGroup";
+import { ChangeEvent } from "./MenuItemGroupType";
 
 const tools = Tools.getInstance();
 // todo checked mutiple
 export default class MenuItems extends React.PureComponent<IMenuItemsProps, any> {
     private static defaultProps: IMenuItemsProps = {
-        id: tools.genID(),
+        id: '',
         label: '',
         checked: [],
         items: [],
@@ -22,6 +24,7 @@ export default class MenuItems extends React.PureComponent<IMenuItemsProps, any>
         super(props);
         
         this.handleChange = this.handleChange.bind(this);
+        this.handleSubItemsChange = this.handleSubItemsChange.bind(this);
         this.handleGroupChange = this.handleGroupChange.bind(this);
     }
     public render() {
@@ -35,7 +38,7 @@ export default class MenuItems extends React.PureComponent<IMenuItemsProps, any>
         }
         
         let activeItem = items[activeIndex as number],
-            activeItemGroup = (activeItem && tools.isArray((activeItem as IMenuItemsProps).items)) ? (activeItem as IMenuItemsProps) : undefined,
+            activeSubItems = (activeItem && tools.isArray((activeItem as IMenuItemsProps).items)) ? (activeItem as IMenuItemsProps) : undefined,
             inputTagName = `${id}_${tools.genID()}`;
 
         return <React.Fragment>
@@ -44,37 +47,45 @@ export default class MenuItems extends React.PureComponent<IMenuItemsProps, any>
                     let active = activeIndex === i;
 
                     return <React.Fragment key={i}>{
-                        tools.isArray((item as IMenuItemsProps).items) ? this.renderItemGroup(item as IMenuItemsProps, active) : 
+                        tools.isArray((item as IMenuItemsProps).items) ? 
+                            <MenuItemGroup {...(item as IMenuItemsProps)} active={active} onChange={this.handleGroupChange}/> : 
                             <MenuItem {...(item as IMenuItemProps)} onChange={this.handleChange} name={inputTagName} multiSelect={multiSelect}/>
                     }</React.Fragment>;
                 })
             }</div>
             {
-                activeItemGroup ? 
+                activeSubItems ? 
                     <div className={cssModules.items}>{
-                        this.renderActiveGroup(activeItemGroup)
+                        this.renderActiveSubItems(activeSubItems)
                     }</div> : ''
             }
             </React.Fragment>
     }
-    public renderActiveGroup(activeItemGroup: IMenuItemsProps): JSX.Element {
+    private renderActiveSubItems(activeItemGroup: IMenuItemsProps): JSX.Element {
         let { id, items, multiSelect, activeIndex } = activeItemGroup;
 
         if (multiSelect === undefined) {
             multiSelect = this.props.multiSelect;
         }
 
-        return <MenuItems id={id} label={activeItemGroup.label} items={items} multiSelect={multiSelect} activeIndex={activeIndex} onChange={this.handleGroupChange}/>;
+        return <MenuItems id={id} label={activeItemGroup.label} items={items} multiSelect={multiSelect} activeIndex={activeIndex} onChange={this.handleSubItemsChange}/>;
     }
-    public renderItemGroup(itemGroup: IMenuItemsProps, actived: boolean = false): JSX.Element {
+    private renderItemGroup(itemGroup: IMenuItemsProps, actived: boolean = false): JSX.Element {
         let { className, style, label, icon, multiSelect } = itemGroup;
 
         return <div className={tools.classNames(cssModules['item-group'], actived && cssModules['active-item-group'], className)} style={style}>
             {Icon.renderIcon(icon)}{label}<Icon icon={iconChevronRight_solid} />
         </div>;
     }
+    private handleGroupChange(e: ChangeEvent) {
+        let { id, items, onChange } = this.props;
 
-    public handleGroupChange(e: any) {
+        onChange && onChange({
+            id, 
+            activeIndex: items.findIndex(item => (item as IMenuItemsProps).id === e.id)
+        });
+    }
+    private handleSubItemsChange(e: any) {
         let { id, items, onChange } = this.props;
 
         onChange && onChange({
@@ -83,13 +94,13 @@ export default class MenuItems extends React.PureComponent<IMenuItemsProps, any>
             activeIndex: items.findIndex(item => (item as IMenuItemsProps).id === e.id)
         });
     }
-    public handleChange(e: IMenuItemChangeEvent) {
+    private handleChange(e: IMenuItemChangeEvent) {
         let { id, items, onChange } = this.props;
 
         onChange && onChange({
             id, 
             checked: [e], 
-            activeIndex: items.findIndex(item => (item as IMenuItemProps).value === e.value)
+            // activeIndex: items.findIndex(item => (item as IMenuItemProps).value === e.value)
         });
     }
 }

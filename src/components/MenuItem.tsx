@@ -2,16 +2,16 @@ import * as React from "react";
 import { IMenuItemProps, IMenuItemState } from "./MenuItemType";
 import cssModules from './MenuItems.scss';
 import Tools from "../utils/Tools";
-import Icon, { iconChevronRight_solid, IconProps, IconDefinition } from "./Icon";
+import Icon from "./Icon";
 
 const tools = Tools.getInstance();
 
 // todo checked mutiple
 export default class MenuItem extends React.PureComponent<IMenuItemProps, IMenuItemState> {
     private static defaultProps: IMenuItemProps = {
-        name: '',
         value: '',
         label: '',
+        name: '',
         checked: false,
         multiSelect: false,
     };

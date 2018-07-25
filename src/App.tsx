@@ -45,9 +45,9 @@ class App extends React.Component<any, any> {
         function setItems(menu: any, event: any) {
             let itemIsModified = false,
                 { items } = menu,
-                { checked } = event;
+                { checked, activeIndex } = event;
 
-            checked.forEach((v: any) => {
+            Array.isArray(checked) && checked.forEach((v: any) => {
                 let id = v.id || v.value,
                     item = items.find((itm: any) => itm.id === id || itm.value === id);
 
@@ -70,7 +70,9 @@ class App extends React.Component<any, any> {
                 menu.items = [...menu.items];
                 menu = {...menu};
             }
-            menu.activeIndex = event.activeIndex;
+            if (activeIndex >= 0) {
+                menu.activeIndex = activeIndex;
+            }
             
             return menu;
         }
