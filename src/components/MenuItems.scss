@@ -2,11 +2,14 @@
 .items {
     display: block;
     flex: 1 1 auto;
-    .item-group, .item{
-        height: 2em;
-        line-height: 2em;
-        padding-left: 20px;
+    .item{
         font-size: 16px;
+        height: 44px;
+        line-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-left: 10px;
     }
     .item {
         &-clicked {
@@ -18,8 +21,26 @@
         &-input {
             display: inline-block;
         }
+        .item-content, .item-icon, .item-input {
+            margin-right: 10px;
+        }
+        .item-content {
+            flex: 1 0 auto;
+        }
+        .item-icon, .item-input {
+            flex: 0 0 auto;
+            width: 1em;
+        }
     }
-    .active-item-group {
-        background-color: #fff;
+    .item-group {
+        .sub-item-arrow {
+            flex: 0 0 auto;
+        }
+        &-active {
+            background-color: #fff;
+        }
     }
+}
+.active-sub-items {
+    background-color: #fff;
 }

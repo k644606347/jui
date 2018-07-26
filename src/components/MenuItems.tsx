@@ -9,7 +9,6 @@ import MenuItemGroup from "./MenuItemGroup";
 import { ChangeEvent } from "./MenuItemGroupType";
 
 const tools = Tools.getInstance();
-// todo checked mutiple
 export default class MenuItems extends React.PureComponent<IMenuItemsProps, any> {
     private static defaultProps: IMenuItemsProps = {
         id: '',
@@ -41,6 +40,11 @@ export default class MenuItems extends React.PureComponent<IMenuItemsProps, any>
             activeSubItems = (activeItem && tools.isArray((activeItem as IMenuItemsProps).items)) ? (activeItem as IMenuItemsProps) : undefined,
             inputTagName = `${id}_${tools.genID()}`;
 
+            // todo 应为React.ReactElement<IMenuItemsProps>
+        let subItemsREl: any = null;
+        if (activeSubItems) {
+            subItemsREl = this.renderActiveSubItems(activeSubItems);
+        }
         return <React.Fragment>
             <div className={cssModules.items}>{
                 items.map((item, i) => {
@@ -48,16 +52,14 @@ export default class MenuItems extends React.PureComponent<IMenuItemsProps, any>
 
                     return <React.Fragment key={i}>{
                         tools.isArray((item as IMenuItemsProps).items) ? 
-                            <MenuItemGroup {...(item as IMenuItemsProps)} active={active} onChange={this.handleGroupChange}/> : 
+                            <MenuItemGroup {...(item as IMenuItemsProps)} targetItems={subItemsREl} active={active} onChange={this.handleGroupChange}/> : 
                             <MenuItem {...(item as IMenuItemProps)} onChange={this.handleChange} name={inputTagName} multiSelect={multiSelect}/>
                     }</React.Fragment>;
                 })
             }</div>
             {
-                activeSubItems ? 
-                    <div className={cssModules.items}>{
-                        this.renderActiveSubItems(activeSubItems)
-                    }</div> : ''
+                subItemsREl ? 
+                    <div className={tools.classNames(cssModules.items, cssModules['active-sub-items'])}>{subItemsREl}</div> : ''
             }
             </React.Fragment>
     }
@@ -69,13 +71,6 @@ export default class MenuItems extends React.PureComponent<IMenuItemsProps, any>
         }
 
         return <MenuItems id={id} label={activeItemGroup.label} items={items} multiSelect={multiSelect} activeIndex={activeIndex} onChange={this.handleSubItemsChange}/>;
-    }
-    private renderItemGroup(itemGroup: IMenuItemsProps, actived: boolean = false): JSX.Element {
-        let { className, style, label, icon, multiSelect } = itemGroup;
-
-        return <div className={tools.classNames(cssModules['item-group'], actived && cssModules['active-item-group'], className)} style={style}>
-            {Icon.renderIcon(icon)}{label}<Icon icon={iconChevronRight_solid} />
-        </div>;
     }
     private handleGroupChange(e: ChangeEvent) {
         let { id, items, onChange } = this.props;

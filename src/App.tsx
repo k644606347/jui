@@ -28,8 +28,14 @@ class App extends React.Component<any, any> {
                     {
                         id: 'items1', label: 'items1', 
                         items: [
-                                { value: 'item2', label: 'item2', checked: false },
-                                { value: 'item3', label: 'item3', checked: false }
+                                { 
+                                    value: 'item2', label: 'item2', checked: false,
+                                    icon: iconAccessibleIcon_brand,
+                                },
+                                { 
+                                    value: 'item3', label: 'item3', checked: false,
+                                    icon: <Icon icon={iconThList_solid} spin={true} />
+                                }
                             ] 
                     }
                 ],
