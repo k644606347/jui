@@ -120,4 +120,13 @@ export default class Tools {
     public classNames(...args: Array<string | Array<string | undefined> | undefined>): string {
         return args.filter(n => !!n).map(n => Array.isArray(n) ? this.classNames.apply(this, n) : n).join(' ');
     }
+
+    public supportTouchEvents(): boolean {
+        return 'ontouchstart' in document && 'ontouchmove' in document && 'ontouchend' in document;
+    }
+
+    // 需要依赖webpack变量注入
+    public isDev() {
+        return process && process.env && process.env.NODE_ENV === "development";
+    }
 }

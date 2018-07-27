@@ -4,6 +4,7 @@ import Tools from "../utils/Tools";
 import Icon, { iconChevronRight_solid } from "./Icon";
 import { IMenuItemGroupProps, IMenuItemGroupState } from "./MenuItemGroupType";
 import { MouseEvent } from "react";
+import MenuItems from "./MenuItems";
 
 const tools = Tools.getInstance();
 
@@ -12,6 +13,7 @@ export default class MenuItemGroup extends React.PureComponent<IMenuItemGroupPro
         id: '',
         label: '',
         active: false,
+        targetItems: <MenuItems id={tools.genID()} label={''} items={[]} />,
     };
     private clickedTimer: number;
     constructor(props: IMenuItemGroupProps) {
@@ -20,24 +22,51 @@ export default class MenuItemGroup extends React.PureComponent<IMenuItemGroupPro
         this.state = {
             clicked: false,
         };
+        this.handleTouchStart = this.handleTouchStart.bind(this);
+        this.handleTouchEnd = this.handleTouchEnd.bind(this);
         this.handleClick = this.handleClick.bind(this);
     }
     public render() {
         let { label, active, className, style, icon } = this.props,
             { clicked } = this.state;
 
-        return <div className={tools.classNames(cssModules.item, cssModules['item-group'], active && cssModules['item-group-active'], clicked ? cssModules['item-clicked'] : '', className)} style={style} onClick={this.handleClick}>
+        return <div className={tools.classNames(cssModules.item, cssModules['item-group'], active && cssModules['item-group-active'], clicked ? cssModules['item-clicked'] : '', className)} style={style}
+         {...this.buildEvents()}>
             <div className={cssModules['item-icon']}>{Icon.renderIcon(icon)}</div>
             <div className={cssModules['item-content']}>{label}</div>
-            <div className={cssModules['item-group-arrow']}><Icon icon={iconChevronRight_solid} /></div>
+            <div className={cssModules['sub-item-arrow']}><Icon icon={iconChevronRight_solid} /></div>
         </div>;
     }
-    private handleClick(e: MouseEvent<HTMLElement>) {
-        let { id, onChange } = this.props;
-
+    private buildEvents() {
+        if (tools.supportTouchEvents()) {
+            return {
+                onTouchStart: this.handleTouchStart,
+                onTouchEnd: this.handleTouchEnd,
+            };
+        } else {
+            // 兼容pc端
+            return {
+                onClick: this.handleClick,
+            }
+        }
+    }
+    private handleTouchStart(e: React.TouchEvent<HTMLElement>) {
+        // todo 增加MenuItems的操作反馈
+        this.setState({clicked: true});
+        this.fireChangeCallback();
+    }
+    private handleTouchEnd(e: React.TouchEvent<HTMLElement>) {
+        this.setState({clicked: false});
+    }
+    private handleClick(e: React.MouseEvent<HTMLElement>) {
         this.setState({clicked: true});
         clearTimeout(this.clickedTimer);
-        this.clickedTimer = window.setTimeout(() => this.setState({clicked: false}), 100);
+        this.clickedTimer = window.setTimeout(() => this.setState({clicked: false}), 150);
+
+        this.fireChangeCallback();
+    }
+    private fireChangeCallback(options?: any) {
+        let { id, onChange } = this.props;
 
         onChange && onChange({ id });
     }

@@ -10,11 +10,6 @@
         align-items: center;
         justify-content: space-between;
         padding-left: 10px;
-    }
-    .item {
-        &-clicked {
-           background: #ccc;
-        }
         &-focus {
             box-shadow: 1px 1px 1px #ccc;
         }
@@ -38,6 +33,11 @@
         }
         &-active {
             background-color: #fff;
+        }
+    }
+    .item {
+        &-clicked {
+            background-color: #ccc;
         }
     }
 }

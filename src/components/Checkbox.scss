@@ -7,12 +7,12 @@
     .icon {
         display: inline-block;
         font-size: 1.35em;
-        margin-right: 5px;
         vertical-align: middle;
         color: #d2d2d2;
     }
     .description {
         display: inline-block;
+        margin-left: 5px;
     }
     &.disabled {
         opacity: .6;
