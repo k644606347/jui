@@ -3,7 +3,7 @@ import { CheckboxProps } from './CheckboxType';
 import * as React from 'react';
 import cssModules from './Checkbox.scss';
 import Tools from '../utils/Tools';
-import { iconCheck_solid, iconCheckCircle_solid, iconCheckCircle_regular, iconCircle_regular } from './icons/FontAwesomeMap';
+import { iconCheckCircle_solid, iconCheckCircle_regular, iconCircle_regular } from './icons/FontAwesomeMap';
 import Icon from './Icon';
 
 const tools = Tools.getInstance();

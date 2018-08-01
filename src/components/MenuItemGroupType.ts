@@ -7,7 +7,7 @@ export interface ChangeEvent {
 export interface IMenuItemGroupProps {
     id: string;
     label: string | JSX.Element;
-    targetItems: React.ReactElement<IMenuItemsProps>;
+    targetItems?: React.ReactElement<IMenuItemsProps>;
     active?: boolean;
     className?: string;
     style?: React.CSSProperties;

@@ -20,8 +20,17 @@ class App extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
 
+        let that = this;
+
         this.state = {
             menu: {
+                showItems: false,
+                onShow() {
+                    that.setState({menu: {...that.state.menu, showItems: true}});
+                },
+                onHide() {
+                    that.setState({menu: {...that.state.menu, showItems: false}});
+                },
                 activeIndex: 1,
                 items: [
                     { value: 'item1', label: 'item1', checked: false },
@@ -39,6 +48,7 @@ class App extends React.Component<any, any> {
                             ] 
                     }
                 ],
+                backdropCoverage: 'bottom',
             }
         };
 

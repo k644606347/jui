@@ -10,7 +10,8 @@
     "object-literal-sort-keys": false,
     "jsx-self-close": false,
     "jsx-no-string-ref": false,
-    "interface-name": false
+    "interface-name": false,
+    "member-ordering": false
   },
   "linterOptions": {
     "exclude": [

@@ -12,14 +12,22 @@ export interface IMenuProps {
     className?: string;
     style?: React.CSSProperties;
     multiSelect?: boolean;
+    onShow?: () => void;
+    onHide?: () => void;
     onChange?: (e: any) => void;
     level?: 1 | 2;
     activeIndex?: number;
+    backdrop?: boolean;
+    backdropClick?: boolean;
+    backdropCoverage?: 'full' | 'bottom';
 }
 export interface IMenuState {
-    showItems: boolean;
     itemsRect: {
         top: number,
         left: number
     },
+    backdropRect: {
+        top: number,
+        left: number,
+    }
 }

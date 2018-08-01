@@ -2,19 +2,19 @@
 $menu-btn-bgcolor: #008AE6;
 $menu-btn-color: #fff;
 $menu-name: menu;
+$menu-btn-height: 47px;
 $menu-btn-font-size: 18px;
 .#{$menu-name}-wrap {
     display: inline-block;
 }
 .#{$menu-name}-btn {
-    // display: inline-block;
     position: relative;
     z-index: 20;
     text-align: center;
     font-size: $menu-btn-font-size;
-    padding: 5px 10px;
-    height: 1.5em;
-    line-height: 1.5em;
+    padding: 0 15px;
+    height: $menu-btn-height;
+    line-height: $menu-btn-height;
     overflow: hidden;
     text-overflow: ellipsis;
     word-break: break-word;
@@ -30,7 +30,6 @@ $menu-btn-font-size: 18px;
 .#{$menu-name}-items-wrap {
     width: 100vw;
     height: 50vh;
-    // position: fixed;
     position: absolute;
     z-index: 20;
     display: flex;
@@ -40,12 +39,8 @@ $menu-btn-font-size: 18px;
 .#{$menu-name}-items-wrap-backdrop {
     width: 100vw;
     height: 100vh;
-    position: fixed;
-    // position: absolute;
-    left: 0;
-    background-color: rgba(0, 0, 0, .4);
+    position: absolute;
+    opacity: .4;
+    background-color: #000;
     z-index: 10;
 }
-// .#{$menu-name}-items-level-wrap {
-//     flex: 1 1 auto;
-// }

@@ -13,12 +13,11 @@ export default class MenuItemGroup extends React.PureComponent<IMenuItemGroupPro
         id: '',
         label: '',
         active: false,
-        targetItems: <MenuItems id={tools.genID()} label={''} items={[]} />,
     };
     private clickedTimer: number;
     constructor(props: IMenuItemGroupProps) {
         super(props);
-        
+
         this.state = {
             clicked: false,
         };
@@ -30,12 +29,21 @@ export default class MenuItemGroup extends React.PureComponent<IMenuItemGroupPro
         let { label, active, className, style, icon } = this.props,
             { clicked } = this.state;
 
-        return <div className={tools.classNames(cssModules.item, cssModules['item-group'], active && cssModules['item-group-active'], clicked ? cssModules['item-clicked'] : '', className)} style={style}
-         {...this.buildEvents()}>
-            <div className={cssModules['item-icon']}>{Icon.renderIcon(icon)}</div>
-            <div className={cssModules['item-content']}>{label}</div>
-            <div className={cssModules['sub-item-arrow']}><Icon icon={iconChevronRight_solid} /></div>
-        </div>;
+        return (
+            <div className={
+                tools.classNames(
+                    cssModules.item, cssModules['item-group'],
+                    active && cssModules['item-group-active'],
+                    clicked && cssModules['item-clicked'],
+                    className)
+            } style={style} {...this.buildEvents()}>
+                <div className={cssModules['item-icon']}>{Icon.renderIcon(icon)}</div>
+                <div className={cssModules['item-content']}>{label}</div>
+                <div className={cssModules['sub-item-arrow']}>
+                    <Icon icon={iconChevronRight_solid} />
+                </div>
+            </div>
+        );
     }
     private buildEvents() {
         if (tools.supportTouchEvents()) {
@@ -52,16 +60,16 @@ export default class MenuItemGroup extends React.PureComponent<IMenuItemGroupPro
     }
     private handleTouchStart(e: React.TouchEvent<HTMLElement>) {
         // todo 增加MenuItems的操作反馈
-        this.setState({clicked: true});
+        this.setState({ clicked: true });
         this.fireChangeCallback();
     }
     private handleTouchEnd(e: React.TouchEvent<HTMLElement>) {
-        this.setState({clicked: false});
+        this.setState({ clicked: false });
     }
     private handleClick(e: React.MouseEvent<HTMLElement>) {
-        this.setState({clicked: true});
+        this.setState({ clicked: true });
         clearTimeout(this.clickedTimer);
-        this.clickedTimer = window.setTimeout(() => this.setState({clicked: false}), 150);
+        this.clickedTimer = window.setTimeout(() => this.setState({ clicked: false }), 150);
 
         this.fireChangeCallback();
     }
