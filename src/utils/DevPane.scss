@@ -1,0 +1,47 @@
+@charset "UTF-8";
+.wrapper {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    max-width: 50vw;
+    background: rgba(0, 0, 0, .5);
+    color: #eee;
+    border: 1px solid #222;
+    padding: 2px 8px;
+    z-index: 9999;
+    &.hide {
+        left: 100vw;
+        right: initial;
+        .close-btn {
+            border-radius: 50% 0 0 50%;
+            left: -1.5em;
+        }
+    }
+    .close-btn {
+        padding: 0;
+        margin: 0;
+        background: inherit;
+        position: absolute;
+        font-size: 20px;
+        width: 1.5em;
+        height: 1.5em;
+        line-height: 1.5em;
+        top: -1.5em;
+        left: 1em;
+        display: inline-block;
+        text-align: center;
+        vertical-align: middle;
+        border-radius: 50% 50% 0 0;
+    }
+    p {
+        margin: 0;
+        font-size: 16px;
+        line-height: 24px;
+    }
+}
+.app-scrollable {
+    height: 100vh;
+    overflow: auto;
+    border: 2px dashed orange;
+    box-sizing: border-box;
+}

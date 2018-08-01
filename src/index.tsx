@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom';
 import App from './App';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
-import EnvPane from './utils/EnvPane';
+import DevPane from './utils/DevPane';
 import Tools from './utils/Tools';
 import ConsoleLog from './utils/ConsoleLog';
 
@@ -12,7 +12,7 @@ tools.isDev() && ConsoleLog.init();
 ReactDOM.render(
   <React.Fragment>
     <App />
-    {tools.isDev() ? <EnvPane /> : ''}
+    {tools.isDev() ? <DevPane /> : ''}
   </React.Fragment>,
   document.getElementById('root') as HTMLElement
 );
