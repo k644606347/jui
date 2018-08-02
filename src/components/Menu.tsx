@@ -6,12 +6,16 @@ import Icon from "./Icon";
 import MenuItems from "./MenuItems";
 
 const tools = Tools.getInstance();
+
+/**
+ * 菜单栏组件, 样式定位以<body>元素为基准
+ */
 export default class Menu extends React.PureComponent<IMenuProps, IMenuState> {
     public static updateItemsLayout() {
         Menu.instances.forEach(ins => {
             if (ins.props.showItems) {
                 ins.setState({
-                    itemsRect: ins.genItemsRect()
+                    itemsStyle: ins.genItemsStyle()
                 });
             }
         });
@@ -19,8 +23,8 @@ export default class Menu extends React.PureComponent<IMenuProps, IMenuState> {
     public static updateMenuBackdrop() {
         Menu.instances.forEach(ins => {
             let { showItems, backdrop } = ins.props,
-                { backdropRect } = ins.state,
-                nextBackdropRect = ins.genBackdropRect(),
+                { backdropStyle } = ins.state,
+                nextBackdropStyle = ins.genBackdropStyle(),
                 maxOffset = 10;
 
             if (!showItems || !backdrop) {
@@ -28,10 +32,10 @@ export default class Menu extends React.PureComponent<IMenuProps, IMenuState> {
             }
 
             // 小于偏移量的scroll移动不做处理
-            if (Math.abs(backdropRect.top - nextBackdropRect.top) < maxOffset) {
+            if (Math.abs(Number(backdropStyle.top) - Number(nextBackdropStyle.top)) < maxOffset) {
                 return;
             }
-            ins.setState({ backdropRect: nextBackdropRect });
+            ins.setState({ backdropStyle: nextBackdropStyle });
         })
     }
     private static instances: Menu[] = [];
@@ -51,11 +55,11 @@ export default class Menu extends React.PureComponent<IMenuProps, IMenuState> {
         super(props);
 
         this.state = {
-            itemsRect: {
+            itemsStyle: {
                 top: 0,
                 left: 0,
             },
-            backdropRect: {
+            backdropStyle: {
                 top: 0,
                 left: 0
             },
@@ -68,16 +72,16 @@ export default class Menu extends React.PureComponent<IMenuProps, IMenuState> {
     public render() {
         let { props, state } = this,
             { id, label, className, showItems, style, icon, items, level, activeIndex, multiSelect, backdrop, backdropClick } = props,
-            { itemsRect, backdropRect } = state;
+            { itemsStyle, backdropStyle } = state;
 
         return <React.Fragment>
             <div className={cssModules['menu-wrap']}>
                 <div ref='menuBtn' style={style} className={tools.classNames(cssModules['menu-btn'], className)} onClick={this.handleBtnClick}>{Icon.renderIcon(icon)}{label}</div>
                 <div className={cssModules['menu-items-root']} style={{ display: showItems ? 'block' : 'none' }}>
-                    <div style={itemsRect} className={cssModules['menu-items-wrap']}>
+                    <div style={itemsStyle} className={cssModules['menu-items-wrap']}>
                         <MenuItems id={id} label={label} activeIndex={activeIndex} items={items} multiSelect={multiSelect} level={level} onChange={this.handleChange} />
                     </div>
-                    {backdrop ? <div className={cssModules['menu-items-wrap-backdrop']} style={backdropRect} onClick={backdropClick ? this.handleBackdropClick : undefined}></div> : ''}
+                    {backdrop ? <div className={cssModules['menu-items-wrap-backdrop']} style={backdropStyle} onClick={backdropClick ? this.handleBackdropClick : undefined}></div> : ''}
                 </div>
             </div>
         </React.Fragment>;
@@ -87,10 +91,10 @@ export default class Menu extends React.PureComponent<IMenuProps, IMenuState> {
             nextState = {} as IMenuState;
 
         if (showItems) {
-            nextState.itemsRect = this.genItemsRect();
+            nextState.itemsStyle = this.genItemsStyle();
 
             if (backdrop) {
-                nextState.backdropRect = this.genBackdropRect();
+                nextState.backdropStyle = this.genBackdropStyle();
             }
 
             this.setState(nextState);
@@ -116,10 +120,10 @@ export default class Menu extends React.PureComponent<IMenuProps, IMenuState> {
             }
         }
         if (needUpdateItemsLayout) {
-            nextState.itemsRect = this.genItemsRect();
+            nextState.itemsStyle = this.genItemsStyle();
         }
         if (needUpdateBackdropLayout) {
-            nextState.backdropRect = this.genBackdropRect();
+            nextState.backdropStyle = this.genBackdropStyle();
         }
 
         !tools.isEmptyObject(nextState) && this.setState(nextState);
@@ -131,27 +135,26 @@ export default class Menu extends React.PureComponent<IMenuProps, IMenuState> {
             Menu.instances.splice(index, 1);
         }
     }
-    private genItemsRect() {
+    private genItemsStyle() {
         let menuBtnRect = this.getMenuBtnRect(),
-            xOffset = 0 - menuBtnRect.left,
-            yOffset = 0,
-            { itemsRect } = this.state;
-
-        if (itemsRect.top === yOffset && itemsRect.left === xOffset) {
-            return itemsRect;
-        }
+            rootRect = document.body.getBoundingClientRect(),
+            xOffset = rootRect.left - menuBtnRect.left,
+            yOffset = 0;
 
         return {
             top: yOffset,
-            left: xOffset
+            left: xOffset,
+            width: rootRect.width,
         }
     }
-    private genBackdropRect() {
+    private genBackdropStyle() {
         let { backdropCoverage } = this.props,
             menuBtnRect = this.getMenuBtnRect(),
-            style = {
+            rootRect = document.body.getBoundingClientRect(),
+            style: React.CSSProperties = {
                 top: 0 - (menuBtnRect.top + menuBtnRect.height),
-                left: 0 - menuBtnRect.left,
+                left: rootRect.left - menuBtnRect.left,
+                width: rootRect.width,
             };
 
         if (menuBtnRect.top <= 0) {
@@ -159,7 +162,8 @@ export default class Menu extends React.PureComponent<IMenuProps, IMenuState> {
         }
         
         if (backdropCoverage === 'bottom') {
-            style.top = menuBtnRect.height;
+            style.top = 0;
+            style.height = `calc(100vh - ${menuBtnRect.top + menuBtnRect.height + 'px'})`;
         }
 
         return style;

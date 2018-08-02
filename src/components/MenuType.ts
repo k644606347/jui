@@ -22,12 +22,6 @@ export interface IMenuProps {
     backdropCoverage?: 'full' | 'bottom';
 }
 export interface IMenuState {
-    itemsRect: {
-        top: number,
-        left: number
-    },
-    backdropRect: {
-        top: number,
-        left: number,
-    }
+    itemsStyle: React.CSSProperties;
+    backdropStyle: React.CSSProperties;
 }
