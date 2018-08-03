@@ -115,7 +115,7 @@ class App extends React.Component<any, any> {
                 <Button>btn1</Button>
                 <Button type={'primary'}>btn2</Button>
                 <Button type="warning" size="large" loading={true}>btn3</Button>
-                <Button icon={<React.Fragment><Icon style={{ marginRight: '20px' }} icon={icon500px_brand} /></React.Fragment>} disabled={true}>disabled btn</Button>
+                <Button icon={<Icon style={{ marginRight: '20px' }} icon={icon500px_brand} />} disabled={true}>disabled btn</Button>
                 <Button type="dashed" size="small">small btn</Button>
                 <Button size="large">large btn</Button>
                 <Button loading={true} icon='cloud' inline={true}>inline btn</Button>
