@@ -3,7 +3,6 @@ import cssModules from './MenuItems.scss';
 import Tools from "../utils/Tools";
 import Icon, { iconChevronRight_solid } from "./Icon";
 import { IMenuItemGroupProps, IMenuItemGroupState } from "./MenuItemGroupType";
-import { MouseEvent } from "react";
 import MenuItems from "./MenuItems";
 
 const tools = Tools.getInstance();

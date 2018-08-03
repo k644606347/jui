@@ -95,7 +95,11 @@ class Button extends React.PureComponent<IButtonProps> {
             }
         }
 
-        className = tools.classNames(cssModule.btn, [type, disabled && 'disabled', inline && 'inline', size, shape].map(n => cssModule[`${prefixCls}-${n}`]), className);
+        className = tools.classNames(
+                        cssModule.btn, 
+                        [type, disabled && 'disabled', inline && 'inline', size, shape].map(n => cssModule[`${prefixCls}-${n}`]), 
+                        className
+                    );
 
         return (
             <TouchFeedback activeClassName={cssModule[`${prefixCls}-active`]} disabled={disabled}>
