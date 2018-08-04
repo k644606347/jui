@@ -26,22 +26,43 @@ export default class MenuItem extends React.PureComponent<IMenuItemProps, IMenuI
         };
 
         this.handleChange = this.handleChange.bind(this);
-        // this.handleClick = this.handleClick.bind(this);
         this.handleTouchStart = this.handleTouchStart.bind(this);
         this.handleTouchEnd = this.handleTouchEnd.bind(this);
+        this.handleClick = this.handleClick.bind(this);
     }
     public render() {
         let { name, label, checked, multiSelect, className, style, icon } = this.props,
             { clicked } = this.state;
 
             // todo label后的div的touchstart会触发label, 应考虑使用div + touchstart 替代 label
-        return <label className={tools.classNames(cssModules.item, clicked ? cssModules['item-clicked'] : '', className)} style={style}>
+        return (
+            <div className={
+                tools.classNames(
+                    cssModules.item, 
+                    clicked && cssModules['item-clicked'], 
+                    className
+                    )
+                } style={style} {...this.buildEvents()}>
                 <div className={cssModules['item-icon']}>{Icon.renderIcon(icon)}</div>
                 <div className={cssModules['item-content']}>{label}</div>
                 {
                     this.renderInputComponent()
                 }
-            </label>
+            </div>
+        )
+    }
+    private buildEvents() {
+        if (tools.supportTouchEvents()) {
+            return {
+                onTouchStart: this.handleTouchStart,
+                onTouchEnd: this.handleTouchEnd,
+            };
+        } else {
+            // 兼容pc端
+            return {
+                onClick: this.handleClick,
+            }
+        }
     }
     private renderInputComponent() {
         let { multiSelect, name, value, checked } = this.props,
@@ -49,7 +70,6 @@ export default class MenuItem extends React.PureComponent<IMenuItemProps, IMenuI
                 name,
                 value,
                 checked,
-                onChange: this.handleChange,
             };
 
         return multiSelect ? <Checkbox {...propsConfig} /> : <Radio {...propsConfig} />;
@@ -66,40 +86,24 @@ export default class MenuItem extends React.PureComponent<IMenuItemProps, IMenuI
 
         onChange && onChange({ checked, value });
     }
-    // todo touchstart and touchend event
-    // private handleClick(e: React.MouseEvent<HTMLElement>) {
-    //     let { value, onChange } = this.props,
-    //         checked = e.checked;
-
-    //         this.setState({clicked: true});
-    //         clearTimeout(this.clickedTimer);
-    //         this.clickedTimer = window.setTimeout(() => this.setState({clicked: false}), 100);
-
-    //     onChange && onChange({ checked, value });
-    // }
-    // private buildEvents() {
-    //     if (tools.supportTouchEvents()) {
-    //         return {
-    //             onTouchStart: this.handleTouchStart,
-    //             onTouchEnd: this.handleTouchEnd,
-    //         };
-    //     } else {
-    //         // 兼容pc端
-    //         return {
-    //             onClick: this.handleClick,
-    //         }
-    //     }
-    // }
     private handleTouchStart(e: React.TouchEvent<HTMLElement>) {
         this.setState({clicked: true});
-        // this.fireChangeCallback();
     }
     private handleTouchEnd(e: React.TouchEvent<HTMLElement>) {
         this.setState({clicked: false});
+        this.fireChangeCallback({ checked: !this.props.checked });
     }
-    // private fireChangeCallback(options?: any) {
-    //     let { id, onChange } = this.props;
+    private handleClick(e: React.MouseEvent<HTMLElement>) {
+        this.setState({ clicked: true });
+        clearTimeout(this.clickedTimer);
+        this.clickedTimer = window.setTimeout(() => this.setState({ clicked: false }), 150);
 
-    //     onChange && onChange({ id });
-    // }
+        this.fireChangeCallback({ checked: !this.props.checked });
+    }
+    private fireChangeCallback(options?: any) {
+        let { value, onChange } = this.props,
+            { checked } = options;
+
+        onChange && onChange({ checked, value });
+    }
 }

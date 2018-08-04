@@ -1,9 +1,10 @@
 import * as React from "react";
 import cssModules from './MenuItems.scss';
 import Tools from "../utils/Tools";
-import Icon, { iconChevronRight_solid } from "./Icon";
+import Icon from "./Icon";
 import { IMenuItemGroupProps, IMenuItemGroupState } from "./MenuItemGroupType";
 import MenuItems from "./MenuItems";
+import { iconChevronRight } from "./icons/FontAwesomeMap";
 
 const tools = Tools.getInstance();
 
@@ -39,7 +40,7 @@ export default class MenuItemGroup extends React.PureComponent<IMenuItemGroupPro
                 <div className={cssModules['item-icon']}>{Icon.renderIcon(icon)}</div>
                 <div className={cssModules['item-content']}>{label}</div>
                 <div className={cssModules['sub-item-arrow']}>
-                    <Icon icon={iconChevronRight_solid} />
+                    <Icon icon={iconChevronRight} />
                 </div>
             </div>
         );
@@ -60,10 +61,10 @@ export default class MenuItemGroup extends React.PureComponent<IMenuItemGroupPro
     private handleTouchStart(e: React.TouchEvent<HTMLElement>) {
         // todo 增加MenuItems的操作反馈
         this.setState({ clicked: true });
-        this.fireChangeCallback();
     }
     private handleTouchEnd(e: React.TouchEvent<HTMLElement>) {
         this.setState({ clicked: false });
+        this.fireChangeCallback();
     }
     private handleClick(e: React.MouseEvent<HTMLElement>) {
         this.setState({ clicked: true });

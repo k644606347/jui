@@ -11,5 +11,5 @@ export interface CheckboxProps {
     disabled?: boolean;
     style?: React.CSSProperties;
     className?: string;
-    onChange: (e: ChangeEvent) => void;
+    onChange?: (e: ChangeEvent) => void;
 }

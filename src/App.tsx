@@ -7,14 +7,14 @@ import Hello from './components/Hello';
 import Button from './components/Button';
 import logo from './logo.svg';
 import Icon, { IconProps } from './components/Icon';
-import { icon500px_brand, iconAccessibleIcon_brand, iconAddressBook_solid, iconThList_solid } from './components/icons/FontAwesomeMap';
+import { icon500px, iconAccessibleIcon, iconAddressBook, iconThList } from './components/icons/FontAwesomeMap';
 import List from './components/List';
 import favoriteIcon from './favicon.ico';
 import Pagination from './components/Pagination';
 import Menu from './components/Menu';
 import Tools from './utils/Tools';
 
-window.console.log('icon:', (<Icon icon={iconThList_solid} /> as React.ReactElement<IconProps>).type === Icon, icon500px_brand);
+window.console.log('icon:', (<Icon icon={iconThList} /> as React.ReactElement<IconProps>).type === Icon, icon500px);
 const tools = Tools.getInstance();
 class App extends React.Component<any, any> {
     constructor(props: any) {
@@ -39,11 +39,11 @@ class App extends React.Component<any, any> {
                         items: [
                                 { 
                                     value: 'item2', label: 'item2', checked: false,
-                                    icon: iconAccessibleIcon_brand,
+                                    icon: iconAccessibleIcon,
                                 },
                                 { 
                                     value: 'item3', label: 'item3', checked: false,
-                                    icon: <Icon icon={iconThList_solid} spin={true} />
+                                    icon: <Icon icon={iconThList} spin={true} />
                                 }
                             ] 
                     }
@@ -113,17 +113,17 @@ class App extends React.Component<any, any> {
                 {/* <input type="text" style={{position: 'fixed', zIndex: 30  }} /> */}
                 <Menu id={'menu1'} multiSelect={true} label={'ddd'} level={2} {...menu} onChange={this.handleMenuChange} />
                 <Button>btn1</Button>
-                <Button type={'primary'}>btn2</Button>
+                <Button type={'primary'} icon={iconThList}>btn2</Button>
                 <Button type="warning" size="large" loading={true}>btn3</Button>
-                <Button icon={<Icon style={{ marginRight: '20px' }} icon={icon500px_brand} />} disabled={true}>disabled btn</Button>
+                <Button icon={<Icon style={{ marginRight: '20px' }} icon={icon500px} />} disabled={true}>disabled btn</Button>
                 <Button type="dashed" size="small">small btn</Button>
                 <Button size="large">large btn</Button>
                 <Button loading={true} icon='cloud' inline={true}>inline btn</Button>
                 <Button shape="circle" loading={true} inline={true} size="large">btn4</Button>
                 <Button className="body-btn" type={'primary'}>custom className</Button>
-                <Icon icon={icon500px_brand} size="2x" rotation={90} flip="vertical" border={true} pulse={true} spin={true} />
-                <Icon icon={iconAccessibleIcon_brand} size="2x" rotation={90} flip="vertical" border={true} pulse={true} spin={true} />
-                <Icon icon={iconAddressBook_solid} size="2x" rotation={90} flip="vertical" border={true} pulse={true} spin={true} />
+                <Icon icon={iconAccessibleIcon} size="2x" rotation={90} flip="vertical" border={true} pulse={true} spin={true} />
+                <Icon icon={iconAccessibleIcon} size="2x" rotation={90} flip="vertical" border={true} pulse={true} spin={true} />
+                <Icon icon={iconAddressBook} size="2x" rotation={90} flip="vertical" border={true} pulse={true} spin={true} />
                 <Pagination current={1} total={20} disabled={true} />
                 <Pagination current={21} total={20} disabled={true} />
                 <List dataSource={[

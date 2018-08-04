@@ -2,7 +2,6 @@ import * as React from "react";
 import { IMenuItemsProps } from "./MenuItemsType";
 import cssModules from './MenuItems.scss';
 import Tools from "../utils/Tools";
-import Icon, { iconChevronRight_solid } from "./Icon";
 import MenuItem from "./MenuItem";
 import { IMenuItemChangeEvent, IMenuItemProps } from "./MenuItemType";
 import MenuItemGroup from "./MenuItemGroup";

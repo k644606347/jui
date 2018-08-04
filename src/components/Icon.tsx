@@ -30,16 +30,17 @@ export interface IconProps {
     transform?: string | Transform
     symbol?: FaSymbol
     style?: CSSProperties
-}
+};
+import Tools from '../utils/Tools';
 
-export * from './icons/FontAwesomeMap';
+const tools = Tools.getInstance();
 
 export { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 
 export default class Icon extends React.PureComponent<IconProps, any> {
     public static renderIcon(icon: React.ReactElement<IconProps> | IconDefinition | undefined) {
         if (icon) {
-            if (Icon.isIconComponent(icon)) {
+            if (Icon.isIconElement(icon)) {
                 return icon;
             } else {
                 return <Icon icon={icon as IconDefinition} />
@@ -48,8 +49,13 @@ export default class Icon extends React.PureComponent<IconProps, any> {
             return '';
         }
     }
-    public static isIconComponent(icon: any) {
+    public static isIconElement(icon: any) {
         return (icon as React.ReactElement<IconProps>).type === Icon;
+    }
+    public static isFontAweSomeIcon(icon: any) {
+        let fasIcon = (icon as IconDefinition);
+
+        return fasIcon.prefix && fasIcon.iconName && tools.isArray(fasIcon.icon);
     }
     constructor(props: IconProps) {
         super(props);

@@ -31,7 +31,7 @@ export interface ButtonProps {
     inline?: boolean;
     type?: ButtonType;
     size?: SizeType;
-    icon?: IconType | React.ReactElement<IconProps>; // todo 追加对IconDefinition的支持，这样编写props时更简洁
+    icon?: IconType | IconDefinition | React.ReactElement<IconProps>;
     shape?: ShapeType;
     disabled?: boolean;
     loading?: boolean;

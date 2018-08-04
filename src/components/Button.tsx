@@ -1,31 +1,41 @@
 import * as React from 'react';
 import { IButtonIcons, ButtonProps } from './ButtonType';
 import cssModule from './Button.scss';
-import Icon, { iconCloud_solid, iconCloudDownloadAlt_solid, iconDownload_solid, iconCloudUploadAlt_solid, iconPowerOff_solid, iconSpinner_solid, iconSearch_solid, iconCheckCircle_solid, iconCheckCircle_regular, iconTimesCircle_solid, iconTimesCircle_regular } from './Icon';
+import Icon from './Icon';
 import TouchFeedback from './TouchFeedback';
 import Tools from '../utils/Tools';
-import { iconEllipsisH_solid, iconEllipsisV_solid, iconChevronUp_solid, iconChevronRight_solid, iconChevronDown_solid, iconChevronLeft_solid } from './icons/FontAwesomeMap';
+import { 
+    iconCloud, iconCloudDownloadAlt, 
+    iconDownload, iconCloudUploadAlt, 
+    iconPowerOff, iconSpinner, 
+    iconSearch, iconCheckCircle, 
+    iconCheckCircle_r, iconTimesCircle, 
+    iconTimesCircle_r, iconEllipsisH, 
+    iconEllipsisV, iconChevronUp, 
+    iconChevronRight, iconChevronDown, 
+    iconChevronLeft 
+} from './icons/FontAwesomeMap';
 
 const tools = Tools.getInstance();
 const prefixCls = 'btn';
 const buttonIcons: IButtonIcons = {
-    cloud: iconCloud_solid,
-    'cloud-down': iconCloudDownloadAlt_solid,
-    'cloud-upload': iconCloudUploadAlt_solid,
-    download: iconDownload_solid,
-    loading: iconSpinner_solid,
-    'power-off': iconPowerOff_solid,
-    search: iconSearch_solid,
-    'check-circle': iconCheckCircle_solid,
-    'check-circle-o': iconCheckCircle_regular,
-    'times-circle': iconTimesCircle_solid,
-    'times-circle-o': iconTimesCircle_regular,
-    'ellipsis-h': iconEllipsisH_solid,
-    'ellipsis-v': iconEllipsisV_solid,
-    'up': iconChevronUp_solid,
-    'right': iconChevronRight_solid,
-    'down': iconChevronDown_solid,
-    'left': iconChevronLeft_solid,
+    cloud: iconCloud,
+    'cloud-down': iconCloudDownloadAlt,
+    'cloud-upload': iconCloudUploadAlt,
+    download: iconDownload,
+    loading: iconSpinner,
+    'power-off': iconPowerOff,
+    search: iconSearch,
+    'check-circle': iconCheckCircle,
+    'check-circle-o': iconCheckCircle_r,
+    'times-circle': iconTimesCircle,
+    'times-circle-o': iconTimesCircle_r,
+    'ellipsis-h': iconEllipsisH,
+    'ellipsis-v': iconEllipsisV,
+    'up': iconChevronUp,
+    'right': iconChevronRight,
+    'down': iconChevronDown,
+    'left': iconChevronLeft,
 };
 class Button extends React.PureComponent<ButtonProps, any> {
     public static defaultProps = {
@@ -53,7 +63,7 @@ class Button extends React.PureComponent<ButtonProps, any> {
                 if (typeof icon === 'string') {
                     iconEntity = buttonIcons[icon];
                 } else {
-                    iconElement = icon;
+                    iconElement = Icon.renderIcon(icon);
                 }
             }
         }
