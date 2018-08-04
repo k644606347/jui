@@ -82,7 +82,7 @@ export default class Menu extends React.PureComponent<IMenuProps, IMenuState> {
 
         return <React.Fragment>
             <div className={cssModules['menu-wrap']}>
-                <div ref='menuBtn' style={style} className={tools.classNames(cssModules['menu-btn'], className)} onClick={this.handleBtnClick}>{Icon.renderIcon(icon)}{label}</div>
+                <div ref='menuBtn' style={style} className={tools.classNames(cssModules['menu-btn'], className)} onClick={this.handleBtnClick}>{icon && Icon.renderIcon(icon)}{label}</div>
                 <div className={cssModules['menu-items-root']} style={{ display: showItems ? 'block' : 'none' }}>
                     <div style={itemsStyle} className={cssModules['menu-items-wrap']}>
                         <MenuItems id={id} label={label} activeIndex={activeIndex} items={items} multiSelect={multiSelect} level={level} onChange={this.handleChange} />

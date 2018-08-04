@@ -38,15 +38,11 @@ const tools = Tools.getInstance();
 export { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 
 export default class Icon extends React.PureComponent<IconProps, any> {
-    public static renderIcon(icon: React.ReactElement<IconProps> | IconDefinition | undefined) {
-        if (icon) {
-            if (Icon.isIconElement(icon)) {
-                return icon;
-            } else {
-                return <Icon icon={icon as IconDefinition} />
-            }
+    public static renderIcon(icon: React.ReactElement<IconProps> | IconDefinition) {
+        if (Icon.isIconElement(icon)) {
+            return icon as React.ReactElement<IconProps>;
         } else {
-            return '';
+            return <Icon icon={icon as IconDefinition} />
         }
     }
     public static isIconElement(icon: any) {

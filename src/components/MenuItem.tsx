@@ -43,7 +43,7 @@ export default class MenuItem extends React.PureComponent<IMenuItemProps, IMenuI
                     className
                     )
                 } style={style} {...this.buildEvents()}>
-                <div className={cssModules['item-icon']}>{Icon.renderIcon(icon)}</div>
+                <div className={cssModules['item-icon']}>{icon && Icon.renderIcon(icon)}</div>
                 <div className={cssModules['item-content']}>{label}</div>
                 {
                     this.renderInputComponent()

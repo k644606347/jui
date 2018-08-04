@@ -1,6 +1,6 @@
 import { IconDefinition, IconProps } from "./Icon";
 
-export interface IButtonIcons {
+export interface PresetIcons {
     cloud: IconDefinition;
     'cloud-down': IconDefinition;
     'cloud-upload': IconDefinition;
@@ -20,7 +20,7 @@ export interface IButtonIcons {
     'left': IconDefinition;
 }
 
-type IconType = keyof IButtonIcons;
+type IconType = keyof PresetIcons;
 type SizeType = 'small' | 'default' | 'large';
 type ShapeType = 'circle';
 type ButtonType = 'primary' | 'dashed' | 'warning';

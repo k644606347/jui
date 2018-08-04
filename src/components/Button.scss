@@ -86,8 +86,10 @@ $btn-name: btn;
     line-height: $button-height-sm;
     padding: 0 $h-spacing-lg;
   }
-  &-icon + span{
-    margin-left: .5em;
+  .icon {
+    & ~ span {
+      margin-left: .5em;
+    }
   }
   &-circle {
     width: $button-height;

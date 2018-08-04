@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { IButtonIcons, ButtonProps } from './ButtonType';
+import { PresetIcons, ButtonProps } from './ButtonType';
 import cssModule from './Button.scss';
-import Icon from './Icon';
+import Icon, { IconProps } from './Icon';
 import TouchFeedback from './TouchFeedback';
 import Tools from '../utils/Tools';
 import { 
@@ -18,7 +18,7 @@ import {
 
 const tools = Tools.getInstance();
 const prefixCls = 'btn';
-const buttonIcons: IButtonIcons = {
+const buttonIcons: PresetIcons = {
     cloud: iconCloud,
     'cloud-down': iconCloudDownloadAlt,
     'cloud-upload': iconCloudUploadAlt,
@@ -54,14 +54,14 @@ class Button extends React.PureComponent<ButtonProps, any> {
     public render() {
         let { props } = this,
             { children, className, disabled, icon, inline, loading, shape, style, size, type } = props,
-            iconEntity, iconElement;
+            presetIcon, iconElement;
 
         if (loading) {
-            iconEntity = buttonIcons.loading;
+            presetIcon = buttonIcons.loading;
         } else {
             if (icon) {
                 if (typeof icon === 'string') {
-                    iconEntity = buttonIcons[icon];
+                    presetIcon = buttonIcons[icon];
                 } else {
                     iconElement = Icon.renderIcon(icon);
                 }
@@ -70,14 +70,26 @@ class Button extends React.PureComponent<ButtonProps, any> {
 
         className = tools.classNames(
             cssModule.btn,
-            [type, disabled && 'disabled', inline && 'inline', size, shape].map(n => cssModule[`${prefixCls}-${n}`]),
+            [ type, disabled && 'disabled', inline && 'inline', size, shape ].map(
+                n => cssModule[`${prefixCls}-${n}`]
+            ),
             className
         );
 
         return (
             <TouchFeedback activeClassName={cssModule[`${prefixCls}-active`]} disabled={disabled}>
                 <a style={style} className={className} onClick={this.handleClick}>
-                    {iconEntity ? <Icon icon={iconEntity} className={cssModule[`${prefixCls}-icon`]} spin={loading} /> : iconElement ? iconElement : null}
+                    {
+                        presetIcon ?  
+                            <Icon icon={presetIcon} className={cssModule.icon} spin={loading} /> : 
+                            iconElement ? 
+                                React.cloneElement<IconProps>(
+                                    iconElement, 
+                                    {
+                                        className: tools.classNames(cssModule.icon, iconElement.props.className),
+                                    }
+                                ) : null
+                    }
                     {children !== undefined ? <React.Fragment><span>{children}</span></React.Fragment> : null}
                 </a>
             </TouchFeedback>
