@@ -11,16 +11,22 @@ const tools = Tools.getInstance();
  * 菜单栏组件, 样式定位以<body>元素为基准
  */
 export default class Menu extends React.PureComponent<IMenuProps, IMenuState> {
-    public static updateItemsLayout() {
+    public static handleResize() {
         Menu.instances.forEach(ins => {
-            if (ins.props.showItems) {
-                ins.setState({
-                    itemsStyle: ins.genItemsStyle()
-                });
+            let { showItems, backdrop } = ins.props,
+                nextState = {} as IMenuState;
+
+            if (showItems) {
+                nextState.itemsStyle = ins.genItemsStyle();
+                
+                if (backdrop) {
+                    nextState.backdropStyle = ins.genBackdropStyle();
+                }
+                ins.setState(nextState);
             }
         });
     }
-    public static updateMenuBackdrop() {
+    public static handleScroll() {
         Menu.instances.forEach(ins => {
             let { showItems, backdrop } = ins.props,
                 { backdropStyle } = ins.state,
@@ -200,8 +206,8 @@ export default class Menu extends React.PureComponent<IMenuProps, IMenuState> {
     }
 }
 
-Menu.updateItemsLayout = Menu.updateItemsLayout.bind(Menu);
-Menu.updateMenuBackdrop = Menu.updateMenuBackdrop.bind(Menu);
+Menu.handleResize = Menu.handleResize.bind(Menu);
+Menu.handleScroll = Menu.handleScroll.bind(Menu);
 
 const win = window, addEvent = win.addEventListener;
 let backdropTimer: number = 0;
@@ -213,8 +219,8 @@ addEvent('scroll', e => {
         clearTimeout(backdropTimer);
     }
     backdropTimer = win.setTimeout(() => {
-        Menu.updateMenuBackdrop();
+        Menu.handleScroll();
         backdropTimer = 0;
     }, 100);
 }, true);
-addEvent('resize', Menu.updateItemsLayout, false);
+addEvent('resize', Menu.handleResize);

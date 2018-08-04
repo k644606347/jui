@@ -1,32 +1,13 @@
-import { MouseEventHandler } from 'react';
 import * as React from 'react';
+import { IButtonIcons, ButtonProps } from './ButtonType';
 import cssModule from './Button.scss';
-import Icon, { IconDefinition, iconCloud_solid, iconCloudDownloadAlt_solid, iconDownload_solid, iconCloudUploadAlt_solid, iconPowerOff_solid, iconSpinner_solid, iconSearch_solid, iconCheckCircle_solid, iconCheckCircle_regular, iconTimesCircle_solid, iconTimesCircle_regular } from './Icon';
+import Icon, { iconCloud_solid, iconCloudDownloadAlt_solid, iconDownload_solid, iconCloudUploadAlt_solid, iconPowerOff_solid, iconSpinner_solid, iconSearch_solid, iconCheckCircle_solid, iconCheckCircle_regular, iconTimesCircle_solid, iconTimesCircle_regular } from './Icon';
 import TouchFeedback from './TouchFeedback';
 import Tools from '../utils/Tools';
 import { iconEllipsisH_solid, iconEllipsisV_solid, iconChevronUp_solid, iconChevronRight_solid, iconChevronDown_solid, iconChevronLeft_solid } from './icons/FontAwesomeMap';
 
 const tools = Tools.getInstance();
 const prefixCls = 'btn';
-interface IButtonIcons {
-    cloud: IconDefinition;
-    'cloud-down': IconDefinition;
-    'cloud-upload': IconDefinition;
-    download: IconDefinition;
-    loading: IconDefinition;
-    'power-off': IconDefinition;
-    search: IconDefinition;
-    'check-circle': IconDefinition;
-    'check-circle-o': IconDefinition;
-    'times-circle': IconDefinition;
-    'times-circle-o': IconDefinition;
-    'ellipsis-h': IconDefinition;
-    'ellipsis-v': IconDefinition;
-    'up': IconDefinition;
-    'right': IconDefinition;
-    'down': IconDefinition;
-    'left': IconDefinition;
-}
 const buttonIcons: IButtonIcons = {
     cloud: iconCloud_solid,
     'cloud-down': iconCloudDownloadAlt_solid,
@@ -46,25 +27,7 @@ const buttonIcons: IButtonIcons = {
     'down': iconChevronDown_solid,
     'left': iconChevronLeft_solid,
 };
-
-type IconType = keyof IButtonIcons;
-type SizeType = 'small' | 'default' | 'large';
-type ShapeType = 'circle';
-type ButtonType = 'primary' | 'dashed' | 'warning';
-export interface IButtonProps {
-    className?: string;
-    activeClassName?: string;
-    inline?: boolean;
-    type?: ButtonType;
-    size?: SizeType;
-    icon?: IconType | JSX.Element;
-    shape?: ShapeType;
-    disabled?: boolean;
-    loading?: boolean;
-    style?: React.CSSProperties;
-    onClick?: MouseEventHandler<HTMLAnchorElement>;
-}
-class Button extends React.PureComponent<IButtonProps> {
+class Button extends React.PureComponent<ButtonProps, any> {
     public static defaultProps = {
         disabled: false,
         icon: '',
@@ -72,7 +35,7 @@ class Button extends React.PureComponent<IButtonProps> {
         loading: false,
         size: 'default',
     };
-    constructor(props: IButtonProps) {
+    constructor(props: ButtonProps) {
         super(props);
 
         this.handleClick = this.handleClick.bind(this);
@@ -95,7 +58,11 @@ class Button extends React.PureComponent<IButtonProps> {
             }
         }
 
-        className = tools.classNames(cssModule.btn, [type, disabled && 'disabled', inline && 'inline', size, shape].map(n => cssModule[`${prefixCls}-${n}`]), className);
+        className = tools.classNames(
+            cssModule.btn,
+            [type, disabled && 'disabled', inline && 'inline', size, shape].map(n => cssModule[`${prefixCls}-${n}`]),
+            className
+        );
 
         return (
             <TouchFeedback activeClassName={cssModule[`${prefixCls}-active`]} disabled={disabled}>
