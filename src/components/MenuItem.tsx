@@ -31,19 +31,21 @@ export default class MenuItem extends React.PureComponent<IMenuItemProps, IMenuI
         this.handleClick = this.handleClick.bind(this);
     }
     public render() {
-        let { name, label, checked, multiSelect, className, style, icon } = this.props,
+        let { label, checked, className, style, icon } = this.props,
             { clicked } = this.state;
 
-            // todo label后的div的touchstart会触发label, 应考虑使用div + touchstart 替代 label
         return (
             <div className={
                 tools.classNames(
                     cssModules.item, 
+                    checked && cssModules['item-checked'],
                     clicked && cssModules['item-clicked'], 
                     className
                     )
                 } style={style} {...this.buildEvents()}>
-                <div className={cssModules['item-icon']}>{icon && Icon.renderIcon(icon)}</div>
+                {
+                    icon && <div className={cssModules['item-icon']}>{Icon.renderIcon(icon)}</div>
+                }
                 <div className={cssModules['item-content']}>{label}</div>
                 {
                     this.renderInputComponent()
@@ -70,6 +72,7 @@ export default class MenuItem extends React.PureComponent<IMenuItemProps, IMenuI
                 name,
                 value,
                 checked,
+                className: tools.classNames(cssModules['item-input'])
             };
 
         return multiSelect ? <Checkbox {...propsConfig} /> : <Radio {...propsConfig} />;

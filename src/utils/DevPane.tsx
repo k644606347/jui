@@ -31,9 +31,10 @@ export default class EnvPane extends React.PureComponent<EnvPaneProps, EnvPageSt
                 }
                 </a>
                 <div className={cssModules.main}>
-                    <p>ontouchstart: {('ontouchstart' in document) + ''}</p>
-                    <p>ontouchmove: {('ontouchstart' in document) + ''}</p>
-                    <p>ontouchend: {('ontouchstart' in document) + ''}</p>
+                    <p>ontouchstart/move/end: {('ontouchstart' in document) + ''}/{('ontouchstart' in document) + ''}/{('ontouchstart' in document) + ''}</p>
+                    <p>window innerWidth/Height: {window.innerWidth}/{window.innerHeight}</p>
+                    <p>body offsetWidth/Height: {document.body.offsetWidth}/{document.body.offsetHeight}</p>
+                    <p>dpr: {window.devicePixelRatio}</p>
                     <div>
                         <label><input type="checkbox" onChange={this.handleAppScrollable} />将div.App设置为可滚动</label>
                     </div>

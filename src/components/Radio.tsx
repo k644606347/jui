@@ -3,7 +3,7 @@ import { CheckboxProps } from './CheckboxType';
 import * as React from 'react';
 import cssModules from './Checkbox.scss';
 import Tools from '../utils/Tools';
-import { iconCheckCircle_r, iconCheckCircle, iconCircle_r } from './icons/FontAwesomeMap';
+import { iconCheck } from './icons/FontAwesomeMap';
 import Icon from './Icon';
 
 const tools = Tools.getInstance();
@@ -25,10 +25,16 @@ class Checkbox extends React.PureComponent<CheckboxProps, any> {
 
         // todo icon风格需优化
         return (
-            <label style={style} className={tools.classNames(cssModules.wrapper, checked ? cssModules.checked : '', disabled ? cssModules.disabled : '', className)}>
+            <label style={style} className={
+                tools.classNames(
+                    cssModules.wrapper, 
+                    checked && cssModules.checked, 
+                    disabled && cssModules.disabled, 
+                    className)
+                }>
                     <input className={tools.classNames(cssModules.input)} type="checkbox" name={name} value={value}
                      checked={checked} disabled={disabled} onChange={this.handleChange}/>
-                <div className={cssModules.icon}><Icon icon={disabled ? iconCheckCircle_r : checked ? iconCheckCircle : iconCircle_r} /></div>
+                <div className={cssModules.icon}><Icon icon={iconCheck} /></div>
                 {children !== undefined ? <div className={cssModules.description}>{children}</div> : ''}
             </label>
         );

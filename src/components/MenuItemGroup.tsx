@@ -37,7 +37,9 @@ export default class MenuItemGroup extends React.PureComponent<IMenuItemGroupPro
                     clicked && cssModules['item-clicked'],
                     className)
             } style={style} {...this.buildEvents()}>
-                <div className={cssModules['item-icon']}>{icon && Icon.renderIcon(icon)}</div>
+                {
+                    icon && <div className={cssModules['item-icon']}>{Icon.renderIcon(icon)}</div>
+                }
                 <div className={cssModules['item-content']}>{label}</div>
                 <div className={cssModules['sub-item-arrow']}>
                     <Icon icon={iconChevronRight} />

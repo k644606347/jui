@@ -25,7 +25,13 @@ class Checkbox extends React.PureComponent<CheckboxProps, any> {
         let { name, value, style, className, children, checked, disabled } = this.props;
 
         return (
-            <label style={style} className={tools.classNames(cssModules.wrapper, checked ? cssModules.checked : '', disabled ? cssModules.disabled : '', className)}>
+            <label style={style} className={
+                tools.classNames(
+                    cssModules.wrapper, 
+                    checked && cssModules.checked, 
+                    disabled && cssModules.disabled, 
+                    className)
+                }>
                     <input className={tools.classNames(cssModules.input)} type="checkbox" name={name} value={value}
                      checked={checked} disabled={disabled} onChange={this.handleChange}/>
                 <div className={cssModules.icon}><Icon icon={disabled ? iconCheckCircle_r : checked ? iconCheckCircle : iconCircle_r} /></div>

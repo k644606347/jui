@@ -25,6 +25,7 @@ class App extends React.Component<any, any> {
         this.state = {
             menu: {
                 showItems: false,
+                multiSelect: false,
                 onShow() {
                     that.setState({menu: {...that.state.menu, showItems: true}});
                 },
@@ -33,9 +34,9 @@ class App extends React.Component<any, any> {
                 },
                 activeIndex: 1,
                 items: [
-                    { value: 'item1', label: 'item1', checked: false },
+                    { value: 'item1', label: 'item1123121312131', checked: false },
                     {
-                        id: 'items1', label: 'items1', 
+                        id: 'items1', label: 'items1123121312131', 
                         items: [
                                 { 
                                     value: 'item2', label: 'item2', checked: false,
@@ -111,7 +112,7 @@ class App extends React.Component<any, any> {
                     To get started, edit <code>src/App.tsx</code> and save to reload.
         </p>
                 {/* <input type="text" style={{position: 'fixed', zIndex: 30  }} /> */}
-                <Menu id={'menu1'} multiSelect={true} label={'ddd'} level={2} {...menu} onChange={this.handleMenuChange} />
+                <Menu id={'menu1'} label={'ddd'} level={2} {...menu} onChange={this.handleMenuChange} />
                 <Button>btn1</Button>
                 <Button type={'primary'} icon={iconThList}>btn2</Button>
                 <Button type="warning" size="large" loading={true}>btn3</Button>
