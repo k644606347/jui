@@ -1,18 +1,18 @@
-import { IPaginationProps, IChangeEvent } from "./PaginationType";
+import { PaginationProps, PaginationChangeEvent } from "./PaginationType";
 import * as React from "react";
 import cssModules from './Pagination.scss';
 import Button from "./Button";
 import Tools from "../utils/Tools";
 
 const tools = Tools.getInstance();
-export default class Pagination extends React.PureComponent<IPaginationProps, any> {
-    public static defaultProps: IPaginationProps = {
+export default class Pagination extends React.PureComponent<PaginationProps, any> {
+    public static defaultProps: PaginationProps = {
         current: 1,
         total: 1,
         prevText: '上一页',
         nextText: '下一页',
     };
-    constructor(props: IPaginationProps) {
+    constructor(props: PaginationProps) {
         super(props);
 
         this.handlePrev = this.handlePrev.bind(this);
@@ -39,7 +39,7 @@ export default class Pagination extends React.PureComponent<IPaginationProps, an
         
         this.handleChange({ current: current + 1, total, action: 'next'});
     }
-    public handleChange(e: IChangeEvent) {
+    public handleChange(e: PaginationChangeEvent) {
         let { onChange } = this.props;
         
         onChange && onChange(e);

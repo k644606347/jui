@@ -1,12 +1,12 @@
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { IconProps } from "./Icon";
-import { IMenuItemProps } from "./MenuItemType";
-import { IMenuItemsProps } from "./MenuItemsType";
+import { MenuItemProps } from "./MenuItemType";
+import { MenuItemsProps, MenuItemsChangeEvent } from "./MenuItemsType";
 
-export interface IMenuProps {
+export interface MenuProps {
     id: string;
     label: string | JSX.Element;
-    items: Array<IMenuItemsProps | IMenuItemProps>;
+    items: Array<MenuItemsProps | MenuItemProps>;
     showItems?: boolean;
     icon?: React.ReactElement<IconProps> | IconDefinition;
     className?: string;
@@ -14,14 +14,14 @@ export interface IMenuProps {
     multiSelect?: boolean;
     onShow?: () => void;
     onHide?: () => void;
-    onChange?: (e: any) => void;
+    onChange?: (e: MenuItemsChangeEvent) => void;
     level?: 1 | 2;
     activeIndex?: number;
     backdrop?: boolean;
     backdropClick?: boolean;
     backdropCoverage?: 'full' | 'bottom';
 }
-export interface IMenuState {
+export interface MenuState {
     itemsStyle: React.CSSProperties;
     backdropStyle: React.CSSProperties;
 }

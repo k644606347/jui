@@ -1,4 +1,5 @@
-export interface ChangeEvent {
+
+export interface CheckboxChangeEvent {
     name: string;
     value: string;
     checked: boolean;
@@ -11,5 +12,5 @@ export interface CheckboxProps {
     disabled?: boolean;
     style?: React.CSSProperties;
     className?: string;
-    onChange?: (e: ChangeEvent) => void;
+    onChange?: (e: CheckboxChangeEvent) => void;
 }

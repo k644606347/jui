@@ -1,0 +1,46 @@
+@charset "UTF-8";
+
+.item {
+    font-size: 16px;
+    height: 44px;
+    line-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px;
+    user-select: none;
+    &.checked {
+        color: #108ee9;
+    }
+    .icon ~ .content, .content ~ .input {
+        margin-left: 5px;
+    }
+    .icon, .input {
+        flex: 0 0 auto;
+        font-size: 18px;
+        width: 22px;
+    }
+    .content {
+        flex: 1 1 auto;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-align: left;
+    }
+    &-group {
+        .sub-item-arrow {
+            flex: 0 0 auto;
+            margin-left: 5px;
+            font-size: 18px;
+            width: 22px;
+            text-align: center;
+            color: #999;
+        }
+        &-active {
+            background-color: #fff;
+        }
+    }
+    &-clicked {
+        background-color: #ddd;
+    }
+}

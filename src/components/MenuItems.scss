@@ -1,52 +1,16 @@
 @charset "UTF-8";
+@import "./style/mixins/hairline.scss";
+
+$items-bg-color: #fff;
 .items {
     display: block;
     flex: 1 1 0%;
     overflow: hidden;
-    .item {
-        font-size: 16px;
-        height: 44px;
-        line-height: 44px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 15px;
-        user-select: none;
-        &-checked {
-            color: #108ee9;
-        }
-        .item-icon ~ .item-content, .item-content ~ .item-input {
-            margin-left: 5px;
-        }
-        .item-icon, .item-input {
-            flex: 0 0 auto;
-            font-size: 18px;
-            width: 22px;
-        }
-        .item-content {
-            flex: 1 1 auto;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            text-align: left;
-        }
+    background-color: $items-bg-color;
+    &.has-sub-items {
+        background-color: #f5f5f9;
     }
-    .item-group {
-        .sub-item-arrow {
-            flex: 0 0 auto;
-            margin-left: 5px;
-            font-size: 18px;
-            width: 22px;
-            text-align: center;
-            color: #aaa;
-        }
-        &-active {
-            background-color: #fff;
-        }
-    }
-    .item {
-        &-clicked {
-            background-color: #ccc;
-        }
-    }
+    // &.sub-items {
+    //     @include hairline(bottom, #ccc);
+    // }
 }

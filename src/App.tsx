@@ -7,12 +7,14 @@ import Hello from './components/Hello';
 import Button from './components/Button';
 import logo from './logo.svg';
 import Icon, { IconProps } from './components/Icon';
-import { icon500px, iconAccessibleIcon, iconAddressBook, iconThList } from './components/icons/FontAwesomeMap';
+import { icon500px, iconAccessibleIcon, iconAddressBook, iconThList, iconAdn, iconBan, iconDribbble, iconCarBattery } from './components/icons/FontAwesomeMap';
 import List from './components/List';
 import favoriteIcon from './favicon.ico';
 import Pagination from './components/Pagination';
 import Menu from './components/Menu';
 import Tools from './utils/Tools';
+import { MenuItemsChangeEvent } from './components/MenuItemsType';
+import { MenuItemProps } from './components/MenuItemType';
 
 window.console.log('icon:', (<Icon icon={iconThList} /> as React.ReactElement<IconProps>).type === Icon, icon500px);
 const tools = Tools.getInstance();
@@ -24,7 +26,8 @@ class App extends React.Component<any, any> {
 
         this.state = {
             menu: {
-                showItems: false,
+                label: '我是Menu1我默认打开',
+                showItems: true,
                 multiSelect: false,
                 onShow() {
                     that.setState({menu: {...that.state.menu, showItems: true}});
@@ -32,19 +35,52 @@ class App extends React.Component<any, any> {
                 onHide() {
                     that.setState({menu: {...that.state.menu, showItems: false}});
                 },
-                activeIndex: 1,
+                activeIndex: 3,
                 items: [
-                    { value: 'item1', label: 'item1123121312131', checked: false },
+                    { value: 'item1', label: '新建', checked: false },
+                    { value: 'item2', label: 'item2', checked: true },
+                    { value: 'item3', label: 'item3待ICON', checked: false, icon: iconCarBattery},
                     {
-                        id: 'items1', label: 'items1123121312131', 
+                        id: 'items1', label: 'items1 label很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长', 
                         items: [
                                 { 
-                                    value: 'item2', label: 'item2', checked: false,
+                                    value: 'item1', label: 'item1', checked: false,
                                     icon: iconAccessibleIcon,
                                 },
                                 { 
-                                    value: 'item3', label: 'item3', checked: false,
+                                    value: 'item1', label: 'item1', checked: false,
                                     icon: <Icon icon={iconThList} spin={true} />
+                                }
+                            ] 
+                    },
+                    {
+                        id: 'items2', 
+                        label: 'items2是多选', 
+                        multiSelect: true,
+                        items: [
+                                { 
+                                    value: 'item2.1', label: 'item2.1', checked: false,
+                                    icon: iconBan,
+                                },
+                                { 
+                                    value: 'item2.2', label: 'item2.2', checked: false,
+                                    icon: <Icon icon={iconAdn} spin={true} />
+                                }
+                            ] 
+                    },
+                    {
+                        id: 'items3', 
+                        label: 'items3带ICON', 
+                        multiSelect: true,
+                        icon: iconDribbble,
+                        items: [
+                                { 
+                                    value: 'item3.1', label: 'item3.1', checked: false,
+                                    icon: iconBan,
+                                },
+                                { 
+                                    value: 'item3.2', label: 'item3.2', checked: false,
+                                    icon: <Icon icon={iconAdn} spin={true} />
                                 }
                             ] 
                     }
@@ -55,46 +91,55 @@ class App extends React.Component<any, any> {
 
         this.handleMenuChange = this.handleMenuChange.bind(this);
     }
-    public handleMenuChange(e: any) {
+    public handleMenuChange(e: MenuItemsChangeEvent) {
         let { menu } = this.state;
 
         // tslint:disable-next-line:no-shadowed-variable
-        function setItems(menu: any, event: any) {
+        function setItems(menu: any, event: MenuItemsChangeEvent) {
             let itemIsModified = false,
-                { items } = menu,
-                { checked, activeIndex } = event;
+                { items, multiSelect, activeIndex } = event;
 
-            Array.isArray(checked) && checked.forEach((v: any) => {
-                let id = v.id || v.value,
-                    item = items.find((itm: any) => itm.id === id || itm.value === id);
+            Array.isArray(items) && items.forEach((v: any) => {
+                let id = v.id || v.value, 
+                    item = menu.items.find((itm: any) => itm.id === id || itm.value === id);
 
                 if (item === undefined) {
                     return;
                 }
-                if (tools.isArray(v.checked)) {
+                if (tools.isArray(v.items)) {
                     let result = setItems(item, v);
                     if (item !== result) {
                         itemIsModified = true;
                     }
                 } else {
+                    if (!multiSelect) {
+                        let nextItems: MenuItemProps[] = [];
+                        menu.items.forEach((itm: MenuItemProps) => {
+                            nextItems.push({...itm, checked: false});
+                        });
+                        menu.items = nextItems;
+
+                        item = menu.items.find((itm: any) => itm.id === id || itm.value === id);
+                    }
+
                     item.checked = v.checked;
                     item = {...item};
                     itemIsModified = true;
-                    window.console.log(item);
+                    // window.console.log(item);
                 }
             });
             if (itemIsModified) {
                 menu.items = [...menu.items];
                 menu = {...menu};
             }
-            if (activeIndex >= 0) {
+            if (activeIndex && activeIndex >= 0) {
                 menu.activeIndex = activeIndex;
             }
             
             return menu;
         }
 
-        window.console.log(e);
+        window.console.log('Menu ChangeEvent: ', e);
 
         menu = setItems(menu, e);
         this.setState({ menu });
@@ -112,7 +157,7 @@ class App extends React.Component<any, any> {
                     To get started, edit <code>src/App.tsx</code> and save to reload.
         </p>
                 {/* <input type="text" style={{position: 'fixed', zIndex: 30  }} /> */}
-                <Menu id={'menu1'} label={'ddd'} level={2} {...menu} onChange={this.handleMenuChange} />
+                <Menu id={'menu1'} level={2} {...menu} onChange={this.handleMenuChange} />
                 <Button>btn1</Button>
                 <Button type={'primary'} icon={iconThList}>btn2</Button>
                 <Button type="warning" size="large" loading={true}>btn3</Button>

@@ -1,11 +1,11 @@
 import Button from "./Button";
 
-export interface IChangeEvent {
+export interface PaginationChangeEvent {
     current: number;
     total: number;
     action: string;
 }
-export interface IPaginationProps {
+export interface PaginationProps {
     current: number;
     total: number;
     disabled?: boolean;
@@ -15,5 +15,5 @@ export interface IPaginationProps {
     nextBtn?: Button;
     prevText?: string;
     nextText?: string;
-    onChange?: (e: IChangeEvent) => void;
+    onChange?: (e: PaginationChangeEvent) => void;
 }

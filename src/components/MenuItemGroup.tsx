@@ -1,21 +1,20 @@
 import * as React from "react";
-import cssModules from './MenuItems.scss';
+import cssModules from './MenuItem.scss';
 import Tools from "../utils/Tools";
 import Icon from "./Icon";
-import { IMenuItemGroupProps, IMenuItemGroupState } from "./MenuItemGroupType";
-import MenuItems from "./MenuItems";
+import { MenuItemGroupProps, MenuItemGroupState } from "./MenuItemGroupType";
 import { iconChevronRight } from "./icons/FontAwesomeMap";
 
 const tools = Tools.getInstance();
 
-export default class MenuItemGroup extends React.PureComponent<IMenuItemGroupProps, IMenuItemGroupState> {
-    private static defaultProps: IMenuItemGroupProps = {
+export default class MenuItemGroup extends React.PureComponent<MenuItemGroupProps, MenuItemGroupState> {
+    private static defaultProps: Partial<MenuItemGroupProps> = {
         id: '',
         label: '',
         active: false,
     };
     private clickedTimer: number;
-    constructor(props: IMenuItemGroupProps) {
+    constructor(props: MenuItemGroupProps) {
         super(props);
 
         this.state = {
@@ -34,13 +33,13 @@ export default class MenuItemGroup extends React.PureComponent<IMenuItemGroupPro
                 tools.classNames(
                     cssModules.item, cssModules['item-group'],
                     active && cssModules['item-group-active'],
-                    clicked && cssModules['item-clicked'],
+                    clicked && cssModules.clicked,
                     className)
             } style={style} {...this.buildEvents()}>
                 {
-                    icon && <div className={cssModules['item-icon']}>{Icon.renderIcon(icon)}</div>
+                    icon && <div className={cssModules.icon}>{Icon.renderIcon(icon)}</div>
                 }
-                <div className={cssModules['item-content']}>{label}</div>
+                <div className={cssModules.content}>{label}</div>
                 <div className={cssModules['sub-item-arrow']}>
                     <Icon icon={iconChevronRight} />
                 </div>
@@ -61,23 +60,23 @@ export default class MenuItemGroup extends React.PureComponent<IMenuItemGroupPro
         }
     }
     private handleTouchStart(e: React.TouchEvent<HTMLElement>) {
-        // todo 增加MenuItems的操作反馈
+        // TODO 增加MenuItems的操作反馈
         this.setState({ clicked: true });
     }
     private handleTouchEnd(e: React.TouchEvent<HTMLElement>) {
         this.setState({ clicked: false });
-        this.fireChangeCallback();
+        this.fireClick();
     }
     private handleClick(e: React.MouseEvent<HTMLElement>) {
         this.setState({ clicked: true });
         clearTimeout(this.clickedTimer);
         this.clickedTimer = window.setTimeout(() => this.setState({ clicked: false }), 150);
 
-        this.fireChangeCallback();
+        this.fireClick();
     }
-    private fireChangeCallback(options?: any) {
-        let { id, onChange } = this.props;
+    private fireClick() {
+        let { id, targetItems, onClick } = this.props;
 
-        onChange && onChange({ id });
+        onClick && onClick({ id, targetItems });
     }
 }

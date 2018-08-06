@@ -1,69 +1,70 @@
 import * as React from "react";
-import { IMenuItemsProps } from "./MenuItemsType";
+import { MenuItemsProps, MenuItemsChangeEvent } from "./MenuItemsType";
 import cssModules from './MenuItems.scss';
 import Tools from "../utils/Tools";
 import MenuItem from "./MenuItem";
-import { IMenuItemChangeEvent, IMenuItemProps } from "./MenuItemType";
+import { MenuItemProps, MenuItemChangeEvent } from "./MenuItemType";
 import MenuItemGroup from "./MenuItemGroup";
-import { ChangeEvent } from "./MenuItemGroupType";
+import { ClickEvent } from "./MenuItemGroupType";
 
 const tools = Tools.getInstance();
-export default class MenuItems extends React.PureComponent<IMenuItemsProps, any> {
-    private static defaultProps: IMenuItemsProps = {
-        id: '',
-        label: '',
+export default class MenuItems extends React.PureComponent<MenuItemsProps, any> {
+    private static defaultProps: MenuItemsProps = {
+        id: 'items',
+        label: 'items',
         checked: [],
         items: [],
         multiSelect: false,
         level: 1,
         activeIndex: 0,
     };
-    constructor(props: IMenuItemsProps) {
+    constructor(props: MenuItemsProps) {
         super(props);
         
-        this.handleChange = this.handleChange.bind(this);
+        this.handleItemChange = this.handleItemChange.bind(this);
         this.handleSubItemsChange = this.handleSubItemsChange.bind(this);
         this.handleGroupChange = this.handleGroupChange.bind(this);
     }
     public render() {
         let { props } = this,
-            { id, items, level, activeIndex, multiSelect } = props;
+            { id, items, level, activeIndex, multiSelect, className, style } = props;
 
-        if (activeIndex === undefined) {
-            activeIndex = MenuItems.defaultProps.activeIndex;
-        } else if (activeIndex >= items.length) {
-            activeIndex = items.length - 1;
-        }
-        
-        let activeItem = items[activeIndex as number],
-            activeSubItems = (activeItem && tools.isArray((activeItem as IMenuItemsProps).items)) ? (activeItem as IMenuItemsProps) : undefined,
+        let activeItem = items[activeIndex!],
+            activeSubItems = (activeItem && tools.isArray((activeItem as MenuItemsProps).items)) ? (activeItem as MenuItemsProps) : undefined,
             inputTagName = `${id}_${tools.genID()}`;
 
-            // todo 应为React.ReactElement<IMenuItemsProps>
-        let subItemsREl: any = null;
-        if (activeSubItems) {
-            subItemsREl = this.renderActiveSubItems(activeSubItems);
+        // TODO 应为React.ReactElement<MenuItemsProps>
+        let subItemsEl: any;
+        if (level! > 1 && activeSubItems) {
+            subItemsEl = this.renderActiveSubItems(activeSubItems);
         }
         return <React.Fragment>
-            <div className={cssModules.items}>{
+            <div style={style} className={
+                tools.classNames(
+                    cssModules.items,
+                    subItemsEl && cssModules['has-sub-items'],
+                    className,
+                )
+            }>{
                 items.map((item, i) => {
                     let active = activeIndex === i;
 
                     return <React.Fragment key={i}>{
-                        tools.isArray((item as IMenuItemsProps).items) ? 
-                            <MenuItemGroup {...(item as IMenuItemsProps)} targetItems={subItemsREl} active={active} onChange={this.handleGroupChange}/> : 
-                            <MenuItem {...(item as IMenuItemProps)} onChange={this.handleChange} name={inputTagName} multiSelect={multiSelect}/>
+                        tools.isArray((item as MenuItemsProps).items) ? 
+                            <MenuItemGroup {...(item as MenuItemsProps)} targetItems={subItemsEl} active={active} onClick={this.handleGroupChange}/> : 
+                            <MenuItem {...(item as MenuItemProps)} onChange={this.handleItemChange} multiSelect={multiSelect}/>
                     }</React.Fragment>;
                 })
             }</div>
             {
-                subItemsREl ? 
-                    <div className={tools.classNames(cssModules.items, cssModules['active-sub-items'])}>{subItemsREl}</div> : ''
+                subItemsEl ? 
+                    <div className={tools.classNames(cssModules.items, cssModules['active-sub-items'])}>{subItemsEl}</div> : ''
             }
             </React.Fragment>
     }
-    private renderActiveSubItems(activeItemGroup: IMenuItemsProps): JSX.Element {
-        let { id, items, multiSelect, activeIndex } = activeItemGroup;
+    private renderActiveSubItems(activeItemGroup: MenuItemsProps) {
+        let { id, items, multiSelect, activeIndex } = activeItemGroup,
+            { level } = this.props;
 
         if (multiSelect === undefined) {
             multiSelect = this.props.multiSelect;
@@ -71,30 +72,33 @@ export default class MenuItems extends React.PureComponent<IMenuItemsProps, any>
 
         return <MenuItems id={id} label={activeItemGroup.label} items={items} multiSelect={multiSelect} activeIndex={activeIndex} onChange={this.handleSubItemsChange}/>;
     }
-    private handleGroupChange(e: ChangeEvent) {
-        let { id, items, onChange } = this.props;
+    private handleGroupChange(e: ClickEvent) {
+        let { id, items, multiSelect, onChange } = this.props;
 
         onChange && onChange({
             id, 
-            activeIndex: items.findIndex(item => (item as IMenuItemsProps).id === e.id)
+            items: [],
+            multiSelect,
+            activeIndex: items.findIndex(item => (item as MenuItemsProps).id === e.id)
         });
     }
-    private handleSubItemsChange(e: any) {
-        let { id, items, onChange } = this.props;
+    private handleSubItemsChange(e: MenuItemsChangeEvent) {
+        let { id, items, multiSelect, onChange } = this.props;
 
         onChange && onChange({
             id, 
-            checked: [e], 
-            activeIndex: items.findIndex(item => (item as IMenuItemsProps).id === e.id)
+            items: [e], 
+            multiSelect,
+            activeIndex: items.findIndex(item => (item as MenuItemsProps).id === e.id)
         });
     }
-    private handleChange(e: IMenuItemChangeEvent) {
-        let { id, items, onChange } = this.props;
+    private handleItemChange(e: MenuItemChangeEvent) {
+        let { id, items, multiSelect, onChange } = this.props;
 
         onChange && onChange({
             id, 
-            checked: [e], 
-            // activeIndex: items.findIndex(item => (item as IMenuItemProps).value === e.value)
+            items: [e],
+            multiSelect,
         });
     }
 }

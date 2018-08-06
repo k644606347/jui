@@ -22,7 +22,7 @@ export default class List extends React.PureComponent<IListProps, any> {
         this.renderSectionBody = this.renderSectionBody.bind(this);
     }
     public render() {
-        let { props, state } = this,
+        let { props } = this,
             { dataSource, style, className } = props;
 
         return (<ul style={style} className={tools.classNames(cssModules.list, className)}>{
@@ -45,7 +45,7 @@ export default class List extends React.PureComponent<IListProps, any> {
         }</ul>);
     }
     private renderSection(data: ISectionData) {
-        let { renderSectionHeader, renderSectionBody, props } = this,
+        let { renderSectionHeader, renderSectionBody } = this,
             // { renderSectionWrapper } = props,
             headerEl = renderSectionHeader(data),
             bodyEl = renderSectionBody(data);

@@ -1,20 +1,20 @@
-import { IMenuProps, IMenuState } from "./MenuType";
 import * as React from "react";
 import cssModules from './Menu.scss';
 import Tools from "../utils/Tools";
 import Icon from "./Icon";
 import MenuItems from "./MenuItems";
+import { MenuProps, MenuState } from "./MenuType";
 
 const tools = Tools.getInstance();
 
 /**
  * 菜单栏组件, 样式定位以<body>元素为基准
  */
-export default class Menu extends React.PureComponent<IMenuProps, IMenuState> {
+export default class Menu extends React.PureComponent<MenuProps, MenuState> {
     public static handleResize() {
         Menu.instances.forEach(ins => {
             let { showItems, backdrop } = ins.props,
-                nextState = {} as IMenuState;
+                nextState = {} as MenuState;
 
             if (showItems) {
                 nextState.itemsStyle = ins.genItemsStyle();
@@ -45,9 +45,9 @@ export default class Menu extends React.PureComponent<IMenuProps, IMenuState> {
         })
     }
     private static instances: Menu[] = [];
-    private static defaultProps: IMenuProps = {
-        id: tools.genID(),
-        label: '',
+    private static defaultProps: MenuProps = {
+        id: 'menu',
+        label: 'menu',
         items: [],
         activeIndex: 0,
         showItems: false,
@@ -57,7 +57,7 @@ export default class Menu extends React.PureComponent<IMenuProps, IMenuState> {
         backdropClick: false,
         backdropCoverage: 'full',
     };
-    constructor(props: IMenuProps) {
+    constructor(props: MenuProps) {
         super(props);
 
         this.state = {
@@ -85,7 +85,7 @@ export default class Menu extends React.PureComponent<IMenuProps, IMenuState> {
                 <div ref='menuBtn' style={style} className={tools.classNames(cssModules['menu-btn'], className)} onClick={this.handleBtnClick}>{icon && Icon.renderIcon(icon)}{label}</div>
                 <div className={cssModules['menu-items-root']} style={{ display: showItems ? 'block' : 'none' }}>
                     <div style={itemsStyle} className={cssModules['menu-items-wrap']}>
-                        <MenuItems id={id} label={label} activeIndex={activeIndex} items={items} multiSelect={multiSelect} level={level} onChange={this.handleChange} />
+                        <MenuItems id={`${id}_root_items`} label={label} activeIndex={activeIndex} items={items} multiSelect={multiSelect} level={level} onChange={this.handleChange} />
                     </div>
                     {backdrop ? <div className={cssModules['menu-items-wrap-backdrop']} style={backdropStyle} onClick={backdropClick ? this.handleBackdropClick : undefined}></div> : ''}
                 </div>
@@ -94,7 +94,7 @@ export default class Menu extends React.PureComponent<IMenuProps, IMenuState> {
     }
     public componentDidMount() {
         let { backdrop, showItems } = this.props,
-            nextState = {} as IMenuState;
+            nextState = {} as MenuState;
 
         if (showItems) {
             nextState.itemsStyle = this.genItemsStyle();
@@ -107,9 +107,9 @@ export default class Menu extends React.PureComponent<IMenuProps, IMenuState> {
         }
         Menu.instances.push(this);
     }
-    public componentDidUpdate(prevProps: IMenuProps) {
+    public componentDidUpdate(prevProps: MenuProps) {
         let { showItems, backdrop } = this.props,
-            nextState = {} as IMenuState,
+            nextState = {} as MenuState,
             needUpdateItemsLayout = false,
             needUpdateBackdropLayout = false;
 

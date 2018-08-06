@@ -1,19 +1,20 @@
 import { IconProps, IconDefinition } from "./Icon";
-import { IMenuItemsProps } from "./MenuItemsType";
+import { MenuItemsProps } from "./MenuItemsType";
 
-export interface ChangeEvent {
+export interface ClickEvent {
     id: string;
+    targetItems?: React.ReactElement<MenuItemsProps>;
 }
-export interface IMenuItemGroupProps {
+export interface MenuItemGroupProps {
     id: string;
     label: string | JSX.Element;
-    targetItems?: React.ReactElement<IMenuItemsProps>;
+    targetItems?: React.ReactElement<MenuItemsProps>;
     active?: boolean;
     className?: string;
     style?: React.CSSProperties;
     icon?: React.ReactElement<IconProps> | IconDefinition;
-    onChange?: (e: ChangeEvent) => void;
+    onClick?: (e: ClickEvent) => void;
 }
-export interface IMenuItemGroupState {
+export interface MenuItemGroupState {
     clicked: boolean;
 }

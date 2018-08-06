@@ -1,10 +1,10 @@
 import { IconProps, IconDefinition } from "./Icon";
 
-export interface IMenuItemChangeEvent {
+export interface MenuItemChangeEvent {
     value: string;
     checked: boolean;
 }
-export interface IMenuItemProps {
+export interface MenuItemProps {
     label: string | JSX.Element;
     value: string;
     name: string; 
@@ -13,7 +13,7 @@ export interface IMenuItemProps {
     style?: React.CSSProperties;
     icon?: React.ReactElement<IconProps> | IconDefinition;
     multiSelect?: boolean;
-    onChange?: (e: IMenuItemChangeEvent) => void;
+    onChange?: (e: MenuItemChangeEvent) => void;
 }
 export interface IMenuItemState {
     clicked: boolean;

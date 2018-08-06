@@ -1,31 +1,29 @@
 import * as React from "react";
-import { IMenuItemProps, IMenuItemState } from "./MenuItemType";
-import cssModules from './MenuItems.scss';
+import { MenuItemProps, IMenuItemState } from "./MenuItemType";
+import cssModules from './MenuItem.scss';
 import Tools from "../utils/Tools";
 import Icon from "./Icon";
 import Checkbox from "./Checkbox";
-import { ChangeEvent } from "./CheckboxType";
 import Radio from "./Radio";
 
 const tools = Tools.getInstance();
 
-export default class MenuItem extends React.PureComponent<IMenuItemProps, IMenuItemState> {
-    private static defaultProps: IMenuItemProps = {
-        value: '',
-        label: '',
-        name: '',
+export default class MenuItem extends React.PureComponent<MenuItemProps, IMenuItemState> {
+    private static defaultProps: MenuItemProps = {
+        value: 'item',
+        label: 'item',
+        name: 'item',
         checked: false,
         multiSelect: false,
     };
     private clickedTimer: number;
-    constructor(props: IMenuItemProps) {
+    constructor(props: MenuItemProps) {
         super(props);
-        
+
         this.state = {
             clicked: false,
         };
 
-        this.handleChange = this.handleChange.bind(this);
         this.handleTouchStart = this.handleTouchStart.bind(this);
         this.handleTouchEnd = this.handleTouchEnd.bind(this);
         this.handleClick = this.handleClick.bind(this);
@@ -37,16 +35,16 @@ export default class MenuItem extends React.PureComponent<IMenuItemProps, IMenuI
         return (
             <div className={
                 tools.classNames(
-                    cssModules.item, 
-                    checked && cssModules['item-checked'],
-                    clicked && cssModules['item-clicked'], 
+                    cssModules.item,
+                    checked && cssModules.checked,
+                    clicked && cssModules.clicked,
                     className
-                    )
-                } style={style} {...this.buildEvents()}>
+                )
+            } style={style} {...this.buildEvents()}>
                 {
-                    icon && <div className={cssModules['item-icon']}>{Icon.renderIcon(icon)}</div>
+                    icon && <div className={cssModules.icon}>{Icon.renderIcon(icon)}</div>
                 }
-                <div className={cssModules['item-content']}>{label}</div>
+                <div className={cssModules.content}>{label}</div>
                 {
                     this.renderInputComponent()
                 }
@@ -72,41 +70,29 @@ export default class MenuItem extends React.PureComponent<IMenuItemProps, IMenuI
                 name,
                 value,
                 checked,
-                className: tools.classNames(cssModules['item-input'])
+                className: tools.classNames(cssModules.input)
             };
 
-        return multiSelect ? <Checkbox {...propsConfig} /> : <Radio {...propsConfig} />;
-    }
-
-    // todo 目前Radio和Checkbox公用Checkbox下的ChangeEvent,后续需追加命名空间区别Radio和Checkbox下的ChangeEvent
-    private handleChange(e: ChangeEvent) {
-        let { value, onChange } = this.props,
-            checked = e.checked;
-
-            this.setState({clicked: true});
-            clearTimeout(this.clickedTimer);
-            this.clickedTimer = window.setTimeout(() => this.setState({clicked: false}), 100);
-
-        onChange && onChange({ checked, value });
+        return multiSelect ? <Checkbox {...propsConfig} /> : checked ? <Radio {...propsConfig} /> : '';
     }
     private handleTouchStart(e: React.TouchEvent<HTMLElement>) {
-        this.setState({clicked: true});
+        this.setState({ clicked: true });
     }
     private handleTouchEnd(e: React.TouchEvent<HTMLElement>) {
-        this.setState({clicked: false});
-        this.fireChangeCallback({ checked: !this.props.checked });
+        this.setState({ clicked: false });
+        this.fireChange({ checked: !this.props.checked });
     }
     private handleClick(e: React.MouseEvent<HTMLElement>) {
         this.setState({ clicked: true });
         clearTimeout(this.clickedTimer);
         this.clickedTimer = window.setTimeout(() => this.setState({ clicked: false }), 150);
 
-        this.fireChangeCallback({ checked: !this.props.checked });
+        this.fireChange({ checked: !this.props.checked });
     }
-    private fireChangeCallback(options?: any) {
+    private fireChange(options: any) {
         let { value, onChange } = this.props,
             { checked } = options;
 
-        onChange && onChange({ checked, value });
+        onChange && onChange({ value, checked });
     }
 }
