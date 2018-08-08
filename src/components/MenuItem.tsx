@@ -1,5 +1,5 @@
 import * as React from "react";
-import { MenuItemProps, IMenuItemState } from "./MenuItemType";
+import { MenuItemProps, MenuItemState } from "./MenuItemType";
 import cssModules from './MenuItem.scss';
 import Tools from "../utils/Tools";
 import Icon from "./Icon";
@@ -8,7 +8,7 @@ import Radio from "./Radio";
 
 const tools = Tools.getInstance();
 
-export default class MenuItem extends React.PureComponent<MenuItemProps, IMenuItemState> {
+export default class MenuItem extends React.PureComponent<MenuItemProps, MenuItemState> {
     private static defaultProps: MenuItemProps = {
         value: 'item',
         label: 'item',
@@ -17,12 +17,11 @@ export default class MenuItem extends React.PureComponent<MenuItemProps, IMenuIt
         multiSelect: false,
     };
     private clickedTimer: number;
+    public readonly state: MenuItemState = {
+        clicked: false,
+    }
     constructor(props: MenuItemProps) {
         super(props);
-
-        this.state = {
-            clicked: false,
-        };
 
         this.handleTouchStart = this.handleTouchStart.bind(this);
         this.handleTouchEnd = this.handleTouchEnd.bind(this);

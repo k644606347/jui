@@ -2,24 +2,24 @@ import * as React from 'react';
 import Tools from '../utils/Tools';
 
 const tools = Tools.getInstance();
-export interface ITouchProps {
+export interface TouchProps {
     disabled?: boolean;
     activeClassName?: string;
     activeStyle?: object;
     children?: any;
 }
-export interface ITouchState {
+export interface TouchState {
     active: boolean;
 }
-export default class TouchFeedback extends React.PureComponent<ITouchProps, ITouchState> {
-    public static defaultProps: ITouchProps = {
+export default class TouchFeedback extends React.PureComponent<TouchProps, TouchState> {
+    public static defaultProps: TouchProps = {
         disabled: false,
     };
-    constructor(props: ITouchProps) {
+    public readonly state: TouchState = {
+        active: false,
+    }
+    constructor(props: TouchProps) {
         super(props);
-        this.state = {
-            active: false,
-        };
 
         this.onTouchStart = this.onTouchStart.bind(this);
         this.onTouchMove = this.onTouchMove.bind(this);

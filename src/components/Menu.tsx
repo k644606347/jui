@@ -11,20 +11,11 @@ const tools = Tools.getInstance();
  * 菜单栏组件, 样式定位以<body>元素为基准
  */
 export default class Menu extends React.PureComponent<MenuProps, MenuState> {
+    public static handleLoad() {
+        this.updateLayout();
+    }
     public static handleResize() {
-        Menu.instances.forEach(ins => {
-            let { showItems, backdrop } = ins.props,
-                nextState = {} as MenuState;
-
-            if (showItems) {
-                nextState.itemsStyle = ins.genItemsStyle();
-                
-                if (backdrop) {
-                    nextState.backdropStyle = ins.genBackdropStyle();
-                }
-                ins.setState(nextState);
-            }
-        });
+        this.updateLayout();
     }
     public static handleScroll() {
         Menu.instances.forEach(ins => {
@@ -44,6 +35,21 @@ export default class Menu extends React.PureComponent<MenuProps, MenuState> {
             ins.setState({ backdropStyle: nextBackdropStyle });
         })
     }
+    private static updateLayout(options?: Partial<MenuState>) {
+        Menu.instances.forEach(ins => {
+            let { showItems, backdrop } = ins.props,
+                nextState: any = {};
+
+            if (showItems) {
+                nextState.itemsStyle = ins.genItemsStyle();
+                
+                if (backdrop) {
+                    nextState.backdropStyle = ins.genBackdropStyle();
+                }
+                ins.setState(Object.assign(nextState, options));
+            }
+        });
+    }
     private static instances: Menu[] = [];
     private static defaultProps: MenuProps = {
         id: 'menu',
@@ -57,19 +63,18 @@ export default class Menu extends React.PureComponent<MenuProps, MenuState> {
         backdropClick: false,
         backdropCoverage: 'full',
     };
+    public readonly state: MenuState = {
+        itemsStyle: {
+            top: 0,
+            left: 0,
+        },
+        backdropStyle: {
+            top: 0,
+            left: 0
+        },        
+    }
     constructor(props: MenuProps) {
         super(props);
-
-        this.state = {
-            itemsStyle: {
-                top: 0,
-                left: 0,
-            },
-            backdropStyle: {
-                top: 0,
-                left: 0
-            },
-        };
 
         this.handleChange = this.handleChange.bind(this);
         this.handleBtnClick = this.handleBtnClick.bind(this);
@@ -77,13 +82,13 @@ export default class Menu extends React.PureComponent<MenuProps, MenuState> {
     }
     public render() {
         let { props, state } = this,
-            { id, label, className, showItems, style, icon, items, level, activeIndex, multiSelect, backdrop, backdropClick } = props,
+            { id, label, className, style, icon, items, showItems, level, activeIndex, multiSelect, backdrop, backdropClick } = props,
             { itemsStyle, backdropStyle } = state;
 
         return <React.Fragment>
             <div className={cssModules['menu-wrap']}>
                 <div ref='menuBtn' style={style} className={tools.classNames(cssModules['menu-btn'], className)} onClick={this.handleBtnClick}>{icon && Icon.renderIcon(icon)}{label}</div>
-                <div className={cssModules['menu-items-root']} style={{ display: showItems ? 'block' : 'none' }}>
+                <div className={cssModules['menu-items-root']} style={{ display: this.didMount && showItems ? 'block' : 'none' }}>
                     <div style={itemsStyle} className={cssModules['menu-items-wrap']}>
                         <MenuItems id={`${id}_root_items`} label={label} activeIndex={activeIndex} items={items} multiSelect={multiSelect} level={level} onChange={this.handleChange} />
                     </div>
@@ -92,11 +97,14 @@ export default class Menu extends React.PureComponent<MenuProps, MenuState> {
             </div>
         </React.Fragment>;
     }
+    private didMount:boolean = false;
     public componentDidMount() {
         let { backdrop, showItems } = this.props,
-            nextState = {} as MenuState;
+            nextState: any = {};
 
+        this.didMount = true;
         if (showItems) {
+            nextState.x = 1;
             nextState.itemsStyle = this.genItemsStyle();
 
             if (backdrop) {
@@ -161,10 +169,11 @@ export default class Menu extends React.PureComponent<MenuProps, MenuState> {
                 top: 0 - (menuBtnRect.top + menuBtnRect.height),
                 left: rootRect.left - menuBtnRect.left,
                 width: rootRect.width,
-            };
+            },
+            menuBtnIsHidden = menuBtnRect.top + menuBtnRect.height <= 0;
 
         window.console.log(rootRect, menuBtnRect);
-        if (menuBtnRect.top <= 0) {
+        if (menuBtnIsHidden) {
             return style;
         }
         
@@ -208,6 +217,7 @@ export default class Menu extends React.PureComponent<MenuProps, MenuState> {
 
 Menu.handleResize = Menu.handleResize.bind(Menu);
 Menu.handleScroll = Menu.handleScroll.bind(Menu);
+Menu.handleLoad = Menu.handleLoad.bind(Menu);
 
 const win = window, addEvent = win.addEventListener;
 let backdropTimer: number = 0;
@@ -221,6 +231,7 @@ addEvent('scroll', e => {
     backdropTimer = win.setTimeout(() => {
         Menu.handleScroll();
         backdropTimer = 0;
-    }, 100);
+    }, 80);
 }, true);
 addEvent('resize', Menu.handleResize);
+addEvent('load', Menu.handleLoad);

@@ -5,12 +5,12 @@ import Tools from './Tools';
 
 const tools = Tools.getInstance();
 export default class EnvPane extends React.PureComponent<EnvPaneProps, EnvPageState> {
+    public readonly state: EnvPageState = {
+        show: true,
+    }
     constructor(props: EnvPaneProps) {
         super(props);
 
-        this.state = {
-            show: true,
-        }
         this.handleCloseBtn = this.handleCloseBtn.bind(this);
         this.handleAppScrollable = this.handleAppScrollable.bind(this);
     }

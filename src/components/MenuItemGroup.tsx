@@ -14,12 +14,12 @@ export default class MenuItemGroup extends React.PureComponent<MenuItemGroupProp
         active: false,
     };
     private clickedTimer: number;
+    public readonly state: MenuItemGroupState = {
+        clicked: false,
+    }
     constructor(props: MenuItemGroupProps) {
         super(props);
 
-        this.state = {
-            clicked: false,
-        };
         this.handleTouchStart = this.handleTouchStart.bind(this);
         this.handleTouchEnd = this.handleTouchEnd.bind(this);
         this.handleClick = this.handleClick.bind(this);

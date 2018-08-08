@@ -3,7 +3,7 @@
   "rules": {
     "one-variable-per-declaration": false,
     "prefer-const": false,
-    "no-unused-variable": [true, {"ignore-pattern": "defaultProps"}],
+    "no-unused-variable": false,
     "no-unused-expression": [true, "allow-fast-null-checks", "allow-new", "allow-tagged-template"],
     "ordered-imports": false,
     "object-literal-shorthand": false,

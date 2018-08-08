@@ -15,6 +15,6 @@ export interface MenuItemProps {
     multiSelect?: boolean;
     onChange?: (e: MenuItemChangeEvent) => void;
 }
-export interface IMenuItemState {
+export interface MenuItemState {
     clicked: boolean;
 }

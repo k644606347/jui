@@ -44,11 +44,11 @@ class App extends React.Component<any, any> {
                         id: 'items1', label: 'items1 label很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长', 
                         items: [
                                 { 
-                                    value: 'item1', label: 'item1', checked: false,
+                                    value: 'item1.1', label: 'item1.1', checked: false,
                                     icon: iconAccessibleIcon,
                                 },
                                 { 
-                                    value: 'item1', label: 'item1', checked: false,
+                                    value: 'item1.2', label: 'item1.2', checked: false,
                                     icon: <Icon icon={iconThList} spin={true} />
                                 }
                             ] 
