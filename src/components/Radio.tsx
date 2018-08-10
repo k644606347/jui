@@ -1,21 +1,21 @@
 
-import { CheckboxProps } from './CheckboxType';
+import { RadioProps } from './RadioType';
 import * as React from 'react';
-import cssModules from './Checkbox.scss';
+import cssModules from './Radio.scss';
 import Tools from '../utils/Tools';
 import { iconCheck } from './icons/FontAwesomeMap';
 import Icon from './Icon';
 
 const tools = Tools.getInstance();
 
-class Checkbox extends React.PureComponent<CheckboxProps, any> {
+class Checkbox extends React.PureComponent<RadioProps, any> {
     private static defaultProps = {
         name: '',
         value: '',
         checked: false,
         disabled: false,
     };
-    constructor(props: CheckboxProps) {
+    constructor(props: RadioProps) {
         super(props);
 
         this.handleChange = this.handleChange.bind(this);

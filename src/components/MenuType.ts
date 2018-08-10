@@ -7,6 +7,7 @@ export interface MenuProps {
     id: string;
     label: string | JSX.Element;
     items: Array<MenuItemsProps | MenuItemProps>;
+    // children: Array<React.ReactElement<MenuItemProps>>;
     showItems?: boolean;
     icon?: React.ReactElement<IconProps> | IconDefinition;
     className?: string;

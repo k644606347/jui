@@ -4,7 +4,7 @@ export interface RadioChangeEvent {
     checked: boolean;
     disabled: boolean;
 }
-export interface CheckboxProps {
+export interface RadioProps {
     name: string;
     value: string;
     checked?: boolean;
