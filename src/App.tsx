@@ -15,6 +15,9 @@ import Menu from './components/Menu';
 import Tools from './utils/Tools';
 import { MenuItemsChangeEvent } from './components/MenuItemsType';
 import { MenuItemProps } from './components/MenuItemType';
+import Form from './components/Form';
+import Field from './components/Field';
+import Checkbox from './components/Checkbox';
 
 window.console.log('icon:', (<Icon icon={iconThList} /> as React.ReactElement<IconProps>).type === Icon, icon500px);
 const tools = Tools.getInstance();
@@ -157,6 +160,17 @@ class App extends React.Component<any, any> {
                     To get started, edit <code>src/App.tsx</code> and save to reload.
         </p>
                 {/* <input type="text" style={{position: 'fixed', zIndex: 30  }} /> */}
+                <Form>
+                    <Field label={'高级配置'} widget={
+                        <Checkbox name="advOptions" value="on" />
+                    }/>
+                    <Field label={'高级配置2'} widget={
+                        <Checkbox name="advOptions2" value="on" />
+                    }/>
+                    <Field label={'高级配置3'} widget={
+                        <Checkbox name="advOptions3" value="on" />
+                    }/>
+                </Form>
                 <Menu id={'menu1'} level={2} {...menu} onChange={this.handleMenuChange} />
                 <Button>btn1</Button>
                 <Button type={'primary'} icon={iconThList}>btn2</Button>

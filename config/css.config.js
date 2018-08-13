@@ -48,7 +48,6 @@ const getCSSConfig = (env, options) => {
                 {
                     loader: require.resolve("css-loader"),
                     options: {
-                        importLoaders: 1,
                         sourceMap: true,
                     }
                 },
@@ -68,7 +67,6 @@ const getCSSConfig = (env, options) => {
                         use: [{
                                 loader: require.resolve("css-loader"),
                                 options: {
-                                    importLoaders: 1,
                                     minimize: true,
                                     sourceMap: false,
                                 }
@@ -97,7 +95,7 @@ function getSCSSConfig(env, options) {
         use: [{
                 loader: require.resolve("style-loader"),
                 options: {
-                    singleton: true,
+                    singleton: isProd(env),
                 }
             },
             {

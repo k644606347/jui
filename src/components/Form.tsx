@@ -3,6 +3,7 @@ import { FormProps } from "./FormType";
 import Tools from "../utils/Tools";
 import Field from "./Field";
 import { FieldProps } from "./FieldType";
+import cssModules from './Form.scss';
 
 const tools = Tools.getInstance();
 export default class Form extends React.PureComponent<FormProps, any> {
@@ -14,7 +15,7 @@ export default class Form extends React.PureComponent<FormProps, any> {
         let { props, state } = this,
             { children } = props;
         return (
-            <form>
+            <form className={cssModules.wrapper}>
                 {
                     this.processChildren(children)
                 }
@@ -29,10 +30,13 @@ export default class Form extends React.PureComponent<FormProps, any> {
         }
     }
     private bindField(field: React.ReactElement<FieldProps>) {
-        let originOnChange = field.props.onChange,
+        let { props } = field,
+            originOnChange = props.onChange,
+            originClassName = props.className,
             that = this;
 
         return React.cloneElement(field, {
+            className: tools.classNames(originClassName, cssModules.field),
             onChange(e: any) {
                 originOnChange && originOnChange(e);
 

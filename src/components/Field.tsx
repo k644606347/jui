@@ -35,12 +35,14 @@ export default class Field extends React.PureComponent<FieldProps, any> {
                 )
             }>
                 <label className={cssModules.label}>{label}</label>
-                <div className={cssModules.field}>
-                    {
-                        renderWidget ? renderWidget(wrappedWidget) : wrappedWidget
-                    }
+                <div className={cssModules['field-control']}>
+                    <div className={cssModules['widget-control']}>
+                        {
+                            renderWidget ? renderWidget(wrappedWidget) : wrappedWidget
+                        }
+                    </div>
+                    <div className={cssModules['rule-msg']}></div>
                 </div>
-                <div className={cssModules['rule-msg']}></div>
             </div>
         )
     }

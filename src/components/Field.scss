@@ -1,0 +1,35 @@
+@charset "UTF-8";
+@import "./style/themes/default.scss";
+@import "./style/mixins/hairline.scss";
+
+$required-bg-color: #f5222d;
+$error-bg-color: #f5222d;
+
+.wrapper {
+    display: flex;
+    font-size: 17px;
+    padding: 8px 0;
+    background-color: $fill-base;
+    position: relative;
+    .label {
+        width: 5em;
+        margin-right: 5px;
+        overflow: hidden;
+        text-align: left;
+    }
+    .field-control {
+        .widget-control {
+            display: flex;
+        }
+        .rule-msg {
+            color: $error-bg-color;
+        }
+    }
+    &.required {
+        .label::after {
+            margin-left: 3px;
+            content: "*";
+            color: $required-bg-color;
+        }
+    }
+}

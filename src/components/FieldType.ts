@@ -13,8 +13,8 @@ export interface FieldProps {
     widget: FormWidget;
     renderWidget?: (widget: FormWidget) => React.ReactNode;
     rules?: FieldRule[];
-    style: CSSProperties;
-    className: string;
+    style?: CSSProperties;
+    className?: string;
     onChange?: (e: any) => void;
     onValueChange?: () => void;
     onFieldsChange?: () => void;
