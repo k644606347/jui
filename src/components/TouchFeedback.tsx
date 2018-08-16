@@ -29,29 +29,29 @@ export default class TouchFeedback extends React.PureComponent<TouchProps, Touch
         this.onMouseUp = this.onMouseUp.bind(this);
         this.onMouseLeave = this.onMouseLeave.bind(this);
     }
-    public onTouchStart(e: any) {
+    private onTouchStart(e: any) {
         this.triggerEvent('TouchStart', true, e)
     }
-    public onTouchMove(e: any) {
+    private onTouchMove(e: any) {
         this.triggerEvent('TouchMove', false, e);
     }
-    public onTouchEnd(e: any) {
+    private onTouchEnd(e: any) {
         this.triggerEvent('TouchEnd', false, e);
     }
-    public onTouchCancel(e: any) {
+    private onTouchCancel(e: any) {
         this.triggerEvent('TouchCancel', false, e);
     }
-    public onMouseDown(e: any) {
+    private onMouseDown(e: any) {
         // pc simulate mobile
         this.triggerEvent('MouseDown', true, e);
     }
-    public onMouseUp(e: any) {
+    private onMouseUp(e: any) {
         this.triggerEvent('MouseUp', false, e);
     }
-    public onMouseLeave(e: any) {
+    private onMouseLeave(e: any) {
         this.triggerEvent('MouseLeave', false, e);
     }
-    public triggerEvent(type: string, isActive: boolean, e: any) {
+    private triggerEvent(type: string, isActive: boolean, e: any) {
         let eventType = 'on' + type,
             { children } = this.props,
             { active } = this.state;
@@ -65,20 +65,12 @@ export default class TouchFeedback extends React.PureComponent<TouchProps, Touch
             });
         }
     }
-    public componentDidUpdate() {
-        if (this.props.disabled && this.state.active) {
-            this.setState({
-                active: false
-            });
-        }
-    }
     public render() {
         let { props, state } = this,
             { activeClassName, activeStyle, children, disabled } = props,
             { active } = state,
             events = disabled ? undefined : {
                 onTouchStart: this.onTouchStart,
-                // tslint:disable-next-line:object-literal-sort-keys
                 onTouchMove: this.onTouchMove,
                 onTouchEnd: this.onTouchEnd,
                 onTouchCancel: this.onTouchCancel,
@@ -86,21 +78,28 @@ export default class TouchFeedback extends React.PureComponent<TouchProps, Touch
                 onMouseUp: this.onMouseUp,
                 onMouseLeave: this.onMouseLeave
             },
-            extraProps = events,
+            nextProps,
             child = React.Children.only(children);
 
         if (!disabled && active) {
-            let childProps = child.props,
-                style = childProps.style,
-                className = childProps.className;
+            let { style, className } = child.props;
 
             if (activeStyle) {
-                style = Object.assign({}, style, activeStyle);
+                style = { ...style, ...activeStyle };
             }
             className = tools.classNames(className, activeClassName);
 
-            extraProps = Object.assign({ className, style }, events);
+            nextProps = { className, style, ...events };
+        } else {
+            nextProps = events;
         }
-        return React.cloneElement(child, extraProps);
+        return React.cloneElement(child, nextProps);
+    }
+    public componentDidUpdate() {
+        if (this.props.disabled && this.state.active) {
+            this.setState({
+                active: false
+            });
+        }
     }
 }
