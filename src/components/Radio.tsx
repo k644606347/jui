@@ -8,7 +8,7 @@ import Icon from './Icon';
 
 const tools = Tools.getInstance();
 
-class Checkbox extends React.PureComponent<RadioProps, any> {
+class Radio extends React.PureComponent<RadioProps, any> {
     private static defaultProps = {
         name: '',
         value: '',
@@ -23,7 +23,7 @@ class Checkbox extends React.PureComponent<RadioProps, any> {
     public render() {
         let { name, value, style, className, children, checked, disabled } = this.props;
 
-        // todo icon风格需优化
+        // TODO icon风格需优化
         return (
             <label style={style} className={
                 tools.classNames(
@@ -46,4 +46,4 @@ class Checkbox extends React.PureComponent<RadioProps, any> {
         onChange && onChange({ name, value, checked, disabled: !!disabled });
     }
 }
-export default Checkbox;
+export default Radio;
