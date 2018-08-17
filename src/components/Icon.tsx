@@ -11,11 +11,13 @@ import {
     FaSymbol
 } from '@fortawesome/fontawesome-svg-core'
 import * as React from 'react';
-import { CSSProperties } from 'react';
-export interface IconProps {
+import Tools from '../utils/Tools';
+import { CSSAttrs } from '../utils/types';
+
+const tools = Tools.getInstance();
+export interface IconProps extends CSSAttrs {
     icon: IconDefinition
     mask?: IconProp
-    className?: string
     color?: string
     spin?: boolean
     pulse?: boolean
@@ -29,11 +31,7 @@ export interface IconProps {
     rotation?: RotateProp
     transform?: string | Transform
     symbol?: FaSymbol
-    style?: CSSProperties
 };
-import Tools from '../utils/Tools';
-
-const tools = Tools.getInstance();
 
 export { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 
@@ -57,8 +55,6 @@ export default class Icon extends React.PureComponent<IconProps, any> {
         super(props);
     }
     public render() {
-        let { icon, style, className, size, spin, border, inverse, flip, pulse, rotation, transform } = this.props;
-
-        return <FontAwesomeIcon icon={icon} style={style} className={className} size={size} spin={spin} border={border} inverse={inverse} flip={flip} pulse={pulse} rotation={rotation} transform={transform} />
+        return <FontAwesomeIcon {...this.props} />
     }
 }
