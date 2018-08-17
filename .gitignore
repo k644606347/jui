@@ -72,5 +72,7 @@ typings/
 # Serverless directories
 .serverless
 
-/.DS_Store
-build/
+.DS_Store
+
+#根目录build/
+/build/
