@@ -45,7 +45,7 @@ measureFileSizesBeforeBuild(paths.appBuild)
   .then(previousFileSizes => {
     // Remove all content but keep the directory so that
     // if you're in it, you don't end up in Trash
-    fs.emptyDirSync(paths.appBuild);
+    // fs.emptyDirSync(paths.appBuild);//禁止自动清理build目录，防止.git被删除导致无法提交
     // Merge with the public folder
     copyPublicFolder();
     // Start the webpack build

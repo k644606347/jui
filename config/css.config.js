@@ -40,51 +40,19 @@ const buildPostCSSLoader = () => {
     };
 };
 const getCSSConfig = (env, options) => {
-    let configMap = {
-        development: {
+    let config = {
             test: /\.css$/,
             use: [
                 require.resolve("style-loader"),
                 {
                     loader: require.resolve("css-loader"),
                     options: {
-                        sourceMap: true,
+                        sourceMap: isDev(env),
                     }
                 },
                 postcssConfig
             ]
-        },
-        production: {
-            test: /\.css$/,
-            loader: ExtractTextPlugin.extract(
-                Object.assign({
-                        fallback: {
-                            loader: require.resolve("style-loader"),
-                            options: {
-                                hmr: false
-                            }
-                        },
-                        use: [{
-                                loader: require.resolve("css-loader"),
-                                options: {
-                                    minimize: true,
-                                    sourceMap: false,
-                                }
-                            },
-                            postcssConfig
-                        ]
-                    },
-                    extractTextPluginOptions
-                )
-            )
-            // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
-        }
     };
-
-    let config = configMap[env];
-    if (!config) {
-        throw new Error(`env:\`${env}\`下缺少.css文件的加载器配置，请追加`);
-    }
 
     return config;
 };
