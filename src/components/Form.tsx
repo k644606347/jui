@@ -48,6 +48,7 @@ export default class Form extends React.PureComponent<FormProps, any> {
     handleChange(e: any) {
         let { onChange } = this.props;
 
+        window.console.log('Form', e);
         onChange && onChange(e);
     }
 }

@@ -22,7 +22,6 @@ $error-bg-color: #f5222d;
         flex: 1 1 auto;
         .widget-control {
             display: flex;
-            justify-content: flex-end;    
         }
         .rule-msg {
             color: $error-bg-color;

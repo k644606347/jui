@@ -7,7 +7,7 @@ import Hello from './components/Hello';
 import Button from './components/Button';
 import logo from './logo.svg';
 import Icon, { IconProps } from './components/Icon';
-import { icon500px, iconAccessibleIcon, iconAddressBook, iconThList, iconAdn, iconBan, iconDribbble, iconCarBattery } from './components/icons/FontAwesomeMap';
+import { icon500px, iconAccessibleIcon, iconAddressBook, iconThList, iconAdn, iconBan, iconDribbble, iconCarBattery, iconInfo } from './components/icons/FontAwesomeMap';
 import List from './components/List';
 import favoriteIcon from './favicon.ico';
 import Pagination from './components/Pagination';
@@ -17,7 +17,6 @@ import { MenuItemsChangeEvent } from './components/MenuItemsType';
 import { MenuItemProps } from './components/MenuItemType';
 import Form from './components/Form';
 import Field from './components/Field';
-import Checkbox from './components/Checkbox';
 
 window.console.log('icon:', (<Icon icon={iconThList} /> as React.ReactElement<IconProps>).type === Icon, icon500px);
 const tools = Tools.getInstance();
@@ -33,63 +32,100 @@ class App extends React.Component<any, any> {
                 showItems: true,
                 multiSelect: false,
                 onShow() {
-                    that.setState({menu: {...that.state.menu, showItems: true}});
+                    that.setState({ menu: { ...that.state.menu, showItems: true } });
                 },
                 onHide() {
-                    that.setState({menu: {...that.state.menu, showItems: false}});
+                    that.setState({ menu: { ...that.state.menu, showItems: false } });
                 },
                 activeIndex: 3,
                 items: [
                     { value: 'item1', label: '新建', checked: false },
                     { value: 'item2', label: 'item2', checked: true },
-                    { value: 'item3', label: 'item3待ICON', checked: false, icon: iconCarBattery},
+                    { value: 'item3', label: 'item3待ICON', checked: false, icon: iconCarBattery },
                     {
-                        id: 'items1', label: 'items1 label很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长', 
+                        id: 'items1', label: 'items1 label很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长',
                         items: [
-                                { 
-                                    value: 'item1.1', label: 'item1.1', checked: false,
-                                    icon: iconAccessibleIcon,
-                                },
-                                { 
-                                    value: 'item1.2', label: 'item1.2', checked: false,
-                                    icon: <Icon icon={iconThList} spin={true} />
-                                }
-                            ] 
+                            {
+                                value: 'item1.1', label: 'item1.1', checked: false,
+                                icon: iconAccessibleIcon,
+                            },
+                            {
+                                value: 'item1.2', label: 'item1.2', checked: false,
+                                icon: <Icon icon={iconThList} spin={true} />
+                            }
+                        ]
                     },
                     {
-                        id: 'items2', 
-                        label: 'items2是多选', 
+                        id: 'items2',
+                        label: 'items2是多选',
                         multiSelect: true,
                         items: [
-                                { 
-                                    value: 'item2.1', label: 'item2.1', checked: false,
-                                    icon: iconBan,
-                                },
-                                { 
-                                    value: 'item2.2', label: 'item2.2', checked: false,
-                                    icon: <Icon icon={iconAdn} spin={true} />
-                                }
-                            ] 
+                            {
+                                value: 'item2.1', label: 'item2.1', checked: false,
+                                icon: iconBan,
+                            },
+                            {
+                                value: 'item2.2', label: 'item2.2', checked: false,
+                                icon: <Icon icon={iconAdn} spin={true} />
+                            }
+                        ]
                     },
                     {
-                        id: 'items3', 
-                        label: 'items3带ICON', 
+                        id: 'items3',
+                        label: 'items3带ICON',
                         multiSelect: true,
                         icon: iconDribbble,
                         items: [
-                                { 
-                                    value: 'item3.1', label: 'item3.1', checked: false,
-                                    icon: iconBan,
-                                },
-                                { 
-                                    value: 'item3.2', label: 'item3.2', checked: false,
-                                    icon: <Icon icon={iconAdn} spin={true} />
-                                }
-                            ] 
+                            {
+                                value: 'item3.1', label: 'item3.1', checked: false,
+                                icon: iconBan,
+                            },
+                            {
+                                value: 'item3.2', label: 'item3.2', checked: false,
+                                icon: <Icon icon={iconAdn} spin={true} />
+                            }
+                        ]
                     }
                 ],
                 backdropCoverage: 'bottom',
-            }
+            },
+            form1: [
+                {
+                    name: 'check1',
+                    label: '复选1',
+                    widget: 'checkbox',
+                    value: 'check1value',
+                    className: 'cls1',
+                    style: {
+                        color: 'red',
+                    },
+                    onChange: this.handleFormChange
+                },
+                {
+                    name: 'radio1',
+                    label: '单选1',
+                    widget: 'radio',
+                    value: 'radio1value',
+                    onChange: this.handleFormChange,
+                    disabled: true,
+                },
+                {
+                    name: 'input1',
+                    label: '输入1',
+                    widget: 'input',
+                    value: 'input1 value',
+                    onChange: this.handleFormChange
+                },
+                {
+                    name: 'input2',
+                    label: '输入2',
+                    widget: 'input',
+                    defaultValue: 'input2 value',
+                    // onChange: this.handleFormChange,
+                    onChange: (e: any) => window.console.log(e),
+                    renderWidget: (widget: any) => <React.Fragment>{widget}<Icon icon={iconInfo} color="green"/></React.Fragment>
+                }
+            ]
         };
 
         this.handleMenuChange = this.handleMenuChange.bind(this);
@@ -103,7 +139,7 @@ class App extends React.Component<any, any> {
                 { items, multiSelect, activeIndex } = event;
 
             Array.isArray(items) && items.forEach((v: any) => {
-                let id = v.id || v.value, 
+                let id = v.id || v.value,
                     item = menu.items.find((itm: any) => itm.id === id || itm.value === id);
 
                 if (item === undefined) {
@@ -118,7 +154,7 @@ class App extends React.Component<any, any> {
                     if (!multiSelect) {
                         let nextItems: MenuItemProps[] = [];
                         menu.items.forEach((itm: MenuItemProps) => {
-                            nextItems.push({...itm, checked: false});
+                            nextItems.push({ ...itm, checked: false });
                         });
                         menu.items = nextItems;
 
@@ -126,19 +162,19 @@ class App extends React.Component<any, any> {
                     }
 
                     item.checked = v.checked;
-                    item = {...item};
+                    item = { ...item };
                     itemIsModified = true;
                     // window.console.log(item);
                 }
             });
             if (itemIsModified) {
                 menu.items = [...menu.items];
-                menu = {...menu};
+                menu = { ...menu };
             }
             if (activeIndex && activeIndex >= 0) {
                 menu.activeIndex = activeIndex;
             }
-            
+
             return menu;
         }
 
@@ -161,15 +197,15 @@ class App extends React.Component<any, any> {
         </p>
                 {/* <input type="text" style={{position: 'fixed', zIndex: 30  }} /> */}
                 <Form>
-                    <Field label={'高级配置'} widget={
-                        <Checkbox name="advOptions" value="on" />
-                    }/>
-                    <Field label={'高级配置2'} widget={
-                        <Checkbox name="advOptions2" value="on" />
-                    }/>
-                    <Field label={'高级配置3'} widget={
-                        <Checkbox name="advOptions3" value="on" />
-                    }/>
+                    {
+                        this.state.form1.map(
+                            (field: any, i: number) => {
+                                let { label, ...restOptions } = field;
+
+                                return <Field label={label} key={i} {...restOptions}></Field>
+                            }
+                        )
+                    }
                 </Form>
                 <Menu id={'menu1'} level={2} {...menu} onChange={this.handleMenuChange} />
                 <Button>btn1</Button>
@@ -363,6 +399,20 @@ class App extends React.Component<any, any> {
                 <Hello name="TypeScript" enthusiasmLevel={10} />
             </div>
         );
+    }
+    handleFormChange = (e: any) => {
+        let newform = [...this.state.form1];
+        
+        window.console.log('form change', e);
+
+        newform.forEach((field, i) => {
+            if (field.name === e.name) {
+                this[i] = Object.assign(field, e);
+            }
+        });
+        this.setState({
+            form: newform
+        });
     }
     private link2(e: any) {
         window.alert(e);
