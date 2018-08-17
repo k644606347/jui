@@ -13,7 +13,10 @@
     "interface-name": false,
     "member-access": false,
     "member-ordering": false,
-    "no-namespace": [true, "allow-declarations"]
+    "no-namespace": [true, "allow-declarations"],
+    "jsx-no-lambda": false,
+    "no-empty-interface": false,
+    "no-debugger": false
   },
   "linterOptions": {
     "exclude": [
