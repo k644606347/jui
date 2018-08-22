@@ -1,7 +1,7 @@
 export default class Tools {
     public static getInstance() {
         const instances = Tools.instances;
-        
+
         return instances.length === 0 ? new Tools() : instances[0];
     }
     private static instances: Tools[] = [];
@@ -14,7 +14,7 @@ export default class Tools {
     }
 
     public isEmptyObject(v: any) {
-        if (!this.isPlainObject(v)){
+        if (!this.isPlainObject(v)) {
             return false;
         }
         for (let p in v) {
@@ -99,7 +99,7 @@ export default class Tools {
         return val.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
     }
 
-    public encodeHTML(html:string) {
+    public encodeHTML(html: string) {
         let htmlEntities = {
             '"': '&quot;',
             "'": '&#39;',
@@ -123,6 +123,33 @@ export default class Tools {
 
     public supportTouchEvents(): boolean {
         return 'ontouchstart' in document && 'ontouchmove' in document && 'ontouchend' in document;
+    }
+
+    calculateCharsByteLength(str: string) {
+        return str.replace(/[^\x00-\xff]/g, '__').length;
+    }
+
+    //  函数来自comos.js
+    calculateMobileCharsLength(str: string) {
+        const CHAR_MAP = { "0": 38.4, "1": 38.4, "2": 38.4, "3": 38.4, "4": 38.4, "5": 38.4, "6": 38.4, "7": 38.4, "8": 38.4, "9": 38.4, "A": 40, "B": 40, "C": 41, "D": 43, "E": 35, "F": 35, "G": 43, "H": 45, "I": 18, "J": 35, "K": 40, "L": 35, "M": 55, "N": 45, "O": 44, "P": 40, "Q": 45, "R": 41, "S": 39, "T": 38, "U": 43, "V": 40, "W": 55, "X": 40, "Y": 40, "Z": 38 };
+        let result = 0;
+
+        if (!str) {
+            return 0;
+        }
+        for (let i = 0; i < str.length; i++) {
+            let charCode = str.charCodeAt(i), charLen;
+            
+            if ((charCode >= 0x0001 && charCode <= 0x007e) || (0xff60 <= charCode && charCode <= 0xff9f)) {
+                charLen = CHAR_MAP.hasOwnProperty(str[i]) ? CHAR_MAP[str[i]] / 64 : 0.5;
+            } else {
+                charLen = 1;
+            }
+            result += charLen;
+        }
+
+        result = (String(result) === result.toFixed(0) ? result : Number(result.toFixed(3)));
+        return result;
     }
 
     // 需要依赖webpack变量注入

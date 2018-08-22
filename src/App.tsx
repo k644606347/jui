@@ -17,6 +17,9 @@ import { MenuItemsChangeEvent } from './components/MenuItemsType';
 import { MenuItemProps } from './components/MenuItemType';
 import Form from './components/Form';
 import Field from './components/Field';
+import Checkbox from './components/formWidget/Checkbox';
+import Log from './utils/Log';
+import Label from './components/Label';
 
 window.console.log('icon:', (<Icon icon={iconThList} /> as React.ReactElement<IconProps>).type === Icon, icon500px);
 const tools = Tools.getInstance();
@@ -207,6 +210,11 @@ class App extends React.Component<any, any> {
                         )
                     }
                 </Form>
+                <Label>Check1</Label><Checkbox name="check1" required onChange={
+                    e => Log.log(e)
+                } onValid={(e) => {
+                    Log.log(e);
+                }} value={'check1'}/>
                 <Menu id={'menu1'} level={2} {...menu} onChange={this.handleMenuChange} />
                 <Button>btn1</Button>
                 <Button type={'primary'} icon={iconThList}>btn2</Button>

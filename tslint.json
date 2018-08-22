@@ -16,7 +16,9 @@
     "no-namespace": [true, "allow-declarations"],
     "jsx-no-lambda": false,
     "no-empty-interface": false,
-    "no-debugger": false
+    "no-debugger": false,
+    "no-console": false,
+    "jsx-boolean-value": false
   },
   "linterOptions": {
     "exclude": [
