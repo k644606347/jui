@@ -46,34 +46,65 @@ const tools = Tools.getInstance(),
     };
 
 const Validator = {
-    validate(value: string, rules: Rule[]) {
+    async validate(value: string, rules: Rule[]) {
+        let hitRule, processReport;
+        // tslint:disable-next-line:prefer-for-of
+        for (let i = 0; i < rules.length; i++) {
+            let rule = rules[i],
+                processor = Validator[rule.rule],
+                processResult: any;
+
+            if (tools.isFunction(processor)) {
+                processResult = await processor(value, rule);
+
+                if (tools.isPlainObject(processResult)) {
+                    if (processResult.isValid === false) {
+                        hitRule = rule;
+                        processReport = processResult;
+                        break;
+                    }
+                } else {
+                    if (processResult === false) {
+                        hitRule = rule;
+                        break;
+                    }
+                }
+            } else {
+                let errorMsg = `配置错误，无法检测，没有[${rule.rule}]的检测方案`;
+                Log.error(errorMsg);
+                processReport = {
+                    msg: errorMsg,
+                    isValid: false,
+                    level: 'error'
+                };
+            }
+        }
+
         return this.report(
             value,
-            rules.find(rule => {
-                let processor = Validator[rule.rule];
-
-                if (tools.isFunction(processor)) {
-                    return processor(value, rule) === false;
-                } else {
-                    Log.log(`无效的校验规则[${rule.rule}]，请检查配置`);
-                    return false;
-                }
-            })
+            hitRule,
+            processReport as Report
         );
     },
-    report(value: string, hitRule?: Rule): Report {
+    report(value: string, hitRule?: Rule, injectReport?: Report): Report {
         let report: Report = {
-                value,
-                isValid: true,
-                msg: ''
-            },
+            value,
+            isValid: true,
+            msg: ''
+        },
             buildMsg = (msg: string) => value !== undefined ? msg.replace('{value}', value) : msg;
 
         if (hitRule) {
             let { rule, level } = hitRule,
                 presetConfig = presetReport[rule];
 
-            report = { ...report, value, isValid: false, hitRule, level, msg: buildMsg(presetConfig.msg) };
+            report = Object.assign(report,
+                { value, isValid: false, hitRule, level, msg: buildMsg(presetConfig.msg) }
+            );
+        }
+
+        if (injectReport) {
+            report = Object.assign(report, injectReport);
         }
 
         return report;
@@ -108,8 +139,49 @@ const Validator = {
     date(value: string) {
         return /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(String(value));
     },
-    callback(value: string, rule: Rule) {
-        return tools.isFunction(rule.value) ? rule.value(value) : false;
+    async callback(value: string, rule: Rule): Promise<Report | boolean> {
+        let callbackResult: Report | boolean;
+
+        if (tools.isFunction(rule.value)) {
+            try {
+                // valid case
+                callbackResult = await rule.value(value);
+
+                if (!tools.isPlainObject(callbackResult)) {
+                    callbackResult = !!callbackResult;
+                }
+            } catch (e) {
+                // invalid case
+                if (e instanceof Error) {
+                    let errorMsg = `callback函数执行报错, 无法完成检测, 报错信息: ${e}`;
+
+                    // level设置为error级别
+                    callbackResult = {
+                        msg: errorMsg,
+                        isValid: false,
+                        level: 'error'
+                    }
+                    Log.error(errorMsg);
+                } else if (tools.isPlainObject(e)) {
+                    callbackResult = e;
+                } else {
+                    callbackResult = {
+                        isValid: false,
+                        msg: JSON.stringify(e),
+                    }
+                }
+            }
+        } else {
+            let errorMsg = `配置错误，无法检测，当rule是callback时，value必须是函数, 当前是: ${rule.value}`;
+            callbackResult = {
+                msg: errorMsg,
+                isValid: false,
+                level: 'error',
+            }
+            Log.error(errorMsg);
+        }
+
+        return callbackResult;
     }
 }
 export default Validator;

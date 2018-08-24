@@ -3,9 +3,6 @@ import * as React from "react";
 import cm from './FormWidget.scss';
 import Tools from "../../utils/Tools";
 import Validator, { Rule, Report } from "./Validator";
-import { Omit } from "../../utils/types";
-import Label from "../Label";
-
 const tools = Tools.getInstance();
 interface OwnProps {
     onValid?: (e: FormWidgetValidEvent) => void;
@@ -18,11 +15,12 @@ interface State {
 }
 
 export default function wrapWidget<OriginProps extends FormWidgetProps>(UnwrappedComponent: React.ComponentClass<OriginProps>): React.ComponentClass<OriginProps & OwnProps> {
+    // TODO 当OriginProps和OwnProps存在同名属性时，会导致属性类型冲突，比如{ a: string; } & { a: number; } 会变成{ a: string & number; } 这时为a赋值string或number都将报错
     type Props = OriginProps & OwnProps;
 
     return class WidgetWrapper extends React.PureComponent<Props, State> {
-        // TODO defaultProps无法指定类型为P
-        // static defaultProps: P = {
+        // TODO defaultProps无法指定类型为Props
+        // static defaultProps: any = {
         //     id: tools.genID('widget_')
         // }
         readonly state: State = {
@@ -44,13 +42,13 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
         }
         render() {
             let { props, state } = this,
-                { id, onValid, onInvalid } = props,
+                { id, onValid, onInvalid, ...restProps } = props as any,// TODO 此处必须转换为any，不然无法使用rest语法
                 { msg, msgLevel } = state;
 
             return (
                 <div className={cm.wrapper}>
                     <div className={cm['widget-control']}>
-                        <UnwrappedComponent {...props} ref={this.widgetRef} onChange={this.handleChange} onFocus={this.handleFocus} onBlur={this.handleBlur} />
+                        <UnwrappedComponent {...restProps} ref={this.widgetRef} onChange={this.handleChange} onFocus={this.handleFocus} onBlur={this.handleBlur} />
                     </div>
                     {
                         msg ?
@@ -71,11 +69,10 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
             this.widgetRef.current.blur();
         }
         private handleChange(e: FormWidgetChangeEvent) {
-            let { value, checked } = e,
+            let { value } = e,
                 { onChange } = this.props;
 
             onChange && onChange(e);
-            // TODO checked的校验
             this.validate(value!).then(this.validateReport);
         }
         private handleLabelClick(e: React.MouseEvent<HTMLLabelElement>) {
@@ -118,7 +115,7 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
             return Validator.validate(value, mixedRules);
         }
         private validateReport(result: Report) {
-            let { name, onValid, onInvalid } = this.props,
+            let { onValid, onInvalid } = this.props,
                 { value, isValid, msg, hitRule, level } = result;
 
             if (result.isValid) {
@@ -133,11 +130,8 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
                 msgLevel: level
             }, () => {
                 let event = {
-                    value,
-                    hitRule,
-                    level,
-                    msg,
-                };
+                        value, hitRule, level, msg,
+                    };
                 if (isValid) {
                     onValid && onValid(event);
                 } else {

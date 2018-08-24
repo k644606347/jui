@@ -1,17 +1,10 @@
-// TODO 无法打印调用栈
+const prefix = '[CUM]';
+const suffix = '';
+
 export default {
-    prefix: '[CUM]',
-    suffix: '',
-    log(...args: any[]) {
-        console.log(this.prefix, ...args);
-    },
-    error(...args: any[]) {
-        console.error(this.prefix, ...args);
-    },
-    warn(...args: any[]) {
-        console.warn(this.prefix, ...args);
-    },
-    info(...args: any[]) {
-        console.info(this.prefix, ...args);
-    }
+    log: console.log.bind(console, prefix),
+    error: console.error.bind(console, prefix),
+    warn: console.warn.bind(console, prefix),
+    info: console.info.bind(console, prefix),
+    table: console.table.bind(console, prefix)
 }

@@ -5,18 +5,12 @@ import Validator, { Rule } from "./Validator";
 
 const tools = Tools.getInstance();
 interface FormWidgetEvent {
-    name?: string;
-    value?: string;
-    disabled?: boolean;
+    name: string;
+    value: string;
     checked?: boolean;
-    eventType: string;
 }
-export interface FormWidgetChangeEvent extends FormWidgetEvent{
-    eventType: 'change'
-}
-export interface FormWidgetFocusEvent extends FormWidgetEvent {
-    eventType: 'focus' | 'blur'
-}
+export interface FormWidgetChangeEvent extends FormWidgetEvent{}
+export interface FormWidgetFocusEvent extends FormWidgetEvent {}
 export type MsgLevelType = 'error' | 'warn' | 'info';
 export interface FormWidgetValidEvent {
     name?: string;
@@ -29,17 +23,16 @@ export interface FormWidgetProps extends CSSAttrs {
     name?: string;
     value?: string;
     defaultValue?: string;
-    label?: string;
     checked?: boolean;
     disabled?: boolean;
-    required?: boolean;
     readonly?: boolean;
     placeholder?: string;
+    required?: boolean;
     maxLength?: number;
     minLength?: number;
     maxZhLength?: number;
     minZhLength?: number;
-    rules?: any[];
+    rules?: Rule[];
     onChange?: (e: FormWidgetChangeEvent) => void;
     onFocus?: (e: FormWidgetFocusEvent) => void;
     onBlur?: (e: FormWidgetFocusEvent) => void;
@@ -59,20 +52,29 @@ export default abstract class FormWidget<P extends FormWidgetProps, S extends Fo
     abstract blur(): void;
     protected handleChange(e?: any) {
         let { value, checked } = e.target, 
-            { onChange, name, disabled } = this.props;
+            { onChange, name } = this.props;
 
-        onChange && onChange({ name, value, checked, disabled, eventType: 'change' });
+        onChange && onChange({ 
+            name: (name || '') as string, 
+            value, checked,
+        });
     }
     protected handleFocus(e?: any) {
-        let { value, disabled, checked } = e, 
+        let { value, checked } = e.target, 
             { onFocus, name } = this.props;
 
-            onFocus && onFocus({ name, value, checked, disabled, eventType: 'focus' });
+        onFocus && onFocus({ 
+            name: (name || '') as string, 
+            value, checked,
+        });
     }
     protected handleBlur(e?: any) {
-        let { value, disabled, checked } = e, 
+        let { value, checked } = e.target, 
             { onBlur, name } = this.props;
 
-            onBlur && onBlur({ name, value, checked, disabled, eventType: 'blur' });
+        onBlur && onBlur({ 
+            name: (name || '') as string, 
+            value, checked,
+        });
     }
 }

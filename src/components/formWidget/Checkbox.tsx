@@ -44,5 +44,15 @@ class Checkbox extends FormWidget<Props, State>{
     blur() {
         this.inputRef.current.blur();
     }
+    protected handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+        let { value, checked } = e.target,
+            { name, onChange } = this.props;
+
+        onChange && onChange({ 
+            name: name || '', 
+            value: (checked ? value : ''), 
+            checked 
+        });
+    }
 }
 export default wrapWidget<Props>(Checkbox);
