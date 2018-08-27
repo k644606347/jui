@@ -8,20 +8,20 @@ import { iconCheckCircle_r, iconCheckCircle, iconCircle_r } from "../icons/FontA
 
 const tools = Tools.getInstance();
 
-interface Props extends FormWidgetProps {};
-interface State extends FormWidgetState {};
-class Checkbox extends FormWidget<Props, State>{
+export interface CheckboxProps extends FormWidgetProps { };
+interface State extends FormWidgetState { };
+class Checkbox extends FormWidget<CheckboxProps, State>{
     static defaultProps: FormWidgetState = {
         checked: false
     }
     private readonly inputRef: React.RefObject<any>;
-    constructor(props: Props) {
+    constructor(props: CheckboxProps) {
         super(props);
 
         this.inputRef = React.createRef();
     }
     render() {
-        let { checked, disabled, className, style, children, onFocus, onBlur, ...restProps } = this.props;
+        let { children, checked, disabled, rules, className, style, onFocus, onBlur, onValid, onInvalid, isValid, validateMsg, validateMsgLevel, ...restProps } = this.props;
 
         // TODO icon风格需优化，细边框
         return (
@@ -46,13 +46,14 @@ class Checkbox extends FormWidget<Props, State>{
     }
     protected handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         let { value, checked } = e.target,
-            { name, onChange } = this.props;
+            { id, name, onChange } = this.props;
 
-        onChange && onChange({ 
-            name: name || '', 
-            value: (checked ? value : ''), 
-            checked 
+        onChange && onChange({
+            id: id || '',
+            name: name || '',
+            value: (checked ? value : ''),
+            checked
         });
     }
 }
-export default wrapWidget<Props>(Checkbox);
+export default wrapWidget(Checkbox);

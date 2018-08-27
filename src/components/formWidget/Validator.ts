@@ -46,7 +46,7 @@ const tools = Tools.getInstance(),
     };
 
 const Validator = {
-    async validate(value: string, rules: Rule[]) {
+    async validate(value: any, rules: Rule[]) {
         let hitRule, processReport;
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < rules.length; i++) {
@@ -109,8 +109,14 @@ const Validator = {
 
         return report;
     },
-    required(value: string) {
-        return value !== '';
+    required(value: any) {
+        if (tools.isArray(value)) {
+            return value.length > 0;
+        } else if (tools.isPlainObject(value)) {
+            return !tools.isEmptyObject(value);
+        } else {
+            return String(value) !== '' && value !== undefined && value !== null;
+        }
     },
     maxlength(value: string, rule: Rule) {
         return value.length < Number(rule.value);
@@ -145,26 +151,21 @@ const Validator = {
         if (tools.isFunction(rule.value)) {
             try {
                 // valid case
-                callbackResult = await rule.value(value);
-
-                if (!tools.isPlainObject(callbackResult)) {
-                    callbackResult = !!callbackResult;
-                }
+                callbackResult = Boolean(await rule.value(value));
             } catch (e) {
                 // invalid case
                 if (e instanceof Error) {
                     let errorMsg = `callback函数执行报错, 无法完成检测, 报错信息: ${e}`;
 
-                    // level设置为error级别
+                    // throw error时level设置为error级别
                     callbackResult = {
                         msg: errorMsg,
                         isValid: false,
                         level: 'error'
                     }
                     Log.error(errorMsg);
-                } else if (tools.isPlainObject(e)) {
-                    callbackResult = e;
                 } else {
+                    // 正常的驳回流程
                     callbackResult = {
                         isValid: false,
                         msg: JSON.stringify(e),

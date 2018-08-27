@@ -1,0 +1,14 @@
+@charset "UTF-8";
+
+.wrapper {
+    display: flex;
+    &.horizontal {
+        flex-direction: row;
+    }
+    .item {
+        margin-right: 15px;
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+}

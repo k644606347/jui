@@ -8,22 +8,22 @@ import FormWidget, { FormWidgetProps, FormWidgetState } from './FormWidget';
 import wrapWidget from './wrapWidget';
 
 const tools = Tools.getInstance();
-interface Props extends FormWidgetProps { }
-class Radio extends FormWidget<Props, FormWidgetState> {
-    static defaultProps: Partial<Props> = {
+export interface RadioProps extends FormWidgetProps { }
+class Radio extends FormWidget<RadioProps, FormWidgetState> {
+    static defaultProps: Partial<RadioProps> = {
         name: '',
         value: '',
         checked: false,
         disabled: false,
     };
     private readonly inputRef: React.RefObject<any>;
-    constructor(props: Props) {
+    constructor(props: RadioProps) {
         super(props);
 
         this.inputRef = React.createRef();
     }
     render() {
-        let { checked, disabled, className, style, children, ...restProps } = this.props;
+        let { checked, disabled, rules, className, style, children, onValid, onInvalid, isValid, validateMsg, validateMsgLevel, ...restProps } = this.props;
 
         // TODO icon风格需优化，细边框
         return (
@@ -53,7 +53,7 @@ class Radio extends FormWidget<Props, FormWidgetState> {
     }
     protected handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         let { value, checked } = e.target,
-            { name, onChange } = this.props;
+            { id, name, onChange } = this.props;
 
         onChange && onChange({ 
             name: name || '', 

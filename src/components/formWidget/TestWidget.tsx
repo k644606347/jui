@@ -3,7 +3,6 @@ import * as React from "react";
 import wrapWidget from "./wrapWidget";
 
 interface Props extends FormWidgetProps {
-    onValid: string;
 }
 class TestWidget extends FormWidget<Props, FormWidgetState> {
     constructor(props: Props) {
@@ -21,4 +20,4 @@ class TestWidget extends FormWidget<Props, FormWidgetState> {
     }
 }
 
-export default wrapWidget<Props>(TestWidget);
+export default wrapWidget(TestWidget);

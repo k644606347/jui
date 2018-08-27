@@ -19,7 +19,7 @@ const extractTextPluginOptions = shouldUseRelativeAssetPaths ? // Making sure th
 
 const isProd = env => env === 'production';
 const isDev = env => env === 'development';
-const classNamePrefix = 'cmui';
+const classNamePrefix = 'jui';
 const buildPostCSSLoader = () => {
     return {
         loader: require.resolve("postcss-loader"),

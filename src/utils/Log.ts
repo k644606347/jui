@@ -1,4 +1,4 @@
-const prefix = '[CUM]';
+const prefix = '[JUI]';
 const suffix = '';
 
 export default {

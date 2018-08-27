@@ -15,7 +15,7 @@ class Input extends FormWidget<Props, {}> {
         this.inputRef = React.createRef();
     }
     render() {
-        const { className, style, ...restProps } = this.props;
+        const { className, rules, style, onValid, onInvalid, isValid, validateMsg, validateMsgLevel, ...restProps } = this.props;
 
         return (
             <input
@@ -39,4 +39,4 @@ class Input extends FormWidget<Props, {}> {
     }
 }
 
-export default wrapWidget<Props>(Input);
+export default wrapWidget(Input);
