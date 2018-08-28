@@ -5,12 +5,17 @@ import wrapWidget from "./wrapWidget";
 interface Props extends FormWidgetProps {
 }
 class TestWidget extends FormWidget<Props, FormWidgetState> {
+    static defaultProps: Props = {
+        id: 'testWidget',
+        // validateTrigger: 'onBlur',
+    }
     constructor(props: Props) {
         super(props);
 
+        console.log(TestWidget.defaultProps, props);
     }
     render() {
-        return <div>onValid: { this.props.onValid }</div>;
+        return <div>{ this.props.id }</div>;
     }
     focus() {
         //

@@ -15,7 +15,10 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
 
     return class WidgetWrapper extends React.PureComponent<Props, State> {
         // TODO defaultProps无法指定类型为Props
-        static defaultProps = UnwrappedComponent.defaultProps;
+        static defaultProps: Partial<OriginProps> = {
+            validateTrigger: 'onChange',
+            ...UnwrappedComponent.defaultProps as any
+        }
         readonly state: State;
         readonly widgetRef: React.RefObject<any>;
         constructor(props: Props) {

@@ -21,7 +21,8 @@ class Checkbox extends FormWidget<CheckboxProps, State>{
         this.inputRef = React.createRef();
     }
     render() {
-        let { children, checked, disabled, rules, className, style, onFocus, onBlur, onValid, onInvalid, isValid, validateMsg, validateMsgLevel, ...restProps } = this.props;
+        let { children, checked, disabled, className, style, ...restProps } = this.props,
+            allowedInputElAttrs = this.getAllowedInputElAttrs(restProps);
 
         // TODO icon风格需优化，细边框
         return (
@@ -32,7 +33,13 @@ class Checkbox extends FormWidget<CheckboxProps, State>{
                     disabled && cm.disabled,
                     className)
             }>
-                <input ref={this.inputRef} {...restProps} className={cm.input} type="checkbox" checked={checked} disabled={disabled} onChange={this.handleChange} />
+                <input {...allowedInputElAttrs} className={cm.input} type="checkbox" 
+                    checked={checked} disabled={disabled}
+                    onChange={this.handleChange} 
+                    onFocus={this.handleFocus} 
+                    onBlur={this.handleBlur} 
+                    ref={this.inputRef}
+                />
                 <div className={cm.icon}><Icon icon={disabled ? iconCheckCircle_r : checked ? iconCheckCircle : iconCircle_r} /></div>
                 {children !== undefined ? <div className={cm.description}>{children}</div> : ''}
             </label>

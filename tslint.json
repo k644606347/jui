@@ -18,7 +18,8 @@
     "no-empty-interface": false,
     "no-debugger": false,
     "no-console": false,
-    "jsx-boolean-value": false
+    "jsx-boolean-value": false,
+    "forin": false
   },
   "linterOptions": {
     "exclude": [

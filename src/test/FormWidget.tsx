@@ -60,7 +60,7 @@ export class FormWidget extends React.PureComponent<any, any> {
         let { state } = this;
 
         return (<React.Fragment>
-            {/* <TestWidget /> */}
+            <TestWidget />
             <Label>
                 多选项: 
                 <CheckboxItems items={state.checkboxItems.items} value={state.checkboxItems.value} onChange={

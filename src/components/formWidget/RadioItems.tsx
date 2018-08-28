@@ -2,27 +2,25 @@ import FormWidget, { FormWidgetProps, FormWidgetChangeEvent } from "./FormWidget
 import * as React from "react";
 import Tools from "../../utils/Tools";
 import wrapWidget from "./wrapWidget";
-import cm from './CheckboxItems.scss';
-import Radio, { RadioProps } from "./Radio";
+import cm from './RadioItems.scss';
+import Radio from "./Radio";
 
 export interface RadioItemsProps extends FormWidgetProps {
     items: any[];
     value?: string | number;
-    layout?: 'horizontal' | 'vertical';
 }
 
 const tools = Tools.getInstance();
 class RadioItems extends FormWidget<RadioItemsProps, any> {
     static defaultProps: RadioItemsProps = {
         items: [],
-        layout: 'horizontal',
     }
     render() {
-        let { name, value, items, className, style, layout } = this.props;
+        let { name, value, items, className, style } = this.props;
 
         return (
             <div style={style} className={
-                tools.classNames(cm.wrapper, layout && cm[layout], className)
+                tools.classNames(cm.wrapper, className)
             }>
                 {
                     items.map((config, i) =>

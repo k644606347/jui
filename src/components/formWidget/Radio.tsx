@@ -23,7 +23,8 @@ class Radio extends FormWidget<RadioProps, FormWidgetState> {
         this.inputRef = React.createRef();
     }
     render() {
-        let { checked, disabled, rules, className, style, children, onValid, onInvalid, isValid, validateMsg, validateMsgLevel, ...restProps } = this.props;
+        let { checked, disabled, className, style, children, ...restProps } = this.props,
+            allowedInputElAttrs = this.getAllowedInputElAttrs(restProps);
 
         // TODO icon风格需优化，细边框
         return (
@@ -34,7 +35,7 @@ class Radio extends FormWidget<RadioProps, FormWidgetState> {
                     disabled && cm.disabled,
                     className)
             }>
-                <input {...restProps} className={cm.input} type="radio" checked={checked} disabled={disabled} 
+                <input {...allowedInputElAttrs} className={cm.input} type="radio" checked={checked} disabled={disabled} 
                     onChange={this.handleChange} 
                     onFocus={this.handleFocus} 
                     onBlur={this.handleBlur} 

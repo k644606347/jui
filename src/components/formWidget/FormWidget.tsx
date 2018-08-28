@@ -19,6 +19,14 @@ export interface FormWidgetValidEvent {
     msg?: string;
     level?: MsgLevelType;
 }
+type ValidateTrigger = 'onChange' | 'onBlur' | false;
+const allowedInputElAttrs: Array<keyof React.InputHTMLAttributes<HTMLInputElement>> = [
+    'id', 'name', 'value', 'defaultValue', 
+    'disabled', 'readOnly', 'required', 
+    'maxLength', 'minLength', 'placeholder', 
+    'onChange', 'onFocus', 'onBlur'
+];
+
 export interface FormWidgetProps extends CSSAttrs {
     id?: string;
     name?: string;
@@ -34,6 +42,7 @@ export interface FormWidgetProps extends CSSAttrs {
     maxZhLength?: number;
     minZhLength?: number;
     rules?: Rule[];
+    validateTrigger?: ValidateTrigger;
     isValid?: boolean;
     validateMsg?: string;
     validateMsgLevel?: MsgLevelType;
@@ -85,6 +94,19 @@ export default abstract class FormWidget<P extends FormWidgetProps, S extends Fo
             name: name || '',
             value, checked,
         });
+    }
+    protected getAllowedInputElAttrs(obj: any = this.props) {
+        let inputElAttrs = {};
+
+        for (let key in obj) {
+            let val = obj[key];
+        
+            if (allowedInputElAttrs.indexOf(key as any) !== -1) {
+                inputElAttrs[key] = val;
+            }
+        }
+
+        return inputElAttrs;
     }
     abstract focus(): void;
     abstract blur(): void;

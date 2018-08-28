@@ -15,15 +15,15 @@ class Input extends FormWidget<Props, {}> {
         this.inputRef = React.createRef();
     }
     render() {
-        const { className, rules, style, onValid, onInvalid, isValid, validateMsg, validateMsgLevel, ...restProps } = this.props;
+        let { className } = this.props,
+            allowedInputElAttrs = this.getAllowedInputElAttrs();
 
         return (
             <input
-                {...restProps}
+                {...allowedInputElAttrs}
                 className={
                     tools.classNames(cm.input, className)
                 }
-                style={style}
                 onChange={this.handleChange}
                 onFocus={this.handleFocus}
                 onBlur={this.handleBlur} 

@@ -8,18 +8,16 @@ import cm from './CheckboxItems.scss';
 export interface CheckboxItemsProps extends FormWidgetProps {
     items: any[];
     value?: Array<string | number>;
-    layout?: 'horizontal' | 'vertical';
 }
 
 const tools = Tools.getInstance();
 class CheckboxItems extends FormWidget<CheckboxItemsProps, any> {
     static defaultProps: CheckboxItemsProps = {
         items: [],
-        layout: 'horizontal',
     }
     private checkboxs: Array<React.ReactElement<CheckboxProps>> = [];
     render() {
-        let { name, value, items, className, style, layout } = this.props,
+        let { name, value, items, className, style } = this.props,
             renderCheckbox = (config: any, key: any) => {
                 let checkboxID = tools.genID('checkbox_item_'),
                     checkboxEl = <Checkbox id={checkboxID} name={name} value={config.value}
@@ -38,7 +36,7 @@ class CheckboxItems extends FormWidget<CheckboxItemsProps, any> {
         this.checkboxs = [];
         return (
             <div style={style} className={
-                tools.classNames(cm.wrapper, layout && cm[layout], className)
+                tools.classNames(cm.wrapper, className)
             }>
                 {
                     items.map((config, i) => renderCheckbox(config, i))
