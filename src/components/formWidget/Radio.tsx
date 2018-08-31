@@ -46,11 +46,19 @@ class Radio extends Widget<RadioProps, FormWidgetState> {
             </label>
         );
     }
-    focus() {
-        this.inputRef.current.focus();
+    componentDidMount() {
+        this.toggleFocus();
     }
-    blur() {
-        this.inputRef.current.blur();
+    componentDidUpdate() {
+        this.toggleFocus();
+    }
+    private toggleFocus() {
+        let { focused } = this.props;
+
+        if (focused)
+            this.inputRef.current.focus();
+        else
+            this.inputRef.current.blur();
     }
     protected handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         let { value, checked } = e.target,

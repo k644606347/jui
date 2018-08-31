@@ -57,6 +57,12 @@ export class FormWidgetTest extends React.PureComponent<any, any> {
             value: 'w',
         }
     };
+    constructor(props: any) {
+        super(props);
+
+        this.check1Ref = React.createRef();
+    }
+    check1Ref: React.RefObject<any>;
     checkboxItemsRef: React.RefObject<CheckboxItemsProps>;
     render() {
         let { state } = this;
@@ -91,7 +97,7 @@ export class FormWidgetTest extends React.PureComponent<any, any> {
                         this.setState({ radioItems });
                     }
                 }/>
-            <Label>Check1</Label><Checkbox name="check1" required onChange={
+            <Label forRef={this.check1Ref}>Check1</Label><Checkbox name="check1" ref={this.check1Ref} required onChange={
                 e => Log.info(e)
             } 
             onValid={(e) => {

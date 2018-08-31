@@ -5,7 +5,8 @@ import Tools from "../../utils/Tools";
 import Validator, { Rule, Report } from "./Validator";
 const tools = Tools.getInstance();
 interface State {
-    isValid: boolean;
+    focused?: boolean;
+    isValid?: boolean;
     msg?: string;
     msgLevel?: MsgLevelType;
 }
@@ -24,6 +25,7 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
             super(props);
 
             this.state = {
+                focused: props.focused || false,
                 isValid: props.isValid || true,
                 msg: props.validateMsg || '',
                 msgLevel: props.validateMsgLevel || 'info',
@@ -39,16 +41,17 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
         render() {
             let { props, state } = this,
                 { ...restProps } = props as any,// TODO 此处必须转换为any，不然无法使用rest语法
-                { isValid, msg, msgLevel } = state;
+                { focused, isValid, msg, msgLevel } = state;
 
             return (
                 <div className={cm.wrapper}>
                     <div className={cm['widget-control']}>
-                        <UnwrappedComponent {...restProps} isValid={isValid} validateMsg={msg} validateMsgLevel={msgLevel} 
-                            ref={this.widgetRef} 
-                            onChange={this.handleChange} onFocus={this.handleFocus} onBlur={this.handleBlur} 
-                            onValid={this.handleValid} onInvalid={this.handleInvalid} 
-                            />
+                        <UnwrappedComponent {...restProps} ref={this.widgetRef}
+                            isValid={isValid} validateMsg={msg} validateMsgLevel={msgLevel}
+                            focused={focused}
+                            onChange={this.handleChange} onFocus={this.handleFocus} onBlur={this.handleBlur}
+                            onValid={this.handleValid} onInvalid={this.handleInvalid}
+                        />
                     </div>
                     {
                         msg ?
@@ -63,22 +66,29 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
             )
         }
         componentDidUpdate(prevProps: Props, prveState: State) {
-            let { isValid, validateMsg, validateMsgLevel } = this.props,
-                prevIsValid = prevProps.isValid;
+            let { isValid, validateMsg, validateMsgLevel, focused } = this.props,
+                nextState: State = {};
 
-            if (isValid !== undefined && isValid !== prevIsValid) {
-                this.setState({ 
-                    isValid: isValid as boolean,
+            if (isValid !== undefined && isValid !== prevProps.isValid) {
+                nextState = {
+                    ...nextState,
+                    isValid: isValid,
                     msg: validateMsg,
-                    msgLevel: validateMsgLevel,
-                 });
+                    msgLevel: validateMsgLevel
+                };
             }
+
+            if (focused !== undefined && focused !== prevProps.focused) {
+                nextState.focused = focused;
+            }
+
+            this.setState(nextState);
         }
         focus() {
-            this.widgetRef.current.focus();
+            this.setState({ focused: true });
         }
         blur() {
-            this.widgetRef.current.blur();
+            this.setState({ focused: false });
         }
         validate() {
             this.widgetRef.current.validate();

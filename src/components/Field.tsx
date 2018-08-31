@@ -34,7 +34,7 @@ export default class Field extends React.PureComponent<FieldProps, any> {
                                 render ? 
                                     render(widgetEl, labelEl) : 
                                     <React.Fragment>
-                                        { labelEl },
+                                        { labelEl }
                                         {
                                             renderWidget ? renderWidget(widgetEl) : widgetEl
                                         }

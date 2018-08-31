@@ -33,6 +33,7 @@ export interface FormWidgetProps extends CSSAttrs {
     value?: any;
     defaultValue?: any;
     checked?: boolean;
+    focused?: boolean;
     disabled?: boolean;
     readOnly?: boolean;
     placeholder?: string;
@@ -53,7 +54,7 @@ export interface FormWidgetProps extends CSSAttrs {
     onValid?: (e: FormWidgetValidEvent) => void;
     onInvalid?: (e: FormWidgetValidEvent) => void;
 }
-export interface FormWidgetState { }
+export interface FormWidgetState {}
 export default abstract class Widget<P extends FormWidgetProps, S extends FormWidgetState> extends React.PureComponent<P, S> {
     readonly state: S;
     constructor(props: P) {
@@ -108,8 +109,6 @@ export default abstract class Widget<P extends FormWidgetProps, S extends FormWi
 
         return inputElAttrs;
     }
-    abstract focus(): void;
-    abstract blur(): void;
     protected getRules() {
         let { required, maxLength, minLength, maxZhLength, minZhLength, rules } = this.props,
             ruleMap = {
