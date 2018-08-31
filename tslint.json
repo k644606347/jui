@@ -19,7 +19,8 @@
     "no-debugger": false,
     "no-console": false,
     "jsx-boolean-value": false,
-    "forin": false
+    "forin": false,
+    "curly": false
   },
   "linterOptions": {
     "exclude": [

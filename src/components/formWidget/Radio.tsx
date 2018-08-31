@@ -4,12 +4,12 @@ import cm from './Radio.scss';
 import Tools from '../../utils/Tools';
 import { iconCheck } from '../icons/FontAwesomeMap';
 import Icon from '../Icon';
-import FormWidget, { FormWidgetProps, FormWidgetState } from './FormWidget';
+import Widget, { FormWidgetProps, FormWidgetState } from './Widget';
 import wrapWidget from './wrapWidget';
 
 const tools = Tools.getInstance();
 export interface RadioProps extends FormWidgetProps { }
-class Radio extends FormWidget<RadioProps, FormWidgetState> {
+class Radio extends Widget<RadioProps, FormWidgetState> {
     static defaultProps: Partial<RadioProps> = {
         name: '',
         value: '',
@@ -63,4 +63,4 @@ class Radio extends FormWidget<RadioProps, FormWidgetState> {
         });
     }
 }
-export default wrapWidget<FormWidgetProps>(Radio);
+export default wrapWidget(Radio);

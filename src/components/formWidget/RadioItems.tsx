@@ -1,9 +1,9 @@
-import FormWidget, { FormWidgetProps, FormWidgetChangeEvent } from "./FormWidget";
+import Widget, { FormWidgetProps, FormWidgetChangeEvent } from "./Widget";
 import * as React from "react";
 import Tools from "../../utils/Tools";
-import wrapWidget from "./wrapWidget";
 import cm from './RadioItems.scss';
 import Radio from "./Radio";
+import wrapWidget from "./wrapWidget";
 
 export interface RadioItemsProps extends FormWidgetProps {
     items: any[];
@@ -11,7 +11,7 @@ export interface RadioItemsProps extends FormWidgetProps {
 }
 
 const tools = Tools.getInstance();
-class RadioItems extends FormWidget<RadioItemsProps, any> {
+class RadioItems extends Widget<RadioItemsProps, any> {
     static defaultProps: RadioItemsProps = {
         items: [],
     }

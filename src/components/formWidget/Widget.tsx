@@ -54,7 +54,7 @@ export interface FormWidgetProps extends CSSAttrs {
     onInvalid?: (e: FormWidgetValidEvent) => void;
 }
 export interface FormWidgetState { }
-export default abstract class FormWidget<P extends FormWidgetProps, S extends FormWidgetState> extends React.PureComponent<P, S> {
+export default abstract class Widget<P extends FormWidgetProps, S extends FormWidgetState> extends React.PureComponent<P, S> {
     readonly state: S;
     constructor(props: P) {
         super(props);

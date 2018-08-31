@@ -1,10 +1,10 @@
-import FormWidget, { FormWidgetProps, FormWidgetState } from "./FormWidget";
+import Widget, { FormWidgetProps, FormWidgetState } from "./Widget";
 import * as React from "react";
 import wrapWidget from "./wrapWidget";
 
 interface Props extends FormWidgetProps {
 }
-class TestWidget extends FormWidget<Props, FormWidgetState> {
+class TestWidget extends Widget<Props, FormWidgetState> {
     static defaultProps: Props = {
         id: 'testWidget',
         // validateTrigger: 'onBlur',

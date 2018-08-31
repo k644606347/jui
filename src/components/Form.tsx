@@ -2,53 +2,64 @@ import * as React from "react";
 import { FormProps } from "./FormType";
 import Tools from "../utils/Tools";
 import Field from "./Field";
-import { FieldProps } from "./FieldType";
 import cssModules from './Form.scss';
+import Log from "../utils/Log";
+import { FormContext } from "./Form-Context";
+import Config from "./formWidget/Config";
+import { FieldProps } from "./FieldType";
 
 const tools = Tools.getInstance();
 export default class Form extends React.PureComponent<FormProps, any> {
+    static isWidgetElement = (node: React.ReactNode) => {
+        let isWidget = false;
+        if (!React.isValidElement(node)) {
+            return false;
+        }
+        for (let key in Config) {
+            if (node.type === Config[key].widget) {
+                isWidget = true;
+                break;
+            }
+        }
+        return isWidget;
+    }
     constructor(props: FormProps) {
         super(props);
 
+        this.handleChange = this.handleChange.bind(this);
     }
     render() {
         let { props, state } = this,
-            { children } = props;
+            { fields, children } = props;
+
         return (
-            <form className={cssModules.wrapper}>
-                {
-                    this.processChildren(children)
-                }
-            </form>
+            <FormContext.Provider value={{ onChange: this.handleChange }}>
+                <form className={cssModules.wrapper}>
+                    {
+                        fields ? this.renderFields(fields) : children
+                    }
+                </form>
+            </FormContext.Provider>
         )
     }
-    private processChildren(children: React.ReactNode): React.ReactNode {
-        if (!tools.isArray(children)) {
-            return Field.isField(children) ? this.bindField(children as React.ReactElement<FieldProps>) : children;
-        } else {
-            return (children as React.ReactNode[]).map(n => this.processChildren(n));
-        }
-    }
-    private bindField(field: React.ReactElement<FieldProps>) {
-        let { props } = field,
-            originOnChange = props.onChange,
-            originClassName = props.className,
-            that = this;
-
-        return React.cloneElement(field, {
-            className: tools.classNames(originClassName, cssModules.field),
-            onChange(e: any) {
-                originOnChange && originOnChange(e);
-
-                that.handleChange(e);
-            }
-        })
+    private renderFields(fields: FieldProps[]) {
+        return (
+            <React.Fragment>
+                {
+                    fields.map((field: FieldProps, i) => {
+                        let { widget, label, renderWidget, ...widgetProps } = field;
+                        return (
+                            <Field key={i} label={label} widget={widget} widgetProps={widgetProps} renderWidget={renderWidget}></Field>
+                        )
+                    })
+                }
+            </React.Fragment>
+        )
     }
     // TOOD 回调处理
     handleChange(e: any) {
         let { onChange } = this.props;
 
-        window.console.log('Form', e);
         onChange && onChange(e);
     }
 }

@@ -1,6 +1,6 @@
-import FormWidget, { FormWidgetProps, MsgLevelType, FormWidgetValidEvent, FormWidgetState, FormWidgetChangeEvent, FormWidgetFocusEvent } from "./FormWidget";
+import { FormWidgetProps, MsgLevelType, FormWidgetValidEvent, FormWidgetState, FormWidgetChangeEvent, FormWidgetFocusEvent } from "./Widget";
 import * as React from "react";
-import cm from './FormWidget.scss';
+import cm from './Widget.scss';
 import Tools from "../../utils/Tools";
 import Validator, { Rule, Report } from "./Validator";
 const tools = Tools.getInstance();
@@ -14,8 +14,7 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
     type Props = OriginProps;
 
     return class WidgetWrapper extends React.PureComponent<Props, State> {
-        // TODO defaultProps无法指定类型为Props
-        static defaultProps: Partial<OriginProps> = {
+        static defaultProps: Partial<Props> = {
             validateTrigger: 'onChange',
             ...UnwrappedComponent.defaultProps as any
         }

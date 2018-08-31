@@ -1,74 +1,86 @@
 import * as React from "react";
-import { FieldProps, FormWidgetMap } from "./FieldType";
+import { FieldProps } from "./FieldType";
 import cm from './Field.scss';
 import Tools from '../utils/Tools';
+import { FormContext } from "./Form-Context";
+import Label from "./Label";
+import Form from "./Form";
+import Log from "../utils/Log";
+import Config from "./formWidget/Config";
 
 const tools = Tools.getInstance();
 export default class Field extends React.PureComponent<FieldProps, any> {
-    static OPTIONS_WIDGETS = ['checkbox', 'radio'];
-    public static isField(field: any) {
-        return (field as React.ReactElement<FieldProps>).type === Field;
-    }
-    widgetRef: React.RefObject<any>;
     constructor(props: FieldProps) {
         super(props);
-
-        this.widgetRef = React.createRef();
-        this.handleChange = this.handleChange.bind(this);
-        this.handleLabelClick = this.handleLabelClick.bind(this);
     }
     render() {
         let { props } = this,
-            { label, widget, options, rules, renderWidget, style, className, ...restProps } = props,
-            required = !!rules && rules.some(r => r.rule === 'required'),
-            that = this,
-            widgetComponent = FormWidgetMap[widget],
-            widgetElement;
-
-        if (!widgetComponent) {
-            throw new Error(`不支持此widget的配置: ${widget}`);
-        }
-
-        widgetElement = React.createElement(widgetComponent, {
-            ...restProps,
-            ref: this.widgetRef,
-            onChange(e: any) {
-                that.handleChange(e);
-            }
-        });
+            { className, style, label, widget, renderWidget, render } = props;
 
         return (
-            <div style={style} className={
-                tools.classNames(
-                    cm.wrapper,
-                    className
-                )
-            }>
-                <label className={cm.label} onClick={this.handleLabelClick}>{label}</label>
-                <div className={cm['field-control']}>
-                    <div className={cm['widget-control']}>
-                    {
-                        renderWidget ? renderWidget(widgetElement) : widgetElement
+            <FormContext.Consumer>
+                {
+                    (args) => {  
+                        let widgetEl = this.processWidget(widget, args.onChange),
+                            labelEl = label !== undefined ? <Label>{label}</Label> : undefined;
+                        return (
+                            <div style={style} className={
+                                tools.classNames(
+                                    cm.wrapper,
+                                    className
+                                )
+                            }>
+                            {
+                                render ? 
+                                    render(widgetEl, labelEl) : 
+                                    <React.Fragment>
+                                        { labelEl },
+                                        {
+                                            renderWidget ? renderWidget(widgetEl) : widgetEl
+                                        }
+                                    </React.Fragment>
+                            }
+                            </div>
+                        );
                     }
-                    </div>
-                    <div className={cm['rule-msg']}></div>
-                </div>
-            </div>
+                }
+            </FormContext.Consumer>
         );
     }
-    // TOOD 回调处理
-    handleChange(e: any) {
-        let { onChange } = this.props;
+    private processWidget(widget: JSX.Element | string, onChange: (...args: any[]) => void) {
+        let { widgetProps } = this.props,
+            widgetEl: JSX.Element,
+            // tslint:disable-next-line:ban-types
+            originOnChange: Function,
+            injectedProps = {
+                onChange(e: any) {
+                    tools.isFunction(originOnChange) && originOnChange(e);
+    
+                    onChange && onChange(e);
+                },
+            };
 
-        window.console.log('Field', e);
-        onChange && onChange(e);
-    }
-    handleLabelClick() {
-        let { current } = this.widgetRef;
+        if (typeof widget === 'string') {
+            let widgetClass = Config[widget].widget;
+            
+            if (!widgetClass)
+                Log.throw(`<Field>渲染异常，没有widget为"${widget}"的配置`);
 
-        current && tools.isFunction(current.focus) && this.widgetRef.current.focus();
-    }
-    isOptionsWidget(widgetName: string) {
-        return Field.OPTIONS_WIDGETS.indexOf(widgetName) !== -1;
+            if (widgetProps) {
+                originOnChange = widgetProps.onChange;
+                injectedProps = { ...widgetProps, ...injectedProps };
+            }
+
+            widgetEl = React.createElement(widgetClass, injectedProps);
+        } else {
+            if (!Form.isWidgetElement(widget)) {
+                Log.throw(`<Field>渲染异常，widget prop必须是Widget类型的React元素, 当前是: ${widget.type}`);
+            }
+
+            originOnChange = widget.props.onChange;
+            widgetEl = React.cloneElement(widget, injectedProps);
+        }
+        
+        return widgetEl;
     }
 }

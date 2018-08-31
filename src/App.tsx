@@ -17,7 +17,8 @@ import { MenuItemsChangeEvent } from './components/MenuItemsType';
 import { MenuItemProps } from './components/MenuItemType';
 import Form from './components/Form';
 import Field from './components/Field';
-import { FormWidget } from './test/FormWidget';
+import { FormWidgetTest } from './test/FormWidget.test';
+import FormTest from './test/Form.test';
 
 window.console.log('icon:', (<Icon icon={iconThList} /> as React.ReactElement<IconProps>).type === Icon, icon500px);
 const tools = Tools.getInstance();
@@ -89,44 +90,7 @@ class App extends React.Component<any, any> {
                     }
                 ],
                 backdropCoverage: 'bottom',
-            },
-            form1: [
-                {
-                    name: 'check1',
-                    label: '复选1',
-                    widget: 'checkbox',
-                    value: 'check1value',
-                    className: 'cls1',
-                    style: {
-                        color: 'red',
-                    },
-                    onChange: this.handleFormChange
-                },
-                {
-                    name: 'radio1',
-                    label: '单选1',
-                    widget: 'radio',
-                    value: 'radio1value',
-                    onChange: this.handleFormChange,
-                    disabled: true,
-                },
-                {
-                    name: 'input1',
-                    label: '输入1',
-                    widget: 'input',
-                    value: 'input1 value',
-                    onChange: this.handleFormChange
-                },
-                {
-                    name: 'input2',
-                    label: '输入2',
-                    widget: 'input',
-                    defaultValue: 'input2 value',
-                    // onChange: this.handleFormChange,
-                    onChange: (e: any) => window.console.log(e),
-                    renderWidget: (widget: any) => <React.Fragment>{widget}<Icon icon={iconInfo} color="green"/></React.Fragment>
-                }
-            ]
+            }
         };
 
         this.handleMenuChange = this.handleMenuChange.bind(this);
@@ -197,18 +161,8 @@ class App extends React.Component<any, any> {
                     To get started, edit <code>src/App.tsx</code> and save to reload.
         </p>
                 {/* <input type="text" style={{position: 'fixed', zIndex: 30  }} /> */}
-                <Form>
-                    {
-                        this.state.form1.map(
-                            (field: any, i: number) => {
-                                let { label, ...restOptions } = field;
-
-                                return <Field label={label} key={i} {...restOptions}></Field>
-                            }
-                        )
-                    }
-                </Form>
-                <FormWidget />
+                <FormWidgetTest />
+                <FormTest />
                 <Menu id={'menu1'} level={2} {...menu} onChange={this.handleMenuChange} />
                 <Button>btn1</Button>
                 <Button type={'primary'} icon={iconThList}>btn2</Button>

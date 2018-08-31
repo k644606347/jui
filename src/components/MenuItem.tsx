@@ -3,8 +3,8 @@ import { MenuItemProps, MenuItemState } from "./MenuItemType";
 import cssModules from './MenuItem.scss';
 import Tools from "../utils/Tools";
 import Icon from "./Icon";
-import Checkbox from "./Checkbox";
-import Radio from "./Radio";
+import Checkbox from "./formWidget/Checkbox";
+import Radio from "./formWidget/Radio";
 
 const tools = Tools.getInstance();
 

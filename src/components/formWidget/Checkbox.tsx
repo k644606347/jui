@@ -1,16 +1,16 @@
-import FormWidget, { FormWidgetState, FormWidgetProps } from "./FormWidget";
+import Widget, { FormWidgetState, FormWidgetProps } from "./Widget";
 import * as React from "react";
-import wrapWidget from "./wrapWidget";
 import cm from './Checkbox.scss';
 import Tools from "../../utils/Tools";
 import Icon from "../Icon";
 import { iconCheckCircle_r, iconCheckCircle, iconCircle_r } from "../icons/FontAwesomeMap";
+import wrapWidget from "./wrapWidget";
 
 const tools = Tools.getInstance();
 
 export interface CheckboxProps extends FormWidgetProps { };
 interface State extends FormWidgetState { };
-class Checkbox extends FormWidget<CheckboxProps, State>{
+class Checkbox extends Widget<CheckboxProps, State>{
     static defaultProps: FormWidgetState = {
         checked: false
     }
@@ -24,6 +24,7 @@ class Checkbox extends FormWidget<CheckboxProps, State>{
         let { children, checked, disabled, className, style, ...restProps } = this.props,
             allowedInputElAttrs = this.getAllowedInputElAttrs(restProps);
 
+            console.info(this.props);
         // TODO icon风格需优化，细边框
         return (
             <label style={style} className={

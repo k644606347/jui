@@ -1,15 +1,15 @@
 import * as React from 'react';
 import cssModules from './Input.scss';
-import FormWidget, { FormWidgetProps, FormWidgetState } from './FormWidget';
-import wrapWidget from './wrapWidget';
+import Widget, { FormWidgetProps, FormWidgetState } from './Widget';
 import Tools from '../../utils/Tools';
 import cm from './Input.scss';
+import { InputProps } from './InputType';
+import wrapWidget from './wrapWidget';
 
 const tools = Tools.getInstance();
-interface Props extends FormWidgetProps { }
-class Input extends FormWidget<Props, {}> {
+class Input extends Widget<InputProps, {}> {
     private readonly inputRef: React.RefObject<any>;
-    constructor(props: Props) {
+    constructor(props: InputProps) {
         super(props);
 
         this.inputRef = React.createRef();

@@ -3,10 +3,11 @@ import Checkbox from "../components/formWidget/Checkbox";
 import Label from "../components/Label";
 import Log from "../utils/Log";
 import TestWidget from "../components/formWidget/TestWidget";
-import CheckboxItems from "../components/formWidget/CheckboxItems";
+import CheckboxItems, { CheckboxItemsProps } from "../components/formWidget/CheckboxItems";
 import RadioItems from "../components/formWidget/RadioItems";
+import Form from "../components/Form";
 
-export class FormWidget extends React.PureComponent<any, any> {
+export class FormWidgetTest extends React.PureComponent<any, any> {
     readonly state: any = {
         checkboxItems: {
             items: [
@@ -56,23 +57,30 @@ export class FormWidget extends React.PureComponent<any, any> {
             value: 'w',
         }
     };
+    checkboxItemsRef: React.RefObject<CheckboxItemsProps>;
     render() {
         let { state } = this;
 
+        let checkboxItemsEl = <CheckboxItems items={state.checkboxItems.items} value={state.checkboxItems.value} onChange={
+                (e: any) => {
+                    let checkboxItems = {...state.checkboxItems};
+                    checkboxItems.value = e.value;
+                    this.setState({ checkboxItems });
+                }
+            } />;
+
+        Log.log('isWidgetElement:', Form.isWidgetElement(<Label></Label>), Form.isWidgetElement(checkboxItemsEl));
+
+        this.checkboxItemsRef = React.createRef();
+        React.createElement(CheckboxItems, {ref: this.checkboxItemsRef, ...state.checkboxItems });
+
+        window.console.log(this.checkboxItemsRef);
+        window.console.log(([CheckboxItems] as Array<string | React.ComponentClass<any, any> | React.StatelessComponent<any>>).indexOf(checkboxItemsEl.type));
         return (<React.Fragment>
             <TestWidget />
-            <Label>
-                多选项: 
-                <CheckboxItems items={state.checkboxItems.items} value={state.checkboxItems.value} onChange={
-                    (e: any) => {
-                        let checkboxItems = {...state.checkboxItems};
-                        checkboxItems.value = e.value;
-                        this.setState({ checkboxItems });
-                    }
-                } />
-            </Label>
-            <Label>
-                单选项: 
+            <Label>多选项: </Label>
+            { checkboxItemsEl }
+            <Label>单选项: </Label>
                 <RadioItems {...state.radioItems} onChange={
                     (e: any) => {
                         let { radioItems } = state;
@@ -83,7 +91,6 @@ export class FormWidget extends React.PureComponent<any, any> {
                         this.setState({ radioItems });
                     }
                 }/>
-            </Label>
             <Label>Check1</Label><Checkbox name="check1" required onChange={
                 e => Log.info(e)
             } 
