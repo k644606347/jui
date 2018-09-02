@@ -93,7 +93,7 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                         }
                     }
                 }>
-                <Pagination />
+                <Pagination current={1} total={20}/>
                     <Field label={'name: '} widget={<Input name="name"/>} renderWidget={
                         widget => <React.Fragment>
                             <Icon icon={iconInfo} />
@@ -120,7 +120,18 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                                     value: 'shanghai'
                                 }
                             ]
-                        } />
+                        } rules={
+                            [
+                                {
+                                    rule: 'callback',
+                                    value: (value: any) => {
+                                        return new Promise((resolve, reject) => {
+                                            setTimeout(resolve, 500, value);
+                                        });
+                                    }
+                                }
+                            ]
+                        }/>
                     }></Field>
                     <Field widget='checkbox' widgetProps={state.form2.isBtn} render={(widget) => {
                         return <React.Fragment>

@@ -81,7 +81,7 @@ export class FormWidgetTest extends React.PureComponent<any, any> {
         React.createElement(CheckboxItems, {ref: this.checkboxItemsRef, ...state.checkboxItems });
 
         window.console.log(this.checkboxItemsRef);
-        window.console.log(([CheckboxItems] as Array<string | React.ComponentClass<any, any> | React.StatelessComponent<any>>).indexOf(checkboxItemsEl.type));
+        window.console.log(([CheckboxItems] as Array<string | React.ComponentClass<any> | React.StatelessComponent<any>>).indexOf(checkboxItemsEl.type));
         return (<React.Fragment>
             <TestWidget />
             <Label>多选项: </Label>

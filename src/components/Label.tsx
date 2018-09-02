@@ -1,6 +1,7 @@
 import * as React from "react";
 import cm from './Label.scss';
 import Tools from "../utils/Tools";
+import Log from "../utils/Log";
 
 interface Props extends React.HTMLProps<HTMLLabelElement> {
     forRef?: React.RefObject<any>;
@@ -9,20 +10,32 @@ interface Props extends React.HTMLProps<HTMLLabelElement> {
 }
 
 const tools = Tools.getInstance();
-export default function Label(props: Props): JSX.Element {
-    let { required, children, forRef, className, onClick, ...restProps } = props;
+export default class Label extends React.PureComponent<Props, any> {
+    constructor(props: Props) {
+        super(props);
 
-    return (
-        <label {...restProps} className={
-            tools.classNames(cm.wrapper, cm.required, className)
-        } onClick={
-            (e: React.MouseEvent<HTMLLabelElement>) => {
-                onClick && onClick(e);
+        this.handleLabelClick = this.handleLabelClick.bind(this);
+    }
+    render() {
+        let { required, children, forRef, className, onClick, ...restProps } = this.props;
 
-                if (forRef && forRef.current && tools.isFunction(forRef.current.focus)) {
-                    forRef.current.focus();
-                }
+        return (
+            <label {...restProps} className={
+                tools.classNames(cm.wrapper, cm.required, className)
+            } onClick={this.handleLabelClick}>{children}</label>
+        )
+    }
+    handleLabelClick(e: React.MouseEvent<HTMLLabelElement>) {
+        let { onClick, forRef } = this.props;
+
+        onClick && onClick(e);
+    
+        if (forRef && forRef.current) {
+            if (!tools.isFunction(forRef.current.focus)) {
+                Log.warn('forRef.current缺少focus方法，无法触发focus行为');
+                return;
             }
-        }>{children}</label>
-    )
+            forRef.current.focus();
+        }
+    }
 }

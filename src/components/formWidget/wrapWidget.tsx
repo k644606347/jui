@@ -3,12 +3,13 @@ import * as React from "react";
 import cm from './Widget.scss';
 import Tools from "../../utils/Tools";
 import Validator, { Rule, Report } from "./Validator";
+import Log from "../../utils/Log";
 const tools = Tools.getInstance();
 interface State {
     focused?: boolean;
     isValid?: boolean;
-    msg?: string;
-    msgLevel?: MsgLevelType;
+    validateMsg?: string;
+    validateMsgLevel?: MsgLevelType;
 }
 
 export default function wrapWidget<OriginProps extends FormWidgetProps>(UnwrappedComponent: React.ComponentClass<OriginProps>): React.ComponentClass<OriginProps> {
@@ -27,8 +28,8 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
             this.state = {
                 focused: props.focused || false,
                 isValid: props.isValid || true,
-                msg: props.validateMsg || '',
-                msgLevel: props.validateMsgLevel || 'info',
+                validateMsg: props.validateMsg || '',
+                validateMsgLevel: props.validateMsgLevel || 'info',
             }
             this.widgetRef = React.createRef();
 
@@ -41,26 +42,26 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
         render() {
             let { props, state } = this,
                 { ...restProps } = props as any,// TODO 此处必须转换为any，不然无法使用rest语法
-                { focused, isValid, msg, msgLevel } = state;
+                { focused, isValid, validateMsg, validateMsgLevel } = state;
 
             return (
                 <div className={cm.wrapper}>
                     <div className={cm['widget-control']}>
                         <UnwrappedComponent {...restProps} ref={this.widgetRef}
-                            isValid={isValid} validateMsg={msg} validateMsgLevel={msgLevel}
+                            isValid={isValid} validateMsg={validateMsg} validateMsgLevel={validateMsgLevel}
                             focused={focused}
                             onChange={this.handleChange} onFocus={this.handleFocus} onBlur={this.handleBlur}
                             onValid={this.handleValid} onInvalid={this.handleInvalid}
                         />
                     </div>
                     {
-                        msg ?
+                        validateMsg ?
                             <div className={
                                 tools.classNames(
                                     cm['msg-control'],
-                                    cm[`msg-${msgLevel}`]
+                                    cm[`msg-${validateMsgLevel}`]
                                 )
-                            }>{msg}</div> : ''
+                            }>{validateMsg}</div> : ''
                     }
                 </div>
             )
@@ -73,8 +74,8 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
                 nextState = {
                     ...nextState,
                     isValid: isValid,
-                    msg: validateMsg,
-                    msgLevel: validateMsgLevel
+                    validateMsg: validateMsg,
+                    validateMsgLevel: validateMsgLevel
                 };
             }
 
@@ -93,13 +94,20 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
         validate() {
             this.widgetRef.current.validate();
         }
+        private validatePromise: Promise<Report>;
         private handleChange(e: FormWidgetChangeEvent) {
             let { value } = e,
                 { onChange } = this.props,
                 widgetObj = this.widgetRef.current;
 
             onChange && onChange(e);
-            widgetObj.validate(value).then(widgetObj.validateReport);
+            let promise = this.validatePromise = widgetObj.validate(value)
+                .then((report: Report) => {
+                    // Log.log(this.validatePromise, promise, this.validatePromise === promise);
+                    if (this.validatePromise === promise) {
+                        widgetObj.validateReport(report);
+                    }
+                });
         }
         private handleFocus(e: FormWidgetFocusEvent) {
             let { onFocus } = this.props;
@@ -114,14 +122,14 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
         private handleValid(e: FormWidgetValidEvent) {
             let { onValid } = this.props;
 
-            this.setState({ isValid: true, msg: e.msg, msgLevel: 'info' }, () => {
+            this.setState({ isValid: true, validateMsg: e.msg, validateMsgLevel: 'info' }, () => {
                 onValid && onValid(e);
             });
         }
         private handleInvalid(e: FormWidgetValidEvent) {
             let { onInvalid } = this.props;
 
-            this.setState({ isValid: false, msg: e.msg, msgLevel: e.level }, () => {
+            this.setState({ isValid: false, validateMsg: e.msg, validateMsgLevel: e.level }, () => {
                 onInvalid && onInvalid(e);
             });
         }
