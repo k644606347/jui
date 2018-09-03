@@ -1,14 +1,14 @@
 import * as React from 'react';
 import cssModules from './DevPane.scss';
-import { EnvPageState, EnvPaneProps } from './DevPaneType';
-import Tools from './Tools';
+import { DevPaneState, DevPaneProps } from './DevPaneType';
+import Tools from '../utils/Tools';
 
 const tools = Tools.getInstance();
-export default class EnvPane extends React.PureComponent<EnvPaneProps, EnvPageState> {
-    public readonly state: EnvPageState = {
+export default class DevPane extends React.PureComponent<DevPaneProps, DevPaneState> {
+    public readonly state: DevPaneState = {
         show: true,
     }
-    constructor(props: EnvPaneProps) {
+    constructor(props: DevPaneProps) {
         super(props);
 
         this.handleCloseBtn = this.handleCloseBtn.bind(this);

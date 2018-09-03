@@ -1,6 +1,6 @@
 // tslint:disable-next-line:no-empty-interface
-export interface EnvPaneProps {
+export interface DevPaneProps {
 }
-export interface EnvPageState {
+export interface DevPaneState {
     show: boolean;
 }
