@@ -4,19 +4,15 @@ import '../components/style/common.scss';
 import './App.css';
 import Hello from '../components/Hello';
 
-import Button from '../components/Button';
 import logo from './logo.svg';
-import Icon, { IconProps } from '../components/Icon';
-import { icon500px, iconAccessibleIcon, iconAddressBook, iconThList, iconAdn, iconBan, iconDribbble, iconCarBattery, iconInfo } from '../components/icons/FontAwesomeMap';
-import List from '../components/List';
 import favoriteIcon from './favicon.ico';
-import Pagination from '../components/Pagination';
-import Menu from '../components/Menu';
-import Tools from '../utils/Tools';
 import { MenuItemsChangeEvent } from '../components/MenuItemsType';
 import { MenuItemProps } from '../components/MenuItemType';
 import { FormWidgetTest } from './FormWidget.test';
 import FormTest from './Form.test';
+import { Icon, Tools, Menu, Button, Pagination, List } from 'src/App';
+import { IconProps } from '../components/Icon';
+import { iconThList, icon500px, iconCarBattery, iconAccessibleIcon, iconBan, iconAdn, iconDribbble, iconAddressBook } from '../components/icons/FontAwesomeMap';
 
 window.console.log('icon:', (<Icon icon={iconThList} /> as React.ReactElement<IconProps>).type === Icon, icon500px);
 const tools = Tools.getInstance();

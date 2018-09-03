@@ -1,15 +1,6 @@
 import * as React from "react";
-import Form from "../components/Form";
-import Field from "../components/Field";
-import Tools from "../utils/Tools";
-import Icon from "../components/Icon";
 import { iconInfo, iconAccusoft, iconAddressCard_r } from "../components/icons/FontAwesomeMap";
-import Log from "../utils/Log";
-import Label from "../components/Label";
-import Input from "../components/formWidget/Input";
-import CheckboxItems from "../components/formWidget/CheckboxItems";
-import Pagination from "../components/Pagination";
-import Button from "../components/Button";
+import { Tools, Icon, Form, Log, Field, Pagination, Input, CheckboxItems, Button } from "../App";
 
 interface FormTestProps {}
 

@@ -1,11 +1,7 @@
 import * as React from "react";
-import Checkbox from "../components/formWidget/Checkbox";
-import Label from "../components/Label";
-import Log from "../utils/Log";
 import TestWidget from "../components/formWidget/TestWidget";
-import CheckboxItems, { CheckboxItemsProps } from "../components/formWidget/CheckboxItems";
-import RadioItems from "../components/formWidget/RadioItems";
-import Form from "../components/Form";
+import { CheckboxItems, Form, Log, Label, Checkbox, RadioItems } from "../App";
+import { CheckboxItemsProps } from "../components/formWidget/CheckboxItems";
 
 export class FormWidgetTest extends React.PureComponent<any, any> {
     readonly state: any = {
