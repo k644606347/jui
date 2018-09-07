@@ -2,13 +2,13 @@ import * as React from "react";
 import { FieldProps } from "./FieldType";
 import cm from './Field.scss';
 import Tools from '../utils/Tools';
-import { FormContext } from "./Form-Context";
+import { FormContext } from "./FormContext";
 import Label from "./Label";
 import Form from "./Form";
 import Log from "../utils/Log";
 import Config from "./formWidget/Config";
-
 const tools = Tools.getInstance();
+
 export default class Field extends React.PureComponent<FieldProps, any> {
     constructor(props: FieldProps) {
         super(props);
@@ -17,12 +17,15 @@ export default class Field extends React.PureComponent<FieldProps, any> {
         let { props } = this,
             { className, style, label, widget, renderWidget, render } = props;
 
+        // Log.log(FormContext, FormContext.Consumer, FormContext.Provider.contextTypes);
         return (
             <FormContext.Consumer>
                 {
-                    (args) => {  
-                        let widgetEl = this.processWidget(widget, args.onChange),
+                    (args) => {
+                        let { onChange } = args,
+                            widgetEl = this.processWidget(widget, onChange),
                             labelEl = label !== undefined ? <Label>{label}</Label> : undefined;
+
                         return (
                             <div style={style} className={
                                 tools.classNames(

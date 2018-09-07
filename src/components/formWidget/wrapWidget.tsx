@@ -4,6 +4,7 @@ import cm from './Widget.scss';
 import Tools from "../../utils/Tools";
 import Validator, { Rule, Report } from "./Validator";
 import Log from "../../utils/Log";
+import { FormContext } from "../FormContext";
 const tools = Tools.getInstance();
 interface State {
     focused?: boolean;
@@ -22,6 +23,7 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
         }
         readonly state: State;
         readonly widgetRef: React.RefObject<any>;
+        formContext: any;
         constructor(props: Props) {
             super(props);
 
@@ -45,26 +47,42 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
                 { focused, isValid, validateMsg, validateMsgLevel } = state;
 
             return (
-                <div className={cm.wrapper}>
-                    <div className={cm['widget-control']}>
-                        <UnwrappedComponent {...restProps} ref={this.widgetRef}
-                            isValid={isValid} validateMsg={validateMsg} validateMsgLevel={validateMsgLevel}
-                            focused={focused}
-                            onChange={this.handleChange} onFocus={this.handleFocus} onBlur={this.handleBlur}
-                            onValid={this.handleValid} onInvalid={this.handleInvalid}
-                        />
-                    </div>
+                <FormContext.Consumer>
                     {
-                        validateMsg ?
-                            <div className={
-                                tools.classNames(
-                                    cm['msg-control'],
-                                    cm[`msg-${validateMsgLevel}`]
-                                )
-                            }>{validateMsg}</div> : ''
+                        context => {
+                            this.formContext = context;
+                            return <div className={cm.wrapper}>
+                                <div className={cm['widget-control']}>
+                                    <UnwrappedComponent {...restProps} ref={this.widgetRef}
+                                        isValid={isValid} validateMsg={validateMsg} validateMsgLevel={validateMsgLevel}
+                                        focused={focused}
+                                        onChange={this.handleChange} onFocus={this.handleFocus} onBlur={this.handleBlur}
+                                        onValid={this.handleValid} onInvalid={this.handleInvalid}
+                                    />
+                                </div>
+                                {
+                                    validateMsg ?
+                                        <div className={
+                                            tools.classNames(
+                                                cm['msg-control'],
+                                                cm[`msg-${validateMsgLevel}`]
+                                            )
+                                        }>{validateMsg}</div> : ''
+                                }
+                            </div>
+                        }
                     }
-                </div>
+                </FormContext.Consumer>
             )
+        }
+        componentDidMount() {
+            let { formContext } = this;
+            
+            if (formContext) {
+                let { onMount } = formContext;
+
+                onMount && onMount(this);
+            }
         }
         componentDidUpdate(prevProps: Props, prveState: State) {
             let { isValid, validateMsg, validateMsgLevel, focused } = this.props,

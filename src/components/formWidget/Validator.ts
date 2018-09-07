@@ -22,6 +22,7 @@ export interface Rule {
     level?: 'error' | 'warn';
 }
 export interface Report {
+    name?: string;
     isValid: boolean;
     value?: any;
     msg: string;

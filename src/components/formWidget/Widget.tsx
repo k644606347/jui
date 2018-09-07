@@ -2,6 +2,7 @@ import * as React from "react";
 import { CSSAttrs } from "../../utils/types";
 import Tools from "../../utils/Tools";
 import Validator, { Rule, Report } from "./Validator";
+import WidgetStore from "./stores/WidgetStore";
 
 const tools = Tools.getInstance();
 interface FormWidgetEvent {
@@ -11,7 +12,7 @@ interface FormWidgetEvent {
     checked?: boolean;
 }
 export interface FormWidgetChangeEvent extends FormWidgetEvent { }
-export interface FormWidgetFocusEvent extends FormWidgetEvent { }
+export interface FormWidgetFocusEvent { }
 export type MsgLevelType = 'error' | 'warn' | 'info';
 export interface FormWidgetValidEvent {
     name?: string;
@@ -31,7 +32,7 @@ export interface FormWidgetProps extends CSSAttrs {
     id?: string;
     name?: string;
     value?: any;
-    defaultValue?: any;
+    // defaultValue?: any;
     checked?: boolean;
     focused?: boolean;
     disabled?: boolean;
@@ -40,16 +41,14 @@ export interface FormWidgetProps extends CSSAttrs {
     required?: boolean;
     maxLength?: number;
     minLength?: number;
-    maxZhLength?: number;
-    minZhLength?: number;
     rules?: Rule[];
     validateTrigger?: ValidateTrigger;
     isValid?: boolean;
     validateMsg?: string;
     validateMsgLevel?: MsgLevelType;
     onChange?: (e: FormWidgetChangeEvent) => void;
-    onFocus?: (e: FormWidgetFocusEvent) => void;
-    onBlur?: (e: FormWidgetFocusEvent) => void;
+    onFocus?: (e?: FormWidgetFocusEvent) => void;
+    onBlur?: (e?: FormWidgetFocusEvent) => void;
     // onAfterInit?: (...args: any[]) => void;
     onValid?: (e: FormWidgetValidEvent) => void;
     onInvalid?: (e: FormWidgetValidEvent) => void;
@@ -57,44 +56,49 @@ export interface FormWidgetProps extends CSSAttrs {
 export interface FormWidgetState {}
 export default abstract class Widget<P extends FormWidgetProps, S extends FormWidgetState> extends React.PureComponent<P, S> {
     readonly state: S;
+    store: WidgetStore;
+    dataType: 'string';
     constructor(props: P) {
         super(props);
 
+        this.store = new WidgetStore({
+            data: props.value,
+            dataType: this.dataType,
+        });
         this.handleChange = this.handleChange.bind(this);
         this.handleFocus = this.handleFocus.bind(this);
         this.handleBlur = this.handleBlur.bind(this);
         this.validateReport = this.validateReport.bind(this);
     }
+    componentDidUpdate(prevProps: FormWidgetProps, prevState: FormWidgetState) {
+        let { value } = this.props;
+
+        if (prevProps.value !== value) {
+            this.store.setData(value);
+        }
+    }
     protected handleChange(e?: any) {
         let { value, checked } = e.target,
-            { id, name, onChange } = this.props;
+            { id, name, onChange } = this.props,
+            { store } = this;
 
-
+        store.setData(value);
         onChange && onChange({
             id: id || '',
             name: name || '',
-            value, checked,
+            value: store.getData(), 
+            checked,
         });
     }
     protected handleFocus(e?: any) {
-        let { value, checked } = e.target,
-            { id, name, onFocus } = this.props;
+        let { onFocus } = this.props;
 
-        onFocus && onFocus({
-            id: id || '',
-            name: name || '',
-            value, checked,
-        });
+        onFocus && onFocus();
     }
     protected handleBlur(e?: any) {
-        let { value, checked } = e.target,
-            { id, name, onBlur } = this.props;
+        let { onBlur } = this.props;
 
-        onBlur && onBlur({
-            id: id || '',
-            name: name || '',
-            value, checked,
-        });
+        onBlur && onBlur();
     }
     protected getAllowedInputElAttrs(obj: any = this.props) {
         let inputElAttrs = {};
@@ -110,13 +114,11 @@ export default abstract class Widget<P extends FormWidgetProps, S extends FormWi
         return inputElAttrs;
     }
     protected getRules() {
-        let { required, maxLength, minLength, maxZhLength, minZhLength, rules } = this.props,
+        let { required, maxLength, minLength, rules } = this.props,
             ruleMap = {
                 required,
                 maxLength,
                 minLength,
-                maxZhLength,
-                minZhLength,
             },
             mixedRules: Rule[] = [];
 
@@ -131,8 +133,16 @@ export default abstract class Widget<P extends FormWidgetProps, S extends FormWi
 
         return mixedRules;
     }
-    async validate(value: any = this.props.value): Promise<Report> {
-        return Validator.validate(value, this.getRules());
+    async validate(value: any = this.store.getData()): Promise<Report> {
+        let promise = Validator.validate(value, this.getRules()),
+            { name } = this.props;
+            
+        return promise.then(report => {
+            if (name) {
+                report.name = name;
+            }
+            return report;
+        });
     }
     protected validateReport(result: Report) {
         let { onValid, onInvalid } = this.props,

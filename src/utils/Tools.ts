@@ -1,5 +1,5 @@
 export default class Tools {
-    public static getInstance() {
+    static getInstance() {
         const instances = Tools.instances;
 
         return instances.length === 0 ? new Tools() : instances[0];
@@ -9,11 +9,11 @@ export default class Tools {
         // logic
     }
 
-    public isPlainObject(v: any) {
+    isPlainObject(v: any) {
         return Object.prototype.toString.call(v) === '[object Object]';
     }
 
-    public isEmptyObject(v: any) {
+    isEmptyObject(v: any) {
         if (!this.isPlainObject(v)) {
             return false;
         }
@@ -25,19 +25,19 @@ export default class Tools {
         return true;
     }
 
-    public isFunction(v: any) {
+    isFunction(v: any) {
         return v && Object.prototype.toString.call(v) === '[object Function]';
     }
 
-    public isString(v: any) {
+    isString(v: any) {
         return Object.prototype.toString.call(v) === '[object String]';
     }
 
-    public isArray(v: any) {
+    isArray(v: any) {
         return Array.isArray(v);
     }
 
-    public genID(prefix?: string) {
+    genID(prefix?: string) {
         let randomStr = () => this.randomInt(100000, 10000000).toString(16).substr(-5);
 
         return (prefix !== undefined ? prefix : '') + randomStr() + randomStr();
@@ -48,7 +48,7 @@ export default class Tools {
      * @param maxVal
      * @returns {number}
      */
-    public randomInt(minVal: number, maxVal?: number) {
+    randomInt(minVal: number, maxVal?: number) {
         maxVal = Number(maxVal);
         if (arguments.length === 0) {
             minVal = 0;
@@ -80,26 +80,26 @@ export default class Tools {
         return Math.round(Math.random() * (maxVal - minVal) + minVal);
     }
 
-    public upperCaseFirst(str: string) {
+    upperCaseFirst(str: string) {
         return str[0].toUpperCase() + str.substr(1);
     }
 
-    public lowerCaseFirst(str: string) {
+    lowerCaseFirst(str: string) {
         return str[0].toLowerCase() + str.substr(1);
     }
-
-    public removeZWSP(content: string) {// 删除零宽空格(ZWSP), ZWSP参考：https://zh.wikipedia.org/wiki/%E7%A9%BA%E6%A0%BC
+    
+    removeZWSP(content: string) {// 删除零宽空格(ZWSP), ZWSP参考：https://zh.wikipedia.org/wiki/%E7%A9%BA%E6%A0%BC
         if (content === undefined || content === null || content === '') {
             return '';
         }
         return (content + '').replace(/[\ufeff\u200b\u200c\u200d]/g, '');
     }
 
-    public encodeAttr(val: string) {
+    encodeAttr(val: string) {
         return val.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
     }
 
-    public encodeHTML(html: string) {
+    encodeHTML(html: string) {
         let htmlEntities = {
             '"': '&quot;',
             "'": '&#39;',
@@ -111,17 +111,17 @@ export default class Tools {
         return html.replace(/["'&<>]/g, char => htmlEntities[char] || char);
     }
 
-    public bindSelfMethod(methodNames: string[], context: object) {
+    bindSelfMethod(methodNames: string[], context: object) {
         methodNames.forEach(name => {
             context[name] = context[name].bind(context);
         });
     }
 
-    public classNames(...args: Array<string | Array<string | undefined> | undefined>): string {
+    classNames(...args: Array<string | Array<string | undefined> | undefined>): string {
         return args.filter(n => !!n).map(n => Array.isArray(n) ? this.classNames.apply(this, n) : n).join(' ');
     }
 
-    public supportTouchEvents(): boolean {
+    supportTouchEvents(): boolean {
         return 'ontouchstart' in document && 'ontouchmove' in document && 'ontouchend' in document;
     }
 
@@ -153,7 +153,7 @@ export default class Tools {
     }
 
     // 需要依赖webpack变量注入
-    public isDev() {
+    isDev() {
         return process && process.env && process.env.NODE_ENV === "development";
     }
 }
