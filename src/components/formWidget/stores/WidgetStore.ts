@@ -18,13 +18,14 @@ export default class WidgetStore {
     constructor(args: constructParam) {
         let { data, dataType } = args;
 
-        this.setData(args.hasOwnProperty('data') ? data : this.getDefaultData());
-
         if (!dataType || !dataTypes.find(dt => dt === dataType)) {
             Log.throw(`只能设置为下列类型{ ${dataTypes.join(',')} }, 但是当前类型设置为${dataType}`);
         }
-
         this.dataType = dataType;
+        
+        this.setData(args.hasOwnProperty('data') ? data : this.getDefaultData());
+        
+
     }
     getDefaultData() {
         return defaultDataMap[this.dataType];

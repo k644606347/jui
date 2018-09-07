@@ -3,6 +3,7 @@ import { CSSAttrs } from "../../utils/types";
 import Tools from "../../utils/Tools";
 import Validator, { Rule, Report } from "./Validator";
 import WidgetStore from "./stores/WidgetStore";
+import { DataType } from "./stores/DataConvertor";
 
 const tools = Tools.getInstance();
 interface FormWidgetEvent {
@@ -57,7 +58,7 @@ export interface FormWidgetState {}
 export default abstract class Widget<P extends FormWidgetProps, S extends FormWidgetState> extends React.PureComponent<P, S> {
     readonly state: S;
     store: WidgetStore;
-    dataType: 'string';
+    dataType: DataType = 'string';
     constructor(props: P) {
         super(props);
 
