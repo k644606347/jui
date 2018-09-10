@@ -11,9 +11,6 @@ const tools = Tools.getInstance();
 export interface CheckboxProps extends FormWidgetProps { };
 interface State extends FormWidgetState { };
 class Checkbox extends Widget<CheckboxProps, State>{
-    static defaultProps: FormWidgetState = {
-        checked: false
-    }
     private readonly inputRef: React.RefObject<any>;
     constructor(props: CheckboxProps) {
         super(props);
@@ -24,7 +21,6 @@ class Checkbox extends Widget<CheckboxProps, State>{
         let { children, checked, disabled, className, style, ...restProps } = this.props,
             allowedInputElAttrs = this.getAllowedInputElAttrs(restProps);
 
-            console.info(this.props);
         // TODO icon风格需优化，细边框
         return (
             <label style={style} className={

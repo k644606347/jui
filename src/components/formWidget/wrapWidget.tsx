@@ -79,9 +79,9 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
             let { formContext } = this;
             
             if (formContext) {
-                let { onMount } = formContext;
+                let { onWidgetMount } = formContext;
 
-                onMount && onMount(this);
+                onWidgetMount && onWidgetMount(this);
             }
         }
         componentDidUpdate(prevProps: Props, prveState: State) {
@@ -110,7 +110,7 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
             this.setState({ focused: false });
         }
         validate() {
-            this.widgetRef.current.validate();
+            return this.widgetRef.current.validate();
         }
         private validatePromise: Promise<Report>;
         private handleChange(e: FormWidgetChangeEvent) {

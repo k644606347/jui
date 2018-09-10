@@ -14,7 +14,7 @@ import { FieldProps } from "./FieldType";
 
 export interface FormProps {
     fields?: FieldProps[];
-    onSubmit?: () => void;
+    onSubmit?: (e: any) => void;
     onChange?: (e: any) => void;
     onValid?: () => void;
     onInvalid?: () => void;
@@ -25,8 +25,5 @@ export interface FormProps {
 }
 export interface FormState {
     isValid?: boolean;
-    value?: Array<{
-        name: string;
-        value: any;
-    }>
+    value?: {[key in string]?: any}
 }

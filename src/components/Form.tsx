@@ -7,9 +7,11 @@ import { FormContext } from "./FormContext";
 import Config from "./formWidget/Config";
 import { FieldProps } from "./FieldType";
 import { Report } from "./formWidget/Validator";
+import Log from "../utils/Log";
 
 const tools = Tools.getInstance();
 export default class Form extends React.PureComponent<FormProps, FormState> {
+    readonly state: FormState;
     static defaultProps: Partial<FormProps> = {
         isValid: true
     }
@@ -29,10 +31,14 @@ export default class Form extends React.PureComponent<FormProps, FormState> {
     constructor(props: FormProps) {
         super(props);
 
+        let { fields } = props;
+
         this.state = {
             isValid: props.isValid,
-            value: []
         };
+        if (fields) {
+            this.state.value = fields.map((field: any) => ({name: field.name, value: field.value}));
+        }
         this.handleChange = this.handleChange.bind(this);
         this.handleWidgetMount = this.handleWidgetMount.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -40,8 +46,7 @@ export default class Form extends React.PureComponent<FormProps, FormState> {
     private readonly widgets: any = [];
     render() {
         let { props, state } = this,
-            { fields, children } = props,
-            { value, isValid } = state;
+            { fields, children } = props;
 
         return (
             <FormContext.Provider value={{ onChange: this.handleChange, onWidgetMount: this.handleWidgetMount }}>
@@ -87,12 +92,14 @@ export default class Form extends React.PureComponent<FormProps, FormState> {
             isValid = true;
 
         this.validate()
-            .then((reports) => {
-                this.validateReport(reports);
-            })
             .catch((error) => {
                 isValid = false;
-                alert(error);
+                if (error instanceof Error) {
+                    Log.error(error);
+                    alert(error);
+                } else {
+                    this.validateReport(error);
+                }
             })
             .finally(() => {
                 this.setState({ isValid }, () => {
@@ -101,7 +108,9 @@ export default class Form extends React.PureComponent<FormProps, FormState> {
                     } else {
                         onInvalid && onInvalid();
                     }
-                    onSubmit && onSubmit();
+                    onSubmit && onSubmit({
+                        value: this.state.value,
+                    });
                 })
             })
     }
@@ -120,7 +129,7 @@ export default class Form extends React.PureComponent<FormProps, FormState> {
             validCount = 0, invalidCount = 0,
             processor = (resolve: (value?: any) => void, reject: (reason?: any) => void) => {
                 this.widgets.forEach((widget: any) => {
-                    widget.valdiate().then((report: Report) => {
+                    widget.validate().then((report: Report) => {
                         if (!report.isValid) {
                             isValid = false;
                             invalidCount ++;
@@ -146,7 +155,7 @@ export default class Form extends React.PureComponent<FormProps, FormState> {
                 });
             }
 
-        return new Promise(processor);
+        return new Promise(processor.bind(this));
     }
     private handleSubmit(e: React.FormEvent) {
         e.preventDefault();

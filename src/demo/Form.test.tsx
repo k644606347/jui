@@ -6,9 +6,11 @@ interface FormTestProps {}
 
 const tools = Tools.getInstance();
 export default class FormTest extends React.PureComponent<FormTestProps, { fields: any[], form2: any }> {
+    formForFieldsRef: React.RefObject<any>;
     constructor(props: FormTestProps) {
         super(props);
 
+        this.formForFieldsRef = React.createRef();
         this.state = {
             fields: [
                 {
@@ -62,7 +64,12 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
 
         return (
             <div>
-                <Form fields={fields} onChange={e => Log.log(e)}></Form>
+                <Form ref={this.formForFieldsRef} fields={fields} onChange={e => Log.log(e)} onSubmit={e => {
+                    Log.info('onSubmit', e);
+                }}></Form>
+                <Button onClick={e => {
+                    this.formForFieldsRef.current.submit();
+                }}>submit!</Button>
                 <Form onChange={
                     e => {
                         Log.log(e);

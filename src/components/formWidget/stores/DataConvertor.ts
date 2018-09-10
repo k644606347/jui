@@ -6,14 +6,14 @@ const tools = Tools.getInstance();
 export type DataType = 'integer' | 'float' | 'string' | 'boolean' | 'array' | 'object';
 export const dataTypes: DataType[] = ['integer', 'float', 'string', 'boolean', 'array', 'object'];
 
-export default class Convertor {
+export default class DataConvertor {
     private static instances = [];
     static getInstanceOf() {
         let instance;
-        if (Convertor.instances.length === 0 ) {
-            instance = new Convertor();
+        if (DataConvertor.instances.length === 0 ) {
+            instance = new DataConvertor();
         } else 
-            instance = Convertor.instances[0];
+            instance = DataConvertor.instances[0];
 
         return instance;
     }
