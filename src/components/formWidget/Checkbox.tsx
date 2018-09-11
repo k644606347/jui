@@ -8,7 +8,9 @@ import wrapWidget from "./wrapWidget";
 
 const tools = Tools.getInstance();
 
-export interface CheckboxProps extends FormWidgetProps { };
+export interface CheckboxProps extends FormWidgetProps {
+    checked?: boolean;
+};
 interface State extends FormWidgetState { };
 class Checkbox extends Widget<CheckboxProps, State>{
     private readonly inputRef: React.RefObject<any>;
@@ -37,24 +39,10 @@ class Checkbox extends Widget<CheckboxProps, State>{
                     onBlur={this.handleBlur} 
                     ref={this.inputRef}
                 />
-                <div className={cm.icon}><Icon icon={disabled ? iconCheckCircle_r : checked ? iconCheckCircle : iconCircle_r} /></div>
+                <div className={cm.icon}><Icon icon={checked ? iconCheckCircle : iconCircle_r} /></div>
                 {children !== undefined ? <div className={cm.description}>{children}</div> : ''}
             </label>
         );
-    }
-    componentDidMount() {
-        this.toggleFocus();
-    }
-    componentDidUpdate() {
-        this.toggleFocus();
-    }
-    private toggleFocus() {
-        let { focused } = this.props;
-
-        if (focused)
-            this.inputRef.current.focus();
-        else
-            this.inputRef.current.blur();
     }
     protected handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         let { value, checked } = e.target,

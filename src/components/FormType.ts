@@ -13,17 +13,16 @@ import { FieldProps } from "./FieldType";
 // }
 
 export interface FormProps {
-    fields?: FieldProps[];
+    fields: FieldProps[];
     onSubmit?: (e: any) => void;
     onChange?: (e: any) => void;
     onValid?: () => void;
     onInvalid?: () => void;
     isValid?: boolean;
-    // children: Field[];
-    // action: string;
+    // action: string;// TODO
     // method: 'post' | 'get';
 }
 export interface FormState {
     isValid?: boolean;
-    value?: {[key in string]?: any}
+    value: {[key in string]? : any};
 }

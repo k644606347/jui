@@ -8,7 +8,9 @@ import Widget, { FormWidgetProps, FormWidgetState } from './Widget';
 import wrapWidget from './wrapWidget';
 
 const tools = Tools.getInstance();
-export interface RadioProps extends FormWidgetProps { }
+export interface RadioProps extends FormWidgetProps { 
+    checked?: boolean;
+}
 class Radio extends Widget<RadioProps, FormWidgetState> {
     static defaultProps: Partial<RadioProps> = {
         name: '',
@@ -45,20 +47,6 @@ class Radio extends Widget<RadioProps, FormWidgetState> {
                 {children !== undefined ? <div className={cm.description}>{children}</div> : ''}
             </label>
         );
-    }
-    componentDidMount() {
-        this.toggleFocus();
-    }
-    componentDidUpdate() {
-        this.toggleFocus();
-    }
-    private toggleFocus() {
-        let { focused } = this.props;
-
-        if (focused)
-            this.inputRef.current.focus();
-        else
-            this.inputRef.current.blur();
     }
     protected handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         let { value, checked } = e.target,

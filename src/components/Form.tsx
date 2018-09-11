@@ -8,6 +8,7 @@ import Config from "./formWidget/Config";
 import { FieldProps } from "./FieldType";
 import { Report } from "./formWidget/Validator";
 import Log from "../utils/Log";
+import * as ReactDOM from "react-dom";
 
 const tools = Tools.getInstance();
 export default class Form extends React.PureComponent<FormProps, FormState> {
@@ -28,17 +29,30 @@ export default class Form extends React.PureComponent<FormProps, FormState> {
         }
         return isWidget;
     }
+    getInitialState(): FormState {
+        let { props } = this,
+            { fields } = props,
+            value = {};
+
+        fields.forEach(field => {
+            let { widget, widgetProps } = field;
+            if (React.isValidElement(widget)) {
+                widget = widget as JSX.Element;
+                value[widget.props.name] = widget.props.value;
+            } else if ( widgetProps ) {
+                value[widgetProps.name] = widgetProps.value;
+            }
+        });
+    
+        return {
+            isValid: props.isValid,
+            value
+        }
+    }
     constructor(props: FormProps) {
         super(props);
 
-        let { fields } = props;
-
-        this.state = {
-            isValid: props.isValid,
-        };
-        if (fields) {
-            this.state.value = fields.map((field: any) => ({name: field.name, value: field.value}));
-        }
+        this.state = this.getInitialState();
         this.handleChange = this.handleChange.bind(this);
         this.handleWidgetMount = this.handleWidgetMount.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -55,18 +69,32 @@ export default class Form extends React.PureComponent<FormProps, FormState> {
                     cm.isValid
                 )} onSubmit={this.handleSubmit}>
                     {
-                        fields ? this.renderFields(fields) : children
+                        this.renderFields(fields)
                     }
                 </form>
             </FormContext.Provider>
         )
     }
     private renderFields(fields: FieldProps[]) {
+        let { value } = this.state;
+
         return (
             <React.Fragment>
                 {
                     fields.map((field: FieldProps, i) => {
-                        let { widget, label, renderWidget, ...widgetProps } = field;
+                        let { widget, label, renderWidget, widgetProps } = field;
+                        if (React.isValidElement(widget)) {
+                            let { name } = widget.props as any;
+
+                            if (value[name]) {
+                                widget = React.cloneElement(widget as JSX.Element, {
+                                    value: value[name],
+                                });
+                            }
+                        } else {
+                            if (widgetProps && widgetProps.name) 
+                                widgetProps.value = value[widgetProps.name];
+                        }
                         return (
                             <Field key={i} label={label} widget={widget} widgetProps={widgetProps} renderWidget={renderWidget}></Field>
                         )
@@ -77,7 +105,7 @@ export default class Form extends React.PureComponent<FormProps, FormState> {
     }
     componentDidUpdate(prevProps: FormProps, prevState: FormState) {
         let { isValid } = this.props,
-            nextState: FormState = {};
+            nextState: FormState = {...this.state};
 
         if (prevProps.isValid !== isValid) {
             nextState.isValid = isValid;
@@ -85,7 +113,10 @@ export default class Form extends React.PureComponent<FormProps, FormState> {
         this.setState(nextState);
     }
     private handleWidgetMount(widgetInstance: any) {
-        this.widgets.push(widgetInstance);
+        let { isFormField } = widgetInstance.props;
+        Log.info(widgetInstance, isFormField);
+
+        isFormField && this.widgets.push(widgetInstance);
     }
     submit() {
         let { onSubmit, onValid, onInvalid } = this.props,
@@ -165,28 +196,19 @@ export default class Form extends React.PureComponent<FormProps, FormState> {
     }
     // TOOD 回调处理
     private handleChange(e: any) {
-        let { onChange } = this.props;
-        //     { value } = this.state;
+        let { onChange } = this.props, 
+            { value } = this.state;
 
-        // value = [...value];
-        // let targetIndex = value.findIndex((v: any) => v.name === e.name),
-        //     target;
+        value = { ...value };
 
-        // if (targetIndex !== -1) {
-        //     target = value[targetIndex];
-        // }
-        // if (target) {
-        //     target.value = e.value;
-        // } else {
-        //     target = {
-        //         name: e.name,
-        //         value: e.value,
-        //     }
-        //     value.push(target);
-        // }
-        // this.setState({
-        //     value
-        // });
-        onChange && onChange(e);
+        value[e.name] = e.value;
+
+        this.setState({
+            value
+        }, () => {
+            onChange && onChange({
+                value: this.state.value
+            });
+        });
     }
 }

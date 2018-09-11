@@ -31,20 +31,6 @@ class Input extends Widget<InputProps, {}> {
             />
         );
     }
-    componentDidMount() {
-        this.toggleFocus();
-    }
-    componentDidUpdate() {
-        this.toggleFocus();
-    }
-    private toggleFocus() {
-        let { focused } = this.props;
-
-        if (focused)
-            this.inputRef.current.focus();
-        else
-            this.inputRef.current.blur();
-    }
 }
 
 export default wrapWidget(Input);

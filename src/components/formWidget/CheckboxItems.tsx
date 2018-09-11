@@ -37,12 +37,6 @@ class CheckboxItems extends Widget<CheckboxItemsProps, any> {
             </div>
         )
     }
-    focus() {
-        //
-    }
-    blur() {
-        //
-    }
     private renderCheckboxItem(item: CheckboxItem, key: string | number) {
         let { value } = this.props,
             checkboxID = tools.genID('checkbox_item_'),

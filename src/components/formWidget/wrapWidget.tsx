@@ -103,29 +103,31 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
 
             this.setState(nextState);
         }
-        focus() {
-            this.setState({ focused: true });
-        }
-        blur() {
-            this.setState({ focused: false });
-        }
         validate() {
             return this.widgetRef.current.validate();
         }
+        validateReport(report: Report) {
+            return this.widgetRef.current.validateReport(report);
+        }
         private validatePromise: Promise<Report>;
+        private validateTimer: number;
         private handleChange(e: FormWidgetChangeEvent) {
             let { value } = e,
                 { onChange } = this.props,
                 widgetObj = this.widgetRef.current;
 
-            onChange && onChange(e);
-            let promise = this.validatePromise = widgetObj.validate(value)
-                .then((report: Report) => {
-                    // Log.log(this.validatePromise, promise, this.validatePromise === promise);
-                    if (this.validatePromise === promise) {
-                        widgetObj.validateReport(report);
-                    }
-                });
+                window.clearTimeout(this.validateTimer);
+                this.validateTimer = window.setTimeout(() => {
+                    let promise: Promise<any>;
+
+                    onChange && onChange(e);
+                    promise = this.validatePromise = widgetObj.validate(value)
+                        .then((report: Report) => {
+                            if (this.validatePromise === promise) {
+                                widgetObj.validateReport(report);
+                            }
+                        });
+                }, 20);
         }
         private handleFocus(e: FormWidgetFocusEvent) {
             let { onFocus } = this.props;

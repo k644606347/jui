@@ -33,16 +33,16 @@ export interface Report {
 const tools = Tools.getInstance(),
     presetReport = {
         'required': { msg: '该字段不能为空' },
-        'maxLength': { msg: '字符个数不能大于{value}' },
-        'minLength': { msg: '字符个数不能小于{value}' },
-        'maxZhLength': { msg: '长度不能大于{value}个汉字' },
-        'minZhLength': { msg: '长度不能小于{value}个汉字' },
+        'maxLength': { msg: (rule: Rule, value: any) => `字符个数不能大于${rule.value}` },
+        'minLength': { msg: (rule: Rule, value: any) => `字符个数不能小于${rule.value}` },
+        'maxZhLength': { msg: (rule: Rule, value: any) => `长度不能大于${rule.value}个汉字` },
+        'minZhLength': { msg: (rule: Rule, value: any) => `长度不能小于${rule.value}个汉字` },
         'email': { msg: 'EMAIL格式不正确' },
         'url': { msg: 'URL格式不正确' },
         'domain': { msg: '域名格式不正确' },
         'datetime': { msg: '时间格式不正确' },
         'date': { msg: '日期格式不正确' },
-        'mobilePhone': { msg: '{value}不是有效的手机号码' },
+        'mobilePhone': { msg: (rule: Rule, value: any) => `${value}不是有效的手机号码` },
         'callback': { msg: '数据错误' },
     };
 
@@ -92,15 +92,15 @@ const Validator = {
             value,
             isValid: true,
             msg: ''
-        },
-            buildMsg = (msg: string) => value !== undefined ? msg.replace('{value}', value) : msg;
+        };
 
         if (hitRule) {
             let { rule, level } = hitRule,
-                presetConfig = presetReport[rule];
+                presetConfig = presetReport[rule],
+                { msg } = presetConfig;
 
             report = Object.assign(report,
-                { value, isValid: false, hitRule, level, msg: buildMsg(presetConfig.msg) }
+                { value, isValid: false, hitRule, level, msg: tools.isFunction(msg) ? msg(hitRule, value) : msg }
             );
         }
 
@@ -119,11 +119,11 @@ const Validator = {
             return String(value) !== '' && value !== undefined && value !== null;
         }
     },
-    maxlength(value: string, rule: Rule) {
-        return value.length < Number(rule.value);
+    maxLength(value: string, rule: Rule) {
+        return value.length <= Number(rule.value);
     },
     minLength(value: string, rule: Rule) {
-        return value.length > Number(rule.value);
+        return value.length >= Number(rule.value);
     },
     maxZhLength(value: string, rule: Rule) {
         return (tools.calculateCharsByteLength(value) / 2) <= Number(rule.value);

@@ -17,7 +17,6 @@ export default class Field extends React.PureComponent<FieldProps, any> {
         let { props } = this,
             { className, style, label, widget, renderWidget, render } = props;
 
-        // Log.log(FormContext, FormContext.Consumer, FormContext.Provider.contextTypes);
         return (
             <FormContext.Consumer>
                 {
@@ -55,7 +54,8 @@ export default class Field extends React.PureComponent<FieldProps, any> {
             widgetEl: JSX.Element,
             // tslint:disable-next-line:ban-types
             originOnChange: Function,
-            injectedProps = {
+            injectedProps: any = {
+                __isFormField: true,
                 onChange(e: any) {
                     tools.isFunction(originOnChange) && originOnChange(e);
     
