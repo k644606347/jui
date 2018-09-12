@@ -117,10 +117,7 @@ export class FormWidgetTest extends React.PureComponent<any, any> {
                         value(value: any) {
                             return new Promise((resolve, reject) => {
                                 console.log('callback2');
-                                resolve({
-                                    msg: 'callback2 resolved',
-                                    isValid: true,
-                                });
+                                reject('callback2 resolved');
                             })
                         },
                         level: 'warn'

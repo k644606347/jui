@@ -25,7 +25,7 @@ export interface Report {
     fieldName?: string;
     isValid: boolean;
     msg: string;
-    level?: 'error' | 'warn' | 'info';
+    level?: 'error' | 'warn';
 }
 
 const tools = Tools.getInstance(),
@@ -41,7 +41,7 @@ const tools = Tools.getInstance(),
         'datetime': { msg: '时间格式不正确' },
         'date': { msg: '日期格式不正确' },
         'mobilePhone': { msg: (rule: Rule, value: any) => `${value}不是有效的手机号码` },
-        'callback': { msg: '数据错误' },
+        'callback': { msg: (rule: Rule, value: any) => `未通过校验, value=${JSON.stringify(value)}, rule=${JSON.stringify(rule)}` },
     };
 
 const Validator = {
@@ -84,18 +84,17 @@ const Validator = {
     report(value: string, hitRule?: Rule, injectReport?: Report): Report {
         let report: Report = {
             isValid: true,
-            msg: ""
+            msg: "",
         };
 
         if (hitRule) {
             let { rule, level } = hitRule,
-                presetConfig = presetReport[rule],
-                { msg } = presetConfig;
+                { msg } = presetReport[rule];
 
             report = Object.assign(report, {
                 value,
                 isValid: false,
-                level,
+                level: level || 'error',
                 msg: tools.isFunction(msg) ? msg(hitRule, value) : msg
             });
         }
@@ -167,7 +166,7 @@ const Validator = {
                     // 正常的驳回流程
                     callbackResult = {
                         isValid: false,
-                        msg: JSON.stringify(e)
+                        msg: tools.isString(e) ? e : JSON.stringify(e)
                     };
                 }
             }
