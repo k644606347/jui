@@ -149,7 +149,7 @@ export default class Form extends React.PureComponent<FormProps, FormState> {
         let { widgets } = this;
 
         widgets.forEach((widget: any) => {
-            let targetReport = reports.find(report => report.name === widget.props.name);
+            let targetReport = reports.find(report => report.fieldName === widget.props.name);
 
             targetReport && widget.validateReport(targetReport);
         });
@@ -170,7 +170,7 @@ export default class Form extends React.PureComponent<FormProps, FormState> {
                         }
                     }).catch((e: Error) => {
                         let report: Report = {
-                            name: widget.props.name,
+                            fieldName: widget.props.name,
                             msg: e.message,
                             isValid,
                         };

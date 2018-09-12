@@ -22,12 +22,10 @@ export interface Rule {
     level?: 'error' | 'warn';
 }
 export interface Report {
-    name?: string;
+    fieldName?: string;
     isValid: boolean;
-    value?: any;
     msg: string;
-    hitRule?: Rule;
-    level?: 'error' | 'warn';
+    level?: 'error' | 'warn' | 'info';
 }
 
 const tools = Tools.getInstance(),
@@ -76,22 +74,17 @@ const Validator = {
                 processReport = {
                     msg: errorMsg,
                     isValid: false,
-                    level: 'error'
+                    level: "error"
                 };
             }
         }
 
-        return this.report(
-            value,
-            hitRule,
-            processReport as Report
-        );
+        return this.report(value, hitRule, processReport as Report);
     },
     report(value: string, hitRule?: Rule, injectReport?: Report): Report {
         let report: Report = {
-            value,
             isValid: true,
-            msg: ''
+            msg: ""
         };
 
         if (hitRule) {
@@ -99,9 +92,12 @@ const Validator = {
                 presetConfig = presetReport[rule],
                 { msg } = presetConfig;
 
-            report = Object.assign(report,
-                { value, isValid: false, hitRule, level, msg: tools.isFunction(msg) ? msg(hitRule, value) : msg }
-            );
+            report = Object.assign(report, {
+                value,
+                isValid: false,
+                level,
+                msg: tools.isFunction(msg) ? msg(hitRule, value) : msg
+            });
         }
 
         if (injectReport) {
@@ -116,7 +112,7 @@ const Validator = {
         } else if (tools.isPlainObject(value)) {
             return !tools.isEmptyObject(value);
         } else {
-            return String(value) !== '' && value !== undefined && value !== null;
+            return String(value) !== "" && value !== undefined && value !== null;
         }
     },
     maxLength(value: string, rule: Rule) {
@@ -126,10 +122,10 @@ const Validator = {
         return value.length >= Number(rule.value);
     },
     maxZhLength(value: string, rule: Rule) {
-        return (tools.calculateCharsByteLength(value) / 2) <= Number(rule.value);
+        return tools.calculateCharsByteLength(value) / 2 <= Number(rule.value);
     },
     minZhLength(value: string, rule: Rule) {
-        return (tools.calculateCharsByteLength(value) / 2) >= Number(rule.value);
+        return tools.calculateCharsByteLength(value) / 2 >= Number(rule.value);
     },
     email(value: string) {
         return /^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/.test(String(value));
@@ -141,7 +137,9 @@ const Validator = {
         return /^http[s]?:\/\/[\w]+\.[\w]+\/?/.test(String(value));
     },
     datetime(value: string) {
-        return /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)\s+([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/.test(String(value));
+        return /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)\s+([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/.test(
+            String(value)
+        );
     },
     date(value: string) {
         return /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(String(value));
@@ -162,15 +160,15 @@ const Validator = {
                     callbackResult = {
                         msg: errorMsg,
                         isValid: false,
-                        level: 'error'
-                    }
+                        level: "error"
+                    };
                     Log.error(errorMsg);
                 } else {
                     // 正常的驳回流程
                     callbackResult = {
                         isValid: false,
-                        msg: JSON.stringify(e),
-                    }
+                        msg: JSON.stringify(e)
+                    };
                 }
             }
         } else {
@@ -178,12 +176,12 @@ const Validator = {
             callbackResult = {
                 msg: errorMsg,
                 isValid: false,
-                level: 'error',
-            }
+                level: "error"
+            };
             Log.error(errorMsg);
         }
 
         return callbackResult;
     }
-}
+};
 export default Validator;

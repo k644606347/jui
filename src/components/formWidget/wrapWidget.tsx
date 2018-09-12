@@ -140,16 +140,18 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
             onBlur && onBlur(e);
         }
         private handleValid(e: FormWidgetValidEvent) {
-            let { onValid } = this.props;
+            let { onValid } = this.props,
+                { report } = e;
 
-            this.setState({ isValid: true, validateMsg: e.msg, validateMsgLevel: 'info' }, () => {
+            this.setState({ isValid: true, validateMsg: report.msg, validateMsgLevel: 'info' }, () => {
                 onValid && onValid(e);
             });
         }
         private handleInvalid(e: FormWidgetValidEvent) {
-            let { onInvalid } = this.props;
+            let { onInvalid } = this.props,
+                { report } = e;
 
-            this.setState({ isValid: false, validateMsg: e.msg, validateMsgLevel: e.level }, () => {
+            this.setState({ isValid: false, validateMsg: report.msg, validateMsgLevel: report.level }, () => {
                 onInvalid && onInvalid(e);
             });
         }

@@ -104,7 +104,7 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                         }
                     ]
                 } />
-                <Form ref={this.formForFieldsRef} fields={fields} onChange={e => Log.log(e)} onSubmit={e => {
+            <Form ref={this.formForFieldsRef} fields={fields} onChange={e => Log.log(e)} onSubmit={e => {
                     Log.info('onSubmit', e);
                 }}></Form>
                 <Button onClick={e => {

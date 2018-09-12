@@ -14,10 +14,7 @@ export interface FormWidgetChangeEvent extends FormWidgetEvent { }
 export interface FormWidgetFocusEvent { }
 export type MsgLevelType = 'error' | 'warn' | 'info';
 export interface FormWidgetValidEvent {
-    name?: string;
-    value?: any;
-    msg?: string;
-    level?: MsgLevelType;
+    report: Report
 }
 type ValidateTrigger = 'onChange' | 'onBlur' | false;
 const allowedInputElAttrs: Array<keyof React.InputHTMLAttributes<HTMLInputElement>> = [
@@ -121,18 +118,18 @@ export default abstract class Widget<P extends FormWidgetProps, S extends FormWi
             
         return promise.then(report => {
             if (name) {
-                report.name = name;
+                report.fieldName = name;
             }
             return report;
         });
     }
-    protected validateReport(result: Report) {
+    protected validateReport(report: Report) {
         let { onValid, onInvalid } = this.props,
-            { value, isValid, msg, hitRule, level } = result;
+            { isValid } = report,
+            event = {
+                report
+            };
 
-        let event = {
-            value, hitRule, level, msg,
-        };
         if (isValid) {
             onValid && onValid(event);
         } else {
