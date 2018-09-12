@@ -50,7 +50,7 @@ export interface FormWidgetProps extends CSSAttrs {
 }
 export interface FormWidgetState {}
 export default abstract class Widget<P extends FormWidgetProps, S extends FormWidgetState> extends React.PureComponent<P, S> {
-    readonly state: S;
+    state: S;
     constructor(props: P) {
         super(props);
 

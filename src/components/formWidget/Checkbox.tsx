@@ -3,7 +3,7 @@ import * as React from "react";
 import cm from './Checkbox.scss';
 import Tools from "../../utils/Tools";
 import Icon from "../Icon";
-import { iconCheckCircle_r, iconCheckCircle, iconCircle_r } from "../icons/FontAwesomeMap";
+import { iconCheckCircle, iconCircle_r } from "../icons/FontAwesomeMap";
 import wrapWidget from "./wrapWidget";
 
 const tools = Tools.getInstance();
@@ -11,17 +11,24 @@ const tools = Tools.getInstance();
 export interface CheckboxProps extends FormWidgetProps {
     checked?: boolean;
 };
-interface State extends FormWidgetState { };
-class Checkbox extends Widget<CheckboxProps, State>{
-    private readonly inputRef: React.RefObject<any>;
+export interface CheckboxState extends FormWidgetState {
+    checked?: boolean;
+}
+class Checkbox extends Widget<CheckboxProps, CheckboxState>{
+    static defaultProps: Partial<CheckboxProps> = {
+        checked: false,
+    }
     constructor(props: CheckboxProps) {
         super(props);
 
-        this.inputRef = React.createRef();
+        this.state = {
+            checked: props.checked,
+        };
     }
     render() {
-        let { children, checked, disabled, className, style, ...restProps } = this.props,
-            allowedInputElAttrs = this.getAllowedInputElAttrs(restProps);
+        let { children, disabled, className, style, ...restProps } = this.props,
+        { checked } = this.state,
+        allowedInputElAttrs = this.getAllowedInputElAttrs(restProps);
 
         // TODO icon风格需优化，细边框
         return (
@@ -37,22 +44,30 @@ class Checkbox extends Widget<CheckboxProps, State>{
                     onChange={this.handleChange} 
                     onFocus={this.handleFocus} 
                     onBlur={this.handleBlur} 
-                    ref={this.inputRef}
                 />
                 <div className={cm.icon}><Icon icon={checked ? iconCheckCircle : iconCircle_r} /></div>
                 {children !== undefined ? <div className={cm.description}>{children}</div> : ''}
             </label>
         );
     }
+    componentDidUpdate(prevProps: CheckboxProps, prevState: CheckboxState) {
+        let { checked } = this.props;
+
+        if (prevProps.checked !== checked) {
+            this.setState({ checked });
+        }
+    }
     protected handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         let { value, checked } = e.target,
             { id, name, onChange } = this.props;
 
-        onChange && onChange({
-            id: id || '',
-            name: name || '',
-            value: (checked ? value : ''),
-            checked
+        this.setState({ checked }, () => {
+            onChange && onChange({
+                id: id || '',
+                name: name || '',
+                value: value,
+                checked
+            });
         });
     }
 }

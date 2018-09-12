@@ -8,7 +8,6 @@ import Config from "./formWidget/Config";
 import { FieldProps } from "./FieldType";
 import { Report } from "./formWidget/Validator";
 import Log from "../utils/Log";
-import * as ReactDOM from "react-dom";
 
 const tools = Tools.getInstance();
 export default class Form extends React.PureComponent<FormProps, FormState> {

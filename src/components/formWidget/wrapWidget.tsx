@@ -112,7 +112,7 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
         private validatePromise: Promise<Report>;
         private validateTimer: number;
         private handleChange(e: FormWidgetChangeEvent) {
-            let { value } = e,
+            let { value, checked } = e,
                 { onChange } = this.props,
                 widgetObj = this.widgetRef.current;
 
@@ -121,6 +121,9 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
                     let promise: Promise<any>;
 
                     onChange && onChange(e);
+                    if (checked === false) {// checkbox / radio
+                        value = '';
+                    }
                     promise = this.validatePromise = widgetObj.validate(value)
                         .then((report: Report) => {
                             if (this.validatePromise === promise) {
