@@ -16,6 +16,7 @@ import MenuItemGroup from "./components/MenuItemGroup";
 import TouchFeedback from "./components/TouchFeedback";
 import Tools from "./utils/Tools";
 import Log from './utils/Log';
+import Message from "./components/Message";
 export {
     Form,
     Field,
@@ -33,6 +34,7 @@ export {
     MenuItem,
     MenuItemGroup,
     TouchFeedback,
+    Message,
     Log,
     Tools,
 }

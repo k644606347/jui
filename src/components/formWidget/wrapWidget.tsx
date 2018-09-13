@@ -116,11 +116,11 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
                 { onChange } = this.props,
                 widgetObj = this.widgetRef.current;
 
+                onChange && onChange(e);
                 window.clearTimeout(this.validateTimer);
                 this.validateTimer = window.setTimeout(() => {
                     let promise: Promise<any>;
 
-                    onChange && onChange(e);
                     if (checked === false) {// checkbox / radio
                         value = '';
                     }
@@ -130,7 +130,7 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
                                 widgetObj.validateReport(report);
                             }
                         });
-                }, 20);
+                }, 100);
         }
         private handleFocus(e: FormWidgetFocusEvent) {
             let { onFocus } = this.props;

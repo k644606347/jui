@@ -13,6 +13,7 @@ import FormTest from './Form.test';
 import { Icon, Tools, Menu, Button, Pagination, List } from 'src/App';
 import { IconProps } from '../components/Icon';
 import { iconThList, icon500px, iconCarBattery, iconAccessibleIcon, iconBan, iconAdn, iconDribbble, iconAddressBook } from '../components/icons/FontAwesomeMap';
+import MessageTest from './Message.test';
 
 window.console.log('icon:', (<Icon icon={iconThList} /> as React.ReactElement<IconProps>).type === Icon, icon500px);
 const tools = Tools.getInstance();
@@ -154,6 +155,7 @@ class App extends React.Component<any, any> {
                 <p className="App-intro">
                     To get started, edit <code>src/App.tsx</code> and save to reload.
         </p>
+                <MessageTest />
                 {/* <input type="text" style={{position: 'fixed', zIndex: 30  }} /> */}
                 <FormWidgetTest />
                 <FormTest />
