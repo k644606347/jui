@@ -5,14 +5,8 @@ import RadioItems from "./RadioItems";
 import Input from "./Input";
 
 export default {
-    checkbox: {
-        widget: Checkbox
-    },
     checkboxItems: {
         widget: CheckboxItems
-    },
-    radio: {
-        widget: Radio
     },
     radioItems: {
         widget: RadioItems

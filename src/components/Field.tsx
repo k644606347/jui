@@ -23,7 +23,8 @@ export default class Field extends React.PureComponent<FieldProps, any> {
                     (args) => {
                         let { onChange } = args,
                             widgetEl = this.processWidget(widget, onChange),
-                            labelEl = label !== undefined ? <Label>{label}</Label> : undefined;
+                            labelEl = label !== undefined ? <Label>{label}</Label> : undefined,
+                            isWidgetEl = Form.isWidgetElement(widgetEl);
 
                         return (
                             <div style={style} className={
@@ -33,14 +34,16 @@ export default class Field extends React.PureComponent<FieldProps, any> {
                                 )
                             }>
                             {
-                                render ? 
-                                    render(widgetEl, labelEl) : 
-                                    <React.Fragment>
-                                        { labelEl }
-                                        {
-                                            renderWidget ? renderWidget(widgetEl) : widgetEl
-                                        }
-                                    </React.Fragment>
+                                isWidgetEl ? 
+                                    render ? 
+                                        render(widgetEl as JSX.Element, labelEl) : 
+                                        <React.Fragment>
+                                            { labelEl }
+                                            {
+                                                renderWidget ? renderWidget(widgetEl as JSX.Element) : widgetEl
+                                            }
+                                        </React.Fragment>
+                                    : this.renderWidgetFail(widgetEl as string)
                             }
                             </div>
                         );
@@ -48,6 +51,10 @@ export default class Field extends React.PureComponent<FieldProps, any> {
                 }
             </FormContext.Consumer>
         );
+    }
+    private renderWidgetFail(msg: string) {
+        Log.error(msg);
+        return <div>{msg}</div>;
     }
     private processWidget(widget: JSX.Element | string, onChange: (...args: any[]) => void) {
         let { widgetProps } = this.props,
@@ -64,10 +71,13 @@ export default class Field extends React.PureComponent<FieldProps, any> {
             };
 
         if (typeof widget === 'string') {
-            let widgetClass = Config[widget].widget;
-            
-            if (!widgetClass)
-                Log.throw(`<Field>渲染异常，没有widget为"${widget}"的配置`);
+            let widgetConfig = Config[widget];
+
+            if (!widgetConfig || !widgetConfig.widget) {
+                return `<Field>渲染异常，没有widget为"${widget}"的配置`;
+            }
+
+            let widgetClass = widgetConfig.widget;
 
             if (widgetProps) {
                 originOnChange = widgetProps.onChange;
@@ -77,7 +87,7 @@ export default class Field extends React.PureComponent<FieldProps, any> {
             widgetEl = React.createElement(widgetClass, injectedProps);
         } else {
             if (!Form.isWidgetElement(widget)) {
-                Log.throw(`<Field>渲染异常，widget prop必须是Widget类型的React元素, 当前是: ${widget.type}`);
+                return `<Field>渲染异常，widget prop必须是Widget类型的React元素, 当前是: ${widget.type}`;
             }
 
             originOnChange = widget.props.onChange;

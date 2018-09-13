@@ -11,21 +11,27 @@ const tools = Tools.getInstance();
 export interface RadioProps extends FormWidgetProps { 
     checked?: boolean;
 }
-class Radio extends Widget<RadioProps, FormWidgetState> {
+export interface RadioState extends FormWidgetState {
+    checked?: boolean;
+}
+class Radio extends Widget<RadioProps, RadioState> {
     static defaultProps: Partial<RadioProps> = {
         name: '',
         value: '',
         checked: false,
         disabled: false,
     };
-    private readonly inputRef: React.RefObject<any>;
+    getInitialState() {
+        return {
+            checked: this.props.checked,
+        }
+    }
     constructor(props: RadioProps) {
         super(props);
-
-        this.inputRef = React.createRef();
     }
     render() {
-        let { checked, disabled, className, style, children, ...restProps } = this.props,
+        let { disabled, className, style, children, ...restProps } = this.props,
+            { checked } = this.state,
             allowedInputElAttrs = this.getAllowedInputElAttrs(restProps);
 
         // TODO icon风格需优化，细边框
@@ -35,27 +41,36 @@ class Radio extends Widget<RadioProps, FormWidgetState> {
                     cm.wrapper,
                     checked && cm.checked,
                     disabled && cm.disabled,
-                    className)
+                    className
+                )
             }>
                 <input {...allowedInputElAttrs} className={cm.input} type="radio" checked={checked} disabled={disabled} 
                     onChange={this.handleChange} 
                     onFocus={this.handleFocus} 
                     onBlur={this.handleBlur} 
-                    ref={this.inputRef}
                 />
                 <div className={cm.icon}><Icon icon={iconCheck} /></div>
                 {children !== undefined ? <div className={cm.description}>{children}</div> : ''}
             </label>
         );
     }
+    componentDidUpdate(prevProps: RadioProps, prevState: RadioState) {
+        let { checked } = this.props;
+
+        if (prevProps.checked !== checked) {
+            this.setState({ checked });
+        }
+    }
     protected handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         let { value, checked } = e.target,
-            { id, name, onChange } = this.props;
+            { name, onChange } = this.props;
 
-        onChange && onChange({ 
-            name: name || '', 
-            value: (checked ? value : ''), 
-            checked 
+        this.setState({ checked }, () => {
+            onChange && onChange({ 
+                name: name || '', 
+                value,
+                checked
+            });
         });
     }
 }

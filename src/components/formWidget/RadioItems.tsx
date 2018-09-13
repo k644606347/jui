@@ -4,9 +4,15 @@ import Tools from "../../utils/Tools";
 import cm from './RadioItems.scss';
 import Radio from "./Radio";
 import wrapWidget from "./wrapWidget";
-
+import { CSSAttrs } from "../../utils/types";
+interface RadioItems extends CSSAttrs {
+    label: string;
+    value: string;
+    readOnly?: boolean;
+    disabled?: boolean;
+}
 export interface RadioItemsProps extends FormWidgetProps {
-    items: any[];
+    items: RadioItems[];
     value?: string | number;
 }
 
@@ -16,24 +22,25 @@ class RadioItems extends Widget<RadioItemsProps, any> {
         items: [],
     }
     render() {
-        let { name, value, items, className, style } = this.props;
+        let { name, value, items, className, style, disabled } = this.props;
 
         return (
             <div style={style} className={
                 tools.classNames(cm.wrapper, className)
             }>
                 {
-                    items.map((config, i) =>
-                        <div key={i} className={cm.item}>
-                            <Radio name={name} value={config.value} 
+                    items.map((config, i) => {
+                        let mixedConfig = {disabled, ...config};
+                        
+                        return <div key={i} className={cm.item}>
+                            <Radio {...mixedConfig} name={name}
                                 checked={value === config.value} 
-                                readOnly={config.readOnly} disabled={config.disabled} 
                                 className={cm.item} 
                                 onChange={this.handleChange}>
-                                { config.label }
+                                { mixedConfig.label }
                             </Radio>
                         </div>
-                    )
+                    })
                 }
             </div>
         )

@@ -4,11 +4,11 @@ import * as React from "react";
 import Tools from "../../utils/Tools";
 import cm from './CheckboxItems.scss';
 import wrapWidget from "./wrapWidget";
+import { CSSAttrs } from "../../utils/types";
 
-interface CheckboxItem {
-    value: string;
+interface CheckboxItem extends CSSAttrs {
     label: string;
-    checked?: boolean;
+    value: string;
     readOnly?: boolean;
     disabled?: boolean;
 }
@@ -24,7 +24,7 @@ class CheckboxItems extends Widget<CheckboxItemsProps, any> {
     }
     private checkboxs: Array<React.ReactElement<CheckboxProps>> = [];
     render() {
-        let { name, value, items, className, style } = this.props;
+        let { items, className, style, disabled } = this.props;
         
         this.checkboxs = [];
         return (
@@ -32,13 +32,13 @@ class CheckboxItems extends Widget<CheckboxItemsProps, any> {
                 tools.classNames(cm.wrapper, className)
             }>
                 {
-                    items.map((item, i) => this.renderCheckboxItem(item, i))
+                    items.map((item, i) => this.renderCheckboxItem({ disabled, ...item }, i))
                 }
             </div>
         )
     }
     private renderCheckboxItem(item: CheckboxItem, key: string | number) {
-        let { value } = this.props,
+        let { name, value } = this.props,
             checkboxID = tools.genID('checkbox_item_'),
             checkboxEl = <Checkbox id={checkboxID} name={name} value={item.value}
                     checked={

@@ -6,6 +6,14 @@ class FormStore {
     setFields(fields: any) {
         this.fields = fields;
     }
+    setField(field: any) {
+        let targetIndex = this.fields.findIndex(f => f.name === field.name);
+
+        if (targetIndex === -1) {
+            this.addField(field);
+        }
+        this.fields[targetIndex] = field;
+    }
     addField(field: any) {
         this.fields.push(field);
     }
@@ -15,6 +23,8 @@ class FormStore {
         if (field) {
             field.value = value;
         }
+    }
+    getValue() {
     }
 }
 const createFormStore = (...args: any[]) => new FormStore(args);

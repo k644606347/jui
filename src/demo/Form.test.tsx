@@ -15,10 +15,16 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
             fields: [
                 {
                     label: '复选1',
-                    widget: 'checkbox',
+                    widget: 'checkboxItems',
                     widgetProps: {
                         name: 'check1',
-                        value: 'check1value',
+                        value: ['check1value'],
+                        items: [
+                            {
+                                label: 'check1',
+                                value: 'check1value',
+                            }
+                        ],
                         className: 'cls1',
                         style: {
                             color: 'red',
@@ -27,10 +33,16 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                 },
                 {
                     label: '单选1',
-                    widget: 'radio',
+                    widget: 'radioItems',
                     widgetProps: {
                         name: 'radio1',
                         value: 'radio1value',
+                        items: [
+                            {
+                                label: 'radio1',
+                                value: 'radio1value',
+                            }
+                        ],
                         disabled: true,
                     }
                 },

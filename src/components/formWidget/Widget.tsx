@@ -51,9 +51,13 @@ export interface FormWidgetProps extends CSSAttrs {
 export interface FormWidgetState {}
 export default abstract class Widget<P extends FormWidgetProps, S extends FormWidgetState> extends React.PureComponent<P, S> {
     state: S;
+    getInitialState(props: P) {
+        return {} as S;
+    }
     constructor(props: P) {
         super(props);
 
+        this.state = this.getInitialState(props);
         this.handleChange = this.handleChange.bind(this);
         this.handleFocus = this.handleFocus.bind(this);
         this.handleBlur = this.handleBlur.bind(this);
