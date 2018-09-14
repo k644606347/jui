@@ -47,6 +47,9 @@ const cssConfig = cssConfigFile.getConfigByEnv(env.stringified['process.env'].NO
 // This is the production configuration.
 // It compiles slowly and is focused on producing a fast and minimal bundle.
 // The development configuration is different and lives in a separate file.
+
+const mainFile = 'lib/jui';
+const demoFile = 'demo/demo';
 module.exports = {
   // Don't attempt to continue if there are any errors.
   bail: true,
@@ -55,11 +58,11 @@ module.exports = {
   devtool: shouldUseSourceMap ? 'source-map' : false,
   // In production, we only want to load the polyfills and the app code.
   entry: {
-    'lib/jui': [
+    [mainFile]: [
       require.resolve('./polyfills'),
       paths.appIndexJs,
     ],
-    'demo/demo': paths.demoJs,
+    [demoFile]: paths.demoJs,
   },
   output: {
     // The build folder.
@@ -281,7 +284,7 @@ module.exports = {
       tslint: paths.appTsLint,
     }),
     new CommonsChunkPlugin({
-      name: 'lib/comos-ui-mobile',
+      name: [mainFile],
     })
   ],
   // Some libraries import Node modules but don't use them in the browser.
