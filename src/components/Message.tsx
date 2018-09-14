@@ -2,14 +2,13 @@ import * as React from 'react';
 import { CSSAttrs } from '../utils/types';
 import Tools from '../utils/Tools';
 import cm from './Message.scss';
-import { IconDefinition } from './Icon';
 import {
     iconStop,
     iconTimesCircle,
     iconExclamationCircle,
     iconInfoCircle
 } from './icons/FontAwesomeMap';
-import { Icon } from '../App';
+import Icon, { IconDefinition } from './Icon';
 
 interface Props extends CSSAttrs {
     type: 'error' | 'warn' | 'info';

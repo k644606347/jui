@@ -10,7 +10,7 @@ import { MenuItemsChangeEvent } from '../components/MenuItemsType';
 import { MenuItemProps } from '../components/MenuItemType';
 import { FormWidgetTest } from './FormWidget.test';
 import FormTest from './Form.test';
-import { Icon, Tools, Menu, Button, Pagination, List } from 'src/App';
+import { Icon, Tools, Menu, Button, Pagination, List } from 'src/index';
 import { IconProps } from '../components/Icon';
 import { iconThList, icon500px, iconCarBattery, iconAccessibleIcon, iconBan, iconAdn, iconDribbble, iconAddressBook } from '../components/icons/FontAwesomeMap';
 import MessageTest from './Message.test';

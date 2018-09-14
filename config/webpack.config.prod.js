@@ -15,6 +15,7 @@ const getClientEnvironment = require('./env');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const cssConfigFile = require('./css.config');
+const CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -38,7 +39,7 @@ if (env.stringified['process.env'].NODE_ENV !== '"production"') {
 }
 
 // Note: defined here because it will be used more than once.
-const cssFilename = 'static/css/[name].[contenthash:8].css';
+const cssFilename = 'demo/css/[name].[contenthash:8].css';
 
 //通过环境变量获取css相关设置
 const cssConfig = cssConfigFile.getConfigByEnv(env.stringified['process.env'].NODE_ENV.replace(/"/g, ''));
@@ -53,15 +54,21 @@ module.exports = {
   // You can exclude the *.map files from the build during deployment.
   devtool: shouldUseSourceMap ? 'source-map' : false,
   // In production, we only want to load the polyfills and the app code.
-  entry: [require.resolve('./polyfills'), paths.appIndexJs],
+  entry: {
+    'lib/jui': [
+      require.resolve('./polyfills'),
+      paths.appIndexJs,
+    ],
+    'demo/demo': paths.demoJs,
+  },
   output: {
     // The build folder.
     path: paths.appBuild,
     // Generated JS file names (with nested folders).
     // There will be one main bundle, and one file per asynchronous chunk.
     // We don't currently advertise code splitting but Webpack supports it.
-    filename: 'lib/comos-ui-mobile.min.js',
-    chunkFilename: 'lib/[name].chunk.js',
+    filename: '[name].min.js',
+    chunkFilename: '[name].chunk.min.js',
     // We inferred the "public path" (such as / or /my-project) from homepage.
     publicPath: publicPath,
     // Point sourcemap entries to original disk location (format as URL on Windows)
@@ -137,7 +144,7 @@ module.exports = {
             loader: require.resolve('url-loader'),
             options: {
               limit: 10000,
-              name: 'static/media/[name].[hash:8].[ext]',
+              name: 'demo/media/[name].[hash:8].[ext]',
             },
           },
           {
@@ -177,7 +184,7 @@ module.exports = {
             // by webpacks internal loaders.
             exclude: [/\.(js|jsx|mjs)$/, /\.html$/, /\.json$/],
             options: {
-              name: 'static/media/[name].[hash:8].[ext]',
+              name: 'demo/media/[name].[hash:8].[ext]',
             },
           },
           // ** STOP ** Are you adding a new loader?
@@ -273,6 +280,9 @@ module.exports = {
       tsconfig: paths.appTsProdConfig,
       tslint: paths.appTsLint,
     }),
+    new CommonsChunkPlugin({
+      name: 'lib/comos-ui-mobile',
+    })
   ],
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.

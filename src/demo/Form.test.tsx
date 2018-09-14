@@ -1,6 +1,6 @@
 import * as React from "react";
 import { iconInfo, iconAccusoft, iconAddressCard_r } from "../components/icons/FontAwesomeMap";
-import { Tools, Icon, Form, Log, Field, Pagination, Input, CheckboxItems, Button } from "../App";
+import { Tools, Icon, Form, Log, Field, Pagination, Input, CheckboxItems, Button } from "../index";
 
 interface FormTestProps {}
 
