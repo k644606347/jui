@@ -35,10 +35,12 @@ export default class Form extends React.PureComponent<FormProps, FormState> {
 
         fields.forEach(field => {
             let { widget, widgetProps } = field;
+
             if (React.isValidElement(widget)) {
-                widget = widget as JSX.Element;
-                value[widget.props.name] = widget.props.value;
-            } else if ( widgetProps ) {
+                widgetProps = (widget as JSX.Element).props;
+            }
+
+            if (widgetProps && !!widgetProps.disabled) {
                 value[widgetProps.name] = widgetProps.value;
             }
         });

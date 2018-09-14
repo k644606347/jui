@@ -109,14 +109,28 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
         validateReport(report: Report) {
             return this.widgetRef.current.validateReport(report);
         }
+        private isDisabled() {
+            return !!this.props.disabled;
+        }
+        private isReadOnly() {
+            return !!this.props.readOnly;
+        }
         private validatePromise: Promise<Report>;
         private validateTimer: number;
         private handleChange(e: FormWidgetChangeEvent) {
             let { value, checked } = e,
-                { onChange } = this.props,
-                widgetObj = this.widgetRef.current;
+                { name, id, onChange } = this.props,
+                widgetObj = this.widgetRef.current,
+                mixedEvent = {
+                    ...e,
+                    name, id
+                };
 
-                onChange && onChange(e);
+                if (this.isDisabled() || this.isReadOnly()) {
+                    return;
+                }
+
+                onChange && onChange(mixedEvent);
                 window.clearTimeout(this.validateTimer);
                 this.validateTimer = window.setTimeout(() => {
                     let promise: Promise<any>;

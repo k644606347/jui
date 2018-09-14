@@ -22,7 +22,7 @@ class RadioItems extends Widget<RadioItemsProps, any> {
         items: [],
     }
     render() {
-        let { name, value, items, className, style, disabled } = this.props;
+        let { name, value, items, className, style, disabled, readOnly } = this.props;
 
         return (
             <div style={style} className={
@@ -30,7 +30,7 @@ class RadioItems extends Widget<RadioItemsProps, any> {
             }>
                 {
                     items.map((config, i) => {
-                        let mixedConfig = {disabled, ...config};
+                        let mixedConfig = { disabled, readOnly, ...config };
                         
                         return <div key={i} className={cm.item}>
                             <Radio {...mixedConfig} name={name}
@@ -44,12 +44,6 @@ class RadioItems extends Widget<RadioItemsProps, any> {
                 }
             </div>
         )
-    }
-    focus() {
-        //
-    }
-    blur() {
-        //
     }
     handleChange(e: FormWidgetChangeEvent) {
         let { name, onChange } = this.props;

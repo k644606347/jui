@@ -1,3 +1,10 @@
+/**
+ * @author jiangyu3
+ * 因fontawesome5.x图标库分为了多个文件，
+ * 此脚本用于将fontawesome构建到到统一的单文件中
+ * 命名冲突的图标名称将追加各自的suffix做区别
+ */
+
 const fs = require('fs');
 const path = require('path');
 const fas = require('@fortawesome/free-solid-svg-icons');
@@ -48,7 +55,7 @@ const buildDifineByIconPack = (iconPack) => {
     content += `\n} from '${packInfo.module}';\n`;
     content += `export {\n    `;
     targetNames.forEach(n => {
-        content += `${n}, `;ls
+        content += `${n}, `;
     });
     content += `\n};\n`;
     processedIconNames = processedIconNames.concat(targetNames);

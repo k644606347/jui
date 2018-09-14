@@ -30,7 +30,7 @@ class Radio extends Widget<RadioProps, RadioState> {
         super(props);
     }
     render() {
-        let { disabled, className, style, children, ...restProps } = this.props,
+        let { disabled, readOnly, className, style, children, ...restProps } = this.props,
             { checked } = this.state,
             allowedInputElAttrs = this.getAllowedInputElAttrs(restProps);
 
@@ -41,10 +41,11 @@ class Radio extends Widget<RadioProps, RadioState> {
                     cm.wrapper,
                     checked && cm.checked,
                     disabled && cm.disabled,
+                    readOnly && cm.readOnly,
                     className
                 )
             }>
-                <input {...allowedInputElAttrs} className={cm.input} type="radio" checked={checked} disabled={disabled} 
+                <input {...allowedInputElAttrs} className={cm.input} type="radio" checked={checked} disabled={!!(disabled || readOnly)} 
                     onChange={this.handleChange} 
                     onFocus={this.handleFocus} 
                     onBlur={this.handleBlur} 

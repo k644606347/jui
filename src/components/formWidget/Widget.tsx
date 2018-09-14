@@ -9,6 +9,8 @@ interface FormWidgetEvent {
     name?: string;
     value?: any;
     checked?: boolean;
+    disabled?: boolean;
+    readOnly?: boolean;
 }
 export interface FormWidgetChangeEvent extends FormWidgetEvent { }
 export interface FormWidgetFocusEvent { }

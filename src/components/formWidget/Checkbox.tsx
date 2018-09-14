@@ -26,7 +26,7 @@ class Checkbox extends Widget<CheckboxProps, CheckboxState>{
         };
     }
     render() {
-        let { children, disabled, className, style, ...restProps } = this.props,
+        let { children, disabled, readOnly, className, style, ...restProps } = this.props,
         { checked } = this.state,
         allowedInputElAttrs = this.getAllowedInputElAttrs(restProps);
 
@@ -37,13 +37,14 @@ class Checkbox extends Widget<CheckboxProps, CheckboxState>{
                     cm.wrapper,
                     checked && cm.checked,
                     disabled && cm.disabled,
+                    readOnly && cm.readOnly,
                     className)
             }>
                 <input {...allowedInputElAttrs} className={cm.input} type="checkbox" 
-                    checked={checked} disabled={disabled}
+                    checked={checked} disabled={!!(disabled || readOnly)}
                     onChange={this.handleChange} 
                     onFocus={this.handleFocus} 
-                    onBlur={this.handleBlur} 
+                    onBlur={this.handleBlur}
                 />
                 <div className={cm.icon}><Icon icon={checked ? iconCheckCircle : iconCircle_r} /></div>
                 {children !== undefined ? <div className={cm.description}>{children}</div> : ''}
