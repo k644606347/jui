@@ -9,11 +9,11 @@ export default class Tools {
         // logic
     }
 
-    isPlainObject(v: any) {
+    isPlainObject(v: any): v is {[k in string | number | symbol]: any} {
         return Object.prototype.toString.call(v) === '[object Object]';
     }
 
-    isEmptyObject(v: any) {
+    isEmptyObject(v: any): v is {[k in string | number | symbol]: any} {
         if (!this.isPlainObject(v)) {
             return false;
         }
@@ -25,19 +25,19 @@ export default class Tools {
         return true;
     }
 
-    isFunction(v: any) {
+    isFunction(v: any): v is (...args: any[]) => any {
         return v && Object.prototype.toString.call(v) === '[object Function]';
     }
 
-    isString(v: any) {
+    isString(v: any): v is string {
         return Object.prototype.toString.call(v) === '[object String]';
     }
 
-    isArray(v: any) {
+    isArray(v: any): v is any[] {
         return Array.isArray(v);
     }
 
-    genID(prefix?: string) {
+    genID(prefix?: string): string {
         let randomStr = () => this.randomInt(100000, 10000000).toString(16).substr(-5);
 
         return (prefix !== undefined ? prefix : '') + randomStr() + randomStr();

@@ -10,6 +10,7 @@
         "@fortawesome/react-fontawesome": "0.1.0-11",
         "react": "^16.4.1",
         "react-dom": "^16.4.1",
+        "react-is": "^16.5.1",
         "styled-components": "^3.4.6"
     },
     "scripts": {
@@ -25,6 +26,7 @@
         "@types/jest": "^23.1.1",
         "@types/react": "^16.4.1",
         "@types/react-dom": "^16.0.7",
+        "@types/react-is": "^16.3.1",
         "@types/styled-components": "^3.0.1",
         "autoprefixer": "7.1.6",
         "babel-jest": "^22.1.0",

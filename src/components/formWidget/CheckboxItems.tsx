@@ -42,7 +42,7 @@ class CheckboxItems extends Widget<CheckboxItemsProps, any> {
             checkboxID = tools.genID('checkbox_item_'),
             checkboxEl = <Checkbox id={checkboxID} name={name} value={item.value}
                     checked={
-                        Array.isArray(value) ? value.some((v) => v === item.value) : false
+                        tools.isArray(value) ? value.some((v) => v === item.value) : false
                     } 
                     readOnly={item.readOnly} disabled={item.disabled} 
                     onChange={this.handleChange}>

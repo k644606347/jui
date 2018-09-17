@@ -1,6 +1,6 @@
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     Transform,
     IconProp,
@@ -9,70 +9,54 @@ import {
     PullProp,
     RotateProp,
     FaSymbol
-} from '@fortawesome/fontawesome-svg-core'
-import * as React from 'react';
-import Tools from '../utils/Tools';
-import { CSSAttrs } from '../utils/types';
-import styled from 'styled-components';
+} from "@fortawesome/fontawesome-svg-core";
+import * as React from "react";
+import Tools from "../utils/Tools";
+import { CSSAttrs } from "../utils/types";
+import styled from "styled-components";
+import hoistNonReactStatics from "../utils/hoistNonReactStatics";
 
 const tools = Tools.getInstance();
 export interface IconProps extends CSSAttrs {
-    icon: IconDefinition
-    mask?: IconProp
-    color?: string
-    spin?: boolean
-    pulse?: boolean
-    border?: boolean
-    fixedWidth?: boolean
-    inverse?: boolean
-    listItem?: boolean
-    flip?: FlipProp
-    size?: SizeProp
-    pull?: PullProp
-    rotation?: RotateProp
-    transform?: string | Transform
-    symbol?: FaSymbol
-};
+    icon: IconDefinition;
+    mask?: IconProp;
+    color?: string;
+    spin?: boolean;
+    pulse?: boolean;
+    border?: boolean;
+    fixedWidth?: boolean;
+    inverse?: boolean;
+    listItem?: boolean;
+    flip?: FlipProp;
+    size?: SizeProp;
+    pull?: PullProp;
+    rotation?: RotateProp;
+    transform?: string | Transform;
+    symbol?: FaSymbol;
+}
 
-export { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+export { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 
 class Icon extends React.PureComponent<IconProps, any> {
-    public static renderIcon(icon: React.ReactElement<IconProps> | IconDefinition) {
-        if (Icon.isIconElement(icon)) {
-            return icon as React.ReactElement<IconProps>;
-        } else {
-            return <Icon icon={icon as IconDefinition} />
-        }
+    static renderIcon(icon: React.ReactElement<IconProps> | IconDefinition) {
+        return this.isIconElement(icon) ? icon : <Styled icon={icon} />;
     }
-    public static isIconElement(icon: any) {
-        return (icon as React.ReactElement<IconProps>).type === Icon;
+    static isIconElement(icon: any): icon is React.ReactElement<IconProps> {
+        return React.isValidElement(icon) && icon.type === Styled;
     }
-    public static isFontAweSomeIcon(icon: any) {
-        let fasIcon = (icon as IconDefinition);
+    static isFontAweSomeIcon(icon: any) {
+        let fasIcon = icon as IconDefinition;
 
-        return fasIcon.prefix && fasIcon.iconName && tools.isArray(fasIcon.icon);
+        return (
+            fasIcon.prefix && fasIcon.iconName && tools.isArray(fasIcon.icon)
+        );
     }
     constructor(props: IconProps) {
         super(props);
     }
     public render() {
-        return <FontAwesomeIcon {...this.props} />
+        return <FontAwesomeIcon {...this.props} />;
     }
 }
 const Styled = styled(Icon)``;
-const renderIcon = (icon: React.ReactElement<IconProps> | IconDefinition) => {
-    if (isIconElement(icon)) {
-        return icon as React.ReactElement<IconProps>;
-    } else {
-        return <Styled icon={icon as IconDefinition} />
-    }
-}
-const isIconElement = (icon: any) => {
-    return (icon as React.ReactElement<IconProps>).type === Styled;
-}
-const isFontAweSomeIcon = (icon: any) => {
-    let fasIcon = (icon as IconDefinition);
-
-    return fasIcon.prefix && fasIcon.iconName && tools.isArray(fasIcon.icon);
-}
-export default Object.assign(Styled, { renderIcon, isIconElement, isFontAweSomeIcon });
+export default hoistNonReactStatics(Styled, Icon);
