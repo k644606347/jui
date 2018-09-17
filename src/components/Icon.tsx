@@ -13,6 +13,7 @@ import {
 import * as React from 'react';
 import Tools from '../utils/Tools';
 import { CSSAttrs } from '../utils/types';
+import styled from 'styled-components';
 
 const tools = Tools.getInstance();
 export interface IconProps extends CSSAttrs {
@@ -35,7 +36,7 @@ export interface IconProps extends CSSAttrs {
 
 export { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 
-export default class Icon extends React.PureComponent<IconProps, any> {
+class Icon extends React.PureComponent<IconProps, any> {
     public static renderIcon(icon: React.ReactElement<IconProps> | IconDefinition) {
         if (Icon.isIconElement(icon)) {
             return icon as React.ReactElement<IconProps>;
@@ -58,3 +59,20 @@ export default class Icon extends React.PureComponent<IconProps, any> {
         return <FontAwesomeIcon {...this.props} />
     }
 }
+const Styled = styled(Icon)``;
+const renderIcon = (icon: React.ReactElement<IconProps> | IconDefinition) => {
+    if (isIconElement(icon)) {
+        return icon as React.ReactElement<IconProps>;
+    } else {
+        return <Styled icon={icon as IconDefinition} />
+    }
+}
+const isIconElement = (icon: any) => {
+    return (icon as React.ReactElement<IconProps>).type === Styled;
+}
+const isFontAweSomeIcon = (icon: any) => {
+    let fasIcon = (icon as IconDefinition);
+
+    return fasIcon.prefix && fasIcon.iconName && tools.isArray(fasIcon.icon);
+}
+export default Object.assign(Styled, { renderIcon, isIconElement, isFontAweSomeIcon });

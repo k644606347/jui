@@ -16,6 +16,7 @@ const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const cssConfigFile = require('./css.config');
 const CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -285,7 +286,8 @@ module.exports = {
     }),
     new CommonsChunkPlugin({
       name: [mainFile],
-    })
+    }),
+    new BundleAnalyzerPlugin()
   ],
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.
