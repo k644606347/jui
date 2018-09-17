@@ -11,13 +11,13 @@ const tools = Tools.getInstance();
  * 菜单栏组件, 样式定位以<body>元素为基准
  */
 export default class Menu extends React.PureComponent<MenuProps, MenuState> {
-    public static handleLoad() {
+    static handleLoad() {
         this.updateLayout();
     }
-    public static handleResize() {
+    static handleResize() {
         this.updateLayout();
     }
-    public static handleScroll() {
+    static handleScroll() {
         Menu.instances.forEach(ins => {
             let { showItems, backdrop } = ins.props,
                 { backdropStyle } = ins.state,
@@ -51,7 +51,7 @@ export default class Menu extends React.PureComponent<MenuProps, MenuState> {
         });
     }
     private static instances: Menu[] = [];
-    private static defaultProps: MenuProps = {
+    static defaultProps: Partial<MenuProps> = {
         id: 'menu',
         label: 'menu',
         items: [],

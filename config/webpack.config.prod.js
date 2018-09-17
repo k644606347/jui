@@ -17,7 +17,10 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const cssConfigFile = require('./css.config');
 const CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-
+let analyzer;
+if (process.env.npm_config_analyzer) {
+  analyzer = !!JSON.parse(process.env.npm_config_analyzer);
+}
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
 const publicPath = paths.servedPath;
@@ -32,7 +35,6 @@ const shouldUseSourceMap = false;
 const publicUrl = publicPath.slice(0, -1);
 // Get environment variables to inject into our app.
 const env = getClientEnvironment(publicUrl);
-
 // Assert this just to be safe.
 // Development builds of React are slow and not intended for production.
 if (env.stringified['process.env'].NODE_ENV !== '"production"') {
@@ -287,8 +289,8 @@ module.exports = {
     new CommonsChunkPlugin({
       name: [mainFile],
     }),
-    new BundleAnalyzerPlugin()
-  ],
+    analyzer && new BundleAnalyzerPlugin()
+  ].filter(n => !!n),
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.
   node: {
