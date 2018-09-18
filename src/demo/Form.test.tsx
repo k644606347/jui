@@ -19,6 +19,7 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                     widgetProps: {
                         name: 'check1',
                         value: ['check1value'],
+                        required: true,
                         items: [
                             {
                                 label: 'check1',

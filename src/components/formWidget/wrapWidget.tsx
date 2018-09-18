@@ -1,6 +1,6 @@
 import { FormWidgetProps, MsgLevelType, FormWidgetValidEvent, FormWidgetState, FormWidgetChangeEvent, FormWidgetFocusEvent } from "./Widget";
 import * as React from "react";
-import cm from './Widget.scss';
+import cm from './wrapWidget.scss';
 import Tools from "../../utils/Tools";
 import Validator, { Rule, Report } from "./Validator";
 import Log from "../../utils/Log";

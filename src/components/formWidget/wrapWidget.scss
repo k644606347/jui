@@ -1,0 +1,13 @@
+@charset "UTF-8";
+.wrapper {
+    position: relative;
+    .widget-control {
+
+    }
+    .msg-control {
+        position: absolute;
+        top: 100%;
+        z-index: 10;
+        background: red;
+    }
+}

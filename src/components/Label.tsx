@@ -21,7 +21,7 @@ export default class Label extends React.PureComponent<Props, any> {
 
         return (
             <label {...restProps} className={
-                tools.classNames(cm.wrapper, cm.required, className)
+                tools.classNames(cm.wrapper, required && cm.required, className)
             } onClick={this.handleLabelClick}>{children}</label>
         )
     }

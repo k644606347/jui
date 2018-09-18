@@ -12,7 +12,7 @@ $menu-btn-font-size: 18px;
 }
 .#{$menu-name}-btn {
     position: relative;
-    z-index: 20;
+    z-index: 91; /* z-index保证比wrap-backdrop高 */
     text-align: center;
     font-size: $menu-btn-font-size;
     padding: 0 15px;
@@ -34,7 +34,7 @@ $menu-btn-font-size: 18px;
     width: 100vw;
     height: 50vh;
     position: absolute;
-    z-index: 20;
+    z-index: 91;
     display: flex;
     flex-direction: row;
 }
@@ -44,5 +44,5 @@ $menu-btn-font-size: 18px;
     position: absolute;
     opacity: .4;
     background-color: #000;
-    z-index: 10;
+    z-index: 90;
 }

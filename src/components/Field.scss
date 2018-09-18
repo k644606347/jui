@@ -2,37 +2,23 @@
 @import "./style/themes/default.scss";
 @import "./style/mixins/hairline.scss";
 
-$required-bg-color: #f5222d;
-$error-bg-color: #f5222d;
-
 .wrapper {
     display: flex;
     font-size: 17px;
     padding: 8px 0;
     background-color: $fill-base;
-    position: relative;
+    align-items: center;
     .label {
         width: 5em;
-        margin-right: 5px;
         overflow: hidden;
         text-align: left;
         flex: 0 1 auto;
+        white-space: nowrap;
     }
     .field-control {
         flex: 1 1 auto;
-        .widget-control {
-            display: flex;
-            justify-content: flex-end;    
-        }
-        .rule-msg {
-            color: $error-bg-color;
-        }
     }
-    &.required {
-        .label::after {
-            margin-left: 3px;
-            content: "*";
-            color: $required-bg-color;
-        }
+    .label + .field-control {
+        margin-left: .5em;
     }
 }

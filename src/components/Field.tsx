@@ -23,8 +23,9 @@ export default class Field extends React.PureComponent<FieldProps, any> {
                     (args) => {
                         let { onChange } = args,
                             widgetEl = this.processWidget(widget, onChange),
-                            labelEl = label !== undefined ? <Label>{label}</Label> : undefined,
-                            isWidgetEl = Form.isWidgetElement(widgetEl);
+                            isWidgetEl = Form.isWidgetElement(widgetEl),
+                            { required } = (widgetEl as React.ReactElement<any>).props,
+                            labelEl = label !== undefined ? <Label required={required} className={cm.label}>{label}</Label> : undefined;
 
                         return (
                             <div style={style} className={
@@ -35,14 +36,16 @@ export default class Field extends React.PureComponent<FieldProps, any> {
                             }>
                             {
                                 isWidgetEl ? 
-                                    render ? 
-                                        render(widgetEl as JSX.Element, labelEl) : 
-                                        <React.Fragment>
-                                            { labelEl }
-                                            {
-                                                renderWidget ? renderWidget(widgetEl as JSX.Element) : widgetEl
-                                            }
-                                        </React.Fragment>
+                                        render ? 
+                                            render(widgetEl as JSX.Element, labelEl) : 
+                                            <React.Fragment>
+                                                { labelEl }
+                                                <div className={cm['field-control']}>
+                                                {
+                                                    renderWidget ? renderWidget(widgetEl as JSX.Element) : widgetEl
+                                                }
+                                                </div>
+                                            </React.Fragment>
                                     : this.renderWidgetFail(widgetEl as string)
                             }
                             </div>
