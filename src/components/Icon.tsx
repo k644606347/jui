@@ -37,12 +37,12 @@ export interface IconProps extends CSSAttrs {
 
 export { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 
-class Icon extends React.PureComponent<IconProps, any> {
+export default class Icon extends React.PureComponent<IconProps, any> {
     static renderIcon(icon: React.ReactElement<IconProps> | IconDefinition) {
-        return this.isIconElement(icon) ? icon : <Styled icon={icon} />;
+        return this.isIconElement(icon) ? icon : <Icon icon={icon} />;
     }
     static isIconElement(icon: any): icon is React.ReactElement<IconProps> {
-        return React.isValidElement(icon) && icon.type === Styled;
+        return React.isValidElement(icon) && icon.type === Icon;
     }
     static isFontAweSomeIcon(icon: any) {
         let fasIcon = icon as IconDefinition;
@@ -58,5 +58,3 @@ class Icon extends React.PureComponent<IconProps, any> {
         return <FontAwesomeIcon {...this.props} />;
     }
 }
-const Styled = styled(Icon)``;
-export default hoistNonReactStatics(Styled, Icon);
