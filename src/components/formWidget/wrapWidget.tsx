@@ -5,6 +5,7 @@ import Tools from "../../utils/Tools";
 import Validator, { Rule, Report } from "./Validator";
 import Log from "../../utils/Log";
 import { FormContext } from "../FormContext";
+import hoistNonReactStatics from "../../utils/hoistNonReactStatics";
 const tools = Tools.getInstance();
 interface State {
     focused?: boolean;
@@ -13,10 +14,10 @@ interface State {
     validateMsgLevel?: MsgLevelType;
 }
 
-export default function wrapWidget<OriginProps extends FormWidgetProps>(UnwrappedComponent: React.ComponentClass<OriginProps>): React.ComponentClass<OriginProps> {
+export default function wrapWidget<OriginProps extends FormWidgetProps>(UnwrappedComponent: React.ComponentType<OriginProps>): React.ComponentClass<OriginProps> {
     type Props = OriginProps;
 
-    return class WidgetWrapper extends React.PureComponent<Props, State> {
+    class WidgetWrapper extends React.PureComponent<Props, State> {
         static defaultProps: Partial<Props> = {
             validateTrigger: 'onChange',
             ...UnwrappedComponent.defaultProps as any
@@ -173,4 +174,6 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
             });
         }
     }
+
+    return hoistNonReactStatics(WidgetWrapper, UnwrappedComponent) as React.ComponentClass<Props>;
 }

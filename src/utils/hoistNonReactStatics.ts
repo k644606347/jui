@@ -1,8 +1,7 @@
 import * as ReactIs from "react-is";
 
 /**
- * Copyright 2015, Yahoo! Inc.
- * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
+ * copy 自 https://github.com/mridgway/hoist-non-react-statics
  */
 const REACT_STATICS = {
     childContextTypes: true,
@@ -40,7 +39,7 @@ const getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
 const getPrototypeOf = Object.getPrototypeOf;
 const objectPrototype = Object.prototype;
 
-export default function hoistNonReactStatics(targetComponent: React.ComponentType, sourceComponent: React.ComponentType, blacklist: any) {
+export default function hoistNonReactStatics<P>(targetComponent: React.ComponentType<P>, sourceComponent: React.ComponentType, blacklist?: any): React.ComponentType<P> {
     if (typeof sourceComponent !== 'string') { // don't hoist over string (html) components
 
         if (objectPrototype) {
@@ -50,15 +49,18 @@ export default function hoistNonReactStatics(targetComponent: React.ComponentTyp
             }
         }
 
-        let keys = getOwnPropertyNames(sourceComponent);
+        let keys: Array<string | symbol> = getOwnPropertyNames(sourceComponent);
 
         if (getOwnPropertySymbols) {
             keys = keys.concat(getOwnPropertySymbols(sourceComponent));
         }
 
+        // tslint:disable-next-line:no-string-literal
         const targetStatics = TYPE_STATICS[targetComponent['$$typeof']] || REACT_STATICS;
+        // tslint:disable-next-line:no-string-literal
         const sourceStatics = TYPE_STATICS[sourceComponent['$$typeof']] || REACT_STATICS;
 
+        // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < keys.length; ++i) {
             const key = keys[i];
             if (!KNOWN_STATICS[key] &&
@@ -68,7 +70,7 @@ export default function hoistNonReactStatics(targetComponent: React.ComponentTyp
             ) {
                 const descriptor = getOwnPropertyDescriptor(sourceComponent, key);
                 try { // Avoid failures from read-only properties
-                    defineProperty(targetComponent, key, descriptor);
+                    descriptor && defineProperty(targetComponent, key, descriptor);
                 } catch (e) {}
             }
         }

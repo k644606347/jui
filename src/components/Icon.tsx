@@ -13,8 +13,6 @@ import {
 import * as React from "react";
 import Tools from "../utils/Tools";
 import { CSSAttrs } from "../utils/types";
-import styled from "styled-components";
-import hoistNonReactStatics from "../utils/hoistNonReactStatics";
 
 const tools = Tools.getInstance();
 export interface IconProps extends CSSAttrs {
