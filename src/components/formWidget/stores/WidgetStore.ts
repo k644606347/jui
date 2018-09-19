@@ -1,7 +1,7 @@
 import DataConvertor, { DataType, dataTypes } from "./DataConvertor";
 import Log from "../../../utils/Log";
 
-const convertor = DataConvertor.getInstanceOf();
+const convertor = DataConvertor.getInstance();
 const defaultDataMap: {[key in DataType]?: any} = {
     integer: 0,
     float: 0,

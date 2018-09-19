@@ -29,25 +29,10 @@ export default class Form extends React.PureComponent<FormProps, FormState> {
         return isWidget;
     }
     getInitialState(): FormState {
-        let { props } = this,
-            { fields } = props,
-            value = {};
-
-        fields.forEach(field => {
-            let { widget, widgetProps } = field;
-
-            if (React.isValidElement(widget)) {
-                widgetProps = (widget as JSX.Element).props;
-            }
-
-            if (widgetProps && !!widgetProps.disabled) {
-                value[widgetProps.name] = widgetProps.value;
-            }
-        });
+        let { props } = this;
     
         return {
             isValid: props.isValid,
-            value
         }
     }
     constructor(props: FormProps) {
@@ -77,25 +62,11 @@ export default class Form extends React.PureComponent<FormProps, FormState> {
         )
     }
     private renderFields(fields: FieldProps[]) {
-        let { value } = this.state;
-
         return (
             <React.Fragment>
                 {
                     fields.map((field: FieldProps, i) => {
                         let { widget, label, renderWidget, widgetProps } = field;
-                        if (React.isValidElement(widget)) {
-                            let { name } = widget.props as any;
-
-                            if (value[name]) {
-                                widget = React.cloneElement(widget as JSX.Element, {
-                                    value: value[name],
-                                });
-                            }
-                        } else {
-                            if (widgetProps && widgetProps.name) 
-                                widgetProps.value = value[widgetProps.name];
-                        }
                         return (
                             <Field key={i} label={label} widget={widget} widgetProps={widgetProps} renderWidget={renderWidget}></Field>
                         )
@@ -117,6 +88,14 @@ export default class Form extends React.PureComponent<FormProps, FormState> {
         let { __isFormField } = widgetInstance.props;
 
         __isFormField && this.widgets.push(widgetInstance);
+    }
+    getValue() {
+        let value = {};
+        this.widgets.forEach((w: any) => {
+            value[w.props.name] = w.getValue();
+        });
+
+        return value;
     }
     submit() {
         let { onSubmit, onValid, onInvalid } = this.props,
@@ -140,7 +119,7 @@ export default class Form extends React.PureComponent<FormProps, FormState> {
                         onInvalid && onInvalid();
                     }
                     onSubmit && onSubmit({
-                        value: this.state.value,
+                        value: this.getValue(),
                     });
                 })
             })
@@ -194,21 +173,9 @@ export default class Form extends React.PureComponent<FormProps, FormState> {
 
         this.submit();
     }
-    // TOOD 回调处理
     private handleChange(e: any) {
-        let { onChange } = this.props, 
-            { value } = this.state;
+        let { onChange } = this.props;
 
-        value = { ...value };
-
-        value[e.name] = e.value;
-
-        this.setState({
-            value
-        }, () => {
-            onChange && onChange({
-                value: this.state.value
-            });
-        });
+        onChange && onChange({ value: this.getValue() });
     }
 }

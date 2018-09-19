@@ -2,7 +2,7 @@ const prefix = '[JUI]';
 const suffix = '';
 
 export default {
-    throw: (...args: any[]) => {
+    throw: (...args: any[]): Error => {
         throw new Error(`${prefix} ${args.join('\n')}`);
     },
     log: console.log.bind(console, prefix),

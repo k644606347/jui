@@ -18,16 +18,19 @@ class Checkbox extends Widget<CheckboxProps, CheckboxState>{
     static defaultProps: Partial<CheckboxProps> = {
         checked: false,
     }
+    getInitialState(props: CheckboxProps) {
+        return {
+            ...super.getInitialState(props),
+            checked: props.checked,
+        }
+    }
     constructor(props: CheckboxProps) {
         super(props);
-
-        this.state = {
-            checked: props.checked,
-        };
     }
     render() {
         let { children, disabled, readOnly, className, style, ...restProps } = this.props,
         { checked } = this.state,
+        value = this.getValue(),
         allowedInputElAttrs = this.getAllowedInputElAttrs(restProps);
 
         // TODO icon风格需优化，细边框

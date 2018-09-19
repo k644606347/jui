@@ -7,7 +7,7 @@ import { InputProps } from './InputType';
 import wrapWidget from './wrapWidget';
 
 const tools = Tools.getInstance();
-class Input extends Widget<InputProps, {}> {
+class Input extends Widget<InputProps, FormWidgetState> {
     private readonly inputRef: React.RefObject<any>;
     constructor(props: InputProps) {
         super(props);
@@ -16,11 +16,13 @@ class Input extends Widget<InputProps, {}> {
     }
     render() {
         let { className } = this.props,
-            allowedInputElAttrs = this.getAllowedInputElAttrs();
+            allowedInputElAttrs = this.getAllowedInputElAttrs(),
+            value = this.getValue();
 
         return (
             <input
                 {...allowedInputElAttrs}
+                value={value} 
                 className={
                     tools.classNames(cm.input, className)
                 }

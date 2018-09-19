@@ -24,5 +24,4 @@ export interface FormProps {
 }
 export interface FormState {
     isValid?: boolean;
-    value: {[key in string]? : any};
 }

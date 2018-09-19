@@ -104,6 +104,12 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
 
             this.setState(nextState);
         }
+        setValue() {
+            return this.widgetRef.current.setValue();
+        }
+        getValue() {
+            return this.widgetRef.current.getValue();
+        }
         validate() {
             return this.widgetRef.current.validate();
         }

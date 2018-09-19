@@ -21,8 +21,9 @@ class Radio extends Widget<RadioProps, RadioState> {
         checked: false,
         disabled: false,
     };
-    getInitialState() {
+    getInitialState(props: RadioProps) {
         return {
+            ...super.getInitialState(props),
             checked: this.props.checked,
         }
     }
@@ -32,6 +33,7 @@ class Radio extends Widget<RadioProps, RadioState> {
     render() {
         let { disabled, readOnly, className, style, children, ...restProps } = this.props,
             { checked } = this.state,
+            value = this.getValue(),
             allowedInputElAttrs = this.getAllowedInputElAttrs(restProps);
 
         // TODO icon风格需优化，细边框
@@ -45,7 +47,10 @@ class Radio extends Widget<RadioProps, RadioState> {
                     className
                 )
             }>
-                <input {...allowedInputElAttrs} className={cm.input} type="radio" checked={checked} disabled={!!(disabled || readOnly)} 
+                <input {...allowedInputElAttrs} 
+                    className={cm.input} 
+                    value={value} 
+                    type="radio" checked={checked} disabled={!!(disabled || readOnly)} 
                     onChange={this.handleChange} 
                     onFocus={this.handleFocus} 
                     onBlur={this.handleBlur} 

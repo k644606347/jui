@@ -8,7 +8,7 @@ export const dataTypes: DataType[] = ['integer', 'float', 'string', 'boolean', '
 
 export default class DataConvertor {
     private static instances = [];
-    static getInstanceOf() {
+    static getInstance() {
         let instance;
         if (DataConvertor.instances.length === 0 ) {
             instance = new DataConvertor();
