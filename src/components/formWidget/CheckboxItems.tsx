@@ -20,7 +20,7 @@ export interface CheckboxItemsProps extends FormWidgetProps {
 
 const tools = Tools.getInstance();
 class CheckboxItems extends Widget<CheckboxItemsProps, FormWidgetState> {
-    readonly dataType: DataType = 'array';// TODO bug dataType未生效
+    static dataType: DataType = 'array';
     static defaultProps: CheckboxItemsProps = {
         items: [],
     }
@@ -77,11 +77,10 @@ class CheckboxItems extends Widget<CheckboxItemsProps, FormWidgetState> {
             }
         });
 
-        this.setValue(nextValue).then((val) => {
-            onChange && onChange({
-                name: name || '',
-                value: val,
-            });
+        this.store.setData(nextValue);
+        onChange && onChange({
+            name: name || '',
+            value: this.store.getData(),
         });
     }
 }

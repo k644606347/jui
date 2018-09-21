@@ -35,7 +35,10 @@ export default class WidgetStore {
     }
     setData(data: any) {
         // TODO 是否拦截异常？
-        this.data = convertor.convertTo(data, this.dataType);
+        this.data = this.formatData(data);
+    }
+    formatData(data: any) {
+        return convertor.convertTo(data, this.dataType);
     }
     getDataType() {
         return this.dataType;

@@ -43,7 +43,7 @@ class Checkbox extends Widget<CheckboxProps, CheckboxState>{
                     readOnly && cm.readOnly,
                     className)
             }>
-                <input {...allowedInputElAttrs} className={cm.input} type="checkbox" 
+                <input {...allowedInputElAttrs} value={value} className={cm.input} type="checkbox" 
                     checked={checked} disabled={!!(disabled || readOnly)}
                     onChange={this.handleChange} 
                     onFocus={this.handleFocus} 

@@ -7,11 +7,16 @@ import Label from "./Label";
 import Form from "./Form";
 import Log from "../utils/Log";
 import Config from "./formWidget/Config";
+import Message from "./Message";
 const tools = Tools.getInstance();
 
 export default class Field extends React.PureComponent<FieldProps, any> {
+    private widgetRef: React.RefObject<any>;
+    private formContext: any;
     constructor(props: FieldProps) {
         super(props);
+
+        this.widgetRef = React.createRef();
     }
     render() {
         let { props } = this,
@@ -21,8 +26,9 @@ export default class Field extends React.PureComponent<FieldProps, any> {
             <FormContext.Consumer>
                 {
                     (args) => {
-                        let { onChange } = args,
-                            widgetEl = this.processWidget(widget, onChange),
+                        this.formContext = args;
+                        
+                        let widgetEl = this.processWidget(widget),
                             isWidgetEl = Form.isWidgetElement(widgetEl),
                             { required } = (widgetEl as React.ReactElement<any>).props,
                             labelEl = label !== undefined ? <Label required={required} className={cm.label}>{label}</Label> : undefined;
@@ -55,47 +61,45 @@ export default class Field extends React.PureComponent<FieldProps, any> {
             </FormContext.Consumer>
         );
     }
+    componentDidMount() {
+        let { onWidgetMount } = this.formContext,
+            { widgetRef } = this;
+
+        tools.isFunction(onWidgetMount) && onWidgetMount(widgetRef.current);
+    }
     private renderWidgetFail(msg: string) {
         Log.error(msg);
-        return <div>{msg}</div>;
+        return <Message type="error">{msg}</Message>;
     }
-    private processWidget(widget: JSX.Element | string, onChange: (...args: any[]) => void) {
+    private processWidget(widgetName: string) {
         let { widgetProps } = this.props,
+            { widgetRef, formContext } = this,
             widgetEl: JSX.Element,
             // tslint:disable-next-line:ban-types
             originOnChange: Function,
             injectedProps: any = {
-                __isFormField: true,
+                ref: widgetRef,
                 onChange(e: any) {
                     tools.isFunction(originOnChange) && originOnChange(e);
-    
-                    onChange && onChange(e);
+                    
+                    let { onChange } = formContext;
+                    tools.isFunction(onChange) && onChange(e);
                 },
-            };
+            },
+            widgetConfig = Config[widgetName];
 
-        if (typeof widget === 'string') {
-            let widgetConfig = Config[widget];
-
-            if (!widgetConfig || !widgetConfig.widget) {
-                return `<Field>渲染异常，没有widget为"${widget}"的配置`;
-            }
-
-            let widgetClass = widgetConfig.widget;
-
-            if (widgetProps) {
-                originOnChange = widgetProps.onChange;
-                injectedProps = { ...widgetProps, ...injectedProps };
-            }
-
-            widgetEl = React.createElement(widgetClass, injectedProps);
-        } else {
-            if (!Form.isWidgetElement(widget)) {
-                return `<Field>渲染异常，widget prop必须是Widget类型的React元素, 当前是: ${widget.type}`;
-            }
-
-            originOnChange = widget.props.onChange;
-            widgetEl = React.cloneElement(widget, injectedProps);
+        if (!widgetConfig || !widgetConfig.widget) {
+            return `<Field>渲染异常，没有widget为"${widgetName}"的配置`;
         }
+
+        let widgetClass = widgetConfig.widget;
+
+        if (widgetProps) {
+            originOnChange = widgetProps.onChange;
+            injectedProps = { ...widgetProps, ...injectedProps };
+        }
+
+        widgetEl = React.createElement(widgetClass, injectedProps);
         
         return widgetEl;
     }

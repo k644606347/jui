@@ -7,6 +7,10 @@ import Log from "../../utils/Log";
 import { FormContext } from "../FormContext";
 import hoistNonReactStatics from "../../utils/hoistNonReactStatics";
 const tools = Tools.getInstance();
+
+interface ExtraProps {
+    forwardedRef?: React.RefObject<any>;
+}
 interface State {
     focused?: boolean;
     isValid?: boolean;
@@ -14,17 +18,16 @@ interface State {
     validateMsgLevel?: MsgLevelType;
 }
 
-export default function wrapWidget<OriginProps extends FormWidgetProps>(UnwrappedComponent: React.ComponentType<OriginProps>): React.ComponentClass<OriginProps> {
-    type Props = OriginProps;
+export default function wrapWidget<OriginProps extends FormWidgetProps>(UnwrappedComponent: React.ComponentType<OriginProps>) {
+    type Props = OriginProps & ExtraProps;
 
     class WidgetWrapper extends React.PureComponent<Props, State> {
         static defaultProps: Partial<Props> = {
             validateTrigger: 'onChange',
             ...UnwrappedComponent.defaultProps as any
         }
+        private widgetInstance: any;
         readonly state: State;
-        readonly widgetRef: React.RefObject<any>;
-        formContext: any;
         constructor(props: Props) {
             super(props);
 
@@ -34,7 +37,6 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
                 validateMsg: props.validateMsg || '',
                 validateMsgLevel: props.validateMsgLevel || 'info',
             }
-            this.widgetRef = React.createRef();
 
             this.handleChange = this.handleChange.bind(this);
             this.handleFocus = this.handleFocus.bind(this);
@@ -44,46 +46,34 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
         }
         render() {
             let { props, state } = this,
-                { ...restProps } = props as any,// TODO 此处必须转换为any，不然无法使用rest语法
+                { forwardedRef, ...restProps } = props as any,// TODO 此处必须转换为any，不然无法使用rest语法
                 { focused, isValid, validateMsg, validateMsgLevel } = state;
 
             return (
-                <FormContext.Consumer>
+                <div className={cm.wrapper}>
+                    <div className={cm['widget-control']}>
+                    <UnwrappedComponent {...restProps} ref={(component) => {
+                        this.widgetInstance = component;
+                        if (forwardedRef)
+                            forwardedRef.current = component;
+                    }}
+                            isValid={isValid} validateMsg={validateMsg} validateMsgLevel={validateMsgLevel}
+                            focused={focused}
+                            onChange={this.handleChange} onFocus={this.handleFocus} onBlur={this.handleBlur}
+                            onValid={this.handleValid} onInvalid={this.handleInvalid}
+                        />
+                    </div>
                     {
-                        context => {
-                            this.formContext = context;
-                            return <div className={cm.wrapper}>
-                                <div className={cm['widget-control']}>
-                                    <UnwrappedComponent {...restProps} ref={this.widgetRef}
-                                        isValid={isValid} validateMsg={validateMsg} validateMsgLevel={validateMsgLevel}
-                                        focused={focused}
-                                        onChange={this.handleChange} onFocus={this.handleFocus} onBlur={this.handleBlur}
-                                        onValid={this.handleValid} onInvalid={this.handleInvalid}
-                                    />
-                                </div>
-                                {
-                                    validateMsg ?
-                                        <div className={
-                                            tools.classNames(
-                                                cm['msg-control'],
-                                                cm[`msg-${validateMsgLevel}`]
-                                            )
-                                        }>{validateMsg}</div> : ''
-                                }
-                            </div>
-                        }
+                        validateMsg ?
+                            <div className={
+                                tools.classNames(
+                                    cm['msg-control'],
+                                    cm[`msg-${validateMsgLevel}`]
+                                )
+                            }>{validateMsg}</div> : ''
                     }
-                </FormContext.Consumer>
+                </div>
             )
-        }
-        componentDidMount() {
-            let { formContext } = this;
-            
-            if (formContext) {
-                let { onWidgetMount } = formContext;
-
-                onWidgetMount && onWidgetMount(this);
-            }
         }
         componentDidUpdate(prevProps: Props, prveState: State) {
             let { isValid, validateMsg, validateMsgLevel, focused } = this.props,
@@ -104,18 +94,6 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
 
             this.setState(nextState);
         }
-        setValue() {
-            return this.widgetRef.current.setValue();
-        }
-        getValue() {
-            return this.widgetRef.current.getValue();
-        }
-        validate() {
-            return this.widgetRef.current.validate();
-        }
-        validateReport(report: Report) {
-            return this.widgetRef.current.validateReport(report);
-        }
         private isDisabled() {
             return !!this.props.disabled;
         }
@@ -127,7 +105,7 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
         private handleChange(e: FormWidgetChangeEvent) {
             let { value, checked } = e,
                 { name, id, onChange } = this.props,
-                widgetObj = this.widgetRef.current,
+                widgetObj = this.widgetInstance,
                 mixedEvent = {
                     ...e,
                     name, id
@@ -181,5 +159,8 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
         }
     }
 
-    return hoistNonReactStatics(WidgetWrapper, UnwrappedComponent) as React.ComponentClass<Props>;
+    let HoistedComponent = hoistNonReactStatics(WidgetWrapper, UnwrappedComponent) as React.ComponentClass<Props>;
+
+    return React.forwardRef((props: Props, ref: React.RefObject<any>) => 
+            <HoistedComponent {...props} forwardedRef={ref} />);
 }

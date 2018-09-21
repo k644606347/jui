@@ -49,53 +49,29 @@ export interface FormWidgetProps extends CSSAttrs {
     onChange?: (e: FormWidgetChangeEvent) => void;
     onFocus?: (e?: FormWidgetFocusEvent) => void;
     onBlur?: (e?: FormWidgetFocusEvent) => void;
-    // onAfterInit?: (...args: any[]) => void;
+    onDidMount?: (...args: any[]) => void;
     onValid?: (e: FormWidgetValidEvent) => void;
     onInvalid?: (e: FormWidgetValidEvent) => void;
-    __isFormField?: boolean;
 }
 export interface FormWidgetState {
-    dataType: DataType;
-    prevPropsName: string;
-    prevPropsValue: any;
     value: any;
 }
 
 const convertor = DataConvertor.getInstance();
 export default abstract class Widget<P extends FormWidgetProps, S extends FormWidgetState> extends React.PureComponent<P, S> {
-    static getDerivedStateFromProps(props: FormWidgetProps, state: FormWidgetState) {
-        let { name, value } = props,
-            nextState = null;
-
-        if (name !== state.prevPropsName) {
-            nextState = {
-                dataType: state.dataType,
-                prevPropsName: name,
-                prevPropsValue: value,
-                value: DefaultData.getBy(state.dataType)
-            }
-        } else {
-            if (value !== state.prevPropsValue) {
-                nextState = {
-                    value: convertor.convertTo(value, state.dataType)
-                }
-            }
-        }
-
-        return nextState;
-    }
-    readonly dataType: DataType = 'string';
+    static dataType: DataType = 'string';
+    store: WidgetStore;
     state: S;
-    getInitialState(props: P) {
-        return {
-            dataType: this.dataType,
-            prevPropsName: props.name,
-            prevPropsValue: props.value,
-            value: convertor.convertTo(props.value, this.dataType),
-        } as S;
+    getInitialState(props: P): S {
+        return {} as S;
     }
     constructor(props: P) {
         super(props);
+
+        this.store = new WidgetStore({
+            data: props.value,
+            dataType: this.getDataType(),
+        });
 
         this.state = this.getInitialState(props);
         this.handleChange = this.handleChange.bind(this);
@@ -103,34 +79,33 @@ export default abstract class Widget<P extends FormWidgetProps, S extends FormWi
         this.handleBlur = this.handleBlur.bind(this);
         this.validateReport = this.validateReport.bind(this);
     }
-    setValue(value: any): Promise<any> {
-        return new Promise((resolve, reject) => {
-            let nextValue = convertor.convertTo(value, this.dataType);
-
-            try {
-                this.setState({
-                    value: nextValue
-                }, resolve.bind(this, nextValue));
-            } catch(e) {
-                Log.error(e);
-                reject(e);
-            }
-        });
-    }
     getValue() {
-        return this.state.value;
+        return this.store.getData();
     }
     protected handleChange(e?: any) {
         let { value } = e.target,
             { id, name, onChange } = this.props;
 
-        this.setValue(value).then((val) => {
-            onChange && onChange({
-                id: id || '',
-                name: name || '',
-                value: val,
-            });
-        })
+        onChange && onChange({
+            id: id || '',
+            name: name || '',
+            value: this.store.formatData(value),
+        });
+    }
+    componentDidMount() {
+        let { onDidMount } = this.props;
+
+        onDidMount && onDidMount();
+    }
+    componentWillReceiveProps(nextProps: P) {
+        let { props, store } = this;
+
+        if (props.value !== nextProps.value) {
+            store.setData(nextProps.value);
+        }
+    }
+    getDataType(): DataType {
+        return this.getClass().dataType;
     }
     getClass(): any {
         return this.constructor;

@@ -85,9 +85,7 @@ export default class Form extends React.PureComponent<FormProps, FormState> {
         this.setState(nextState);
     }
     private handleWidgetMount(widgetInstance: any) {
-        let { __isFormField } = widgetInstance.props;
-
-        __isFormField && this.widgets.push(widgetInstance);
+        this.widgets.push(widgetInstance);
     }
     getValue() {
         let value = {};

@@ -7,10 +7,12 @@ interface FormTestProps {}
 const tools = Tools.getInstance();
 export default class FormTest extends React.PureComponent<FormTestProps, { fields: any[], form2: any, testInputValue: string }> {
     formForFieldsRef: React.RefObject<any>;
+    inputRef: React.RefObject<any>;
     constructor(props: FormTestProps) {
         super(props);
 
         this.formForFieldsRef = React.createRef();
+        this.inputRef = React.createRef();
         this.state = {
             fields: [
                 {
@@ -93,7 +95,7 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
 
         return (
             <div>
-                <Form fields={
+                {/* <Form fields={
                     [
                         {
                             widget: 'checkboxItems',
@@ -116,21 +118,63 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                             }
                         }
                     ]
-                } />
-            <Form ref={this.formForFieldsRef} fields={fields} onChange={e => Log.log(e)} onSubmit={e => {
+                } onChange={
+                    e => {
+                        let nextFields = [],
+                            { value } = e;
+
+                        nextFields = state.fields.map(field => {
+                            let nextValue = value[field.name].value;
+                            if (nextValue !== field.value) {
+                                return {...field, value: nextValue};
+                            } else {
+                                return field;
+                            }
+                        });
+                        this.setState({ fields: nextFields });
+                    }
+                } /> */}
+            <Form ref={this.formForFieldsRef} fields={fields} onChange={
+                    e => {
+                        let nextFields = [],
+                            { value } = e;
+
+                        nextFields = state.fields.map(field => {
+                            let name = field.widgetProps.name || '';
+
+                            if (name === undefined)
+                                return field;
+
+                            let nextValue = value[name];
+
+                            if (nextValue !== field.widgetProps.value) {
+                                let nextWidgetProps = {...field.widgetProps, value: nextValue};
+                                debugger;
+                                return {...field, widgetProps: nextWidgetProps};
+                            } else {
+                                return field;
+                            }
+                        });
+                        this.setState({ fields: nextFields });
+                    }
+                } onSubmit={e => {
                     Log.info('onSubmit', e);
                 }}></Form>
                 <Button onClick={e => {
                     this.formForFieldsRef.current.submit();
                 }}>submit!</Button>
-                <Input value={state.testInputValue} onChange={(e: any) => {
+                <Input ref={this.inputRef} value={state.testInputValue} onChange={(e: any) => {
                     // setTimeout(() => {
                         console.log(e);
                         this.setState({testInputValue: e.value});
                     // }, 100);
                 }} />
+                <Input value=""  />
             </div>
         )
+    }
+    componentDidMount() {
+        Log.log('this.inputRef=', this.inputRef);
     }
     handleChange(e: any) {
         Log.log('onChange',e);

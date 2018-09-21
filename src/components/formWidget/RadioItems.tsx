@@ -47,13 +47,13 @@ class RadioItems extends Widget<RadioItemsProps, any> {
         )
     }
     handleChange(e: FormWidgetChangeEvent) {
-        let { name, onChange } = this.props;
+        let { name, onChange } = this.props,
+            { store } = this;
 
-        this.setValue(e.value).then(val => {
-            onChange && onChange({
-                name: name || '',
-                value: val
-            });
+        store.setData(e.value);
+        onChange && onChange({
+            name: name || '',
+            value: store.getData()
         });
     }
 }
