@@ -103,10 +103,9 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
         private validatePromise: Promise<Report>;
         private validateTimer: number;
         private handleChange(e: FormWidgetChangeEvent) {
-            let { value, checked } = e,
-                { name, id, onChange } = this.props,
-                widgetObj = this.widgetInstance,
-                mixedEvent = {
+            let { name, id, onChange } = this.props,
+                { widgetInstance } = this,
+                mixedEvent: FormWidgetChangeEvent = {
                     ...e,
                     name, id
                 };
@@ -120,13 +119,10 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
                 this.validateTimer = window.setTimeout(() => {
                     let promise: Promise<any>;
 
-                    if (checked === false) {// checkbox / radio
-                        value = '';
-                    }
-                    promise = this.validatePromise = widgetObj.validate(value)
+                    promise = this.validatePromise = widgetInstance.validate()
                         .then((report: Report) => {
                             if (this.validatePromise === promise) {
-                                widgetObj.validateReport(report);
+                                widgetInstance.validateReport(report);
                             }
                         });
                 }, 100);

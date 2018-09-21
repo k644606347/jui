@@ -1,8 +1,6 @@
-import Checkbox from "./Checkbox";
 import CheckboxItems from "./CheckboxItems";
-import Radio from "./Radio";
 import RadioItems from "./RadioItems";
-import Input from "./Input";
+import Text from './Text';
 
 export default {
     checkboxItems: {
@@ -11,7 +9,7 @@ export default {
     radioItems: {
         widget: RadioItems
     },
-    input: {
-        widget: Input
+    text: {
+        widget: Text
     }
 }

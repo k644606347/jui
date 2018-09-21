@@ -1,5 +1,5 @@
 import Widget, { FormWidgetProps, FormWidgetChangeEvent, FormWidgetState } from "./Widget";
-import Checkbox, { CheckboxProps } from "./Checkbox";
+import Checkbox, { CheckboxProps, CheckboxChangeEvent } from "../Checkbox";
 import * as React from "react";
 import Tools from "../../utils/Tools";
 import cm from './CheckboxItems.scss';
@@ -60,7 +60,7 @@ class CheckboxItems extends Widget<CheckboxItemsProps, FormWidgetState> {
         this.checkboxs.push(checkboxEl);
         return <div className={cm.item} key={key}>{ checkboxEl }</div>;
     }
-    handleChange(e: FormWidgetChangeEvent) {
+    handleChange(e: CheckboxChangeEvent) {
         let { name, onChange } = this.props,
             checkboxs = this.checkboxs,
             nextValue: any[] = [];
@@ -77,11 +77,12 @@ class CheckboxItems extends Widget<CheckboxItemsProps, FormWidgetState> {
             }
         });
 
-        this.store.setData(nextValue);
-        onChange && onChange({
-            name: name || '',
-            value: this.store.getData(),
-        });
+        this.setValue(nextValue).then(val => {
+            onChange && onChange({
+                name: name || '',
+                value: val,
+            });
+        })
     }
 }
 

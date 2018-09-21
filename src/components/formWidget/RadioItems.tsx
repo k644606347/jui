@@ -2,7 +2,7 @@ import Widget, { FormWidgetProps, FormWidgetChangeEvent } from "./Widget";
 import * as React from "react";
 import Tools from "../../utils/Tools";
 import cm from './RadioItems.scss';
-import Radio from "./Radio";
+import Radio from "../Radio";
 import wrapWidget from "./wrapWidget";
 import { CSSAttrs } from "../../utils/types";
 interface RadioItems extends CSSAttrs {
@@ -47,14 +47,14 @@ class RadioItems extends Widget<RadioItemsProps, any> {
         )
     }
     handleChange(e: FormWidgetChangeEvent) {
-        let { name, onChange } = this.props,
-            { store } = this;
+        let { name, onChange } = this.props;
 
-        store.setData(e.value);
-        onChange && onChange({
-            name: name || '',
-            value: store.getData()
-        });
+        this.setValue(e.value).then(val => {
+            onChange && onChange({
+                name: name || '',
+                value: val,
+            });
+        })
     }
 }
 

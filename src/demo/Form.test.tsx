@@ -51,7 +51,7 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                 },
                 {
                     label: '输入1',
-                    widget: 'input',
+                    widget: 'text',
                     widgetProps: {
                         name: 'input1',
                         value: 'input1 value',
@@ -65,7 +65,7 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                 },
                 {
                     label: '输入2',
-                    widget: 'input',
+                    widget: 'text',
                     widgetProps: {
                         name: 'input2',
                         defaultValue: 'input2 value',

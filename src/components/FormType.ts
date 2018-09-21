@@ -1,9 +1,3 @@
-import Field from "./Field";
-import Checkbox from "./formWidget/Checkbox";
-import CheckboxItems from "./formWidget/CheckboxItems";
-import Radio from "./formWidget/Radio";
-import RadioItems from "./formWidget/RadioItems";
-import Input from "./formWidget/Input";
 import { FieldProps } from "./FieldType";
 
 // export type FormData = FieldData[];

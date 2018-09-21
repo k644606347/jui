@@ -93,7 +93,8 @@ export class FormWidgetTest extends React.PureComponent<any, any> {
                         this.setState({ radioItems });
                     }
                 }/>
-            <Label forRef={this.check1Ref}>Check1</Label><Checkbox name="check1" ref={this.check1Ref} required onChange={
+            <Label forRef={this.check1Ref}>Check1</Label>
+            {/* <Checkbox name="check1" ref={this.check1Ref} required onChange={
                 e => Log.info(e)
             } 
             onValid={(e) => {
@@ -151,7 +152,7 @@ export class FormWidgetTest extends React.PureComponent<any, any> {
                         value: window && window['testCallback']
                     }
                 ]
-            }/>
+            }/> */}
         </React.Fragment>)
     }
 }
