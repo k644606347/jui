@@ -14,6 +14,7 @@ import { Icon, Tools, Menu, Button, Pagination, List } from 'src/index';
 import { IconProps } from '../components/Icon';
 import { iconThList, icon500px, iconCarBattery, iconAccessibleIcon, iconBan, iconAdn, iconDribbble, iconAddressBook } from '../components/icons/FontAwesomeMap';
 import MessageTest from './Message.test';
+import MultiContextProvider from './context/MultiContextProvider';
 
 window.console.log('icon:', (<Icon icon={iconThList} /> as React.ReactElement<IconProps>).type === Icon, icon500px);
 const tools = Tools.getInstance();
@@ -349,6 +350,7 @@ class App extends React.Component<any, any> {
                 <a href="www.baidu.com">link1</a>
                 <a onClick={this.link2}>link2</a>
                 <Hello name="TypeScript" enthusiasmLevel={10} />
+                <MultiContextProvider />
             </div>
         );
     }
