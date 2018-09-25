@@ -11,6 +11,19 @@ import Message from "./Message";
 const tools = Tools.getInstance();
 
 export default class Field extends React.PureComponent<FieldProps, any> {
+    static isWidgetElement = (node: React.ReactNode) => {
+        let isWidget = false;
+        if (!React.isValidElement(node)) {
+            return false;
+        }
+        for (let key in Config) {
+            if (node.type === Config[key].widget) {
+                isWidget = true;
+                break;
+            }
+        }
+        return isWidget;
+    }
     private widgetRef: React.RefObject<any>;
     private formContext: any;
     constructor(props: FieldProps) {
@@ -29,7 +42,7 @@ export default class Field extends React.PureComponent<FieldProps, any> {
                         this.formContext = args;
                         
                         let widgetEl = this.processWidget(widget),
-                            isWidgetEl = Form.isWidgetElement(widgetEl),
+                            isWidgetEl = Field.isWidgetElement(widgetEl),
                             { required } = (widgetEl as React.ReactElement<any>).props,
                             labelEl = label !== undefined ? <Label required={required} className={cm.label}>{label}</Label> : undefined;
 

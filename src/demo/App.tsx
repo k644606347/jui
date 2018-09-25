@@ -10,11 +10,12 @@ import { MenuItemsChangeEvent } from '../components/MenuItemsType';
 import { MenuItemProps } from '../components/MenuItemType';
 import { FormWidgetTest } from './FormWidget.test';
 import FormTest from './Form.test';
-import { Icon, Tools, Menu, Button, Pagination, List } from 'src/index';
+import { Icon, Tools, Menu, Button, Pagination, List, Log } from 'src/index';
 import { IconProps } from '../components/Icon';
 import { iconThList, icon500px, iconCarBattery, iconAccessibleIcon, iconBan, iconAdn, iconDribbble, iconAddressBook } from '../components/icons/FontAwesomeMap';
 import MessageTest from './Message.test';
 import MultiContextProvider from './context/MultiContextProvider';
+import HTMLForm from './HTMLForm';
 
 window.console.log('icon:', (<Icon icon={iconThList} /> as React.ReactElement<IconProps>).type === Icon, icon500px);
 const tools = Tools.getInstance();
@@ -160,6 +161,7 @@ class App extends React.Component<any, any> {
                 {/* <input type="text" style={{position: 'fixed', zIndex: 30  }} /> */}
                 <FormWidgetTest />
                 <FormTest />
+                <HTMLForm />
                 <Menu id={'menu1'} level={2} {...menu} onChange={this.handleMenuChange} />
                 <Button>btn1</Button>
                 <Button type={'primary'} icon={iconThList}>btn2</Button>

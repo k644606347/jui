@@ -1,6 +1,8 @@
 import * as React from "react";
 import { iconInfo, iconAccusoft, iconAddressCard_r } from "../components/icons/FontAwesomeMap";
-import { Tools, Icon, Form, Log, Field, Pagination, Input, CheckboxItems, Button } from "../index";
+import { Tools, Icon, Form, Log, Field, Pagination, Input, CheckboxItems, Button, Checkbox } from "../index";
+import ActiveForm, { ActiveFormProps } from "../components/formWidget/ActiveForm";
+import { FormProps } from "../components/FormType";
 
 interface FormTestProps {}
 
@@ -134,32 +136,14 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                         this.setState({ fields: nextFields });
                     }
                 } /> */}
-            <Form ref={this.formForFieldsRef} fields={fields} onChange={
-                    e => {
-                        let nextFields = [],
-                            { value } = e;
-
-                        nextFields = state.fields.map(field => {
-                            let name = field.widgetProps.name || '';
-
-                            if (name === undefined)
-                                return field;
-
-                            let nextValue = value[name];
-
-                            if (nextValue !== field.widgetProps.value) {
-                                let nextWidgetProps = {...field.widgetProps, value: nextValue};
-                                debugger;
-                                return {...field, widgetProps: nextWidgetProps};
-                            } else {
-                                return field;
-                            }
-                        });
-                        this.setState({ fields: nextFields });
-                    }
-                } onSubmit={e => {
-                    Log.info('onSubmit', e);
-                }}></Form>
+                {
+                    React.createElement(ActiveForm.create(fields) as React.ComponentClass<ActiveFormProps>, {
+                        ref: this.formForFieldsRef,
+                        onSubmit: (e: any) => {
+                            Log.info('onSubmit', e);
+                        }
+                    })
+                }
                 <Button onClick={e => {
                     this.formForFieldsRef.current.submit();
                 }}>submit!</Button>

@@ -1,21 +1,9 @@
-import { FieldProps } from "./FieldType";
+import { CSSAttrs } from "../utils/types";
 
-// export type FormData = FieldData[];
-
-// export interface FormSubmitEvent {
-//     data: FormData;
-// }
-
-export interface FormProps {
-    fields: FieldProps[];
-    onSubmit?: (e: any) => void;
-    onChange?: (e: any) => void;
-    onValid?: () => void;
-    onInvalid?: () => void;
+export interface FormProps extends CSSAttrs {
+    onSubmit?: (e: React.FormEvent) => void;
     isValid?: boolean;
     // action: string;// TODO
     // method: 'post' | 'get';
 }
-export interface FormState {
-    isValid?: boolean;
-}
+export interface FormState {}

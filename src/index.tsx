@@ -17,7 +17,9 @@ import TouchFeedback from "./components/TouchFeedback";
 import Tools from "./utils/Tools";
 import Log from './utils/Log';
 import Message from "./components/Message";
+import ActiveForm from "./components/formWidget/ActiveForm";
 export {
+    ActiveForm,
     Form,
     Field,
     Button,

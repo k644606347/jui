@@ -71,8 +71,6 @@ export class FormWidgetTest extends React.PureComponent<any, any> {
                 }
             } />;
 
-        Log.log('isWidgetElement:', Form.isWidgetElement(<Label></Label>), Form.isWidgetElement(checkboxItemsEl));
-
         this.checkboxItemsRef = React.createRef();
         React.createElement(CheckboxItems, {ref: this.checkboxItemsRef, ...state.checkboxItems });
 
