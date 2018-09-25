@@ -2,7 +2,7 @@ import * as React from "react";
 import { FieldProps } from "./FieldType";
 import cm from './Field.scss';
 import Tools from '../utils/Tools';
-import { FormContext } from "./FormContext";
+import { FormContext } from "./formWidget/FormContext";
 import Label from "./Label";
 import Form from "./Form";
 import Log from "../utils/Log";

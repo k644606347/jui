@@ -15,7 +15,7 @@ import { IconProps } from '../components/Icon';
 import { iconThList, icon500px, iconCarBattery, iconAccessibleIcon, iconBan, iconAdn, iconDribbble, iconAddressBook } from '../components/icons/FontAwesomeMap';
 import MessageTest from './Message.test';
 import MultiContextProvider from './context/MultiContextProvider';
-import HTMLForm from './HTMLForm';
+import HTMLForm from './RawForm';
 
 window.console.log('icon:', (<Icon icon={iconThList} /> as React.ReactElement<IconProps>).type === Icon, icon500px);
 const tools = Tools.getInstance();

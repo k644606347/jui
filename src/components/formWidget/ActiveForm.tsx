@@ -2,7 +2,7 @@ import * as React from "react";
 import Tools from "../../utils/Tools";
 import { FormProps, FormState } from "../FormType";
 import Config from "./Config";
-import { FormContext } from "../FormContext";
+import { FormContext } from "./FormContext";
 import { Report } from "./Validator";
 import { FieldProps } from "../FieldType";
 import hoistNonReactStatics from "../../utils/hoistNonReactStatics";

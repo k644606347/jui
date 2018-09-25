@@ -4,7 +4,7 @@ import cm from './wrapWidget.scss';
 import Tools from "../../utils/Tools";
 import Validator, { Rule, Report } from "./Validator";
 import Log from "../../utils/Log";
-import { FormContext } from "../FormContext";
+import { FormContext } from "./FormContext";
 import hoistNonReactStatics from "../../utils/hoistNonReactStatics";
 const tools = Tools.getInstance();
 
