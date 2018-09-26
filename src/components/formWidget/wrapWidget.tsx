@@ -1,4 +1,4 @@
-import { FormWidgetProps, MsgLevelType, FormWidgetValidEvent, FormWidgetState, FormWidgetChangeEvent, FormWidgetFocusEvent } from "./Widget";
+import Widget, { FormWidgetProps, MsgLevelType, FormWidgetValidEvent, FormWidgetState, FormWidgetChangeEvent, FormWidgetFocusEvent } from "./Widget";
 import * as React from "react";
 import cm from './wrapWidget.scss';
 import Tools from "../../utils/Tools";
@@ -26,7 +26,7 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
             validateTrigger: 'onChange',
             ...UnwrappedComponent.defaultProps as any
         }
-        private widgetInstance: any;
+        private widgetInstance: Widget<OriginProps, any> & React.Component;
         readonly state: State;
         constructor(props: Props) {
             super(props);
@@ -52,11 +52,16 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
             return (
                 <div className={cm.wrapper}>
                     <div className={cm['widget-control']}>
-                    <UnwrappedComponent {...restProps} ref={(component) => {
-                        this.widgetInstance = component;
-                        if (forwardedRef)
-                            forwardedRef.current = component;
-                    }}
+                        <UnwrappedComponent {...restProps} 
+                            ref={(component) => {
+                                if (!component) {
+                                    return;
+                                }
+                                
+                                this.widgetInstance = component as any;
+                                if (forwardedRef)
+                                    forwardedRef.current = component;
+                            }}
                             isValid={isValid} validateMsg={validateMsg} validateMsgLevel={validateMsgLevel}
                             focused={focused}
                             onChange={this.handleChange} onFocus={this.handleFocus} onBlur={this.handleBlur}
@@ -94,38 +99,37 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
 
             this.setState(nextState);
         }
-        private isDisabled() {
-            return !!this.props.disabled;
-        }
-        private isReadOnly() {
-            return !!this.props.readOnly;
-        }
-        private validatePromise: Promise<Report>;
-        private validateTimer: number;
         private handleChange(e: FormWidgetChangeEvent) {
-            let { name, id, onChange } = this.props,
+            let { name, id, onChange} = this.props,
                 { widgetInstance } = this,
                 mixedEvent: FormWidgetChangeEvent = {
                     ...e,
                     name, id
                 };
 
-                if (this.isDisabled() || this.isReadOnly()) {
+                if (widgetInstance.isDisabled() || widgetInstance.isReadOnly()) {
                     return;
                 }
 
                 onChange && onChange(mixedEvent);
-                window.clearTimeout(this.validateTimer);
-                this.validateTimer = window.setTimeout(() => {
-                    let promise: Promise<any>;
 
-                    promise = this.validatePromise = widgetInstance.validate()
-                        .then((report: Report) => {
-                            if (this.validatePromise === promise) {
-                                widgetInstance.validateReport(report);
-                            }
-                        });
-                }, 100);
+                if (widgetInstance.getValidateTriggers().indexOf('onChange') !== -1)
+                    this.dispatchValidation();
+        }
+        private validatePromise: Promise<any>;
+        private validateTimer: number;
+        private dispatchValidation() {
+            let { widgetInstance } = this;
+
+            window.clearTimeout(this.validateTimer);
+            this.validateTimer = window.setTimeout(() => {
+                let promise: Promise<any> = this.validatePromise = widgetInstance.validate()
+                    .then((report: Report) => {
+                        if (this.validatePromise === promise) {
+                            widgetInstance.validateReport(report);
+                        }
+                    });
+            }, 100);
         }
         private handleFocus(e: FormWidgetFocusEvent) {
             let { onFocus } = this.props;
@@ -133,9 +137,13 @@ export default function wrapWidget<OriginProps extends FormWidgetProps>(Unwrappe
             onFocus && onFocus(e);
         }
         private handleBlur(e: FormWidgetFocusEvent) {
-            let { onBlur } = this.props;
+            let { onBlur } = this.props,
+                { widgetInstance } = this;
 
             onBlur && onBlur(e);
+
+            if (widgetInstance.getValidateTriggers().indexOf('onBlur') !== -1)
+                this.dispatchValidation();
         }
         private handleValid(e: FormWidgetValidEvent) {
             let { onValid } = this.props,

@@ -3,9 +3,6 @@ import { CSSAttrs } from "../../utils/types";
 import Tools from "../../utils/Tools";
 import Validator, { Rule, Report } from "./Validator";
 import DataConvertor, { DataType } from "./stores/DataConvertor";
-import WidgetStore from "./stores/WidgetStore";
-import { Log } from "../..";
-import DefaultData from "./stores/DefaultData";
 
 const tools = Tools.getInstance();
 interface FormWidgetEvent {
@@ -22,7 +19,7 @@ export type MsgLevelType = 'error' | 'warn' | 'info';
 export interface FormWidgetValidEvent {
     report: Report
 }
-type ValidateTrigger = 'onChange' | 'onBlur' | false;
+type ValidateTrigger = 'onChange' | 'onBlur';
 const allowedInputElAttrs: Array<keyof React.InputHTMLAttributes<HTMLInputElement>> = [
     'id', 'name', 'disabled', 'readOnly', 'required', 
     'maxLength', 'minLength', 'placeholder', 
@@ -41,7 +38,7 @@ export interface FormWidgetProps extends CSSAttrs {
     maxLength?: number;
     minLength?: number;
     rules?: Rule[];
-    validateTrigger?: ValidateTrigger;
+    validateTrigger?: ValidateTrigger[] | ValidateTrigger;
     isValid?: boolean;
     validateMsg?: string;
     validateMsgLevel?: MsgLevelType;
@@ -108,6 +105,18 @@ export default abstract class Widget<P extends FormWidgetProps, S extends FormWi
     getClass(): any {
         return this.constructor;
     }
+    isDisabled() {
+        return !!this.props.disabled;
+    }
+    isReadOnly() {
+        return !!this.props.readOnly;
+    }
+    getValidateTriggers() {
+        let { validateTrigger } = this.props;
+
+        return tools.isArray(validateTrigger) ? validateTrigger : 
+                tools.isString(validateTrigger) ? [validateTrigger] : [];
+    }
     protected handleFocus(e?: any) {
         let { onFocus } = this.props;
 
@@ -162,7 +171,7 @@ export default abstract class Widget<P extends FormWidgetProps, S extends FormWi
             return report;
         });
     }
-    protected validateReport(report: Report) {
+    validateReport(report: Report) {
         let { onValid, onInvalid } = this.props,
             { isValid } = report,
             event = {
