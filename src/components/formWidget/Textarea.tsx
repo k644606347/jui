@@ -9,9 +9,10 @@ interface State {}
 const tools = Tools.getInstance();
 class Textarea extends Widget<FormWidgetProps, FormWidgetState> {
     render() {
-        let { className } = this.props;
+        let { className, ...restProps } = this.props,
+            allowedElAttrs = this.getAllowedInputElAttrs(restProps);
 
-        return <textarea className={tools.classNames(cm.wrapper, className)} onChange={this.handleChange} />
+        return <textarea {...allowedElAttrs} className={tools.classNames(cm.wrapper, className)} onChange={this.handleChange} />
     }
 }
 
