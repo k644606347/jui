@@ -4,11 +4,11 @@ import { FormProps, FormState } from "../FormType";
 import Config from "./Config";
 import { FormContext } from "./FormContext";
 import { Report } from "./Validator";
-import { FieldProps } from "../FieldType";
+import { FormItemProps } from "../FormItemType";
 import hoistNonReactStatics from "../../utils/hoistNonReactStatics";
 import { CSSAttrs, Omit } from "../../utils/types";
 import cm from './ActiveForm.scss';
-import Field from "../Field";
+import FormItem from "../FormItem";
 import Form from "../Form";
 import Log from "../../utils/Log";
 
@@ -28,23 +28,23 @@ export interface ActiveFormState {
 }
 const tools = Tools.getInstance();
 
-function renderFields(fields: FieldProps[]) {
+function renderFields(fields: FormItemProps[]) {
     return (
         <React.Fragment>
             {
-                fields.map((field: FieldProps, i) => {
+                fields.map((field: FormItemProps, i) => {
                     let { widget, label, renderWidget, widgetProps } = field;
                     return (
-                        <Field key={i} label={label} widget={widget} widgetProps={widgetProps} renderWidget={renderWidget}></Field>
+                        <FormItem key={i} label={label} widget={widget} widgetProps={widgetProps} renderWidget={renderWidget}></FormItem>
                     )
                 })
             }
         </React.Fragment>
     )
 }
-function create(target: React.ComponentType<ActiveFormProps> | FieldProps[], options?: any): React.ComponentClass<ActiveFormProps> {
+function create(target: React.ComponentType<ActiveFormProps> | FormItemProps[], options?: any): React.ComponentClass<ActiveFormProps> {
     let UnwrappedElement = tools.isFunction(target) ? React.createElement(target) : 
-                                    <Form>{renderFields(target as FieldProps[])}</Form>;
+                                    <Form>{renderFields(target as FormItemProps[])}</Form>;
     
     class ActiveForm extends React.PureComponent<ActiveFormProps, ActiveFormState> {
         readonly state: ActiveFormState;
@@ -64,7 +64,7 @@ function create(target: React.ComponentType<ActiveFormProps> | FieldProps[], opt
                 { isValid } = state;
     
             return (
-                <FormContext.Provider value={{ onChange: this.handleChange, onWidgetMount: this.handleWidgetMount }}>
+                <FormContext.Provider value={{ onWidgetChange: this.handleChange, onWidgetMount: this.handleWidgetMount }}>
                     {
                         React.cloneElement(UnwrappedElement, {
                             className: tools.classNames(cm.wrapper, isValid && cm.isValid),

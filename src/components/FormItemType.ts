@@ -1,7 +1,7 @@
 import { CSSAttrs } from "../utils/types";
 import { FormWidgetProps } from "./formWidget/Widget";
 
-export interface FieldProps extends CSSAttrs {
+export interface FormItemProps extends CSSAttrs {
     widget: string;
     label?: JSX.Element | string;
     renderWidget?: (widget: React.ReactElement<any>) => React.ReactNode;

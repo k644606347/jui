@@ -1,6 +1,6 @@
 import * as React from "react";
 
 export const FormContext = React.createContext({
-    onChange: (...args: any[]) => {},
+    onWidgetChange: (...args: any[]) => {},
     onWidgetMount: (...args: any[]) => {},
 });

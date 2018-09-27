@@ -1,4 +1,4 @@
-import Field from "./components/Field";
+import FormItem from "./components/FormItem";
 import Form from "./components/Form";
 import Icon from "./components/Icon";
 import Button from "./components/Button";
@@ -21,7 +21,7 @@ import ActiveForm from "./components/formWidget/ActiveForm";
 export {
     ActiveForm,
     Form,
-    Field,
+    FormItem,
     Button,
     Icon,
     CheckboxItems,

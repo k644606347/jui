@@ -1,6 +1,6 @@
 import * as React from "react";
 import { iconInfo, iconAccusoft, iconAddressCard_r } from "../components/icons/FontAwesomeMap";
-import { Tools, Icon, Form, Log, Field, Pagination, Input, CheckboxItems, Button, Checkbox } from "../index";
+import { Tools, Icon, Form, Log, FormItem, Pagination, Input, CheckboxItems, Button, Checkbox } from "../index";
 import ActiveForm, { ActiveFormProps } from "../components/formWidget/ActiveForm";
 import { FormProps } from "../components/FormType";
 

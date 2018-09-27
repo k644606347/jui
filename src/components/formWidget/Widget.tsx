@@ -160,7 +160,7 @@ export default abstract class Widget<P extends FormWidgetProps, S extends FormWi
 
         return mixedRules;
     }
-    async validate(value: any = this.getValue()): Promise<Report> {
+    validate(value: any = this.getValue()): Promise<Report> {
         let promise = Validator.validate(value, this.getRules()),
             { name } = this.props;
             
