@@ -51,7 +51,7 @@ export class FormWidgetTest extends React.PureComponent<any, any> {
                 }
             ],
             value: 'w',
-        }
+        },
     };
     constructor(props: any) {
         super(props);

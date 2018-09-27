@@ -3,6 +3,7 @@ import { iconInfo, iconAccusoft, iconAddressCard_r } from "../components/icons/F
 import { Tools, Icon, Form, Log, FormItem, Pagination, Input, CheckboxItems, Button, Checkbox } from "../index";
 import ActiveForm, { ActiveFormProps } from "../components/formWidget/ActiveForm";
 import { FormProps } from "../components/FormType";
+import Textarea from "../components/formWidget/Textarea";
 
 interface FormTestProps {}
 
@@ -70,9 +71,18 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                     widget: 'text',
                     widgetProps: {
                         name: 'input2',
-                        defaultValue: 'input2 value',
+                        initialValue: 'input2 value',
                     },
                     renderWidget: (widget: any) => <React.Fragment>{widget}<Icon icon={iconInfo} color="green" /></React.Fragment>
+                },
+                {
+                    label: 'textarea1',
+                    widget: 'textarea',
+                    widgetProps: {
+                        name: 'textarea1',
+                        initialValue: 'textarea1',
+                    },
+                    renderWidget: (widget: any) => <React.Fragment>{widget}<Icon icon={iconAccusoft} /></React.Fragment>
                 }
             ],
             form2: {
@@ -154,6 +164,9 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                     // }, 100);
                 }} />
                 <Input value=""  />
+                <Textarea onChange={(e: any) => {
+                    console.log(e);
+                }}/>
             </div>
         )
     }

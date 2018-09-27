@@ -24,7 +24,7 @@ const iconMap: { [key in Props['type']]: IconDefinition } = {
 export default class Message extends React.PureComponent<Props, any> {
     static defaultProps: Partial<Props> = {
         type: 'info',
-        showIcon: false
+        showIcon: true,
     };
     render() {
         let { type, showIcon, children, style, className } = this.props;

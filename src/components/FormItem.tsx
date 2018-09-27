@@ -30,9 +30,13 @@ export default class FormItem extends React.PureComponent<FormItemProps, any> {
             { className, style, label, widget, renderWidget, render } = props;
 
         let widgetEl = this.processWidget(widget),
-                        isWidgetEl = FormItem.isWidgetElement(widgetEl),
-                        { required } = (widgetEl as React.ReactElement<any>).props,
-                        labelEl = label !== undefined ? <Label required={required} className={cm.label}>{label}</Label> : undefined;
+            isWidgetEl = FormItem.isWidgetElement(widgetEl),
+            required, labelEl;
+
+        if ( isWidgetEl ) {
+            required = (widgetEl as React.ReactElement<any>).props.required;
+            labelEl = label !== undefined ? <Label required={required} className={cm.label}>{label}</Label> : undefined;
+        }
 
         return (
             <div style={style} className={

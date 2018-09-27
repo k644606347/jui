@@ -15,7 +15,6 @@ class Text extends Widget<FormWidgetProps, FormWidgetState> {
             allowedInputElProps = this.getAllowedInputElAttrs(restProps),
             value = this.getValue();
 
-        Log.log(allowedInputElProps);
         return (
             <Input
                 {...allowedInputElProps}
