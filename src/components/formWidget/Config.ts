@@ -1,7 +1,7 @@
 import CheckboxItems from "./CheckboxItems";
 import RadioItems from "./RadioItems";
-import Text from './Text';
-import Textarea from "./Textarea";
+import InputWidget from './Input';
+import TextareaWidget from "./Textarea";
 
 export default {
     checkboxItems: {
@@ -11,9 +11,9 @@ export default {
         widget: RadioItems
     },
     text: {
-        widget: Text
+        widget: InputWidget
     },
     textarea: {
-        widget: Textarea,
+        widget: TextareaWidget,
     }
 }

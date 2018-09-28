@@ -1,9 +1,9 @@
 import * as React from "react";
 import { iconInfo, iconAccusoft, iconAddressCard_r } from "../components/icons/FontAwesomeMap";
-import { Tools, Icon, Form, Log, FormItem, Pagination, Input, CheckboxItems, Button, Checkbox } from "../index";
+import { Tools, Icon, Form, Log, FormItem, Pagination, PureInput, CheckboxItems, Button, Checkbox } from "../index";
 import ActiveForm, { ActiveFormProps } from "../components/formWidget/ActiveForm";
 import { FormProps } from "../components/FormType";
-import Textarea from "../components/formWidget/Textarea";
+import TextareaWidget from "../components/formWidget/Textarea";
 
 interface FormTestProps {}
 
@@ -71,7 +71,7 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                     widget: 'text',
                     widgetProps: {
                         name: 'input2',
-                        initialValue: 'input2 value',
+                        defaultValue: 'input2 value',
                     },
                     renderWidget: (widget: any) => <React.Fragment>{widget}<Icon icon={iconInfo} color="green" /></React.Fragment>
                 },
@@ -80,7 +80,7 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                     widget: 'textarea',
                     widgetProps: {
                         name: 'textarea1',
-                        initialValue: 'textarea1',
+                        defaultValue: 'textarea1',
                     },
                     renderWidget: (widget: any) => <React.Fragment>{widget}<Icon icon={iconAccusoft} /></React.Fragment>
                 }
@@ -157,14 +157,14 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                 <Button onClick={e => {
                     this.formForFieldsRef.current.submit();
                 }}>submit!</Button>
-                <Input ref={this.inputRef} value={state.testInputValue} onChange={(e: any) => {
+                <PureInput ref={this.inputRef} value={state.testInputValue} onChange={(e: any) => {
                     // setTimeout(() => {
                         console.log(e);
                         this.setState({testInputValue: e.value});
                     // }, 100);
                 }} />
-                <Input value=""  />
-                <Textarea onChange={(e: any) => {
+                <PureInput value=""  />
+                <TextareaWidget onChange={(e: any) => {
                     console.log(e);
                 }}/>
             </div>

@@ -3,9 +3,10 @@ import Checkbox, { CheckboxProps, CheckboxChangeEvent } from "../Checkbox";
 import * as React from "react";
 import Tools from "../../utils/Tools";
 import cm from './CheckboxItems.scss';
-import wrapWidget from "./wrapWidget";
+import connectActiveForm from "./connectActiveForm";
 import { CSSAttrs } from "../../utils/types";
 import { DataType } from "./stores/DataConvertor";
+import { WidgetWrapper } from "./WidgetWrapper";
 
 interface CheckboxItem extends CSSAttrs {
     label: string;
@@ -29,17 +30,17 @@ class CheckboxItems extends Widget<CheckboxItemsProps, FormWidgetState> {
         super(props);
     }
     render() {
-        let { items, className, style, disabled } = this.props;
+        let { items, className, style, disabled } = this.props,
+            { validateReport } = this.state;
         
         this.checkboxs = [];
+
         return (
-            <div style={style} className={
-                tools.classNames(cm.wrapper, className)
-            }>
+            <WidgetWrapper style={style} className={tools.classNames(cm.wrapper, className)} validateReport={ validateReport }>
                 {
                     items.map((item, i) => this.renderCheckboxItem({ disabled, ...item }, i))
                 }
-            </div>
+            </WidgetWrapper>
         )
     }
     private renderCheckboxItem(item: CheckboxItem, key: string | number) {
@@ -86,4 +87,4 @@ class CheckboxItems extends Widget<CheckboxItemsProps, FormWidgetState> {
     }
 }
 
-export default wrapWidget(CheckboxItems);
+export default connectActiveForm(CheckboxItems);

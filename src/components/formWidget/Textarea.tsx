@@ -1,19 +1,19 @@
 import * as React from "react";
-import { Omit } from "../../utils/types";
-import cm from './Textarea.scss';
-import Tools from "../../utils/Tools";
 import Widget, { FormWidgetProps, FormWidgetState } from "./Widget";
-import wrapWidget from "./wrapWidget";
+import PureTextarea from '../PureTextarea';
+import connectActiveForm from "./connectActiveForm";
+import { WidgetWrapper } from "./WidgetWrapper";
 interface State {}
-
-const tools = Tools.getInstance();
 class Textarea extends Widget<FormWidgetProps, FormWidgetState> {
     render() {
-        let { className, ...restProps } = this.props,
-            allowedElAttrs = this.getAllowedInputElAttrs(restProps);
+        let { props, state } = this,
+            { className, style } = props,
+            { validateReport } = state;
 
-        return <textarea {...allowedElAttrs} className={tools.classNames(cm.wrapper, className)} onChange={this.handleChange} />
+        return <WidgetWrapper style={style} className={className} validateReport={validateReport}>
+            <PureTextarea {...this.getAllowedInputElAttrs(props)} onChange={this.handleChange} />
+        </WidgetWrapper>
     }
 }
 
-export default wrapWidget(Textarea);
+export default connectActiveForm(Textarea);

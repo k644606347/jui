@@ -1,6 +1,6 @@
 import Widget, { FormWidgetProps, FormWidgetState } from "./Widget";
 import * as React from "react";
-import wrapWidget from "./wrapWidget";
+import connectActiveForm from "./connectActiveForm";
 
 interface Props extends FormWidgetProps {
 }
@@ -25,4 +25,4 @@ class TestWidget extends Widget<Props, FormWidgetState> {
     }
 }
 
-export default wrapWidget(TestWidget);
+export default connectActiveForm(TestWidget);

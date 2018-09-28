@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Log from '../utils/Log';
-import { Form, Input } from '..';
+import { Form, PureInput } from '..';
 import { FormProps } from '../components/FormType';
 interface Props extends FormProps {
     forwardedRef?: React.RefObject<any>;
@@ -16,7 +16,7 @@ function HTMLForm(props: Props) {
                 e.preventDefault();
             }}
         >
-            Name: <Input type="text" name="usr_name" />
+            Name: <PureInput type="text" name="usr_name" />
             <input type="submit" value="提交" />
         </Form>
     );

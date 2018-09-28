@@ -1,5 +1,6 @@
 import Tools from "../../utils/Tools";
 import Log from "../../utils/Log";
+import { FormWidgetProps } from "./Widget";
 
 // TODO 待实现，考虑启用此接口作为Rule传参规范，但运行时获取的配置无法用到此检测
 // interface RuleMap {
@@ -104,6 +105,26 @@ const Validator = {
         }
 
         return report;
+    },
+    getRulesByProps(props: FormWidgetProps) {
+        let { required, maxLength, minLength, rules } = props,
+            ruleMap = {
+                required,
+                maxLength,
+                minLength,
+            },
+            mixedRules: Rule[] = [];
+
+        Object.keys(ruleMap).forEach(k => {
+            let val = ruleMap[k];
+            val !== undefined && mixedRules.push({
+                rule: k,
+                value: ruleMap[k],
+            });
+        });
+        Object.assign(mixedRules, rules);
+
+        return mixedRules;
     },
     required(value: any) {
         if (tools.isArray(value)) {

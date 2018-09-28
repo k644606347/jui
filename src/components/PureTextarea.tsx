@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Omit } from "../utils/types";
-import { InputChangeEvent } from "./Input";
-import cm from './Textarea.scss';
+import { InputChangeEvent } from "./PureInput";
+import cm from './PureTextarea.scss';
 import Tools from "../utils/Tools";
 
 interface Props extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>{
@@ -11,7 +11,7 @@ interface Props extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onCha
 interface State {}
 
 const tools = Tools.getInstance();
-export default class Textarea extends React.PureComponent<Props, State> {
+export default class PureTextarea extends React.PureComponent<Props, State> {
     render() {
         let { className } = this.props;
 

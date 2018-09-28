@@ -3,8 +3,9 @@ import * as React from "react";
 import Tools from "../../utils/Tools";
 import cm from './RadioItems.scss';
 import Radio from "../Radio";
-import wrapWidget from "./wrapWidget";
+import connectActiveForm from "./connectActiveForm";
 import { CSSAttrs } from "../../utils/types";
+import { WidgetWrapper } from "./WidgetWrapper";
 interface RadioItems extends CSSAttrs {
     label: string;
     value: string;
@@ -23,12 +24,11 @@ class RadioItems extends Widget<RadioItemsProps, any> {
     }
     render() {
         let { name, items, className, style, disabled, readOnly } = this.props,
+            { validateReport } = this.state,
             value = this.getValue();
 
         return (
-            <div style={style} className={
-                tools.classNames(cm.wrapper, className)
-            }>
+            <WidgetWrapper style={style} className={tools.classNames(cm.wrapper, className)} validateReport={ validateReport }>
                 {
                     items.map((config, i) => {
                         let mixedConfig = { disabled, readOnly, ...config };
@@ -43,7 +43,7 @@ class RadioItems extends Widget<RadioItemsProps, any> {
                         </div>
                     })
                 }
-            </div>
+            </WidgetWrapper>
         )
     }
     handleChange(e: FormWidgetChangeEvent) {
@@ -58,4 +58,4 @@ class RadioItems extends Widget<RadioItemsProps, any> {
     }
 }
 
-export default wrapWidget(RadioItems);
+export default connectActiveForm(RadioItems);

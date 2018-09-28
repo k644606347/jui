@@ -1,5 +1,5 @@
 import * as React from 'react';
-import cm from './Input.scss';
+import cm from './PureInput.scss';
 import Tools from '../utils/Tools';
 import { Omit } from '../utils/types';
 
@@ -15,7 +15,7 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
     onChange?: (e: InputChangeEvent) => void;
 };
 const tools = Tools.getInstance();
-export default class Input extends React.PureComponent<InputProps> {
+export default class PureInput extends React.PureComponent<InputProps> {
     constructor(props: InputProps) {
         super(props);
 

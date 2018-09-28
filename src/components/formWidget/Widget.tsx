@@ -23,14 +23,16 @@ type ValidateTrigger = 'onChange' | 'onBlur';
 const allowedInputElAttrs: Array<keyof React.InputHTMLAttributes<HTMLInputElement>> = [
     'id', 'name', 'disabled', 'readOnly', 'required', 
     'maxLength', 'minLength', 'placeholder', 
-    'onChange', 'onFocus', 'onBlur'
+    'onChange', 'onFocus', 'onBlur',
+    'autoFocus',
 ];
 
 export interface FormWidgetProps extends CSSAttrs {
     id?: string;
     name?: string;
-    initialValue?: any;
-    focused?: boolean;
+    defaultValue?: any;
+    defaultValidateReport?: Report;
+    autoFocus?: boolean;
     disabled?: boolean;
     readOnly?: boolean;
     placeholder?: string;
@@ -39,9 +41,6 @@ export interface FormWidgetProps extends CSSAttrs {
     minLength?: number;
     rules?: Rule[];
     validateTrigger?: ValidateTrigger[] | ValidateTrigger;
-    isValid?: boolean;
-    validateMsg?: string;
-    validateMsgLevel?: MsgLevelType;
     onChange?: (e: FormWidgetChangeEvent) => void;
     onFocus?: (e?: FormWidgetFocusEvent) => void;
     onBlur?: (e?: FormWidgetFocusEvent) => void;
@@ -51,24 +50,28 @@ export interface FormWidgetProps extends CSSAttrs {
 }
 export interface FormWidgetState {
     value: any;
+    validateReport?: Report;
 }
 
 const convertor = DataConvertor.getInstance();
+
 export default abstract class Widget<P extends FormWidgetProps, S extends FormWidgetState> extends React.PureComponent<P, S> {
     static dataType: DataType = 'string';
     state: S;
     getInitialState(props: P): S {
         return {
-            value: convertor.convertTo(props.initialValue, this.getDataType()),
+            value: convertor.convertTo(props.defaultValue, this.getDataType()),
+            validateReport: props.defaultValidateReport || { isValid: true },
         } as S;
     }
     constructor(props: P) {
         super(props);
 
         this.state = this.getInitialState(props);
-        this.handleChange = this.handleChange.bind(this);
+
+        this.initChangeHandler();
         this.handleFocus = this.handleFocus.bind(this);
-        this.handleBlur = this.handleBlur.bind(this);
+        this.initBlurHandler();
         this.validateReport = this.validateReport.bind(this);
     }
     setValue(value: any): Promise<any> {
@@ -81,18 +84,6 @@ export default abstract class Widget<P extends FormWidgetProps, S extends FormWi
     }
     getValue() {
         return this.state.value;
-    }
-    protected handleChange(e?: any) {
-        let { value } = e.target,
-            { id, name, onChange } = this.props;
-
-        this.setValue(value).then(val => {
-            onChange && onChange({
-                id: id || '',
-                name: name || '',
-                value: val,
-            });
-        });
     }
     componentDidMount() {
         let { onDidMount } = this.props;
@@ -115,12 +106,48 @@ export default abstract class Widget<P extends FormWidgetProps, S extends FormWi
         let { validateTrigger } = this.props;
 
         return tools.isArray(validateTrigger) ? validateTrigger : 
-                tools.isString(validateTrigger) ? [validateTrigger] : [];
+                tools.isString(validateTrigger) ? [validateTrigger] : ['onChange'];
     }
     protected handleFocus(e?: any) {
         let { onFocus } = this.props;
 
         onFocus && onFocus();
+    }
+    protected initChangeHandler() {
+        let handler = this.handleChange.bind(this),
+            proxyHandler = (...args: any[]) => {
+            if (this.isDisabled() || this.isReadOnly()) {
+                return;
+            }
+
+            handler(...args);
+    
+            if (this.getValidateTriggers().indexOf('onChange') !== -1)
+                this.dispatchValidation();
+        }
+        this.handleChange = proxyHandler.bind(this);
+    }
+    protected handleChange(e?: any) {
+        let { value } = e,
+            { id, name, onChange } = this.props;
+
+        this.setValue(value).then(val => {
+            onChange && onChange({
+                id: id || '',
+                name: name || '',
+                value: val,
+            });
+        });
+    }
+    protected initBlurHandler() {
+        let handler = this.handleBlur.bind(this),
+            proxyHandler = (...args: any[]) => {
+                handler(...args);
+
+                if (this.getValidateTriggers().indexOf('onBlur') !== -1)
+                    this.dispatchValidation();        
+            }
+        this.handleBlur = proxyHandler.bind(this);
     }
     protected handleBlur(e?: any) {
         let { onBlur } = this.props;
@@ -160,6 +187,19 @@ export default abstract class Widget<P extends FormWidgetProps, S extends FormWi
 
         return mixedRules;
     }
+    private validatePromise: Promise<any>;
+    private validateTimer: number;
+    private dispatchValidation() {
+        window.clearTimeout(this.validateTimer);
+        this.validateTimer = window.setTimeout(() => {
+            let promise: Promise<any> = this.validatePromise = this.validate()
+                .then((report: Report) => {
+                    if (this.validatePromise === promise) {
+                        this.validateReport(report);
+                    }
+                });
+        }, 100);
+    }
     validate(value: any = this.getValue()): Promise<Report> {
         let promise = Validator.validate(value, this.getRules()),
             { name } = this.props;
@@ -178,6 +218,7 @@ export default abstract class Widget<P extends FormWidgetProps, S extends FormWi
                 report
             };
 
+        this.setState({ validateReport: report });
         if (isValid) {
             onValid && onValid(event);
         } else {
