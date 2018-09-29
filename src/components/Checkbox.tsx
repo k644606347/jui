@@ -4,7 +4,6 @@ import Tools from "../utils/Tools";
 import Icon from "./Icon";
 import { iconCheckCircle, iconCircle_r } from "./icons/FontAwesomeMap";
 import { CSSAttrs, Omit } from "../utils/types";
-// import wrapWidget from "./formWidget/wrapWidget";
 
 const tools = Tools.getInstance();
 

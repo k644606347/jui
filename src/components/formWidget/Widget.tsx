@@ -11,10 +11,11 @@ interface FormWidgetEvent {
     value?: any;
     disabled?: boolean;
     readOnly?: boolean;
+    focused?: boolean;
 }
 export interface FormWidgetChangeEvent extends FormWidgetEvent {}
 export interface FormWidgetMountEvent extends FormWidgetEvent {}
-export interface FormWidgetFocusEvent {}
+export interface FormWidgetFocusEvent extends FormWidgetEvent {}
 export type MsgLevelType = 'error' | 'warn' | 'info';
 export interface FormWidgetValidEvent {
     report: Report
@@ -42,15 +43,16 @@ export interface FormWidgetProps extends CSSAttrs {
     rules?: Rule[];
     validateTrigger?: ValidateTrigger[] | ValidateTrigger;
     onChange?: (e: FormWidgetChangeEvent) => void;
-    onFocus?: (e?: FormWidgetFocusEvent) => void;
-    onBlur?: (e?: FormWidgetFocusEvent) => void;
-    onDidMount?: (...args: any[]) => void;
+    onFocus?: (e: FormWidgetFocusEvent) => void;
+    onBlur?: (e: FormWidgetFocusEvent) => void;
+    onDidMount?: (e: FormWidgetMountEvent) => void;
     onValid?: (e: FormWidgetValidEvent) => void;
     onInvalid?: (e: FormWidgetValidEvent) => void;
 }
 export interface FormWidgetState {
     value: any;
     validateReport?: Report;
+    focused: boolean;
 }
 
 const convertor = DataConvertor.getInstance();
@@ -62,6 +64,7 @@ export default abstract class Widget<P extends FormWidgetProps, S extends FormWi
         return {
             value: convertor.convertTo(props.defaultValue, this.getDataType()),
             validateReport: props.defaultValidateReport || { isValid: true },
+            focused: !!props.autoFocus,
         } as S;
     }
     constructor(props: P) {
@@ -78,7 +81,9 @@ export default abstract class Widget<P extends FormWidgetProps, S extends FormWi
         return new Promise((resolve, reject) => {
             this.setState(
                 { value: convertor.convertTo(value, this.getDataType()) },
-                resolve.bind(this, this.state.value)
+                () => {
+                    resolve(this.state.value);
+                }
             );
         })
     }
@@ -88,7 +93,7 @@ export default abstract class Widget<P extends FormWidgetProps, S extends FormWi
     componentDidMount() {
         let { onDidMount } = this.props;
 
-        onDidMount && onDidMount();
+        this.dispatchEvent(onDidMount);
     }
     getDataType(): DataType {
         return this.getClass().dataType;
@@ -109,9 +114,20 @@ export default abstract class Widget<P extends FormWidgetProps, S extends FormWi
                 tools.isString(validateTrigger) ? [validateTrigger] : ['onChange'];
     }
     protected handleFocus(e?: any) {
-        let { onFocus } = this.props;
+        let { onFocus } = this.props,
+            { focused } = this.state;
 
-        onFocus && onFocus();
+        this.setState({ focused: true }, () => {
+            this.dispatchEvent(onFocus);
+        });
+    }
+    protected handleChange(e?: any) {
+        let { value } = e,
+            { onChange } = this.props;
+
+        this.setValue(value).then(val => {
+            this.dispatchEvent(onChange, { value: val });
+        });
     }
     protected initChangeHandler() {
         let handler = this.handleChange.bind(this),
@@ -127,16 +143,11 @@ export default abstract class Widget<P extends FormWidgetProps, S extends FormWi
         }
         this.handleChange = proxyHandler.bind(this);
     }
-    protected handleChange(e?: any) {
-        let { value } = e,
-            { id, name, onChange } = this.props;
+    protected handleBlur(e?: any) {
+        let { onBlur } = this.props;
 
-        this.setValue(value).then(val => {
-            onChange && onChange({
-                id: id || '',
-                name: name || '',
-                value: val,
-            });
+        this.setState({ focused: false }, () => {
+            this.dispatchEvent(onBlur);
         });
     }
     protected initBlurHandler() {
@@ -149,10 +160,22 @@ export default abstract class Widget<P extends FormWidgetProps, S extends FormWi
             }
         this.handleBlur = proxyHandler.bind(this);
     }
-    protected handleBlur(e?: any) {
-        let { onBlur } = this.props;
+    protected dispatchEvent(eventFunc: Function | undefined, params?: any) {
+        eventFunc && eventFunc(this.buildEvent(params));
+    }
+    private buildEvent(rawEvent: any = {}) {
+        let { id = '', name = '', disabled = false, readOnly = false } = this.props,
+            { focused } = this.state, 
+            defaultEvent = {
+                id,
+                name,
+                disabled,
+                readOnly,
+                focused,
+                value: this.getValue(),
+            };
 
-        onBlur && onBlur();
+        return tools.isPlainObject(rawEvent) ? Object.assign(defaultEvent, rawEvent) : defaultEvent;
     }
     protected getAllowedInputElAttrs(obj: any = this.props) {
         let inputElAttrs = {};

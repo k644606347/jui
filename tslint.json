@@ -19,7 +19,8 @@
     "jsx-boolean-value": false,
     "forin": false,
     "curly": false,
-    "no-empty": false
+    "no-empty": false,
+    "ban-types": false
   },
   "linterOptions": {
     "exclude": [

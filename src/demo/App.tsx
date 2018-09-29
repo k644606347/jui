@@ -1,5 +1,4 @@
 import * as React from 'react';
-import '../components/style/common.scss';
 
 import './App.css';
 import Hello from '../components/Hello';

@@ -22,7 +22,7 @@ import PureTextarea from './components/PureTextarea';
 import Input from "./components/formWidget/Input";
 import Textarea from "./components/formWidget/Textarea";
 import FormWidgetConfig from "./components/formWidget/Config";
-
+import './components/style/common.scss';
 export {
     Form,
     FormItem,

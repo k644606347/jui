@@ -4,7 +4,7 @@ import { InputChangeEvent } from "./PureInput";
 import cm from './PureTextarea.scss';
 import Tools from "../utils/Tools";
 
-interface Props extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>{
+interface Props extends Omit<React.InputHTMLAttributes<HTMLTextAreaElement>, 'onChange'>{
     onChange?: (e: InputChangeEvent) => void;
 
 }
@@ -13,9 +13,9 @@ interface State {}
 const tools = Tools.getInstance();
 export default class PureTextarea extends React.PureComponent<Props, State> {
     render() {
-        let { className } = this.props;
+        let { className, ...restProps } = this.props;
 
-        return <textarea className={tools.classNames(cm.wrapper, className)} onChange={this.handleChange} />
+        return <textarea {...restProps} className={tools.classNames(cm.wrapper, className)} onChange={this.handleChange} />
     }
     handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         let { id = '', name = '', disabled = false, readOnly = false, onChange } = this.props,

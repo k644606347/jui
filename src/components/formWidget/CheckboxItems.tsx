@@ -79,10 +79,7 @@ class CheckboxItems extends Widget<CheckboxItemsProps, FormWidgetState> {
         });
 
         this.setValue(nextValue).then(val => {
-            onChange && onChange({
-                name: name || '',
-                value: val,
-            });
+            this.dispatchEvent(onChange, { value: val });
         })
     }
 }

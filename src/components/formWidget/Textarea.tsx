@@ -11,7 +11,7 @@ class Textarea extends Widget<FormWidgetProps, FormWidgetState> {
             { validateReport } = state;
 
         return <WidgetWrapper style={style} className={className} validateReport={validateReport}>
-            <PureTextarea {...this.getAllowedInputElAttrs(props)} onChange={this.handleChange} />
+            <PureTextarea {...this.getAllowedInputElAttrs(props)} value={this.getValue()} onChange={this.handleChange} />
         </WidgetWrapper>
     }
 }

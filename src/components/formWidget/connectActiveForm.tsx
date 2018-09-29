@@ -1,9 +1,7 @@
-import Widget, { FormWidgetProps } from "./Widget";
+import Widget, { FormWidgetProps, FormWidgetChangeEvent } from "./Widget";
 import * as React from "react";
-import Tools from "../../utils/Tools";
 import { FormContext } from "./FormContext";
 import hoistNonReactStatics from "../../utils/hoistNonReactStatics";
-const tools = Tools.getInstance();
 
 interface ExtraProps {
     forwardedRef?: React.RefObject<any>;
@@ -20,10 +18,12 @@ export default function connectActiveForm<OriginProps extends FormWidgetProps>(U
         private widgetInstance: Widget<OriginProps, any> & React.Component;
         constructor(props: Props) {
             super(props);
+
+            this.handleChange = this.handleChange.bind(this);
         }
         render() {
             let { props } = this,
-                { forwardedRef, ...restProps } = props as any;// TODO 此处必须转换为any，不然无法使用rest语法
+                { forwardedRef, onChange, ...restProps } = props as any;// TODO 此处必须转换为any，不然无法使用rest语法
 
             return (
                 <FormContext.Consumer>
@@ -40,6 +40,7 @@ export default function connectActiveForm<OriginProps extends FormWidgetProps>(U
                                         if (forwardedRef)
                                             forwardedRef.current = component;
                                     }}
+                                    onChange={this.handleChange}
                                 />
                     }}
                 </FormContext.Consumer>
@@ -50,6 +51,17 @@ export default function connectActiveForm<OriginProps extends FormWidgetProps>(U
                 let { onWidgetMount } = this.formContext;
 
                 onWidgetMount && onWidgetMount(this.widgetInstance);
+            }
+        }
+        handleChange(e: FormWidgetChangeEvent) {
+            let { onChange } = this.props;
+
+            onChange && onChange(e);
+
+            if (this.formContext) {
+                let { onWidgetChange } = this.formContext;
+
+                onWidgetChange && onWidgetChange(e);
             }
         }
     }

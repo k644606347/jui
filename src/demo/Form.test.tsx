@@ -1,9 +1,8 @@
 import * as React from "react";
 import { iconInfo, iconAccusoft, iconAddressCard_r } from "../components/icons/FontAwesomeMap";
-import { Tools, Icon, Form, Log, FormItem, Pagination, PureInput, CheckboxItems, Button, Checkbox } from "../index";
+import { Tools, Icon, Form, Log, FormItem, Pagination, PureInput, CheckboxItems, Button, Checkbox, Input } from "../index";
 import ActiveForm, { ActiveFormProps } from "../components/formWidget/ActiveForm";
-import { FormProps } from "../components/FormType";
-import TextareaWidget from "../components/formWidget/Textarea";
+import Textarea from "../components/formWidget/Textarea";
 
 interface FormTestProps {}
 
@@ -147,10 +146,13 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                     }
                 } /> */}
                 {
-                    React.createElement(ActiveForm.create(fields) as React.ComponentClass<ActiveFormProps>, {
+                    React.createElement(ActiveForm.create(fields), {
                         ref: this.formForFieldsRef,
                         onSubmit: (e: any) => {
                             Log.info('onSubmit', e);
+                        },
+                        onChange: (e: any) => {
+                            Log.info('onChange', e);
                         }
                     })
                 }
@@ -164,9 +166,10 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                     // }, 100);
                 }} />
                 <PureInput value=""  />
-                <TextareaWidget onChange={(e: any) => {
+                <Textarea onChange={(e: any) => {
                     console.log(e);
                 }}/>
+                <Input defaultValue={'baiduyixia'} onChange={e => { Log.warn(e); }}/>
             </div>
         )
     }
