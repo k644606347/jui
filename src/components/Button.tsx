@@ -90,7 +90,7 @@ class Button extends React.PureComponent<ButtonProps, any> {
                                     }
                                 ) : null
                     }
-                    {children !== undefined ? <React.Fragment><span>{children}</span></React.Fragment> : null}
+                    {children !== undefined ? <span className={cssModule.content}>{children}</span> : null}
                 </a>
             </TouchFeedback>
         );

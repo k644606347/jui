@@ -104,6 +104,10 @@ $button-font-size-lg: 24 * $hd;
         line-height: $button-height-sm;
     }
 
+    .icon, .content {
+        display: inline-block;
+        line-height: inherit;
+    }
     .icon {
         &~span {
             margin-left: .5em;

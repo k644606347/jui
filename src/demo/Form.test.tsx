@@ -170,6 +170,8 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                     console.log(e);
                 }}/>
                 <Input defaultValue={'baiduyixia'} onChange={e => { Log.warn(e); }}/>
+                <Button>block btn</Button>
+                <Button inline={true}>inline btn</Button>
             </div>
         )
     }

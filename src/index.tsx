@@ -1,3 +1,6 @@
+// 优先加载通用css
+import './components/style/common.scss';
+
 import FormItem from "./components/FormItem";
 import Form from "./components/Form";
 import Icon from "./components/Icon";
@@ -22,7 +25,6 @@ import PureTextarea from './components/PureTextarea';
 import Input from "./components/formWidget/Input";
 import Textarea from "./components/formWidget/Textarea";
 import FormWidgetConfig from "./components/formWidget/Config";
-import './components/style/common.scss';
 export {
     Form,
     FormItem,
