@@ -3,19 +3,19 @@
 
 .wrapper {
     line-height: 1.5;
-    color: rgba(0, 0, 0, 0.85);
+    color: rgba(0, 0, 0, 0.75);
     margin: 0;
     padding: 5px;
     border-radius: 4px;
     display: flex;
-    align-items: center;
 
     .icon {
         flex: 0 0 auto;
     }
     .message {
-        flex: 1 0 auto;
+        flex: 1 1 auto;
         text-align: left;
+        word-break: break-all;
     }
     .icon + .message {
       margin-left: .3em;

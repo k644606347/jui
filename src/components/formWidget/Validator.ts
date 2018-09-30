@@ -70,6 +70,7 @@ const Validator = {
                     }
                 }
             } else {
+                // TODO rule.rule有可能是undefined，提示时需要区分
                 let errorMsg = `配置错误，无法校验，没有"${rule.rule}"的校验方案`;
                 Log.error(errorMsg);
                 processReport = {

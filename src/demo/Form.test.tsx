@@ -48,7 +48,13 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                                 value: 'radio1value',
                             }
                         ],
-                        disabled: true,
+                        rules: [
+                            {
+                                rule: 'required',
+                                level: 'warn',
+                            }
+                        ],
+                        disabled: false,
                     }
                 },
                 {
