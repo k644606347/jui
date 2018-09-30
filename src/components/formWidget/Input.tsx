@@ -4,6 +4,7 @@ import Widget, { FormWidgetProps, FormWidgetState } from './Widget';
 import PureInput from '../PureInput';
 import connectActiveForm from './connectActiveForm';
 import { WidgetWrapper } from './WidgetWrapper';
+import ValidateReportor from './ValidateReportor';
 
 const tools = Tools.getInstance();
 class Input extends Widget<FormWidgetProps, FormWidgetState> {
@@ -19,10 +20,12 @@ class Input extends Widget<FormWidgetProps, FormWidgetState> {
 
         return (
             <WidgetWrapper style={style} className={className} validateReport={validateReport}>
-                <PureInput
-                    {...allowedInputElProps}
+                <PureInput {...allowedInputElProps}
                     value={value} 
                     onChange={this.handleChange}
+                    style={{
+                        color: ValidateReportor.getFontColor(validateReport)
+                    }}
                 />
             </WidgetWrapper>
         );

@@ -3,6 +3,7 @@ import Widget, { FormWidgetProps, FormWidgetState } from "./Widget";
 import PureTextarea from '../PureTextarea';
 import connectActiveForm from "./connectActiveForm";
 import { WidgetWrapper } from "./WidgetWrapper";
+import ValidateReportor from "./ValidateReportor";
 interface State {}
 class Textarea extends Widget<FormWidgetProps, FormWidgetState> {
     render() {
@@ -11,7 +12,11 @@ class Textarea extends Widget<FormWidgetProps, FormWidgetState> {
             { validateReport } = state;
 
         return <WidgetWrapper style={style} className={className} validateReport={validateReport}>
-            <PureTextarea {...this.getAllowedInputElAttrs(props)} value={this.getValue()} onChange={this.handleChange} />
+            <PureTextarea {...this.getAllowedInputElAttrs(props)} value={this.getValue()} 
+                onChange={this.handleChange} 
+                style={{
+                    color: ValidateReportor.getFontColor(validateReport)
+                }} />
         </WidgetWrapper>
     }
 }

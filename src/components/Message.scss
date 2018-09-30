@@ -1,9 +1,9 @@
 @charset "UTF-8";
+@import './style/themes/color.scss';
 
 .wrapper {
-    font-size: 14px;
     line-height: 1.5;
-    // color: rgba(0, 0, 0, 0.65);
+    color: rgba(0, 0, 0, 0.85);
     margin: 0;
     padding: 5px;
     border-radius: 4px;
@@ -22,34 +22,34 @@
     }
 
     &.error {
-        border: 1px solid #ffa39e;
-        background-color: #fff1f0;
+        border: 1px solid $error-border-color;
+        background-color: $error-bg-color;
 
         .icon {
-            color: #f5222d;
+            color: $error-color;
         }
     }
     &.warn {
-        border: 1px solid #ffe58f;
-        background-color: #fffbe6;
+        border: 1px solid $warn-border-color;
+        background-color: $warn-bg-color;
 
         .icon {
-            color: #faad14;
+            color: $warn-color;
         }
     }
     &.info {
-        border: 1px solid #91d5ff;
-        background-color: #e6f7ff;
+        border: 1px solid $info-border-color;
+        background-color: $info-bg-color;
 
         .icon {
             color: #1890ff;
         }
     }
     &.success {
-        border: 1px solid #b7eb8f;
-        background-color: #f6ffed;
+        border: 1px solid $success-border-color;
+        background-color: $success-bg-color;
         .icon {
-            color: #52c41a;
+            color: $success-color;
         }
     }
 
