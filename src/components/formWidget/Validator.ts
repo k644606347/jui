@@ -1,6 +1,5 @@
 import Tools from "../../utils/Tools";
 import Log from "../../utils/Log";
-import { FormWidgetProps } from "./Widget";
 
 // TODO 待实现，考虑启用此接口作为Rule传参规范，但运行时获取的配置无法用到此检测
 // interface RuleMap {
@@ -17,6 +16,7 @@ import { FormWidgetProps } from "./Widget";
 //     datetime?: boolean | RegExp | string;
 //     callback?: (value: any) => Report;
 // }
+
 export interface Rule {
     rule: string;
     value?: any;
@@ -29,6 +29,15 @@ export interface Report {
     level?: 'error' | 'warn';
 }
 
+interface CheckRuleResult {
+    isValid: boolean,
+    msg: string,
+    index?: number,
+}
+const ALLOWED_RULES = [
+    'required', 'maxLength', 'minLength', 'maxZhLength', 'minZhLength', 
+    'email', 'url', 'domain', 'mobilePhone', 'date', 'datetime', 'callback'
+];
 const tools = Tools.getInstance(),
     presetReport = {
         'required': { msg: '该字段不能为空' },
@@ -48,15 +57,16 @@ const tools = Tools.getInstance(),
 const Validator = {
     async validate(value: any, rules: Rule[]) {
         let hitRule, processReport;
-        // tslint:disable-next-line:prefer-for-of
-        for (let i = 0; i < rules.length; i++) {
-            let rule = rules[i],
-                processor = Validator[rule.rule],
-                processResult: any;
 
-            if (tools.isFunction(processor)) {
-                processResult = await processor(value, rule);
+        let checkRulesResult = this.checkRules(rules);
 
+        if (checkRulesResult.isValid) {
+            // tslint:disable-next-line:prefer-for-of
+            for (let i = 0; i < rules.length; i++) {
+                let rule = rules[i], 
+                    processor = Validator[rule.rule];
+
+                let processResult = await processor(value, rule);
                 if (tools.isPlainObject(processResult)) {
                     if (!processResult.isValid) {
                         hitRule = rule;
@@ -69,19 +79,67 @@ const Validator = {
                         break;
                     }
                 }
-            } else {
-                // TODO rule.rule有可能是undefined，提示时需要区分
-                let errorMsg = `配置错误，无法校验，没有"${rule.rule}"的校验方案`;
-                Log.error(errorMsg);
-                processReport = {
-                    msg: errorMsg,
-                    isValid: false,
-                    level: "error"
-                };
             }
+        } else {
+            let msg = checkRulesResult.msg;
+            Log.error(msg);
+            processReport = {
+                msg,
+                isValid: false,
+                level: "error"
+            };
         }
 
         return this.report(value, hitRule, processReport as Report);
+    },
+    checkRule(rule: any): CheckRuleResult {
+        let result: CheckRuleResult = {
+            isValid: true,
+            msg: '',
+        };
+        
+        if (!tools.isPlainObject(rule)) {
+            result.isValid = false;
+            result.msg = `校验规则必须是对象形式,请检查配置,当前是:\n${JSON.stringify(rule)}`;
+            return result;
+        }
+
+        if (!rule.rule) {
+            result.isValid = false;
+            result.msg = `校验规则必须包含非空的rule字段,请检查配置,当前是:\n${JSON.stringify(rule)}`;
+            return result;
+        }
+
+        if (ALLOWED_RULES.indexOf(rule.rule) === -1) {
+            result.isValid = false;
+            result.msg = `"${rule.rule}"是无效的校验规则,请检查配置,可以使用的校验规则有:\n${JSON.stringify(ALLOWED_RULES)}`;
+            return result;
+        }
+
+        return result;
+    },
+    checkRules(rules: any[]): CheckRuleResult {
+        let result: CheckRuleResult = {
+            isValid: true,
+            msg: '',
+        };
+
+        if (!tools.isArray(rules)) {
+            result = {
+                isValid: false,
+                msg: `rules必须是数组, 当前是:\n${JSON.stringify(rules)},\n请检查配置`,
+            };
+            return result;
+        }
+        for (let i = 0; i < rules.length; i++) {
+            let ruleResult = this.checkRule(rules[i]);
+
+            if (!ruleResult.isValid) {
+                result = ruleResult;
+                result.index = i;
+            }
+        }
+        return result;
     },
     report(value: string, hitRule?: Rule, injectReport?: Report): Report {
         let report: Report = {
@@ -106,26 +164,6 @@ const Validator = {
         }
 
         return report;
-    },
-    getRulesByProps(props: FormWidgetProps) {
-        let { required, maxLength, minLength, rules } = props,
-            ruleMap = {
-                required,
-                maxLength,
-                minLength,
-            },
-            mixedRules: Rule[] = [];
-
-        Object.keys(ruleMap).forEach(k => {
-            let val = ruleMap[k];
-            val !== undefined && mixedRules.push({
-                rule: k,
-                value: ruleMap[k],
-            });
-        });
-        Object.assign(mixedRules, rules);
-
-        return mixedRules;
     },
     required(value: any) {
         if (tools.isArray(value)) {
