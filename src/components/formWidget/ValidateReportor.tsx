@@ -27,7 +27,7 @@ export default class ValidateReportor extends React.PureComponent<Props> {
         
         return msg && !isValid ? 
                 <div style={style} className={tools.classNames(cm.wrapper, className)}>
-                    <Message type={level} showIcon={false}>{msg}</Message>
+                    <Message className={cm.msg} type={level} showIcon={false}>{msg}</Message>
                 </div> : '';
     }
 }

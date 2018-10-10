@@ -17,13 +17,10 @@ export class WidgetWrapper extends React.PureComponent<Props> {
             { className, children, validateReport = { isValid: true, msg: '' } } = props;
 
         return (
-            <div className={tools.classNames(cm.wrapper, className)}>
-                <div className={cm['widget-control']} style={{
-                    color: ValidateReportor.getFontColor(validateReport),
-                }}>{ children }</div>
-                {
-                    <ValidateReportor {...validateReport} className={cm['msg-control']}></ValidateReportor>
-                }
+            <div className={tools.classNames(cm.wrapper, className)} style={{
+                color: ValidateReportor.getFontColor(validateReport),
+            }}>
+                { children }
             </div>
         )
     }

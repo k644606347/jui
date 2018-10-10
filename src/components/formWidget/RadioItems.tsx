@@ -6,6 +6,7 @@ import Radio from "../Radio";
 import connectActiveForm from "./connectActiveForm";
 import { CSSAttrs } from "../../utils/types";
 import { WidgetWrapper } from "./WidgetWrapper";
+import ValidateReportor from "./ValidateReportor";
 interface RadioItems extends CSSAttrs {
     label: string;
     value: string;
@@ -28,22 +29,26 @@ class RadioItems extends Widget<RadioItemsProps, any> {
             value = this.getValue();
 
         return (
-            <WidgetWrapper style={style} className={tools.classNames(cm.wrapper, className)} validateReport={ validateReport }>
-                {
-                    items.map((config, i) => {
-                        let mixedConfig = { disabled, readOnly, ...config };
-                        
-                        return <div key={i} className={cm.item}>
-                            <Radio {...mixedConfig} name={name}
-                                checked={value === config.value} 
-                                className={cm.item} 
-                                onChange={this.handleChange}>
-                                { mixedConfig.label }
-                            </Radio>
-                        </div>
-                    })
-                }
-            </WidgetWrapper>
+            <React.Fragment>
+                <WidgetWrapper style={style} className={tools.classNames(cm.wrapper, className)} validateReport={ validateReport }>
+                    {
+                        items.map((config, i) => {
+                            let mixedConfig = { disabled, readOnly, ...config };
+                            
+                            return <div key={i} className={cm.item}>
+                                <Radio {...mixedConfig} name={name}
+                                    checked={value === config.value} 
+                                    className={cm.item} 
+                                    onChange={this.handleChange}>
+                                    { mixedConfig.label }
+                                </Radio>
+                            </div>
+                        })
+                    }
+                </WidgetWrapper>
+                { validateReport ? <ValidateReportor {...validateReport} /> : '' }
+            </React.Fragment>
+
         )
     }
     handleChange(e: FormWidgetChangeEvent) {

@@ -11,13 +11,16 @@ class Textarea extends Widget<FormWidgetProps, FormWidgetState> {
             { className, style } = props,
             { validateReport } = state;
 
-        return <WidgetWrapper style={style} className={className} validateReport={validateReport}>
-            <PureTextarea {...this.getAllowedInputElAttrs(props)} value={this.getValue()} 
-                onChange={this.handleChange} 
-                style={{
-                    color: ValidateReportor.getFontColor(validateReport)
-                }} />
-        </WidgetWrapper>
+        return <React.Fragment>
+            <WidgetWrapper style={style} className={className} validateReport={validateReport}>
+                <PureTextarea {...this.getAllowedInputElAttrs(props)} value={this.getValue()} 
+                    onChange={this.handleChange} 
+                    style={{
+                        color: ValidateReportor.getFontColor(validateReport)
+                    }} />
+            </WidgetWrapper>
+            { validateReport ? <ValidateReportor {...validateReport} /> : '' }
+            </React.Fragment>
     }
 }
 

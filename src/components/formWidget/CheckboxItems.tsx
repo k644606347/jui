@@ -7,6 +7,7 @@ import connectActiveForm from "./connectActiveForm";
 import { CSSAttrs } from "../../utils/types";
 import { DataType } from "./stores/DataConvertor";
 import { WidgetWrapper } from "./WidgetWrapper";
+import ValidateReportor from "./ValidateReportor";
 
 interface CheckboxItem extends CSSAttrs {
     label: string;
@@ -36,11 +37,15 @@ class CheckboxItems extends Widget<CheckboxItemsProps, FormWidgetState> {
         this.checkboxs = [];
 
         return (
-            <WidgetWrapper style={style} className={tools.classNames(cm.wrapper, className)} validateReport={ validateReport }>
-                {
-                    items.map((item, i) => this.renderCheckboxItem({ disabled, ...item }, i))
-                }
-            </WidgetWrapper>
+            <React.Fragment>
+                <WidgetWrapper style={style} className={tools.classNames(cm.wrapper, className)} validateReport={ validateReport }>
+                    {
+                        items.map((item, i) => this.renderCheckboxItem({ disabled, ...item }, i))
+                    }
+                </WidgetWrapper>
+                { validateReport ? <ValidateReportor {...validateReport} /> : '' }
+            </React.Fragment>
+
         )
     }
     private renderCheckboxItem(item: CheckboxItem, key: string | number) {

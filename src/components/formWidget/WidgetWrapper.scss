@@ -1,26 +1,16 @@
 @import '../style/themes/color.scss';
 
 .wrapper {
-    position: relative;
-    .widget-control {
-        &.error {
-            color: $error-color;
-        }
-        &.warn {
-            color: $warn-color;
-        }
-        &.info {
-            color: $info-color;
-        }
-        &.success {
-            color: $success-color;
-        }
+    &.error {
+        color: $error-color;
     }
-    .msg-control {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        z-index: 10;
+    &.warn {
+        color: $warn-color;
+    }
+    &.info {
+        color: $info-color;
+    }
+    &.success {
+        color: $success-color;
     }
 }

@@ -19,15 +19,18 @@ class Input extends Widget<FormWidgetProps, FormWidgetState> {
             value = this.getValue();
 
         return (
-            <WidgetWrapper style={style} className={className} validateReport={validateReport}>
-                <PureInput {...allowedInputElProps}
-                    value={value} 
-                    onChange={this.handleChange}
-                    style={{
-                        color: ValidateReportor.getFontColor(validateReport)
-                    }}
-                />
-            </WidgetWrapper>
+            <React.Fragment>
+                <WidgetWrapper style={style} className={className} validateReport={validateReport}>
+                    <PureInput {...allowedInputElProps}
+                        value={value} 
+                        onChange={this.handleChange}
+                        style={{
+                            color: ValidateReportor.getFontColor(validateReport)
+                        }}
+                    />
+                </WidgetWrapper>
+                { validateReport ? <ValidateReportor {...validateReport} /> : '' }
+            </React.Fragment>
         );
     }
 }
