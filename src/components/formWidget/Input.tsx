@@ -16,7 +16,7 @@ class Input extends Widget<FormWidgetProps, FormWidgetState> {
             { className, style, ...restProps } = props,
             { validateReport } = state,
             allowedInputElProps = this.getAllowedInputElAttrs(restProps),
-            value = this.getValue();
+            value = this.getParsedValue();
 
         return (
             <React.Fragment>

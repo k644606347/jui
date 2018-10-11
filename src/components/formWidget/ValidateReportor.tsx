@@ -28,12 +28,16 @@ export default class ValidateReportor extends React.PureComponent<Props> {
     }
     render() {
         let { props } = this,
-            { className, style, isValid, msg, level = 'error' } = props;
+            { className, style, isValid, msg, level = 'error', popover } = props,
+            MessageTag = <Message style={style} className={tools.classNames(cm.msg, isValid && cm.isValid, className)}
+                            type={level} showIcon={false}>{msg}</Message>;
         
-            // TODO popover mode
-        return msg && !isValid ? 
-                <div style={style} className={tools.classNames(cm.wrapper, cm.popover, className)}>
-                    <Message className={cm.msg} type={level} showIcon={false}>{msg}</Message>
-                </div> : '';
+        return (
+            popover ? 
+                <div className={popover && cm.popover}>
+                    { MessageTag }
+                </div> : 
+                MessageTag
+        )
     }
 }

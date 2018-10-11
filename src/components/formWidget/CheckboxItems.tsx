@@ -50,7 +50,7 @@ class CheckboxItems extends Widget<CheckboxItemsProps, FormWidgetState> {
     }
     private renderCheckboxItem(item: CheckboxItem, key: string | number) {
         let { name } = this.props,
-            value = this.getValue(),
+            value = this.getParsedValue(),
             checkboxID = tools.genID('checkbox_item_'),
             checkboxEl = <Checkbox id={checkboxID} name={name} value={item.value}
                     checked={
@@ -83,9 +83,7 @@ class CheckboxItems extends Widget<CheckboxItemsProps, FormWidgetState> {
             }
         });
 
-        this.setValue(nextValue).then(val => {
-            this.dispatchEvent(onChange, { value: val });
-        })
+        this.dispatchEvent(onChange, { value: nextValue });
     }
 }
 

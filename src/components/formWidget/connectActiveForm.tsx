@@ -31,7 +31,7 @@ export default function connectActiveForm<OriginProps extends FormWidgetProps>(U
                         this.formContext = context;
 
                         return <UnwrappedComponent {...restProps} 
-                                    ref={(component) => {
+                                    ref={(component: any) => {
                                         if (!component) {
                                             return;
                                         }
@@ -40,7 +40,7 @@ export default function connectActiveForm<OriginProps extends FormWidgetProps>(U
                                         if (forwardedRef)
                                             forwardedRef.current = component;
                                     }}
-                                    onChange={this.handleChange}
+                                    onChange={this.handleChange} 
                                 />
                     }}
                 </FormContext.Consumer>

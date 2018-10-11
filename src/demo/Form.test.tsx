@@ -41,7 +41,7 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                     widget: 'radioItems',
                     widgetProps: {
                         name: 'radio1',
-                        value: 'radio1value',
+                        // value: 'radio1value',
                         items: [
                             {
                                 label: 'radio1',
@@ -76,7 +76,7 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                     widget: 'text',
                     widgetProps: {
                         name: 'input2',
-                        defaultValue: 'input2 value',
+                        value: 'input2 value',
                     },
                     renderWidget: (widget: any) => <React.Fragment>{widget}<Icon icon={iconInfo} color="green" /></React.Fragment>
                 },
@@ -85,7 +85,7 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                     widget: 'textarea',
                     widgetProps: {
                         name: 'textarea1',
-                        defaultValue: 'textarea1',
+                        value: 'textarea1',
                     },
                     renderWidget: (widget: any) => <React.Fragment>{widget}<Icon icon={iconAccusoft} /></React.Fragment>
                 }
@@ -151,17 +151,30 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                         this.setState({ fields: nextFields });
                     }
                 } /> */}
-                {
-                    React.createElement(ActiveForm.create(fields), {
-                        ref: this.formForFieldsRef,
-                        onSubmit: (e: any) => {
-                            Log.info('onSubmit', e);
-                        },
-                        onChange: (e: any) => {
-                            Log.info('onChange', e);
-                        }
-                    })
-                }
+                <ActiveForm initialFields={fields}
+                    ref={this.formForFieldsRef} 
+                    onSubmit={(e: any) => {
+                        Log.info('onSubmit', e);
+                    }}
+                    onChange={(e: any) => {
+                        Log.info('onChange', e);
+                    }}></ActiveForm>
+                <ActiveForm initialValue={{x:1, y:2}}
+                    onChange={e => {
+                        console.log('onChange', e);
+                    }}
+                    onSubmit={e => {
+                        debugger;
+                    }}
+                >{
+                    (args: any) => {
+                        console.log(args);
+                        return <Form>
+                            <label>x: <input type="text" name="x" defaultValue={args.value.x} onChange={args.handleChange} /></label>
+                            <input type="submit" onClick={args.handleSubmit} />
+                            </Form>
+                    }
+                }</ActiveForm>
                 <Button onClick={e => {
                     this.formForFieldsRef.current.submit();
                 }}>submit!</Button>
@@ -175,7 +188,7 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                 <Textarea onChange={(e: any) => {
                     console.log(e);
                 }}/>
-                <Input defaultValue={'baiduyixia'} onChange={e => { Log.warn(e); }}/>
+                <Input value={'baiduyixia'} onChange={e => { Log.warn(e); }}/>
                 <Button>block btn</Button>
                 <Button inline={true}>inline btn</Button>
             </div>

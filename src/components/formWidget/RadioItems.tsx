@@ -26,7 +26,7 @@ class RadioItems extends Widget<RadioItemsProps, any> {
     render() {
         let { name, items, className, style, disabled, readOnly } = this.props,
             { validateReport } = this.state,
-            value = this.getValue();
+            value = this.getParsedValue();
 
         return (
             <React.Fragment>
@@ -54,9 +54,7 @@ class RadioItems extends Widget<RadioItemsProps, any> {
     handleChange(e: FormWidgetChangeEvent) {
         let { onChange } = this.props;
 
-        this.setValue(e.value).then(val => {
-            this.dispatchEvent(onChange, { value: val });
-        })
+        this.dispatchEvent(onChange, { value: e.value });
     }
 }
 
