@@ -48,6 +48,7 @@ const getCSSConfig = (env, options) => {
                     loader: require.resolve("css-loader"),
                     options: {
                         sourceMap: isDev(env),
+                        camelCase: true,
                     }
                 },
                 postcssConfig
