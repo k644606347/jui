@@ -55,6 +55,12 @@ const tools = Tools.getInstance(),
     };
 
 const Validator = {
+    getDefaultReport(): Report {
+        return {
+            isValid: true,
+            msg: '',
+        }
+    },
     async validate(value: any, rules: Rule[]) {
         let hitRule, processReport;
 
