@@ -65,7 +65,7 @@ export default abstract class Widget<P extends FormWidgetProps, S extends FormWi
     getInitialState(props: P): S {
         return {
             // value: convertor.convertTo(props.defaultValue, this.getDataType()),
-            validateReport: props.defaultValidateReport || { isValid: true },
+            validateReport: props.defaultValidateReport || Validator.getDefaultReport(),
             focused: !!props.autoFocus,
         } as S;
     }
