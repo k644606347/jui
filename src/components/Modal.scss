@@ -6,14 +6,30 @@
     right: 0;
     bottom: 0;
     &.show {
-        display: block;
+        display: flex;
+        flex-direction: column;
     }
     .header {
+        flex: 0 0 auto;
+        display: flex;
         .okBtn {
-
+            flex: 0 0 auto;
+        }
+        .title {
+            flex: 1 1 auto;
+            font-weight: 600;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 5px;
+            > div {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
         }
         .cancelBtn {
-
+            flex: 0 0 auto;
         }
     }
     .body {

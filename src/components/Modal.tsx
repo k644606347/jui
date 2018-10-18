@@ -45,7 +45,7 @@ export default class Modal extends React.PureComponent<ModalProps, ModalState> {
             <div className={tools.classNames(modalCSS.wrapper, show && modalCSS.show, className)} style={style}>
                 <div className={tools.classNames(modalCSS.header, headerClassName)} style={headerStyle}>
                     {this.buildBtnByType('okBtn')}
-                    {<div>{title}</div>}
+                    {<div className={modalCSS.title}><div>{title}</div></div>}
                     {this.buildBtnByType('cancelBtn')}
                 </div>
                 <div className={tools.classNames(modalCSS.header, bodyClassName)} style={bodyStyle}>

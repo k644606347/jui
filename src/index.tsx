@@ -24,6 +24,7 @@ import ActiveForm from "./components/formWidget/ActiveForm";
 import PureTextarea from './components/PureTextarea';
 import Input from "./components/formWidget/Input";
 import Textarea from "./components/formWidget/Textarea";
+import Modal from './components/Modal';
 import FormWidgetConfig from "./components/formWidget/Config";
 export {
     Form,
@@ -51,4 +52,5 @@ export {
     Textarea,
     RadioItems,
     CheckboxItems,
+    Modal,
 }
