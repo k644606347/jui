@@ -4,11 +4,12 @@ $navbar-height: 45 * $hd;
 
 .wrapper {
     display: flex;
-    font-size: 16px;
     height: $navbar-height;
     line-height: $navbar-height;
     align-items: center;
+    font-size: 18px;
     .leftContent, .rightContent {
+        min-width: 1.5em;
         flex: 0 0 auto;
         cursor: pointer;
     }
@@ -26,7 +27,6 @@ $navbar-height: 45 * $hd;
         align-items: center;
         overflow: hidden;
         > div {
-            font-size: 18px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
