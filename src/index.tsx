@@ -1,6 +1,3 @@
-// 优先加载通用css
-import './components/style/common.scss';
-
 import FormItem from "./components/FormItem";
 import Form from "./components/Form";
 import Icon from "./components/Icon";
@@ -24,9 +21,13 @@ import ActiveForm from "./components/formWidget/ActiveForm";
 import PureTextarea from './components/PureTextarea';
 import Input from "./components/formWidget/Input";
 import Textarea from "./components/formWidget/Textarea";
+import NavBar from "./components/NavBar";
 import Modal from './components/Modal';
 import FormWidgetConfig from "./components/formWidget/Config";
+import JUIPage from './components/JUIPage';
+
 export {
+    JUIPage,
     Form,
     FormItem,
     Button,
@@ -45,12 +46,12 @@ export {
     Message,
     Log,
     Tools,
-    // FormWidget
     ActiveForm,
     FormWidgetConfig,
     Input,
     Textarea,
     RadioItems,
     CheckboxItems,
+    NavBar,
     Modal,
 }

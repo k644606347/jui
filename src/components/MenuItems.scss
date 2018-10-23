@@ -1,12 +1,11 @@
 @charset "UTF-8";
-@import "./style/mixins/hairline.scss";
+@import "./style/mixins/Hairline.scss";
 
-$items-bg-color: #fff;
 .items {
     display: block;
     flex: 1 1 0%;
     overflow: hidden;
-    background-color: $items-bg-color;
+    background-color: $bg-color;
     &.has-sub-items {
         background-color: #f5f5f9;
     }

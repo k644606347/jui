@@ -1,11 +1,13 @@
 @charset "UTF-8";
-@import './style/themes/default';
-@import './style/mixins/hairline';
+@import './style/Variables';
+@import './style/mixins/Hairline';
 $btn-name: btn;
 $button-height-sm: 30 * $hd;
 $button-font-size-sm: 13 * $hd;
+
 $button-height: 47 * $hd;
 $button-font-size: 18 * $hd;
+
 $button-height-lg: 64 * $hd;
 $button-font-size-lg: 24 * $hd;
 
@@ -26,9 +28,9 @@ $button-font-size-lg: 24 * $hd;
     white-space: nowrap;
     user-select: none;
     // default
-    color: $color-text-base;
-    background-color: $fill-base;
-    @include hairline(all, $border-color-base, $radius-md);
+    color: $text-color;
+    background-color: $bg-color;
+    @include hairline(all, $border-color, $radius-md);
 
     // Multiple buttons inline arranged, the last one border-right may not display
     // &-borderfix {
@@ -37,26 +39,26 @@ $button-font-size-lg: 24 * $hd;
     //   }
     // }
     &-active {
-        background-color: $fill-tap;
+        background-color: $bg-tap-color;
     }
 
     &-disabled {
-        color: transparentize($color-text-base, .3);
+        color: transparentize($text-color, .3);
         opacity: 0.6;
     }
 
     &-primary {
-        color: $color-text-base-inverse;
+        color: $text-inverse-color;
         background-color: $primary-button-fill;
         @include hairline(all, $primary-button-fill, $radius-md);
 
         &.#{$btn-name}-active {
-            color: transparentize($color-text-base-inverse, .3);
+            color: transparentize($text-inverse-color, .3);
             background-color: $primary-button-fill-tap;
         }
 
         &.#{$btn-name}-disabled {
-            color: transparentize($color-text-base-inverse, .6);
+            color: transparentize($text-inverse-color, .6);
             opacity: 0.4;
         }
     }
@@ -73,23 +75,23 @@ $button-font-size-lg: 24 * $hd;
         }
 
         &.#{$btn-name}-disabled {
-            color: transparentize($color-text-base, .1);
-            @include hairline(all, transparentize($color-text-base, .1), $radius-md);
+            color: transparentize($text-color, .1);
+            @include hairline(all, transparentize($text-color, .1), $radius-md);
             opacity: 1; // override default opacity: 0.6
         }
     }
 
     &-warning {
-        color: $color-text-base-inverse;
+        color: $text-inverse-color;
         background-color: $warning-button-fill;
 
         &.#{$btn-name}-active {
-            color: transparentize($color-text-base-inverse, .3);
+            color: transparentize($text-inverse-color, .3);
             background-color: $warning-button-fill-tap;
         }
 
         &.#{$btn-name}-disabled {
-            color: transparentize($color-text-base-inverse, .6);
+            color: transparentize($text-inverse-color, .6);
             opacity: 0.4;
         }
     }
@@ -117,7 +119,7 @@ $button-font-size-lg: 24 * $hd;
     &-circle {
         width: $button-height;
         height: $button-height;
-        @include hairline(all, $border-color-base, 50%);
+        @include hairline(all, $border-color, 50%);
 
         &.#{$btn-name}-large {
             width: $button-height-lg;

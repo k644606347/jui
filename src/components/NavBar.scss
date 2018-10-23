@@ -1,0 +1,54 @@
+@import './style/Variables.scss';
+
+$navbar-height: 45 * $hd;
+
+.wrapper {
+    display: flex;
+    font-size: 16px;
+    height: $navbar-height;
+    line-height: $navbar-height;
+    align-items: center;
+    .leftContent, .rightContent {
+        flex: 0 0 auto;
+        cursor: pointer;
+    }
+    .leftContent {
+        padding: 0 5px 0 15px;
+    }
+    .rightContent {
+        justify-content: flex-end;
+        padding: 0 15px 0 5px;
+    }
+    .content {
+        flex: 1 1 0%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        > div {
+            font-size: 18px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+}
+.light {
+    background: #f8f8f8;
+    .leftContent, .rightContent {
+        color: $primary-color;
+    }
+    .leftContent:active, .rightContent:active {
+        color: $primary-tap-color;
+    }
+    .title {
+        color: $text-color;
+    }
+}
+.dark {
+    background: $primary-color;
+    color: $text-inverse-color;
+    .leftContent, .rightContent, .title {
+        color: $text-inverse-color;
+    }
+}

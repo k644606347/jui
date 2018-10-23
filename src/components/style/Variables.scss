@@ -7,40 +7,41 @@ $hd: 1px; // 基本单位
 // https://github.com/ant-design/ant-design-mobile/wiki/设计变量表及命名规范
 
 // // 全局/品牌色
-$brand-primary: #108ee9;
-$brand-primary-tap: #0e80d2;
+$primary-color: #108ee9;
+$primary-tap-color: #0e80d2;
 // $brand-success: #6abf47;
 // $brand-warning: #ffc600;
 // $brand-error: #f4333c;
 // $brand-important: #ff5b05;  // 用于小红点
 // $brand-wait: #108ee9;
 
-// // 色彩
-// // ---
-// 文字色
-$color-text-base: #000;                  // 基本
-$color-text-base-inverse: #fff;          // 基本 - 反色
-// $color-text-secondary: #a4a9b0;          // 辅助色
-// $color-text-placeholder: #bbb;           // 文本框提示
-// $color-text-disabled: #bbb;              // 失效
-// $color-text-caption: #888;               // 辅助描述
-// $color-text-paragraph: #333;             // 段落
-// $color-link: $brand-primary;             // 链接
+$text-color: #000;
+$text-inverse-color: #fff;
+// $text-tap-inverse-color: #a4a9b0;
+$placeholder-color: #bbb;
+$disabled-color: #bbb;
 
-// 背景色
-$fill-base: #fff;                           // 组件默认背景
-// $fill-body: #f5f5f9;                        // 页面背景
-$fill-tap: #ddd;                            // 组件默认背景 - 按下
-// $fill-disabled: #ddd;                       // 通用失效背景
-// $fill-mask: rgba(0, 0, 0, 0.4);              // 遮罩背景
-// $color-icon-base: #ccc;                      // 许多小图标的背景，比如一些小圆点，加减号
-// $fill-grey: #f7f7f7;
+$bg-color: #fff;
+$bg-tap-color: #ddd;
+
+$border-color: #ddd;
+
+$error-color: #f5222d;
+$error-border-color: #ffa39e;
+$error-bg-color: #fff1f0;
+$info-color: #1890ff;
+$info-border-color: #91d5ff;
+$info-bg-color: #e6f7ff;
+$warn-color: #faad14;
+$warn-border-color: #ffe58f;
+$warn-bg-color: #fffbe6;
+$success-color: #52c41a;
+$success-border-color: #b7eb8f;
+$success-bg-color: #f6ffed;
 
 // // 透明度
 // $opacity-disabled: 0.3;   // switch checkbox radio 等组件禁用的透明度
 
-// 边框色
-$border-color-base: #ddd;
 
 // // 字体尺寸
 // // ---
@@ -102,11 +103,11 @@ $h-spacing-lg: 15 * $hd;
 // $actionsheet-item-height: 50 * $hd;
 // $actionsheet-item-font-size: 18 * $hd;
 
-$primary-button-fill: $brand-primary;
-$primary-button-fill-tap: $brand-primary-tap;
+$primary-button-fill: $primary-color;
+$primary-button-fill-tap: $primary-tap-color;
 
-$ghost-button-color: $brand-primary;    // 同时应用于背景、文字颜色、边框色
-$ghost-button-fill-tap: transparentize($brand-primary, .6);
+$ghost-button-color: $primary-color;    // 同时应用于背景、文字颜色、边框色
+$ghost-button-fill-tap: transparentize($primary-color, .6);
 
 $warning-button-fill: #e94f4f;
 $warning-button-fill-tap: #d24747;
@@ -127,18 +128,18 @@ $link-button-font-size: 16 * $hd;
 // input
 $input-font-size: 17 * $hd;
 $input-color: #000;
-// $input-color-icon-tap: $brand-primary;
+// $input-color-icon-tap: $primary-color;
 
 // // tabs
-// $tabs-color: $brand-primary;
+// $tabs-color: $primary-color;
 // $tabs-height: 43.5 * $hd;
 // $tabs-font-size-heading: 15 * $hd;
 // $tabs-ink-bar-height: $border-width-lg;
 
 // // segmented-control
-// $segmented-control-color: $brand-primary;  // 同时应用于背景、文字颜色、边框色
+// $segmented-control-color: $primary-color;  // 同时应用于背景、文字颜色、边框色
 // $segmented-control-height: 27 * $hd;
-// $segmented-control-fill-tap: transparentize($brand-primary, 0.1);
+// $segmented-control-fill-tap: transparentize($primary-color, 0.1);
 
 // // tab-bar
 // $tab-bar-fill: #ebeeef;
@@ -161,28 +162,28 @@ $input-color: #000;
 
 // // switch
 // $switch-fill: #4dd865;
-// $switch-fill-android: $brand-primary;
+// $switch-fill-android: $primary-color;
 
 // // tag
 // $tag-height: 25 * $hd;
 // $tag-height-sm: 15 * $hd;
-// $tag-color: $brand-primary;
+// $tag-color: $primary-color;
 
 // // keyboard
-// $keyboard-confirm-color: $brand-primary;
-// $keyboard-confirm-tap-color: $brand-primary-tap;
+// $keyboard-confirm-color: $primary-color;
+// $keyboard-confirm-tap-color: $primary-tap-color;
 
 // // picker
 // $option-height: 42 * $hd;           // picker 标题的高度
 
-// // z-index
-// $progress-zindex: 2000;
-// $popover-zindex: 1999;
-// $toast-zindex: 1999;
+// z-index
+$progress-zindex: 2000;
+$popover-zindex: 1999;
+$toast-zindex: 1999;
 // $action-sheet-zindex: 1000; // actonsheet 会放到 popup / modal 中
 // $picker-zindex: 1000;
 // $popup-zindex: 999;
-// $modal-zindex: 999; // modal.alert 应该最大，其他应该较小
+$modal-zindex: 999;
 // $tabs-pagination-zindex: 999;
 
-$error-bg-color: #f5222d;
+// $error-bg-color: #f5222d;

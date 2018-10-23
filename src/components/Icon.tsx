@@ -31,6 +31,7 @@ export interface IconProps extends CSSAttrs {
     rotation?: RotateProp;
     transform?: string | Transform;
     symbol?: FaSymbol;
+    onClick?: (e: React.MouseEvent) => any;
 }
 
 export { IconDefinition } from "@fortawesome/fontawesome-svg-core";
@@ -49,10 +50,10 @@ export default class Icon extends React.PureComponent<IconProps, any> {
             fasIcon.prefix && fasIcon.iconName && tools.isArray(fasIcon.icon)
         );
     }
-    constructor(props: IconProps) {
-        super(props);
-    }
-    public render() {
-        return <FontAwesomeIcon {...this.props} />;
+    render() {
+        let { onClick } = this.props;
+
+        // TODO 不支持传入onClick
+        return <FontAwesomeIcon {...this.props} />
     }
 }

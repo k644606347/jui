@@ -1,12 +1,12 @@
 @charset "UTF-8";
-@import "./style/themes/default.scss";
-@import "./style/mixins/hairline.scss";
+@import "./style/Variables.scss";
+@import "./style/mixins/Hairline.scss";
 
 .wrapper {
     display: flex;
     font-size: 17px;
     padding: 8px 0;
-    background-color: $fill-base;
+    background-color: $bg-color;
     .label {
         width: 5em;
         overflow: hidden;

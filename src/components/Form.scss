@@ -1,15 +1,15 @@
 @charset "UTF-8";
-@import "./style/themes/default.scss";
-@import "./style/mixins/hairline.scss";
+@import "./style/Variables.scss";
+@import "./style/mixins/Hairline.scss";
 
 .wrapper {
     font-size: 17px;
     padding: 1px 8px 0 8px;
     margin: 8px 0;
-    background-color: $fill-base;
+    background-color: $bg-color;
     position: relative;
-    @include hairline('all', $border-color-base);
+    @include hairline('all', $border-color);
     > .field {
-        @include hairline('bottom', $border-color-base);
+        @include hairline('bottom', $border-color);
     }
 }

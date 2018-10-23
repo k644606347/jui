@@ -93,7 +93,7 @@ export default class MenuDemo extends React.PureComponent<any,any> {
         modalProps = {...modalProps, show: !modalProps.show};
         this.setState({ modalProps });
     }
-    public handleMenuChange(e: MenuItemsChangeEvent) {
+    handleMenuChange = (e: MenuItemsChangeEvent) => {
         let { menu } = this.state;
 
         function setItems(menu: any, event: MenuItemsChangeEvent) {

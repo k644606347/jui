@@ -1,11 +1,11 @@
 @charset "UTF-8";
-@import "./style/themes/default.scss";
+@import "./style/Variables.scss";
 
 .wrapper {
     font-size: 17px;
     &.required::after {
         margin-left: 3px;
         content: "*";
-        color: $error-bg-color;
+        color: $error-color;
     }
 }

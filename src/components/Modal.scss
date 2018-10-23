@@ -1,3 +1,5 @@
+@import './style/Variables.scss';
+
 .wrapper {
     display: none;
     position: fixed;
@@ -5,31 +7,17 @@
     left: 0;
     right: 0;
     bottom: 0;
+    background: $bg-color;
+    z-index: $modal-zindex;
     &.show {
         display: flex;
         flex-direction: column;
     }
     .header {
-        flex: 0 0 auto;
-        display: flex;
-        .okBtn {
-            flex: 0 0 auto;
-        }
+        background: #f8f8f8;
+        border-bottom: 1px solid $border-color;
         .title {
-            flex: 1 1 auto;
             font-weight: 600;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0 5px;
-            > div {
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-        }
-        .cancelBtn {
-            flex: 0 0 auto;
         }
     }
     .body {
