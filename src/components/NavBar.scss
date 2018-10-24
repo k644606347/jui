@@ -9,16 +9,15 @@ $navbar-height: 45 * $hd;
     align-items: center;
     font-size: 18px;
     .leftContent, .rightContent {
-        min-width: 1.5em;
         flex: 0 0 auto;
         cursor: pointer;
     }
     .leftContent {
-        padding: 0 5px 0 15px;
+        padding: 0 10px 0 15px;
     }
     .rightContent {
         justify-content: flex-end;
-        padding: 0 15px 0 5px;
+        padding: 0 15px 0 10px;
     }
     .content {
         flex: 1 1 0%;

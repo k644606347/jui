@@ -17,6 +17,7 @@ import NavBarDemo from './NavBarDemo';
 import ListDemo from './ListDemo';
 import cm from "./index.scss";
 import RowTagNestedDemo from './NestedRowTagDemo';
+import ToastDemo from './ToastDemo';
 
 window.console.log('icon:', (<Icon icon={iconThList} /> as React.ReactElement<IconProps>).type === Icon, icon500px);
 const tools = Tools.getInstance();
@@ -28,6 +29,7 @@ class App extends React.Component<any, any> {
         return (
             <JUIPage className={'App'}>
                 <RowTagNestedDemo />
+                <ToastDemo />
                 <MessageTest />
                 <FormWidgetTest />
                 <FormTest />

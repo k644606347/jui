@@ -25,6 +25,7 @@ import NavBar from "./components/NavBar";
 import Modal from './components/Modal';
 import FormWidgetConfig from "./components/formWidget/Config";
 import JUIPage from './components/JUIPage';
+import Toast from "./components/Toast";
 
 export {
     JUIPage,
@@ -54,4 +55,5 @@ export {
     CheckboxItems,
     NavBar,
     Modal,
+    Toast,
 }

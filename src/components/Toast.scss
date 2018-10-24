@@ -1,0 +1,27 @@
+@import './style/Variables.scss';
+
+.toast {
+    position: fixed;
+    z-index: $toast-zindex;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: $text-inverse-color;
+    background-color: $toast-bg-color;
+    padding: 15px;
+    border-radius: 8px;
+    .icon {
+        font-size: 45px;
+    }
+    .icon ~ .content {
+        margin-top: 5px;
+    }
+}
+.overlay {
+    z-index: $toast-zindex - 1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
