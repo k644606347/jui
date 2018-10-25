@@ -5,7 +5,7 @@ import Hello from '../components/Hello';
 
 import { FormWidgetTest } from './FormWidget.test';
 import FormTest from './Form.test';
-import { Icon, Tools, Menu, Button, Pagination, List, Log, JUIPage } from 'src/index';
+import { Icon, Tools, Menu, Button, Pagination, List, Log, JUIPage, Toast } from 'src/index';
 import { IconProps } from '../components/Icon';
 import { iconThList, icon500px, iconAccessibleIcon, iconAddressBook } from '../components/icons/FontAwesomeMap';
 import MessageTest from './Message.test';
@@ -28,8 +28,8 @@ class App extends React.Component<any, any> {
     public render() {
         return (
             <JUIPage className={'App'}>
-                <RowTagNestedDemo />
                 <ToastDemo />
+                <RowTagNestedDemo />
                 <MessageTest />
                 <FormWidgetTest />
                 <FormTest />

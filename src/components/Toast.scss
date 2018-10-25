@@ -10,11 +10,17 @@
     background-color: $toast-bg-color;
     padding: 15px;
     border-radius: 8px;
+    transition: opacity .15s;
+    transition-timing-function: ease-in;
+    opacity: 0;
     .icon {
         font-size: 45px;
     }
     .icon ~ .content {
         margin-top: 5px;
+    }
+    &.show {
+        opacity: 1;
     }
 }
 .overlay {
