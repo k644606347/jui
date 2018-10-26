@@ -1,4 +1,4 @@
-import { CSSAttrs, Omit } from "../utils/types";
+import { CSSAttrs, Omit, AnyFunction } from "../utils/types";
 import * as React from "react";
 import toastCSS from './Toast.scss';
 import Tools from "src/utils/Tools";
@@ -18,8 +18,8 @@ interface ToastState extends CSSAttrs {
     duration?: number;
     onClose?: () => void;
     overlay?: boolean;
-    type?: 'info' | 'loading' | 'success' | 'error' | 'warn';
-    icon?: React.ReactElement<IconProps>;
+    type?: 'info' | 'loading' | 'success' | 'error' | 'warn' | '';
+    icon?: React.ReactElement<IconProps> | boolean;
     content?: React.ReactNode;
     show?: boolean;
 }
@@ -29,6 +29,8 @@ const defaultState: ToastState = {
     duration: 3000,
     overlay: false,
     show: true,
+    type: '',
+    icon: true,
 }
 
 export class StatefulToast extends React.PureComponent<any, ToastState> {
@@ -36,7 +38,10 @@ export class StatefulToast extends React.PureComponent<any, ToastState> {
     private toggleAnimationTimer: any;
     private handleCloseTimer: any;
     private wrapperRef: React.RefObject<any>;
-    readonly state: ToastState = defaultState;
+    readonly state: ToastState = {
+        ...defaultState,
+        show: false,
+    };
     constructor(props: any) {
         super(props);
 
@@ -45,7 +50,7 @@ export class StatefulToast extends React.PureComponent<any, ToastState> {
     }
     render() {
         let { state } = this,
-            { duration, overlay, content, className, style, show, type } = state;
+            { duration, overlay, content, className, style, show, type, icon } = state;
 
         window.clearTimeout(this.handleCloseTimer);
         if (show) {
@@ -54,13 +59,20 @@ export class StatefulToast extends React.PureComponent<any, ToastState> {
             this.handleCloseTimer = window.setTimeout(this.handleClose, duration);
         }
 
+        let iconEl;
+
+        if (icon) {
+            if (Icon.isIconElement(icon)) {
+                iconEl = icon;
+            } else {
+                iconEl = type ? <Icon icon={presetIconMap[type]} spin={type === 'loading'}/> : '';
+            }
+        }
         return (
             <React.Fragment>
                 <div ref={this.wrapperRef} className={tools.classNames(toastCSS.toast, className)} style={style}>
                     <div className={tools.classNames(toastCSS.icon)}>
-                        {
-                            type ? <Icon icon={presetIconMap[type]} spin={type === 'loading'}/> : ''
-                        }
+                        { iconEl }
                     </div>
                     <div className={tools.classNames(toastCSS.content)}>{ content }</div>
                 </div>
@@ -108,15 +120,17 @@ type ToastHandler = (
     ) => Factory;
 
 interface Factory {
+    toastObj?: React.Component<any, ToastState>;
     isShow: () => boolean;
+    show: (args?: Partial<ToastState>) => Factory;
+    hide: () => Factory;
     info: ToastHandler,
     success: ToastHandler,
     error: ToastHandler,
     warn: ToastHandler,
     loading: ToastHandler,
-    show: (args?: Partial<ToastState>) => Factory;
-    hide: () => Factory;
-    toastObj?: React.Component<any, ToastState>;
+    content: AnyFunction;
+    icon: AnyFunction;
 }
 
 const Factory: Factory = {
@@ -125,11 +139,9 @@ const Factory: Factory = {
         return Boolean(this.toastObj && this.toastObj.state.show);
     },
     show(args: Partial<ToastState>) {
-        let nextState = {};
+        let nextState = { ...defaultState };
 
         if (tools.isPlainObject(args)) {
-            nextState = Object.assign(nextState, defaultState);
-
             for (let k in args) {
                 if (args[k] !== undefined) {
                     nextState[k] = args[k];
@@ -145,57 +157,65 @@ const Factory: Factory = {
         } else {
             this.toastObj && this.toastObj.setState({...nextState, show: true});
         }
-
         return this;
     },
     hide() {
-        this.toastObj && this.toastObj.setState({ show: false });
+        this.toastObj && this.toastObj.setState({ ...defaultState, show: false });
         return this;
     },
     info(content, duration, options = {}) {
-        this.show({
+        return this.show({
             ...options,
             content,
             duration,
             type: 'info',
         });
-        return this;
     },
     success(content, duration, options = {}) {
-        this.show({
+        return this.show({
             ...options,
             content,
             duration,
             type: 'success',
         });
-        return this;
     },
     error(content, duration, options = {}) {
-        this.show({
+        return this.show({
             ...options,
             content,
             duration,
             type: 'error',
         });
-        return this;
     },
     warn(content, duration, options = {}) {
-        this.show({
+        return this.show({
             ...options,
             content,
             duration,
             type: 'warn',
         });
-        return this;
     },
     loading(content, duration, options = {}) {
-        this.show({
+        return this.show({
             ...options,
             content,
             duration,
             type: 'loading',
         });
-        return this;
+    },
+    content(content?: React.ReactNode): any {
+        if (content !== undefined && content !== null) {
+            this.toastObj && this.toastObj.setState({ content });
+        } else {
+            return this.toastObj && this.toastObj.state.content;
+        }
+    },
+    icon(icon?: ToastState['icon']): any {
+        if (icon !== undefined && icon !== null) {
+            this.toastObj && this.toastObj.setState({ icon });
+        } else {
+            return this.toastObj && this.toastObj.state.icon;
+        }
     }
 }
 export default Factory;
