@@ -29,6 +29,7 @@ class App extends React.Component<any, any> {
         return (
             <JUIPage className={'App'}>
                 <ToastDemo />
+                <NavBarDemo/>
                 <RowTagNestedDemo />
                 <MessageTest />
                 <FormWidgetTest />
@@ -49,7 +50,6 @@ class App extends React.Component<any, any> {
                 <Icon icon={iconAddressBook} size="2x" rotation={90} flip="vertical" border={true} pulse={true} spin={true} />
                 <Pagination current={1} total={20} disabled={true} />
                 <Pagination current={21} total={20} disabled={true} />
-                <NavBarDemo/>
                 <ModalDemo/>
                 <ListDemo/>
                 <a href="www.baidu.com">link1</a>
