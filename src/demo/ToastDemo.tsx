@@ -19,7 +19,7 @@ export default class ToastDemo extends React.PureComponent<any, any>{
                 }>
                     error Toast
                 </Button>
-                <Button icon={'loading'} onClick={
+                <Button loading onClick={
                     e => Toast.loading('加载中', 0)
                 }>
                     loading Toast
@@ -29,6 +29,21 @@ export default class ToastDemo extends React.PureComponent<any, any>{
                 }>
                     toggle Toast display
                 </Button>
+                <Button onClick={
+                    e => Toast.info(
+                        <React.Fragment>
+                            <h1>目录</h1>
+                            <ul>
+                                <li>第一章</li>
+                                <li>第二章</li>
+                                <li>第三章</li>
+                            </ul>
+                            <h2>第一章, CSS3 transform</h2>
+                            <div> 在上面的例子里面我们用了<b>transform: scale(-1, 1)</b>做水平翻转,然后还用了translateZ(1px)做上下图层关系。理论上我们使用scale但是并没有放大或者缩小...</div>
+                            <div>transform:translateZ() 字体模糊问题 父类重返Z轴平面 -..._博客园</div>
+                        </React.Fragment>
+                    , 0)
+                }>内容为HTML的Toast</Button>
             </React.Fragment>
         );
     }

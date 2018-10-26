@@ -32,9 +32,11 @@ const defaultState: ToastState = {
 }
 
 export class StatefulToast extends React.PureComponent<any, ToastState> {
-    readonly state: ToastState = defaultState;
-    private closeTimer: any;
+    private toggleAnimationDuration = 1000;
+    private toggleAnimationTimer: any;
+    private handleCloseTimer: any;
     private wrapperRef: React.RefObject<any>;
+    readonly state: ToastState = defaultState;
     constructor(props: any) {
         super(props);
 
@@ -45,11 +47,11 @@ export class StatefulToast extends React.PureComponent<any, ToastState> {
         let { state } = this,
             { duration, overlay, content, className, style, show, type } = state;
 
-        window.clearTimeout(this.closeTimer);
+        window.clearTimeout(this.handleCloseTimer);
         if (show) {
             if (duration === 0)
                 duration = 10000000;
-            this.closeTimer = window.setTimeout(this.handleClose, duration);
+            this.handleCloseTimer = window.setTimeout(this.handleClose, duration);
         }
 
         return (
@@ -74,25 +76,23 @@ export class StatefulToast extends React.PureComponent<any, ToastState> {
     componentDidUpdate() {
         this.toggleDisplay();
     }
-    private displayTimer: any;
     toggleDisplay() {
         let wrapperEl = this.wrapperRef.current,
             wrapperStyle = wrapperEl.style,
             { show } = this.state;
 
         if (show) {
-            window.clearTimeout(this.displayTimer);
+            window.clearTimeout(this.toggleAnimationTimer);
             wrapperStyle.display = 'block';
             wrapperEl.classList.add(toastCSS.show);
         } else {
             wrapperEl.classList.remove(toastCSS.show);
 
             if (wrapperStyle.display !== 'none')
-                this.displayTimer = window.setTimeout(() => {
+                this.toggleAnimationTimer = window.setTimeout(() => {
                     wrapperStyle.display = 'none';
-                }, 1000);
+                }, this.toggleAnimationDuration);
         }
-
     }
     handleClose() {
         let { onClose } = this.state;
@@ -105,7 +105,7 @@ export class StatefulToast extends React.PureComponent<any, ToastState> {
 type ToastHandler = (
     content: ToastState['content'], duration?: ToastState['duration'], 
     options?: Omit<Partial<ToastState>, 'content' | 'duration'>
-    ) => void;
+    ) => Factory;
 
 interface Factory {
     isShow: () => boolean;
@@ -114,8 +114,8 @@ interface Factory {
     error: ToastHandler,
     warn: ToastHandler,
     loading: ToastHandler,
-    show: (args?: Partial<ToastState>) => void;
-    hide: () => void;
+    show: (args?: Partial<ToastState>) => Factory;
+    hide: () => Factory;
     toastObj?: React.Component<any, ToastState>;
 }
 
@@ -125,9 +125,7 @@ const Factory: Factory = {
         return Boolean(this.toastObj && this.toastObj.state.show);
     },
     show(args: Partial<ToastState>) {
-        let nextState = {
-                show: true,
-            };
+        let nextState = {};
 
         if (tools.isPlainObject(args)) {
             nextState = Object.assign(nextState, defaultState);
@@ -139,50 +137,65 @@ const Factory: Factory = {
             }
         }
 
-        this.toastObj && this.toastObj.setState({...nextState, show: true});
+        if (this.isShow()) {
+            this.hide();
+            window.setTimeout(() => {
+                this.toastObj && this.toastObj.setState({...nextState, show: true});
+            }, 100);
+        } else {
+            this.toastObj && this.toastObj.setState({...nextState, show: true});
+        }
+
+        return this;
     },
     hide() {
         this.toastObj && this.toastObj.setState({ show: false });
+        return this;
     },
     info(content, duration, options = {}) {
-        this.show.call(this, {
+        this.show({
             ...options,
             content,
             duration,
             type: 'info',
         });
+        return this;
     },
     success(content, duration, options = {}) {
-        this.show.call(this, {
+        this.show({
             ...options,
             content,
             duration,
             type: 'success',
         });
+        return this;
     },
     error(content, duration, options = {}) {
-        this.show.call(this, {
+        this.show({
             ...options,
             content,
             duration,
             type: 'error',
         });
+        return this;
     },
     warn(content, duration, options = {}) {
-        this.show.call(this, {
+        this.show({
             ...options,
             content,
             duration,
             type: 'warn',
         });
+        return this;
     },
     loading(content, duration, options = {}) {
-        this.show.call(this, {
+        this.show({
             ...options,
             content,
             duration,
             type: 'loading',
         });
+        return this;
     }
 }
 export default Factory;
