@@ -24,11 +24,11 @@ import Textarea from "./components/formWidget/Textarea";
 import NavBar from "./components/NavBar";
 import Modal from './components/Modal';
 import FormWidgetConfig from "./components/formWidget/Config";
-import JUIPage from './components/JUIApp';
+import JUIApp from './components/JUIApp';
 import Toast from "./components/Toast";
 
 export {
-    JUIPage,
+    JUIApp,
     Form,
     FormItem,
     Button,

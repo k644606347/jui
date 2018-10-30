@@ -6,7 +6,7 @@
     "target": "es5",
     "lib": ["es2018", "dom"],
     "sourceMap": true,
-    "allowJs": true,
+    "allowJs": false,
     "jsx": "react",
     "moduleResolution": "node",
     "rootDir": "src",
@@ -15,7 +15,9 @@
     "noImplicitThis": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
-    "suppressImplicitAnyIndexErrors": true
+    "suppressImplicitAnyIndexErrors": true,
+    "declaration": true,
+    "declarationDir": "../jui-release/@types/"
   },
   "exclude": [
     "node_modules",

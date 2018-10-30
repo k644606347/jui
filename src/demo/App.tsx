@@ -5,7 +5,7 @@ import Hello from '../components/Hello';
 
 import { FormWidgetTest } from './FormWidget.test';
 import FormTest from './Form.test';
-import { Icon, Tools, Menu, Button, Pagination, List, Log, JUIPage, Toast } from 'src/index';
+import { Icon, Tools, Menu, Button, Pagination, List, Log, JUIApp, Toast } from 'src/index';
 import { IconProps } from '../components/Icon';
 import { iconThList, icon500px, iconAccessibleIcon, iconAddressBook } from '../components/icons/FontAwesomeMap';
 import MessageTest from './Message.test';
@@ -27,7 +27,7 @@ class App extends React.Component<any, any> {
     }
     public render() {
         return (
-            <JUIPage className={'App'}>
+            <JUIApp className={'App'}>
                 <ToastDemo />
                 <NavBarDemo/>
                 <RowTagNestedDemo />
@@ -56,7 +56,7 @@ class App extends React.Component<any, any> {
                 <a onClick={this.link2}>link2</a>
                 <Hello name="TypeScript" enthusiasmLevel={10} />
                 <MultiContextProvider />
-            </JUIPage>
+            </JUIApp>
         );
     }
     handleFormChange = (e: any) => {

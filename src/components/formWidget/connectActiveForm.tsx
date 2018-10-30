@@ -3,12 +3,10 @@ import * as React from "react";
 import { FormContext } from "./FormContext";
 import hoistNonReactStatics from "../../utils/hoistNonReactStatics";
 
-interface ExtraProps {
-    forwardedRef?: React.RefObject<any>;
-}
-
 export default function connectActiveForm<OriginProps extends FormWidgetProps>(UnwrappedComponent: React.ComponentType<OriginProps>) {
-    type Props = OriginProps & ExtraProps;
+    type Props = OriginProps & {
+        forwardedRef?: React.RefObject<any>;
+    };
 
     class WidgetWrapper extends React.PureComponent<Props, any> {
         static defaultProps: Partial<Props> = {
