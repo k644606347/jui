@@ -12,7 +12,7 @@ $list-name: list;
     list-style: none;
     margin: 0;
     padding: 0;
-    .#{$list-name}-item {
+    .item {
         display: block;
         &:nth-child(odd) {
             .section-header {
@@ -33,6 +33,7 @@ $list-name: list;
                 font-size: 20px;
                 height: $section-title-height;
                 line-height: $section-title-height;
+                text-align: center;
                 &.section-header-sticky {
                     position: sticky;
                     top: 0;

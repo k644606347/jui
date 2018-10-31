@@ -72,6 +72,7 @@ function getSCSSConfig(env, options) {
                 options: {
                     modules: true,
                     localIdentName: classNamePrefix + '-' + (isProd(env) ? "[name]_[hash:base64:5]" : "[name]-[local]_[hash:base64:3]"),
+                    camelCase: true,
                 }
             },
             postcssConfig,
