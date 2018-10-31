@@ -17,7 +17,7 @@
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
     "declaration": true,
-    "declarationDir": "../jui-release/@types/"
+    "declarationDir": "../jui-release/types/"
   },
   "exclude": [
     "node_modules",
