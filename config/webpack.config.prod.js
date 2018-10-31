@@ -65,7 +65,7 @@ module.exports = {
       require.resolve('./polyfills'),
       paths.appIndexJs,
     ],
-    [demoFile]: paths.demoJs,
+    // [demoFile]: paths.demoJs,
   },
   output: {
     // The build folder.

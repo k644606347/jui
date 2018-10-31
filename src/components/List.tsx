@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IListProps, ISectionData, IRowData } from './ListType';
+import { IListProps, SectionData, RowData } from './ListType';
 import cssModules from './List.scss';
 import Tools from '../utils/Tools';
 
@@ -33,18 +33,15 @@ export default class List extends React.PureComponent<IListProps, any> {
                 if (dGroup.type === 'section') {
                     result = this.renderSection(dGroup);
                     // classNames.push(cssModules['section-wrap']);
-                } else if (dGroup.type === 'row') {
-                    result = <React.Fragment>{this.renderRow(dGroup)}{this.renderSeparator(dGroup)}</React.Fragment>;
-                    // classNames.push(cssModules['row-wrap']);
                 } else {
-                    result = '';
+                    result = <React.Fragment>{this.renderRow(dGroup)}{this.renderSeparator(dGroup)}</React.Fragment>;
                 }
 
                 return <li className={tools.classNames(classNames)} key={i}>{ result }</li>;
             })
         }</ul>);
     }
-    private renderSection(data: ISectionData) {
+    private renderSection(data: SectionData) {
         let { renderSectionHeader, renderSectionBody } = this,
             // { renderSectionWrapper } = props,
             headerEl = renderSectionHeader(data),
@@ -54,14 +51,14 @@ export default class List extends React.PureComponent<IListProps, any> {
 
         // return renderSectionWrapper ? renderSectionWrapper(headerEl, bodyEl) : <div className={cssModules.section}>{headerEl}{bodyEl}</div>;
     }
-    private renderSectionHeader(data: ISectionData): JSX.Element {
+    private renderSectionHeader(data: SectionData): JSX.Element {
         let { renderSectionHeader, sectionHeaderSticky } = this.props,
             headerContent = renderSectionHeader ? renderSectionHeader(data) : data.title,
             classNames = tools.classNames(cssModules['section-header'], sectionHeaderSticky && cssModules['section-header-sticky']);
 
         return headerContent ? <div className={tools.classNames(classNames)}>{ headerContent }</div> : <React.Fragment />;
     }
-    private renderSectionBody(data: ISectionData) {
+    private renderSectionBody(data: SectionData) {
         let { renderSectionBodyWrapper } = this.props,
             { renderRow, renderSeparator } = this,
             children = data.data.map((d, i) => {
@@ -70,12 +67,12 @@ export default class List extends React.PureComponent<IListProps, any> {
 
         return <div className={cssModules['section-body']}>{ renderSectionBodyWrapper ? renderSectionBodyWrapper(children) : children }</div>;
     }
-    private renderRow(data: IRowData) {
+    private renderRow(data: RowData) {
         let { renderRow } = this.props;
 
         return <div className={ cssModules.row }>{ renderRow(data) }</div>
     }
-    private renderSeparator(data: IRowData) {
+    private renderSeparator(data: RowData) {
         let { renderSeparator } = this.props,
             className = cssModules['row-separator'];
 

@@ -5,23 +5,22 @@
 //   renderSectionBodyWrapper: () => JSX.Element;
 //   renderSeparator: () => JSX.Element;
 // }
-export interface ISectionData {
+export interface SectionData {
   type: 'section';
   title?: string;
-  data: IRowData[];
+  data: RowData[];
 }
-export interface IRowData {
-  type: 'row';
-  data: any;
+export interface RowData {
+  [k: string]: any;
 }
 export interface IListProps {
-  dataSource: Array<ISectionData | IRowData | never>;
+  dataSource: Array<SectionData | RowData | never>;
   style?: React.CSSProperties;
   className?: string;
   sectionHeaderSticky?: boolean;
-  renderRow: (data: IRowData) => JSX.Element;
-  renderSeparator?: (data: IRowData) => JSX.Element;
+  renderRow: (data: RowData) => JSX.Element;
+  renderSeparator?: (data: RowData) => JSX.Element;
   // renderSectionWrapper?: (header: JSX.Element, body: JSX.Element) => JSX.Element;
-  renderSectionHeader?: (data: ISectionData) => JSX.Element;
+  renderSectionHeader?: (data: SectionData) => JSX.Element;
   renderSectionBodyWrapper?: (...child: JSX.Element[][]) => JSX.Element;
 }

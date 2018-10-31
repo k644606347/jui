@@ -46,6 +46,8 @@ $list-name: list;
             background-color: #fff;
             border-top: 1px solid #ececed;
             display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .row-separator {
             background-color: rgb(245, 245, 249);
