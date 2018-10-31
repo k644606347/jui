@@ -51,7 +51,7 @@ const cssConfig = cssConfigFile.getConfigByEnv(env.stringified['process.env'].NO
 // It compiles slowly and is focused on producing a fast and minimal bundle.
 // The development configuration is different and lives in a separate file.
 
-const mainFile = 'lib/jui';
+const mainFile = 'lib/index';
 const demoFile = 'demo/demo';
 module.exports = {
   // Don't attempt to continue if there are any errors.
@@ -73,8 +73,8 @@ module.exports = {
     // Generated JS file names (with nested folders).
     // There will be one main bundle, and one file per asynchronous chunk.
     // We don't currently advertise code splitting but Webpack supports it.
-    filename: '[name].min.js',
-    chunkFilename: '[name].chunk.min.js',
+    filename: '[name].js',
+    chunkFilename: '[name].chunk.js',
     // We inferred the "public path" (such as / or /my-project) from homepage.
     publicPath: publicPath,
     // Point sourcemap entries to original disk location (format as URL on Windows)
@@ -82,6 +82,16 @@ module.exports = {
       path
         .relative(paths.appSrc, info.absoluteResourcePath)
         .replace(/\\/g, '/'),
+    libraryTarget: 'umd',
+  },
+  externals: {
+    react: 'react',
+    'react-is': 'react-is',
+    '@fortawesome/fontawesome-svg-core': '@fortawesome/fontawesome-svg-core',
+    '@fortawesome/free-brands-svg-icons': '@fortawesome/free-brands-svg-icons',
+    '@fortawesome/free-regular-svg-icons': '@fortawesome/free-regular-svg-icons',
+    '@fortawesome/free-solid-svg-icons': '@fortawesome/free-solid-svg-icons',
+    '@fortawesome/react-fontawesome': '@fortawesome/react-fontawesome',
   },
   resolve: {
     // This allows you to set a fallback for where Webpack should look for modules.
