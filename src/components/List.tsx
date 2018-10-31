@@ -3,7 +3,6 @@ import { IListProps, SectionData, RowData } from './ListType';
 import listCSS from './List.scss';
 import Tools from '../utils/Tools';
 
-console.log('listCSS', listCSS);
 export * from './ListType';
 
 const tools = Tools.getInstance();
@@ -66,7 +65,7 @@ export default class List extends React.PureComponent<IListProps, any> {
                 return <React.Fragment key={i}>{ renderRow(d) }{ renderSeparator(d) }</React.Fragment>
             });
 
-        return <div className={listCSS.sectionHeader}>{ renderSectionBodyWrapper ? renderSectionBodyWrapper(children) : children }</div>;
+        return <div className={listCSS.sectionBody}>{ renderSectionBodyWrapper ? renderSectionBodyWrapper(children) : children }</div>;
     }
     private renderRow(data: RowData) {
         let { renderRow } = this.props;
