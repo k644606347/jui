@@ -29,11 +29,15 @@ $list-name: list;
         .section {
             display: block;
             .section-header {
+                padding: 0 15px;
                 display: block;
                 font-size: 20px;
                 height: $section-title-height;
                 line-height: $section-title-height;
                 text-align: center;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
                 &.section-header-sticky {
                     position: sticky;
                     top: 0;
@@ -49,12 +53,14 @@ $list-name: list;
             display: block;
             overflow: hidden;
             text-overflow: ellipsis;
+            padding: 0 15px;
         }
         .row-separator {
             background-color: rgb(245, 245, 249);
             height: 8px;
             border-top: 1px solid #ececed;
             border-bottom: 1px solid #ececed;
+            padding: 0 15px;
         }
     }
 }

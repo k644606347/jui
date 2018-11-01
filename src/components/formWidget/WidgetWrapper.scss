@@ -2,27 +2,27 @@
 
 .wrapper {
     &.error {
-        color: $error-color;
+        color: $error-color !important;
         input::placeholder, textarea::placeholder {
-            color: $error-color;
+            color: $error-color !important;
         }
     }
     &.warn {
-        color: $warn-color;
+        color: $warn-color !important;
         input::placeholder, textarea::placeholder {
-            color: $warn-color;
+            color: $warn-color !important;
         }
     }
     &.info {
-        color: $info-color;
+        color: $info-color !important;
         input::placeholder, textarea::placeholder {
-            color: $info-color;
+            color: $info-color !important;
         }
     }
     &.success {
-        color: $success-color;
+        color: $success-color !important;
         input::placeholder, textarea::placeholder {
-            color: $success-color;
+            color: $success-color !important;
         }
     }
 }

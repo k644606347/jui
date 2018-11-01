@@ -14,12 +14,11 @@ const tools = Tools.getInstance();
 export class WidgetWrapper extends React.PureComponent<Props> {
     render() {
         let { props } = this,
-            { className, children, validateReport = { isValid: true, msg: '' } } = props;
+            { className, children, validateReport = { isValid: true, msg: '' } } = props,
+            { level = '' } = validateReport;
 
         return (
-            <div className={tools.classNames(cm.wrapper, className)} style={{
-                color: ValidateReportor.getFontColor(validateReport),
-            }}>
+            <div className={tools.classNames(cm.wrapper, className, cm[level])}>
                 { children }
             </div>
         )

@@ -34,7 +34,7 @@ export default class List extends React.PureComponent<IListProps, any> {
                     result = this.renderSection(dGroup);
                     // classNames.push(cssModules['section-wrap']);
                 } else {
-                    result = <React.Fragment>{this.renderRow(dGroup)}{this.renderSeparator(dGroup)}</React.Fragment>;
+                    result = <React.Fragment>{this.renderRow(dGroup)}</React.Fragment>;
                 }
 
                 return <li className={tools.classNames(classNames)} key={i}>{ result }</li>;
@@ -62,7 +62,7 @@ export default class List extends React.PureComponent<IListProps, any> {
         let { renderSectionBodyWrapper } = this.props,
             { renderRow, renderSeparator } = this,
             children = data.data.map((d, i) => {
-                return <React.Fragment key={i}>{ renderRow(d) }{ renderSeparator(d) }</React.Fragment>
+                return <React.Fragment key={i}>{ renderRow(d) }</React.Fragment>
             });
 
         return <div className={listCSS.sectionBody}>{ renderSectionBodyWrapper ? renderSectionBodyWrapper(children) : children }</div>;

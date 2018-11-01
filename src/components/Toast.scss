@@ -16,6 +16,9 @@
     opacity: 0;
     .icon {
         font-size: 45px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
     .icon ~ .content {
         margin-top: 5px;
