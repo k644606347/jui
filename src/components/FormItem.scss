@@ -5,19 +5,30 @@
 .wrapper {
     display: flex;
     font-size: 17px;
-    padding: 8px 0;
+    padding: 10px 0;
     background-color: $bg-color;
+    &.horizontal {
+        flex-direction: row;
+        .label + .formitem-control {
+            margin-left: .5em;
+        }
+    }
+    &.vertical {
+        flex-direction: column;
+        .label {
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+    }
     .label {
         width: 5em;
         overflow: hidden;
         text-align: left;
         flex: 0 1 auto;
         white-space: nowrap;
+        text-overflow: ellipsis;
     }
     .formitem-control {
         flex: 1 1 auto;
-    }
-    .label + .field-control {
-        margin-left: .5em;
     }
 }

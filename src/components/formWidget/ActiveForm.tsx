@@ -4,9 +4,8 @@ import { FormProps, FormState } from "../FormType";
 import Config from "./Config";
 import { FormContext } from "./FormContext";
 import { Report } from "./Validator";
-import { FormItemProps } from "../FormItemType";
 import { CSSAttrs, Omit } from "../../utils/types";
-import FormItem from "../FormItem";
+import FormItem, { FormItemProps } from "../FormItem";
 import Form from "../Form";
 import Log from "../../utils/Log";
 import { FormWidgetChangeEvent } from "./Widget";
@@ -83,15 +82,15 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
             <React.Fragment>
                 {
                     fields.map((field: FormItemProps, i) => {
-                        let { widget, label, renderWidget, widgetProps = {} } = field;
+                        let { component, label, componentProps = {}, render} = field;
                         
-                        widgetProps = Object.assign({}, widgetProps, {
+                        componentProps = Object.assign({}, componentProps, {
                             submitting,
-                            value: initialValue[widgetProps.name],
+                            value: initialValue[componentProps.name],
                             onChange,
                         })
                         return (
-                            <FormItem key={i} label={label} widget={widget} widgetProps={widgetProps} renderWidget={renderWidget}></FormItem>
+                            <FormItem key={i} label={label} component={component} componentProps={componentProps} render={render}></FormItem>
                         )
                     })
                 }
@@ -108,13 +107,13 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
                     return;
                 }
                 
-                let { widgetProps } = field;
+                let { componentProps } = field;
 
-                if (!tools.isPlainObject(widgetProps)) {
+                if (!tools.isPlainObject(componentProps)) {
                     return;
                 }
 
-                let { name, value } = widgetProps;
+                let { name, value } = componentProps;
 
                 if (value !== undefined) {
                     result[name] = value;
@@ -201,16 +200,21 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
                     } else {
                         onInvalid && onInvalid();
                         this.setState({ submitting: false });
+                        return;
                     }
 
                     if (onSubmit) {
                         let result = onSubmit({value: this.getValue()});
-
+                    
                         if (result instanceof Promise) {
                             result.finally(()=> {
                                 this.setState({ submitting: false });
                             });
+                        } else {
+                            this.setState({ submitting: false });
                         }
+                    } else {
+                        this.setState({ submitting: false });
                     }
                 })
             })

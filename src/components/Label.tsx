@@ -11,6 +11,9 @@ interface Props extends React.HTMLProps<HTMLLabelElement> {
 
 const tools = Tools.getInstance();
 export default class Label extends React.PureComponent<Props, any> {
+    static isLabelElement(el: any): el is React.ReactElement<Props> {
+        return React.isValidElement(el) && el.type === Label;
+    }
     constructor(props: Props) {
         super(props);
 

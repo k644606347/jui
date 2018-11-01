@@ -4,8 +4,9 @@ import InputWidget from './Input';
 import TextareaWidget from "./Textarea";
 import { FormWidgetProps } from "./Widget";
 
-interface ConfigType {
-    [k: string]: {
+export type FormWidgetName = 'checkboxItems' | 'radioItems' | 'text' | 'textarea';
+export type FormWidgetConfig =  {
+    [key in FormWidgetName]: {
         widget: React.ComponentClass<FormWidgetProps>
     }
 }
@@ -22,4 +23,4 @@ export default {
     textarea: {
         widget: TextareaWidget,
     }
-} as ConfigType;
+} as FormWidgetConfig;

@@ -1,13 +1,14 @@
 import * as React from "react";
 import { iconInfo, iconAccusoft, iconAddressCard_r } from "../components/icons/FontAwesomeMap";
-import { Tools, Icon, Form, Log, FormItem, Pagination, PureInput, CheckboxItems, Button, Checkbox, Input } from "../index";
+import { Tools, Icon, Form, Log, FormItem, Pagination, CheckboxItems, Button, Checkbox, Input } from "../index";
 import ActiveForm, { ActiveFormProps } from "../components/formWidget/ActiveForm";
 import Textarea from "../components/formWidget/Textarea";
+import { FormItemProps } from "src/components/FormItem";
 
 interface FormTestProps {}
 
 const tools = Tools.getInstance();
-export default class FormTest extends React.PureComponent<FormTestProps, { fields: any[], form2: any, testInputValue: string }> {
+export default class FormTest extends React.PureComponent<FormTestProps, { fields: FormItemProps[], form2: any, testInputValue: string }> {
     formForFieldsRef: React.RefObject<any>;
     inputRef: React.RefObject<any>;
     constructor(props: FormTestProps) {
@@ -19,8 +20,8 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
             fields: [
                 {
                     label: '复选1',
-                    widget: 'checkboxItems',
-                    widgetProps: {
+                    component: 'checkboxItems',
+                    componentProps: {
                         name: 'check1',
                         value: ['check1value'],
                         required: true,
@@ -38,8 +39,8 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                 },
                 {
                     label: '单选1',
-                    widget: 'radioItems',
-                    widgetProps: {
+                    component: 'radioItems',
+                    componentProps: {
                         name: 'radio1',
                         // value: 'radio1value',
                         items: [
@@ -59,8 +60,8 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                 },
                 {
                     label: '输入1',
-                    widget: 'text',
-                    widgetProps: {
+                    component: 'text',
+                    componentProps: {
                         name: 'input1',
                         value: 'input1 value',
                         rules: [
@@ -73,21 +74,21 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                 },
                 {
                     label: '输入2',
-                    widget: 'text',
-                    widgetProps: {
+                    component: 'text',
+                    componentProps: {
                         name: 'input2',
                         value: 'input2 value',
                     },
-                    renderWidget: (widget: any) => <React.Fragment>{widget}<Icon icon={iconInfo} color="green" /></React.Fragment>
+                    render: (widget: any, label: any) => <React.Fragment>{label}{widget}<Icon icon={iconInfo} color="green" /></React.Fragment>
                 },
                 {
                     label: 'textarea1',
-                    widget: 'textarea',
-                    widgetProps: {
+                    component: 'textarea',
+                    componentProps: {
                         name: 'textarea1',
                         value: 'textarea1',
                     },
-                    renderWidget: (widget: any) => <React.Fragment>{widget}<Icon icon={iconAccusoft} /></React.Fragment>
+                    render: (widget: any, label) => <React.Fragment>{label}{widget}<Icon icon={iconAccusoft} /></React.Fragment>
                 }
             ],
             form2: {
@@ -104,7 +105,6 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
             testInputValue: 'testInputValue',
         };
         window['fields1'] = this.state.fields;
-        this.handleChange = this.handleChange.bind(this);
     }
     render() {
         let { state } = this,
@@ -178,13 +178,6 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                 <Button onClick={e => {
                     this.formForFieldsRef.current.submit();
                 }}>submit!</Button>
-                <PureInput ref={this.inputRef} value={state.testInputValue} onChange={(e: any) => {
-                    // setTimeout(() => {
-                        console.log(e);
-                        this.setState({testInputValue: e.value});
-                    // }, 100);
-                }} />
-                <PureInput value=""  />
                 <Textarea onChange={(e: any) => {
                     console.log(e);
                 }}/>
@@ -196,22 +189,5 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
     }
     componentDidMount() {
         Log.log('this.inputRef=', this.inputRef);
-    }
-    handleChange(e: any) {
-        Log.log('onChange',e);
-
-        let { fields } = this.state;
-
-        fields = [...fields];
-
-        let targetIndex = fields.findIndex(field => field.name === e.name);
-
-        if (targetIndex !== -1) {
-            let target = fields[targetIndex];
-            target = {...target, checked: e.checked};
-            fields[targetIndex] = target;
-        }
-
-        this.setState({ fields });
     }
 }

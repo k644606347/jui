@@ -1,6 +1,6 @@
 import { Context1 } from "./Contexts";
 
-import { Log, PureInput } from "../..";
+import { Log } from "../..";
 
 import * as React from "react";
 
