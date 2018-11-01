@@ -177,6 +177,14 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
     //         tools.isFunction(w.clean) && w.clean();
     //     });
     // }
+    // clean() {
+    //     let { value } = this.state;
+
+    //     for(let k in value) {
+    //         value[k] = undefined;
+    //     }
+    //     this.setState({ value });
+    // }
     submit() {
         let { onSubmit, onValid, onInvalid } = this.props,
             isValid = true;
