@@ -34,6 +34,7 @@ $navbar-height: 45 * $hd;
 }
 .light {
     background: #f8f8f8;
+    border-bottom: 1px solid $border-color;
     .leftContent, .rightContent {
         color: $primary-color;
     }

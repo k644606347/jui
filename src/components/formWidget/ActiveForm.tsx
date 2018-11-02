@@ -148,7 +148,9 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
     getValue() {
         return this.state.value;
     }
-
+    clean() {
+        this.setState({ value: {} });
+    }
     // setValue(value: FormValue) {
     //     if (!tools.isPlainObject(value)) {
     //         Log.error(`[ActiveForm.setValue]value必须是对象类型，当前是${JSON.stringify(value)}`);
@@ -185,12 +187,41 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
     //     }
     //     this.setState({ value });
     // }
+    // TODO 当瞬间多次触发submit时改如何处理
     submit() {
         let { onSubmit, onValid, onInvalid } = this.props,
-            isValid = true;
+            isValid = true,
+            handleFinally = () => {
+                this.setState({ isValid }, () => {
+                    let updateFormState = () => {
+                        this.setState({ submitting: false });
+                    };
+
+                    if (isValid) {
+                        onValid && onValid();
+                    } else {
+                        onInvalid && onInvalid();
+                        updateFormState();
+                        return;
+                    }
+
+                    if (onSubmit) {
+                        let result = onSubmit({value: this.getValue()});
+                    
+                        if (result instanceof Promise) {
+                            result.then(updateFormState).catch(updateFormState);
+                        } else {
+                            updateFormState();
+                        }
+                    } else {
+                        updateFormState();
+                    }
+                })
+            }
 
         this.setState({ submitting: true });
         this.validate()
+            .then(handleFinally)
             .catch((error) => {
                 isValid = false;
                 if (error instanceof Error) {
@@ -199,33 +230,8 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
                 } else {
                     this.validateReport(error);
                 }
-                this.setState({ submitting: false });
-            })
-            .finally(() => {
-                this.setState({ isValid }, () => {
-                    if (isValid) {
-                        onValid && onValid();
-                    } else {
-                        onInvalid && onInvalid();
-                        this.setState({ submitting: false });
-                        return;
-                    }
-
-                    if (onSubmit) {
-                        let result = onSubmit({value: this.getValue()});
-                    
-                        if (result instanceof Promise) {
-                            result.finally(()=> {
-                                this.setState({ submitting: false });
-                            });
-                        } else {
-                            this.setState({ submitting: false });
-                        }
-                    } else {
-                        this.setState({ submitting: false });
-                    }
-                })
-            })
+                handleFinally();
+            });
     }
     validateReport(reports: Report[]) {
         let { widgets } = this;
