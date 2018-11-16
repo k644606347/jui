@@ -9,6 +9,7 @@
         "@fortawesome/free-solid-svg-icons": "^5.4.1",
         "@fortawesome/react-fontawesome": "0.1.0-11",
         "react": "^16.4.1",
+        "react-dom": "^16.4.1",
         "react-is": "^16.5.1"
     },
     "scripts": {
@@ -23,7 +24,7 @@
         "@types/hoist-non-react-statics": "^3.0.1",
         "@types/jest": "^23.1.1",
         "@types/react": "^16.4.1",
-        "@types/react-dom": "^16.0.7",
+        "@types/react-dom": "^16.0.9",
         "autoprefixer": "7.1.6",
         "babel-jest": "^22.1.0",
         "babel-loader": "^7.1.2",

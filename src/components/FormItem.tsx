@@ -3,8 +3,8 @@ import cm from './FormItem.scss';
 import Tools from '../utils/Tools';
 import Label from "./Label";
 import Config, { FormWidgetName } from "./formWidget/Config";
-import { CSSAttrs } from "src/utils/types";
 import { FormWidgetProps } from "./formWidget/Widget";
+import { CSSAttrs } from "../utils/types";
 const tools = Tools.getInstance();
 
 export interface FormItemProps extends CSSAttrs {
