@@ -16,6 +16,7 @@ module.exports = {
         'jui': constants.appIndex
     },
     output: {
+        path: constants.appBuild,
         // Add /* filename */ comments to generated require()s in the output.
         pathinfo: true,
         // This does not produce a real file. It's just the virtual path that is served
@@ -71,18 +72,22 @@ module.exports = {
             }
         ]
     },
-    devtool: 'source-map',
+    devtool: 'none',
+    externals: {
+        react: 'react',
+        'react-is': 'react-is'
+    },
     plugins: [
         analyze && new BundleAnalyzerPlugin(),
         new UglifyJsPlugin({
             parallel: true,
             cache: true,
             sourceMap: true,
-            // uglifyOptions: {
-            //     output: {
-            //       comments: false
-            //     },
-            //   },
+            uglifyOptions: {
+                output: {
+                    comments: false
+                },
+            },
           })
     ].filter(n => !!n)
 };

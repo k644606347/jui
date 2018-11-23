@@ -7,19 +7,18 @@ import { FormWidgetTest } from './FormWidget.test';
 import FormTest from './Form.test';
 import { Icon, Tools, Menu, Button, Pagination, List, Log, JUIApp, Toast, FormItem } from '..';
 import { IconProps } from '../components/Icon';
-import { iconThList, icon500px, iconAccessibleIcon, iconAddressBook } from '../components/icons/FontAwesomeMap';
 import MessageTest from './Message.test';
 import MultiContextProvider from './context/MultiContextProvider';
 import HTMLForm from './RawForm';
 import ModalDemo from './ModalDemo';
-import MenuDemo from './MenuDemo';
+// import MenuDemo from './MenuDemo';
 import NavBarDemo from './NavBarDemo';
 import ListDemo from './ListDemo';
 import cm from "./index.scss";
 import RowTagNestedDemo from './NestedRowTagDemo';
 import ToastDemo from './ToastDemo';
+import { icon1111, icon1212, iconAddressbook, iconVideo, iconRank } from '../components/icons/IconFont';
 
-window.console.log('icon:', (<Icon icon={iconThList} /> as React.ReactElement<IconProps>).type === Icon, icon500px);
 window.console.log(process.env.NODE_ENV);
 const tools = Tools.getInstance();
 class App extends React.Component<any, any> {
@@ -36,19 +35,19 @@ class App extends React.Component<any, any> {
                 <FormWidgetTest />
                 <FormTest />
                 <HTMLForm />
-                <MenuDemo />
+                {/* <MenuDemo /> */}
                 <Button>btn1</Button>
-                <Button type={'primary'} icon={iconThList}>btn2</Button>
+                <Button type={'primary'} icon={iconRank}>btn2</Button>
                 <Button type="warning" size="large" loading={true}>btn3</Button>
-                <Button icon={<Icon style={{ marginRight: '20px' }} icon={icon500px} />} disabled={true}>disabled btn</Button>
+                <Button icon={<Icon style={{ marginRight: '20px' }} icon={iconVideo} />} disabled={true}>disabled btn</Button>
                 <Button type="dashed" size="small">small btn</Button>
                 <Button size="large">large btn</Button>
                 <Button loading={true} icon='cloud' inline={true}>inline btn</Button>
                 <Button shape="circle" loading={true} inline={true} size="large">btn4</Button>
                 <Button className="body-btn" type={'primary'}>custom className</Button>
-                <Icon icon={iconAccessibleIcon} size="2x" rotation={90} flip="vertical" border={true} pulse={true} spin={true} />
-                <Icon icon={iconAccessibleIcon} size="2x" rotation={90} flip="vertical" border={true} pulse={true} spin={true} />
-                <Icon icon={iconAddressBook} size="2x" rotation={90} flip="vertical" border={true} pulse={true} spin={true} />
+                <Icon icon={icon1111} rotation={90} flip="vertical" pulse={true} spin={true} />
+                <Icon icon={icon1212} rotation={90} flip="vertical" pulse={true} spin={true} />
+                <Icon icon={iconAddressbook} rotation={90} flip="vertical" pulse={true} spin={true} />
                 <Pagination current={1} total={20} disabled={true} />
                 <Pagination current={21} total={20} disabled={true} />
                 <ModalDemo/>

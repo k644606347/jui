@@ -1,6 +1,6 @@
 import { Toast, Button, Modal, Icon } from "..";
 import * as React from "react";
-import { iconCheckCircle_r, iconTimesCircle_r, iconQq, iconWeixin, iconInfoCircle } from "../components/icons/FontAwesomeMap";
+import { iconCircle, iconRoundcheck, iconDelete, iconWeibo } from "../components/icons/IconFont";
 
 export default class ToastDemo extends React.PureComponent<any, any>{
     state = {
@@ -9,7 +9,7 @@ export default class ToastDemo extends React.PureComponent<any, any>{
     render() {
         return (
             <React.Fragment>
-                <Button type={'primary'} icon={iconInfoCircle} onClick={
+                <Button type={'primary'} icon={iconCircle} onClick={
                     e => this.setState({ show: true })
                 }>Toast Demo</Button>
                 <Modal show={this.state.show} onOk={
@@ -26,12 +26,12 @@ export default class ToastDemo extends React.PureComponent<any, any>{
                         <Button type={'primary'} onClick={
                             e => Toast.info('info', 0)
                         }>info Toast</Button>
-                        <Button icon={iconCheckCircle_r} onClick={
+                        <Button icon={iconRoundcheck} onClick={
                             e => Toast.success('success!', 0)
                         }>
                             success Toast
                         </Button>
-                        <Button type={'warning'} icon={iconTimesCircle_r} onClick={
+                        <Button type={'warning'} icon={iconDelete} onClick={
                             e => Toast.error('error!', 0)
                         }>
                             error Toast
@@ -54,10 +54,10 @@ export default class ToastDemo extends React.PureComponent<any, any>{
                         }>
                             带蒙层Toast
                         </Button>
-                        <Button icon={<Icon icon={iconWeixin} />} onClick={
+                        <Button icon={<Icon icon={iconWeibo} />} onClick={
                             e => Toast.show({
                                 content: 'wechat!',
-                                icon: <Icon icon={iconWeixin} />,
+                                icon: <Icon icon={iconRoundcheck} />,
                                 duration: 0,
                             })
                         }>

@@ -1,9 +1,9 @@
 import * as React from "react";
-import { iconInfo, iconAccusoft, iconAddressCard_r } from "../components/icons/FontAwesomeMap";
 import { Tools, Icon, Form, Log, FormItem, Pagination, CheckboxItems, Button, Input } from "..";
 import ActiveForm, { ActiveFormProps } from "../components/formWidget/ActiveForm";
 import Textarea from "../components/formWidget/Textarea";
 import { FormItemProps } from "src/components/FormItem";
+import { iconAddressbook, iconAll } from "../components/icons/IconFont";
 
 interface FormTestProps {}
 
@@ -79,7 +79,7 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                         name: 'input2',
                         value: 'input2 value',
                     },
-                    render: (widget: any, label: any) => <React.Fragment>{label}{widget}<Icon icon={iconInfo} color="green" /></React.Fragment>
+                    render: (widget: any, label: any) => <React.Fragment>{label}{widget}<Icon icon={iconAll} /></React.Fragment>
                 },
                 {
                     label: 'textarea1',
@@ -88,7 +88,7 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                         name: 'textarea1',
                         value: 'textarea1',
                     },
-                    render: (widget: any, label) => <React.Fragment>{label}{widget}<Icon icon={iconAccusoft} /></React.Fragment>
+                    render: (widget: any, label) => <React.Fragment>{label}{widget}<Icon icon={iconAddressbook} /></React.Fragment>
                 }
             ],
             form2: {

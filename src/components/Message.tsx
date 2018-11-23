@@ -1,14 +1,9 @@
 import * as React from 'react';
 import { CSSAttrs } from '../utils/types';
 import Tools from '../utils/Tools';
-import {
-    iconStop,
-    iconTimesCircle,
-    iconExclamationCircle,
-    iconInfoCircle
-} from './icons/FontAwesomeMap';
 import Icon, { IconDefinition } from './Icon';
 import cm from './Message.scss';
+import { iconRoundclose, iconWarn, iconInfo } from './icons/IconFont';
 
 interface Props extends CSSAttrs {
     type: 'error' | 'warn' | 'info';
@@ -17,9 +12,9 @@ interface Props extends CSSAttrs {
 
 const tools = Tools.getInstance();
 const iconMap: { [key in Props['type']]: IconDefinition } = {
-    error: iconTimesCircle,
-    warn: iconExclamationCircle,
-    info: iconInfoCircle
+    error: iconRoundclose,
+    warn: iconWarn,
+    info: iconInfo
 };
 export default class Message extends React.PureComponent<Props, any> {
     static defaultProps: Partial<Props> = {

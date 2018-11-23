@@ -1,5 +1,4 @@
-import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import { IconProps } from "./Icon";
+import { IconProps, IconDefinition } from "./Icon";
 import { MenuItemProps } from "./MenuItemType";
 import { MenuItemsProps, MenuItemsChangeEvent } from "./MenuItemsType";
 

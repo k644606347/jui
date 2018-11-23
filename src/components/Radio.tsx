@@ -1,10 +1,10 @@
 
 import * as React from 'react';
 import Tools from '../utils/Tools';
-import { iconCheck } from './icons/FontAwesomeMap';
 import Icon from './Icon';
 import { Omit } from '../utils/types';
 import cm from './Radio.scss';
+import { iconRadiobox, iconRadioboxfill } from './icons/IconFont';
 
 const tools = Tools.getInstance();
 export interface RadiioChangeEvent {
@@ -55,7 +55,7 @@ export default class Radio extends React.PureComponent<RadioProps, RadioState> {
                     type="radio" checked={checked} disabled={disabled} readOnly={readOnly}
                     onChange={this.handleChange} 
                 />
-                <div className={cm.icon}><Icon icon={iconCheck} /></div>
+                <div className={cm.icon}><Icon icon={checked ? iconRadioboxfill : iconRadiobox} /></div>
                 {children !== undefined ? <div className={cm.description}>{children}</div> : ''}
             </label>
         );

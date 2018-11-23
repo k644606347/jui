@@ -1,6 +1,6 @@
 import { NavBar, Icon, Log, Button, Modal } from "..";
 import * as React from "react";
-import { iconArrowLeft, iconSearch, iconList, iconInfoCircle } from "../components/icons/FontAwesomeMap";
+import { iconActivity, iconAddLight, iconArrowLeftFill, iconSearch, iconList } from "../components/icons/IconFont";
 
 export default class NavBarDemo extends React.PureComponent<any, any> {
     state = {
@@ -9,7 +9,7 @@ export default class NavBarDemo extends React.PureComponent<any, any> {
     render() {
         return (
             <React.Fragment>
-                <Button type={'primary'} icon={iconInfoCircle} onClick={
+                <Button type={'primary'} icon={iconAddLight} onClick={
                     e => this.setState({ show: true })
                 }>Nav Demo</Button>
                 <Modal show={this.state.show} onOk={
@@ -19,18 +19,18 @@ export default class NavBarDemo extends React.PureComponent<any, any> {
                 }>
                     <React.Fragment>
                         <NavBar leftContent={
-                            <Icon icon={iconArrowLeft} />
+                            <Icon icon={iconActivity} />
                         } rightContent={'确定'} onLeftClick={
                             e => Log.log('后退')
                         }>导航栏，浅色主题</NavBar>
                         <NavBar theme={'dark'} leftContent={
-                            <Icon icon={iconArrowLeft} />
+                            <Icon icon={iconAddLight} />
                         } rightContent={'确定'} onLeftClick={
                             e => Log.log('后退')
                         }>导航栏，深色主题</NavBar>
                         <NavBar theme={'dark'} leftContent={
                             <React.Fragment>
-                                <Icon icon={iconArrowLeft} />
+                                <Icon icon={iconArrowLeftFill} />
                                 <Icon icon={iconSearch} />
                                 <Icon icon={iconList} />
                             </React.Fragment>

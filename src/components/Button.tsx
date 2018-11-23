@@ -3,39 +3,28 @@ import { PresetIcons, ButtonProps } from './ButtonType';
 import Icon, { IconProps } from './Icon';
 import TouchFeedback from './TouchFeedback';
 import Tools from '../utils/Tools';
-import { 
-    iconCloud, iconCloudDownloadAlt, 
-    iconDownload, iconCloudUploadAlt, 
-    iconPowerOff, iconSpinner, 
-    iconSearch, iconCheckCircle, 
-    iconCheckCircle_r, iconTimesCircle, 
-    iconTimesCircle_r, iconEllipsisH, 
-    iconEllipsisV, iconChevronUp, 
-    iconChevronRight, iconChevronDown, 
-    iconChevronLeft 
-} from './icons/FontAwesomeMap';
 import cssModule from './Button.scss';
 
 const tools = Tools.getInstance();
 const prefixCls = 'btn';
-const buttonIcons: PresetIcons = {
-    cloud: iconCloud,
-    'cloud-down': iconCloudDownloadAlt,
-    'cloud-upload': iconCloudUploadAlt,
-    download: iconDownload,
-    loading: iconSpinner,
-    'power-off': iconPowerOff,
-    search: iconSearch,
-    'check-circle': iconCheckCircle,
-    'check-circle-o': iconCheckCircle_r,
-    'times-circle': iconTimesCircle,
-    'times-circle-o': iconTimesCircle_r,
-    'ellipsis-h': iconEllipsisH,
-    'ellipsis-v': iconEllipsisV,
-    'up': iconChevronUp,
-    'right': iconChevronRight,
-    'down': iconChevronDown,
-    'left': iconChevronLeft,
+const buttonIcons: any = {
+    // cloud: iconCloud,
+    // 'cloud-down': iconCloudDownloadAlt,
+    // 'cloud-upload': iconCloudUploadAlt,
+    // download: iconDownload,
+    // loading: iconSpinner,
+    // 'power-off': iconPowerOff,
+    // search: iconSearch,
+    // 'check-circle': iconCheckCircle,
+    // 'check-circle-o': iconCheckCircle_r,
+    // 'times-circle': iconTimesCircle,
+    // 'times-circle-o': iconTimesCircle_r,
+    // 'ellipsis-h': iconEllipsisH,
+    // 'ellipsis-v': iconEllipsisV,
+    // 'up': iconChevronUp,
+    // 'right': iconChevronRight,
+    // 'down': iconChevronDown,
+    // 'left': iconChevronLeft,
 };
 class Button extends React.PureComponent<ButtonProps, any> {
     public static defaultProps = {

@@ -1,16 +1,16 @@
 import { CSSAttrs, Omit, AnyFunction } from "../utils/types";
 import * as React from "react";
-import { iconSpinner, iconCheckCircle_r, iconTimesCircle_r, iconExclamationCircle, iconInfoCircle } from "./icons/FontAwesomeMap";
 import Icon, { IconProps } from "./Icon";
 import toastCSS from './Toast.scss';
 import Tools from "../utils/Tools";
+import { iconInfo, iconLoading, iconRoundcheck, iconRoundclose, iconWarn } from "./icons/IconFont";
 
 const presetIconMap = {
-    info: iconInfoCircle,
-    loading: iconSpinner,
-    success: iconCheckCircle_r,
-    error: iconTimesCircle_r,
-    warn: iconExclamationCircle
+    info: iconInfo,
+    loading: iconLoading,
+    success: iconRoundcheck,
+    error: iconRoundclose,
+    warn: iconWarn
 }
 const tools = Tools.getInstance();
 
