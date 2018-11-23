@@ -1,6 +1,6 @@
-import { Toast, Button, Modal, Icon } from "src";
+import { Toast, Button, Modal, Icon } from "..";
 import * as React from "react";
-import { iconCheckCircle_r, iconTimesCircle_r, iconQq, iconWeixin, iconInfoCircle } from "src/components/icons/FontAwesomeMap";
+import { iconCheckCircle_r, iconTimesCircle_r, iconQq, iconWeixin, iconInfoCircle } from "../components/icons/FontAwesomeMap";
 
 export default class ToastDemo extends React.PureComponent<any, any>{
     state = {

@@ -1,6 +1,6 @@
-import { NavBar, Icon, Log, Button, Modal } from "src";
+import { NavBar, Icon, Log, Button, Modal } from "..";
 import * as React from "react";
-import { iconArrowLeft, iconSearch, iconList, iconInfoCircle } from "src/components/icons/FontAwesomeMap";
+import { iconArrowLeft, iconSearch, iconList, iconInfoCircle } from "../components/icons/FontAwesomeMap";
 
 export default class NavBarDemo extends React.PureComponent<any, any> {
     state = {

@@ -2,8 +2,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "../jui-release/lib/",
-    "module": "esnext",
-    "target": "es6",
+    "module": "es2015",
+    "target": "es2015",
     "sourceMap": true,
     "allowJs": false,
     "jsx": "react",
@@ -23,7 +23,6 @@
     "build",
     "scripts",
     "acceptance-tests",
-    "webpack",
     "jest",
     "src/setupTests.ts"
   ]

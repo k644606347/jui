@@ -7,7 +7,7 @@ import { FormWidgetProps } from "./Widget";
 export type FormWidgetName = 'checkboxItems' | 'radioItems' | 'text' | 'textarea';
 export type FormWidgetConfig =  {
     [key in FormWidgetName]: {
-        widget: React.ComponentClass<FormWidgetProps>
+        widget: React.ComponentClass<FormWidgetProps> | React.ForwardRefExoticComponent<FormWidgetProps>
     }
 }
 export default {

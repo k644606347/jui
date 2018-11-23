@@ -86,7 +86,7 @@ function getSCSSConfig(env, options) {
                 loader: require.resolve("css-loader"),
                 options: {
                     modules: true,
-                    localIdentName: classNamePrefix + '-' + (isProd(env) ? "[name]_[hash:base64:5]" : "[name]-[local]_[hash:base64:3]"),
+                    localIdentName: classNamePrefix + '-' + (isProd(env) ? "[hash:base64:8]" : "[name]-[local]_[hash:base64:3]"),
                     camelCase: true,
                 }
             },

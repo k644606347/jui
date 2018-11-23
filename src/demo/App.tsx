@@ -1,11 +1,11 @@
 import * as React from 'react';
 
-import './App.css';
+import './App.scss';
 import Hello from '../components/Hello';
 
 import { FormWidgetTest } from './FormWidget.test';
 import FormTest from './Form.test';
-import { Icon, Tools, Menu, Button, Pagination, List, Log, JUIApp, Toast, FormItem } from 'src/index';
+import { Icon, Tools, Menu, Button, Pagination, List, Log, JUIApp, Toast, FormItem } from '..';
 import { IconProps } from '../components/Icon';
 import { iconThList, icon500px, iconAccessibleIcon, iconAddressBook } from '../components/icons/FontAwesomeMap';
 import MessageTest from './Message.test';
@@ -20,6 +20,7 @@ import RowTagNestedDemo from './NestedRowTagDemo';
 import ToastDemo from './ToastDemo';
 
 window.console.log('icon:', (<Icon icon={iconThList} /> as React.ReactElement<IconProps>).type === Icon, icon500px);
+window.console.log(process.env.NODE_ENV);
 const tools = Tools.getInstance();
 class App extends React.Component<any, any> {
     constructor(props: any) {

@@ -1,4 +1,4 @@
-import { List } from "src";
+import { List } from "..";
 import favoriteIcon from './favicon.ico';
 import * as React from "react";
 

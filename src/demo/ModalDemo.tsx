@@ -1,4 +1,4 @@
-import { Modal, Button } from "src";
+import { Modal, Button } from "..";
 import * as React from "react";
 
 export default class ModalDemo extends React.PureComponent<any,any> {

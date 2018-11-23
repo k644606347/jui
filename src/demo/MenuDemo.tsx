@@ -1,6 +1,6 @@
-import { Modal, Button, Icon, Menu, Tools } from "src";
+import { Modal, Button, Icon, Menu, Tools } from "../";
 import * as React from "react";
-import { iconCarBattery, iconAccessibleIcon, iconThList, iconBan, iconAdn, iconDribbble } from "src/components/icons/FontAwesomeMap";
+import { iconCarBattery, iconAccessibleIcon, iconThList, iconBan, iconAdn, iconDribbble } from "../components/icons/FontAwesomeMap";
 import { MenuItemsChangeEvent } from "src/components/MenuItemsType";
 import { MenuItemProps } from "src/components/MenuItemType";
 
