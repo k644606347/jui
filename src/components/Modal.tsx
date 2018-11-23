@@ -1,8 +1,8 @@
 import * as React from "react";
-import modalCSS from './Modal.scss';
 import NavBar from "./NavBar";
 import { CSSAttrs, NoResultFunction } from "../utils/types";
 import Tools from "../utils/Tools";
+import modalCSS from './Modal.scss';
 export interface ModalProps extends CSSAttrs {
     title?: string | JSX.Element;
     show?: boolean;

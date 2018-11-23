@@ -61,6 +61,21 @@ const getCSSConfig = (env, options) => {
 function getSCSSConfig(env, options) {
     return {
         test: /\.scss$/,
+        // use: ExtractTextPlugin.extract({
+        //     use: [
+        //         {
+        //             loader: require.resolve("css-loader"),
+        //             options: {
+        //                 modules: true,
+        //                 localIdentName: classNamePrefix + '-' + (isProd(env) ? "[name]_[hash:base64:5]" : "[name]-[local]_[hash:base64:3]"),
+        //                 camelCase: true,
+        //                 importLoaders: 2,
+        //             }
+        //         },
+        //         postcssConfig,
+        //         require.resolve("sass-loader")
+        //     ]
+        //   }),
         use: [{
                 loader: require.resolve("style-loader"),
                 options: {

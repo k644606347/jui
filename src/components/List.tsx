@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IListProps, SectionData, RowData } from './ListType';
-import listCSS from './List.scss';
 import Tools from '../utils/Tools';
+import listCSS from './List.scss';
 
 export * from './ListType';
 

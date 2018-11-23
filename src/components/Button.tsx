@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { PresetIcons, ButtonProps } from './ButtonType';
-import cssModule from './Button.scss';
 import Icon, { IconProps } from './Icon';
 import TouchFeedback from './TouchFeedback';
 import Tools from '../utils/Tools';
@@ -15,6 +14,7 @@ import {
     iconChevronRight, iconChevronDown, 
     iconChevronLeft 
 } from './icons/FontAwesomeMap';
+import cssModule from './Button.scss';
 
 const tools = Tools.getInstance();
 const prefixCls = 'btn';

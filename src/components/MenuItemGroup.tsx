@@ -1,9 +1,9 @@
 import * as React from "react";
-import cssModules from './MenuItem.scss';
 import Tools from "../utils/Tools";
 import Icon from "./Icon";
 import { MenuItemGroupProps, MenuItemGroupState } from "./MenuItemGroupType";
 import { iconChevronRight } from "./icons/FontAwesomeMap";
+import cssModules from './MenuItem.scss';
 
 const tools = Tools.getInstance();
 

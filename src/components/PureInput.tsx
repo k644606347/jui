@@ -1,7 +1,7 @@
 import * as React from 'react';
-import cm from './PureInput.scss';
 import Tools from '../utils/Tools';
 import { Omit } from '../utils/types';
+import cm from './PureInput.scss';
 
 
 export interface InputChangeEvent {

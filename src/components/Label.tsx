@@ -1,7 +1,7 @@
 import * as React from "react";
-import cm from './Label.scss';
 import Tools from "../utils/Tools";
 import Log from "../utils/Log";
+import cm from './Label.scss';
 
 interface Props extends React.HTMLProps<HTMLLabelElement> {
     forRef?: React.RefObject<any>;

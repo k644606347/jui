@@ -1,9 +1,10 @@
 import { CSSAttrs, Omit, AnyFunction } from "../utils/types";
 import * as React from "react";
-import toastCSS from './Toast.scss';
+import Checkbox from './Checkbox';
 import Tools from "src/utils/Tools";
 import { iconSpinner, iconCheckCircle_r, iconTimesCircle_r, iconExclamationCircle, iconInfoCircle } from "./icons/FontAwesomeMap";
 import Icon, { IconProps } from "./Icon";
+import toastCSS from './Toast.scss';
 
 const presetIconMap = {
     info: iconInfoCircle,

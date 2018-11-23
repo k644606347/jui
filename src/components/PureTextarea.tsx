@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Omit } from "../utils/types";
 import { InputChangeEvent } from "./PureInput";
-import cm from './PureTextarea.scss';
 import Tools from "../utils/Tools";
+import cm from './PureTextarea.scss';
 
 interface Props extends Omit<React.InputHTMLAttributes<HTMLTextAreaElement>, 'onChange'>{
     onChange?: (e: InputChangeEvent) => void;

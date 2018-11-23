@@ -1,9 +1,8 @@
-import css from './JUIApp.scss';
 import * as React from 'react';
 import { CSSAttrs } from '../utils/types';
 import Tools from '../utils/Tools';
+import css from './JUIApp.scss';
 import { StatefulToast } from './Toast';
-import { Toast } from 'src';
 
 interface Props extends CSSAttrs {
     children: any;

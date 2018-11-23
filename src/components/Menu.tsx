@@ -1,9 +1,9 @@
 import * as React from "react";
-import cssModules from './Menu.scss';
 import Tools from "../utils/Tools";
 import Icon from "./Icon";
 import MenuItems from "./MenuItems";
 import { MenuProps, MenuState } from "./MenuType";
+import cssModules from './Menu.scss';
 
 const tools = Tools.getInstance();
 

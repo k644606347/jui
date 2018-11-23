@@ -1,8 +1,8 @@
 import { PaginationProps, PaginationChangeEvent } from "./PaginationType";
 import * as React from "react";
-import cssModules from './Pagination.scss';
 import Button from "./Button";
 import Tools from "../utils/Tools";
+import cssModules from './Pagination.scss';
 
 const tools = Tools.getInstance();
 export default class Pagination extends React.PureComponent<PaginationProps, any> {

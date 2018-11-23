@@ -1,9 +1,9 @@
 import * as React from "react";
-import navBarCSS from './NavBar.scss';
 import { iconChevronLeft, iconEllipsisH } from "./icons/FontAwesomeMap";
 import Icon from "./Icon";
 import { CSSAttrs, AnyFunction } from "../utils/types";
 import Tools from "../utils/Tools";
+import navBarCSS from './NavBar.scss';
 export interface NavBarProps extends CSSAttrs {
     theme?: 'light' | 'dark';
     leftContent?: string | React.ReactNode;

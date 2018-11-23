@@ -2,12 +2,12 @@ import Widget, { FormWidgetProps, FormWidgetChangeEvent, FormWidgetState } from 
 import Checkbox, { CheckboxProps, CheckboxChangeEvent } from "../Checkbox";
 import * as React from "react";
 import Tools from "../../utils/Tools";
-import cm from './CheckboxItems.scss';
 import connectActiveForm from "./connectActiveForm";
 import { CSSAttrs } from "../../utils/types";
 import { DataType } from "./stores/DataConvertor";
 import { WidgetWrapper } from "./WidgetWrapper";
 import ValidateReportor from "./ValidateReportor";
+import cm from './CheckboxItems.scss';
 
 interface CheckboxItem extends CSSAttrs {
     label: string;

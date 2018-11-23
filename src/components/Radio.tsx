@@ -1,10 +1,10 @@
 
 import * as React from 'react';
-import cm from './Radio.scss';
 import Tools from '../utils/Tools';
 import { iconCheck } from './icons/FontAwesomeMap';
 import Icon from './Icon';
 import { Omit } from '../utils/types';
+import cm from './Radio.scss';
 
 const tools = Tools.getInstance();
 export interface RadiioChangeEvent {

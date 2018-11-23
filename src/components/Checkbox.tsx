@@ -1,9 +1,9 @@
 import * as React from "react";
-import cm from './Checkbox.scss';
 import Tools from "../utils/Tools";
 import Icon from "./Icon";
 import { iconCheckCircle, iconCircle_r } from "./icons/FontAwesomeMap";
 import { CSSAttrs, Omit } from "../utils/types";
+import cm from './Checkbox.scss';
 
 const tools = Tools.getInstance();
 

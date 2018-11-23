@@ -1,12 +1,12 @@
 import Widget, { FormWidgetProps, FormWidgetChangeEvent } from "./Widget";
 import * as React from "react";
 import Tools from "../../utils/Tools";
-import cm from './RadioItems.scss';
 import Radio from "../Radio";
 import connectActiveForm from "./connectActiveForm";
 import { CSSAttrs } from "../../utils/types";
 import { WidgetWrapper } from "./WidgetWrapper";
 import ValidateReportor from "./ValidateReportor";
+import cm from './RadioItems.scss';
 interface RadioItems extends CSSAttrs {
     label: string;
     value: string;

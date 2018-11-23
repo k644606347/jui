@@ -1,6 +1,6 @@
 import * as React from "react";
 import TestWidget from "../components/formWidget/TestWidget";
-import { CheckboxItems, Form, Log, Label, Checkbox, RadioItems } from "../index";
+import { CheckboxItems, Form, Log, Label, RadioItems } from "../index";
 import { CheckboxItemsProps } from "../components/formWidget/CheckboxItems";
 
 export class FormWidgetTest extends React.PureComponent<any, any> {

@@ -1,10 +1,10 @@
 import * as React from "react";
-import cm from './FormItem.scss';
 import Tools from '../utils/Tools';
 import Label from "./Label";
 import Config, { FormWidgetName } from "./formWidget/Config";
 import { FormWidgetProps } from "./formWidget/Widget";
 import { CSSAttrs } from "../utils/types";
+import cm from './FormItem.scss';
 const tools = Tools.getInstance();
 
 export interface FormItemProps extends CSSAttrs {

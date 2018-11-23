@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { CSSAttrs } from '../utils/types';
 import Tools from '../utils/Tools';
-import cm from './Message.scss';
 import {
     iconStop,
     iconTimesCircle,
@@ -9,6 +8,7 @@ import {
     iconInfoCircle
 } from './icons/FontAwesomeMap';
 import Icon, { IconDefinition } from './Icon';
+import cm from './Message.scss';
 
 interface Props extends CSSAttrs {
     type: 'error' | 'warn' | 'info';
