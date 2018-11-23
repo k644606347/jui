@@ -60,7 +60,8 @@ module.exports = {
                                 loader: "css-loader",
                                 options: {
                                     localIdentName: "[hash:base64:8]",
-                                    modules: true
+                                    modules: true,
+                                    camelCase: true,
                                 }
                             },
                             "sass-loader"

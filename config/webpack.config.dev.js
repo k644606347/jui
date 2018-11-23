@@ -69,7 +69,9 @@ module.exports = {
                                 loader: "css-loader",
                                 options: {
                                     localIdentName: constants.classNamePrefix + '-' + "[name]-[local]_[hash:base64:3]",
-                                    modules: true
+                                    modules: true,
+                                    sourceMap: true,
+                                    camelCase: true,
                                 }
                             },
                             "sass-loader"
