@@ -3,7 +3,7 @@ import Tools from "../utils/Tools";
 import Icon from "./Icon";
 import { CSSAttrs, Omit } from "../utils/types";
 import cm from './Checkbox.scss';
-import { iconRoundcheckfill, iconRoundcheck } from "./icons/IconFont";
+import { iconCheckmarkCircle, iconCheckmarkCircleOutline } from "./icons/SVGData";
 
 const tools = Tools.getInstance();
 
@@ -52,7 +52,7 @@ export default class Checkbox extends React.PureComponent<CheckboxProps, Checkbo
                     checked={checked} disabled={disabled} readOnly={readOnly} 
                     onChange={this.handleChange}
                 />
-                <div className={cm.icon}><Icon icon={checked ? iconRoundcheckfill : iconRoundcheck} /></div>
+                <div className={cm.icon}><Icon icon={checked ? iconCheckmarkCircle : iconCheckmarkCircleOutline} /></div>
                 {children !== undefined ? <div className={cm.description}>{children}</div> : ''}
             </label>
         );

@@ -1,11 +1,8 @@
 .icon {
     width: 1em;
     height: 1em;
-    font-size: 42px;
-    line-height: 100px;
-    margin: 10px 0;
-    color: #333;
-    vertical-align: -0.15em;
+    font-size: 1em;
+    vertical-align: -0.125em;
     fill: currentColor;
     overflow: hidden;
 }
@@ -13,7 +10,7 @@
     animation: jui-icon-spin 2s infinite linear;
 }
 .pulse {
-    animation: jui-icon-spin1s infinite steps(8);
+    animation: jui-icon-spin 1s infinite steps(8);
 }
 @keyframes jui-icon-spin {
     0% {

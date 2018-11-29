@@ -1,8 +1,8 @@
 import * as React from "react";
 import Tools from "../utils/Tools";
 import { CSSAttrs } from "../utils/types";
-import { IconDefinition } from "./icons/IconDefinition";
 import iconCSS from './Icon.scss';
+import { IconDefinition } from "./icons/SVGData";
 
 const tools = Tools.getInstance();
 export interface IconProps extends CSSAttrs {
@@ -12,6 +12,8 @@ export interface IconProps extends CSSAttrs {
     flip?: "horizontal" | "vertical" | "both";
     rotation?: 90 | 180 | 270;
     onClick?: (e: React.MouseEvent) => any;
+    id?: string;
+    name?: string;
 }
 export { IconDefinition };
 export default class Icon extends React.PureComponent<IconProps, any> {
@@ -27,7 +29,7 @@ export default class Icon extends React.PureComponent<IconProps, any> {
         this.handleClick = this.handleClick.bind(this);
     }
     render() {
-        let { icon, className, spin, pulse, flip } = this.props,
+        let { icon, id, name, style, className, spin, pulse, flip } = this.props,
             classNames = tools.classNames(
                 iconCSS.icon,
                 spin && iconCSS.spin,
@@ -36,7 +38,7 @@ export default class Icon extends React.PureComponent<IconProps, any> {
                 className
             );
 
-        return <svg className={classNames} viewBox={icon.viewBox} onClick={this.handleClick}>
+        return <svg id={id} name={name} icon-name={icon.name} style={style} className={classNames} viewBox={icon.viewBox} onClick={this.handleClick}>
             {
                 icon.paths.map((path, i) => <path fill='currentColor' key={i} d={path} />)
             }

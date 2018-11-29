@@ -3,14 +3,14 @@ import * as React from "react";
 import Icon, { IconProps } from "./Icon";
 import toastCSS from './Toast.scss';
 import Tools from "../utils/Tools";
-import { iconInfo, iconLoading, iconRoundcheck, iconRoundclose, iconWarn } from "./icons/IconFont";
+import { iconInformationCircleOutline, iconCheckmarkCircleOutline, iconCloseCircleOutline, iconAlert, iconLoading } from "./icons/SVGData";
 
 const presetIconMap = {
-    info: iconInfo,
+    info: iconInformationCircleOutline,
     loading: iconLoading,
-    success: iconRoundcheck,
-    error: iconRoundclose,
-    warn: iconWarn
+    success: iconCheckmarkCircleOutline,
+    error: iconCloseCircleOutline,
+    warn: iconAlert
 }
 const tools = Tools.getInstance();
 

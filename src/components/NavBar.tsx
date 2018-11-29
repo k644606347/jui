@@ -3,7 +3,7 @@ import Icon from "./Icon";
 import { CSSAttrs, AnyFunction } from "../utils/types";
 import Tools from "../utils/Tools";
 import navBarCSS from './NavBar.scss';
-import { iconBackLight, iconMoreLight } from "./icons/IconFont";
+import { iconArrowBack, iconMore } from "./icons/SVGData";
 export interface NavBarProps extends CSSAttrs {
     theme?: 'light' | 'dark';
     leftContent?: string | React.ReactNode;
@@ -17,8 +17,8 @@ const tools = Tools.getInstance();
 export default class NavBar extends React.PureComponent<NavBarProps, any> {
     static defaultProps: Partial<NavBarProps> = {
         theme: 'light',
-        leftContent: <Icon icon={iconBackLight} />,
-        rightContent: <Icon icon={iconMoreLight} />,
+        leftContent: <Icon icon={iconArrowBack} />,
+        rightContent: <Icon icon={iconMore} />,
     };
     render() {
         let { children, leftContent, rightContent, className, style, theme } = this.props;

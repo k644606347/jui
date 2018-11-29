@@ -17,7 +17,9 @@ import ListDemo from './ListDemo';
 import cm from "./index.scss";
 import RowTagNestedDemo from './NestedRowTagDemo';
 import ToastDemo from './ToastDemo';
-import { icon1111, icon1212, iconAddressbook, iconVideo, iconRank } from '../components/icons/IconFont';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStroopwafel } from '@fortawesome/free-solid-svg-icons';
+import { iconAddCircle, iconAddCircleOutline, iconAlert, iconInformation, iconMore } from '../components/icons/SVGData';
 
 window.console.log(process.env.NODE_ENV);
 const tools = Tools.getInstance();
@@ -28,8 +30,9 @@ class App extends React.Component<any, any> {
     public render() {
         return (
             <JUIApp className={'App'}>
+                <FontAwesomeIcon icon={faStroopwafel}/>
                 <ToastDemo />
-                <NavBarDemo/>
+                <NavBarDemo />
                 <RowTagNestedDemo />
                 <MessageTest />
                 <FormWidgetTest />
@@ -37,17 +40,17 @@ class App extends React.Component<any, any> {
                 <HTMLForm />
                 {/* <MenuDemo /> */}
                 <Button>btn1</Button>
-                <Button type={'primary'} icon={iconRank}>btn2</Button>
+                <Button type={'primary'} icon={iconMore}>btn2</Button>
                 <Button type="warning" size="large" loading={true}>btn3</Button>
-                <Button icon={<Icon style={{ marginRight: '20px' }} icon={iconVideo} />} disabled={true}>disabled btn</Button>
+                <Button icon={<Icon style={{ marginRight: '20px' }} icon={iconAddCircleOutline} />} disabled={true}>disabled btn</Button>
                 <Button type="dashed" size="small">small btn</Button>
                 <Button size="large">large btn</Button>
                 <Button loading={true} icon='cloud' inline={true}>inline btn</Button>
                 <Button shape="circle" loading={true} inline={true} size="large">btn4</Button>
                 <Button className="body-btn" type={'primary'}>custom className</Button>
-                <Icon icon={icon1111} rotation={90} flip="vertical" pulse={true} spin={true} />
-                <Icon icon={icon1212} rotation={90} flip="vertical" pulse={true} spin={true} />
-                <Icon icon={iconAddressbook} rotation={90} flip="vertical" pulse={true} spin={true} />
+                <Icon icon={iconAlert} rotation={90} flip="vertical" pulse={true} spin={true} />
+                <Icon icon={iconInformation} rotation={90} flip="vertical" pulse={true} spin={true} />
+                <Icon icon={iconAddCircle} rotation={90} flip="vertical" pulse={true} spin={true} />
                 <Pagination current={1} total={20} disabled={true} />
                 <Pagination current={21} total={20} disabled={true} />
                 <ModalDemo/>

@@ -8,7 +8,7 @@
         "react-is": "^16.6.3"
     },
     "scripts": {
-        "start": "webpack-dev-server --open --config ./config/webpack.config.dev.js",
+        "start": "webpack-dev-server --open --hot --config ./config/webpack.config.dev.js",
         "build": "webpack --config ./config/webpack.config.prod.js",
         "analyze": "npm run build --analyze",
         "test": "node scripts/test.js --env=jsdom"
@@ -17,6 +17,7 @@
         "@babel/core": "^7.1.6",
         "@babel/preset-env": "^7.1.6",
         "@babel/preset-react": "^7.0.0",
+        "@types/node": "^10.12.10",
         "@types/react": "^16.7.7",
         "@types/react-dom": "^16.0.10",
         "@types/react-is": "^16.5.0",

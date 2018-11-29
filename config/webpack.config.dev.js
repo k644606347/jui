@@ -83,13 +83,11 @@ module.exports = {
     },
     devtool: 'source-map',
     devServer: {
-        // Enable gzip compression of generated files.
-        compress: true,
-        // Silence WebpackDevServer's own logs since they're generally not useful. It
-        // will still show compile warnings and errors with this setting.
         clientLogLevel: 'none',
         contentBase: path.resolve('./public'),
-        port: 9000
+        compress: true, // 启用gzip
+        host: '0.0.0.0',// 外部也可访问网站
+        port: 9000,
     },
     plugins: [
         new HtmlWebpackPlugin({

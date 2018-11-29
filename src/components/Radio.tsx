@@ -4,7 +4,7 @@ import Tools from '../utils/Tools';
 import Icon from './Icon';
 import { Omit } from '../utils/types';
 import cm from './Radio.scss';
-import { iconRadiobox, iconRadioboxfill } from './icons/IconFont';
+import { iconRadioButtonOn, iconRadioButtonOff } from './icons/SVGData';
 
 const tools = Tools.getInstance();
 export interface RadiioChangeEvent {
@@ -55,7 +55,7 @@ export default class Radio extends React.PureComponent<RadioProps, RadioState> {
                     type="radio" checked={checked} disabled={disabled} readOnly={readOnly}
                     onChange={this.handleChange} 
                 />
-                <div className={cm.icon}><Icon icon={checked ? iconRadioboxfill : iconRadiobox} /></div>
+                <div className={cm.icon}><Icon icon={checked ? iconRadioButtonOn : iconRadioButtonOff} /></div>
                 {children !== undefined ? <div className={cm.description}>{children}</div> : ''}
             </label>
         );

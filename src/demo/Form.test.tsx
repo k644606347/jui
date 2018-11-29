@@ -3,7 +3,7 @@ import { Tools, Icon, Form, Log, FormItem, Pagination, CheckboxItems, Button, In
 import ActiveForm, { ActiveFormProps } from "../components/formWidget/ActiveForm";
 import Textarea from "../components/formWidget/Textarea";
 import { FormItemProps } from "src/components/FormItem";
-import { iconAddressbook, iconAll } from "../components/icons/IconFont";
+import { iconDoneAll, iconCloudDone } from "../components/icons/SVGData";
 
 interface FormTestProps {}
 
@@ -79,7 +79,7 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                         name: 'input2',
                         value: 'input2 value',
                     },
-                    render: (widget: any, label: any) => <React.Fragment>{label}{widget}<Icon icon={iconAll} /></React.Fragment>
+                    render: (widget: any, label: any) => <React.Fragment>{label}{widget}<Icon icon={iconDoneAll} /></React.Fragment>
                 },
                 {
                     label: 'textarea1',
@@ -88,7 +88,7 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                         name: 'textarea1',
                         value: 'textarea1',
                     },
-                    render: (widget: any, label) => <React.Fragment>{label}{widget}<Icon icon={iconAddressbook} /></React.Fragment>
+                    render: (widget: any, label) => <React.Fragment>{label}{widget}<Icon icon={iconCloudDone} /></React.Fragment>
                 }
             ],
             form2: {

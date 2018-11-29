@@ -3,7 +3,7 @@ import Tools from "../utils/Tools";
 import Icon from "./Icon";
 import { MenuItemGroupProps, MenuItemGroupState } from "./MenuItemGroupType";
 import cssModules from './MenuItem.scss';
-import { iconRight } from "./icons/IconFont";
+import { iconArrowForward } from "./icons/SVGData";
 
 const tools = Tools.getInstance();
 
@@ -41,7 +41,7 @@ export default class MenuItemGroup extends React.PureComponent<MenuItemGroupProp
                 }
                 <div className={cssModules.content}>{label}</div>
                 <div className={cssModules['sub-item-arrow']}>
-                    <Icon icon={iconRight} />
+                    <Icon icon={iconArrowForward} />
                 </div>
             </div>
         );
