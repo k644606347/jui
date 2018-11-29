@@ -17,8 +17,6 @@ import ListDemo from './ListDemo';
 import cm from "./index.scss";
 import RowTagNestedDemo from './NestedRowTagDemo';
 import ToastDemo from './ToastDemo';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStroopwafel } from '@fortawesome/free-solid-svg-icons';
 import { iconAddCircle, iconAddCircleOutline, iconAlert, iconInformation, iconMore } from '../components/icons/SVGData';
 
 window.console.log(process.env.NODE_ENV);
@@ -30,7 +28,6 @@ class App extends React.Component<any, any> {
     public render() {
         return (
             <JUIApp className={'App'}>
-                <FontAwesomeIcon icon={faStroopwafel}/>
                 <ToastDemo />
                 <NavBarDemo />
                 <RowTagNestedDemo />
