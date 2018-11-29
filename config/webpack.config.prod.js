@@ -37,12 +37,13 @@ module.exports = {
                     }, {
                         test: /\.(ts|tsx)$/,
                         use: [
+                            // {
+                            //     loader: 'babel-loader',
+                            //     options: {
+                            //         cacheDirectory: true,
+                            //     }
+                            // }, 
                             {
-                                loader: 'babel-loader',
-                                options: {
-                                    cacheDirectory: true,
-                                }
-                            }, {
                                 loader: 'ts-loader',
                                 options: {
                                     configFile: path.resolve('./tsconfig.json')
@@ -85,6 +86,6 @@ module.exports = {
                     comments: false
                 },
             },
-          })
+        }),
     ].filter(n => !!n)
 };
