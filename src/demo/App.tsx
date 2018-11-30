@@ -17,7 +17,7 @@ import ListDemo from './ListDemo';
 import cm from "./index.scss";
 import RowTagNestedDemo from './NestedRowTagDemo';
 import ToastDemo from './ToastDemo';
-import { iconAddCircle, iconAddCircleOutline, iconAlert, iconInformation, iconMore } from '../components/icons/SVGData';
+import { iconAddCircle, iconAddCircleOutline, iconAlert, iconInfo, iconMore } from '../components/icons/SVGData';
 
 window.console.log(process.env.NODE_ENV);
 const tools = Tools.getInstance();
@@ -46,7 +46,7 @@ class App extends React.Component<any, any> {
                 <Button shape="circle" loading={true} inline={true} size="large">btn4</Button>
                 <Button className="body-btn" type={'primary'}>custom className</Button>
                 <Icon icon={iconAlert} rotation={90} flip="vertical" pulse={true} spin={true} />
-                <Icon icon={iconInformation} rotation={90} flip="vertical" pulse={true} spin={true} />
+                <Icon icon={iconInfo} rotation={90} flip="vertical" pulse={true} spin={true} />
                 <Icon icon={iconAddCircle} rotation={90} flip="vertical" pulse={true} spin={true} />
                 <Pagination current={1} total={20} disabled={true} />
                 <Pagination current={21} total={20} disabled={true} />

@@ -87,6 +87,14 @@ export default class Tools {
     lowerCaseFirst(str: string) {
         return str[0].toLowerCase() + str.substr(1);
     }
+
+    trim(target: any) {
+        if (target === undefined || target === null) {
+            return '';
+        } else {
+            return this.removeZWSP(String(target).replace(/^\s*|\s*$/g, ''));
+        }
+    }
     
     removeZWSP(content: string) {// 删除零宽空格(ZWSP), ZWSP参考：https://zh.wikipedia.org/wiki/%E7%A9%BA%E6%A0%BC
         if (content === undefined || content === null || content === '') {

@@ -3,7 +3,7 @@ import { CSSAttrs } from '../utils/types';
 import Tools from '../utils/Tools';
 import Icon, { IconDefinition } from './Icon';
 import cm from './Message.scss';
-import { iconCloseCircleOutline, iconAlert, iconInformationCircleOutline } from './icons/SVGData';
+import { iconCloseCircleOutline, iconAlert, iconInfoCircleOutline } from './icons/SVGData';
 
 interface Props extends CSSAttrs {
     type: 'error' | 'warn' | 'info';
@@ -14,7 +14,7 @@ const tools = Tools.getInstance();
 const iconMap: { [key in Props['type']]: IconDefinition } = {
     error: iconCloseCircleOutline,
     warn: iconAlert,
-    info: iconInformationCircleOutline
+    info: iconInfoCircleOutline
 };
 export default class Message extends React.PureComponent<Props, any> {
     static defaultProps: Partial<Props> = {

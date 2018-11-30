@@ -4,29 +4,39 @@ import { FormProps, FormState } from "../FormType";
 import Config from "./Config";
 import { FormContext } from "./FormContext";
 import { Report } from "./Validator";
-import { CSSAttrs, Omit } from "../../utils/types";
+import { CSSAttrs, Omit, AnyFunction } from "../../utils/types";
 import FormItem, { FormItemProps } from "../FormItem";
 import Form from "../Form";
 import Log from "../../utils/Log";
 import { FormWidgetChangeEvent } from "./Widget";
 
+type FormValue = {[k in string]: any};
 export interface ActiveFormSubmitEvent {
     value: {[k in string] : any}
 }
 export interface ActiveFormChangeEvent {
-    value: {[k in string] : any}
+    fieldName: string;
+    fieldValue: any;
+    value: FormValue;
 }
 
-type FormValue = {[k in string]: any};
 type FieldChangeEvent = React.ChangeEvent<any> | FormWidgetChangeEvent;
+interface ChildrenMethodParams {
+    value: FormValue, 
+    handleChange: AnyFunction, 
+    handleSubmit: AnyFunction, 
+    isValid: boolean, 
+    submitting: boolean
+}
 export interface ActiveFormProps extends CSSAttrs, Omit<FormProps, 'onSubmit' | 'isValid'> {
+    name?: string;
+    initialFields?: FormItemProps[];
+    initialValue?: FormValue;
+    children?: (e: ChildrenMethodParams) => JSX.Element;
     onSubmit?: (e: ActiveFormSubmitEvent) => void | Promise<any>;
     onChange?: (e: ActiveFormChangeEvent) => void;
     onValid?: () => void;
     onInvalid?: () => void;
-    initialFields?: FormItemProps[];
-    initialValue?: FormValue;
-    children?: (...args: any[]) => JSX.Element;
     // action: string;// TODO
     // method: 'post' | 'get';
 }
@@ -285,14 +295,15 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
     private handleChange(e: FieldChangeEvent) {
         let { onChange } = this.props,
             { value } = this.state,
-            targetName, targetValue,
+            targetName: string, 
+            targetValue: any,
             nextValue = {...value};
 
         if (isActiveFormChangeEvent(e)) {
-            targetName = e.name;
+            targetName = e.name === undefined ? '' : e.name;
             targetValue = e.value;
         } else {
-            targetName = e.target.name;
+            targetName = String(e.target.name);
             targetValue = e.target.value;
         }
 
@@ -300,7 +311,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
         this.setState({
             value: nextValue
         }, () => {
-            onChange && onChange({ value: nextValue }); 
+            onChange && onChange({ value: nextValue, fieldName: targetName, fieldValue: targetValue }); 
         });
 
         function isActiveFormChangeEvent(event: any): event is FormWidgetChangeEvent {

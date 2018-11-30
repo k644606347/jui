@@ -1,9 +1,13 @@
-import { Modal, Button } from "..";
+import { Modal, Button, ActiveForm, Input } from "..";
 import * as React from "react";
 
 export default class ModalDemo extends React.PureComponent<any,any> {
     readonly state = {
         show: false,
+        formData: {
+            name: '123',
+            age: 17,
+        }
     }
     constructor(props: any) {
         super(props);
@@ -25,7 +29,28 @@ export default class ModalDemo extends React.PureComponent<any,any> {
                             return { show: false };
                         })
                     }} show={show}>
-                    this is a Modal
+                    <ActiveForm onChange={e => {
+                        let { formData } = this.state,
+                            { fieldName, fieldValue } = e;
+
+                        console.log(e);
+                        formData = {
+                            ...formData, 
+                            [fieldName]: fieldValue
+                        };
+                        
+                        this.setState({ formData });
+                    }}>
+                        {
+                            (args) => {
+                                console.log('children method called!');
+                                return <React.Fragment>
+                                    <Input name={'name'} value={this.state.formData.name}/>
+                                    <Input name={'age'} value={this.state.formData.age}/>
+                                </React.Fragment>
+                            }
+                        }
+                    </ActiveForm>
                 </Modal>
             </React.Fragment>
         );

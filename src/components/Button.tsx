@@ -4,27 +4,28 @@ import Icon, { IconProps } from './Icon';
 import TouchFeedback from './TouchFeedback';
 import Tools from '../utils/Tools';
 import cssModule from './Button.scss';
+import { iconCloud, iconCloudDownload, iconCloudUpload, iconDownload, iconLoading, iconPower, iconSearch, iconCheckCircle, iconCheckCircleOutline, iconTime, iconTimeOutline, iconMoreVertical, iconMore, iconArrowUp, iconArrowForward, iconArrowDown, iconArrowBack } from './icons/SVGData';
 
 const tools = Tools.getInstance();
 const prefixCls = 'btn';
-const buttonIcons: any = {
-    // cloud: iconCloud,
-    // 'cloud-down': iconCloudDownloadAlt,
-    // 'cloud-upload': iconCloudUploadAlt,
-    // download: iconDownload,
-    // loading: iconSpinner,
-    // 'power-off': iconPowerOff,
-    // search: iconSearch,
-    // 'check-circle': iconCheckCircle,
-    // 'check-circle-o': iconCheckCircle_r,
-    // 'times-circle': iconTimesCircle,
-    // 'times-circle-o': iconTimesCircle_r,
-    // 'ellipsis-h': iconEllipsisH,
-    // 'ellipsis-v': iconEllipsisV,
-    // 'up': iconChevronUp,
-    // 'right': iconChevronRight,
-    // 'down': iconChevronDown,
-    // 'left': iconChevronLeft,
+const buttonIcons: PresetIcons = {
+    cloud: iconCloud,
+    'cloud-down': iconCloudDownload,
+    'cloud-upload': iconCloudUpload,
+    download: iconDownload,
+    loading: iconLoading,
+    'power-off': iconPower,
+    search: iconSearch,
+    'check-circle': iconCheckCircle,
+    'check-circle-o': iconCheckCircleOutline,
+    'time-circle': iconTime,
+    'time-circle-o': iconTimeOutline,
+    'more': iconMore,
+    'more-v': iconMoreVertical,
+    'up': iconArrowUp,
+    'right': iconArrowForward,
+    'down': iconArrowDown,
+    'left': iconArrowBack,
 };
 class Button extends React.PureComponent<ButtonProps, any> {
     public static defaultProps = {

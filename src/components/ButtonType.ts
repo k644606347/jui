@@ -10,10 +10,10 @@ export interface PresetIcons {
     search: IconDefinition;
     'check-circle': IconDefinition;
     'check-circle-o': IconDefinition;
-    'times-circle': IconDefinition;
-    'times-circle-o': IconDefinition;
-    'ellipsis-h': IconDefinition;
-    'ellipsis-v': IconDefinition;
+    'time-circle': IconDefinition;
+    'time-circle-o': IconDefinition;
+    'more': IconDefinition;
+    'more-v': IconDefinition;
     'up': IconDefinition;
     'right': IconDefinition;
     'down': IconDefinition;
