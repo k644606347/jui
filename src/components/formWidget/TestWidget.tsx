@@ -5,8 +5,9 @@ import connectActiveForm from "./connectActiveForm";
 interface Props extends FormWidgetProps {
 }
 class TestWidget extends Widget<Props, FormWidgetState> {
-    static defaultProps: Props = {
+    static defaultProps = {
         id: 'testWidget',
+        value: '',
         // validateTrigger: 'onBlur',
     }
     constructor(props: Props) {

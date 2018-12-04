@@ -14,6 +14,7 @@
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noImplicitAny": true,
+    "alwaysStrict": true,
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
     "declaration": true,

@@ -7,16 +7,17 @@ import cm from './Radio.scss';
 import { iconRadioBtnOn, iconRadioBtnOff } from './icons/SVGData';
 
 const tools = Tools.getInstance();
-export interface RadiioChangeEvent {
-    id?: string;
-    name?: string;
-    value?: any;
-    checked?: boolean;
-    disabled?: boolean;
-    readOnly?: boolean;
+export interface RadioChangeEvent {
+    id: string;
+    name: string;
+    value: string;
+    checked: boolean;
+    disabled: boolean;
+    readOnly: boolean;
+    type: string;
 }
 export interface RadioProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
-    onChange?: (e: RadiioChangeEvent) => void;
+    onChange?: (e: RadioChangeEvent) => void;
 };
 export interface RadioState {}
 
@@ -61,14 +62,17 @@ export default class Radio extends React.PureComponent<RadioProps, RadioState> {
         );
     }
     protected handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-        let { value, checked } = e.target,
+        let { value, checked, readOnly, disabled } = e.target,
             { id, name, onChange } = this.props;
 
         onChange && onChange({
             id: id || '',
             name: name || '',
-            value: value,
-            checked
+            value,
+            checked,
+            readOnly,
+            disabled,
+            type: 'radio',
         });
     }
 }

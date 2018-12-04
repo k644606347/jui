@@ -1,10 +1,14 @@
 import * as React from 'react';
-import { FormProps, FormState } from './FormType';
 import Tools from '../utils/Tools';
+import { CSSAttrs } from "../utils/types";
 import cm from './Form.scss';
 
+export interface FormProps extends CSSAttrs, React.FormHTMLAttributes<HTMLFormElement> {
+    onSubmit?: (e: React.FormEvent) => void;
+    isValid?: boolean;
+}
 const tools = Tools.getInstance();
-export default class Form extends React.PureComponent<FormProps, FormState> {
+export default class Form extends React.PureComponent<FormProps, any> {
     static defaultProps: Partial<FormProps> = {
         isValid: true
     };

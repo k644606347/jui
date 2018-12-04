@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Tools, Icon, Form, Log, FormItem, Pagination, CheckboxItems, Button, Input } from "..";
+import { Tools, Icon, Form, Log, FormItem, Pagination, CheckboxItems, Button, Input, RadioItems } from "..";
 import ActiveForm, { ActiveFormProps } from "../components/formWidget/ActiveForm";
 import Textarea from "../components/formWidget/Textarea";
 import { FormItemProps } from "src/components/FormItem";
@@ -9,7 +9,7 @@ interface FormTestProps {}
 
 const tools = Tools.getInstance();
 export default class FormTest extends React.PureComponent<FormTestProps, { fields: FormItemProps[], form2: any, testInputValue: string }> {
-    formForFieldsRef: React.RefObject<any>;
+    formForFieldsRef: React.RefObject<ActiveForm>;
     inputRef: React.RefObject<any>;
     constructor(props: FormTestProps) {
         super(props);
@@ -152,7 +152,6 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                     }
                 } /> */}
                 <ActiveForm initialFields={fields}
-                    ref={this.formForFieldsRef} 
                     onSubmit={(e: any) => {
                         Log.info('onSubmit', e);
                     }}
@@ -165,22 +164,31 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                     }}
                     onSubmit={e => {
                         debugger;
-                    }}
+                    }} 
+                    ref={this.formForFieldsRef} 
+
                 >{
-                    (args: any) => {
-                        console.log(args);
-                        return <Form>
-                            <label>x: <input type="text" name="x" defaultValue={args.value.x} onChange={args.handleChange} /></label>
-                            <input type="submit" onClick={args.handleSubmit} />
-                            </Form>
+                    ({ value, handleChange }) => {
+                        return <React.Fragment>
+                        <label>x: 
+                            <input type="text" name="x" value={value.x} onChange={handleChange} />
+                        </label>
+                        <Button onClick={this.handleSetValue}>setValue</Button>
+                        <Button onClick={e => {
+                            this.formForFieldsRef.current!.submit();
+                        }}>submit!</Button>
+                        </React.Fragment>
                     }
                 }</ActiveForm>
-                <Button onClick={e => {
-                    this.formForFieldsRef.current.submit();
-                }}>submit!</Button>
                 <Textarea onChange={(e: any) => {
                     console.log(e);
                 }}/>
+                <CheckboxItems items={[
+                    {
+                        label: 'beijing label',
+                        value: 'beijing'
+                    }
+                ]} />
                 <Input value={'baiduyixia'} onChange={e => { Log.warn(e); }}/>
                 <Button>block btn</Button>
                 <Button inline={true}>inline btn</Button>
@@ -189,5 +197,15 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
     }
     componentDidMount() {
         Log.log('this.inputRef=', this.inputRef);
+    }
+    handleSetValue = () => {
+        let activeForm = this.formForFieldsRef.current!;
+
+        activeForm.setValue({x: 3333}).then(() => {
+            console.log(activeForm.getValue());
+        });
+        activeForm.setValue({x: 4444}).then(() => {
+            console.log(activeForm.getValue());
+        });
     }
 }

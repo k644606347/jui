@@ -138,7 +138,7 @@ const Factory: Factory = {
     isShow() {
         return Boolean(this.toastObj && this.toastObj.state.show);
     },
-    show(args: Partial<ToastState>) {
+    show(args?: Partial<ToastState>) {
         let nextState = { ...defaultState };
 
         if (tools.isPlainObject(args)) {

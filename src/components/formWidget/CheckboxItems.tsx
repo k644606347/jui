@@ -22,10 +22,12 @@ export interface CheckboxItemsProps extends FormWidgetProps {
 
 const tools = Tools.getInstance();
 class CheckboxItems extends Widget<CheckboxItemsProps, FormWidgetState> {
-    static dataType: DataType = 'array';
-    static defaultProps: CheckboxItemsProps = {
+    static defaultProps = {
         items: [],
+        value: [],
     }
+    static widgetName = 'checkboxItems';
+    static dataType: DataType = 'array';
     private checkboxs: Array<React.ReactElement<CheckboxProps>> = [];
     constructor(props: CheckboxItemsProps) {
         super(props);
@@ -50,7 +52,7 @@ class CheckboxItems extends Widget<CheckboxItemsProps, FormWidgetState> {
     }
     private renderCheckboxItem(item: CheckboxItem, key: string | number) {
         let { name } = this.props,
-            value = this.getParsedValue(),
+            value = this.getValue(),
             checkboxID = tools.genID('checkbox_item_'),
             checkboxEl = <Checkbox id={checkboxID} name={name} value={item.value}
                     checked={
@@ -67,13 +69,14 @@ class CheckboxItems extends Widget<CheckboxItemsProps, FormWidgetState> {
         return <div className={cm.item} key={key}>{ checkboxEl }</div>;
     }
     handleChange(e: CheckboxChangeEvent) {
-        let { name, onChange } = this.props,
+        let { onChange } = this.props,
             checkboxs = this.checkboxs,
-            nextValue: any[] = [];
-
+            nextValue: Array<CheckboxItem['value']> = [];
+            
         checkboxs.forEach(checkbox => {
-            let { id, value, checked } = checkbox.props;
+            let { id, value = '', checked } = checkbox.props;
 
+            value = String(value);
             if (id === e.id) {
                 if (e.checked) {
                     nextValue.push(value);
@@ -83,7 +86,7 @@ class CheckboxItems extends Widget<CheckboxItemsProps, FormWidgetState> {
             }
         });
 
-        this.dispatchEvent(onChange, { value: nextValue });
+        onChange && onChange(this.buildEvent({ value: nextValue }));
     }
 }
 

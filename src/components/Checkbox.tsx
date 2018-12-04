@@ -10,10 +10,11 @@ const tools = Tools.getInstance();
 export interface CheckboxChangeEvent {
     id: string;
     name: string;
-    value: any;
+    value: string;
     checked: boolean;
     disabled: boolean;
     readOnly: boolean;
+    type: string;
 }
 export interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
     onChange?: (e: CheckboxChangeEvent) => void;
@@ -74,7 +75,8 @@ export default class Checkbox extends React.PureComponent<CheckboxProps, Checkbo
             value,
             checked,
             disabled,
-            readOnly
+            readOnly,
+            type: 'checkbox',
         });
     }
 }

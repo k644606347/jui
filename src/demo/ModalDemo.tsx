@@ -1,5 +1,6 @@
-import { Modal, Button, ActiveForm, Input } from "..";
+import { Modal, Button, ActiveForm, Input, CheckboxItems, Checkbox } from "..";
 import * as React from "react";
+import { ActiveFormChangeEvent, ActiveFormRenderEvent } from "../components/formWidget/ActiveForm";
 
 export default class ModalDemo extends React.PureComponent<any,any> {
     readonly state = {
@@ -7,12 +8,15 @@ export default class ModalDemo extends React.PureComponent<any,any> {
         formData: {
             name: '123',
             age: 17,
+            vip: false
         }
     }
     constructor(props: any) {
         super(props);
 
         this.handleOk = this.handleOk.bind(this);
+        this.handleFormChange = this.handleFormChange.bind(this);
+        this.renderActiveForm = this.renderActiveForm.bind(this);
     }
     render() {
         let { show } = this.state;
@@ -29,31 +33,35 @@ export default class ModalDemo extends React.PureComponent<any,any> {
                             return { show: false };
                         })
                     }} show={show}>
-                    <ActiveForm onChange={e => {
-                        let { formData } = this.state,
-                            { fieldName, fieldValue } = e;
-
-                        console.log(e);
-                        formData = {
-                            ...formData, 
-                            [fieldName]: fieldValue
-                        };
-                        
-                        this.setState({ formData });
-                    }}>
+                    <ActiveForm initialValue={this.state.formData} onChange={this.handleFormChange}>
                         {
-                            (args) => {
-                                console.log('children method called!');
-                                return <React.Fragment>
-                                    <Input name={'name'} value={this.state.formData.name}/>
-                                    <Input name={'age'} value={this.state.formData.age}/>
-                                </React.Fragment>
-                            }
+                            this.renderActiveForm
                         }
                     </ActiveForm>
                 </Modal>
             </React.Fragment>
         );
+    }
+    renderActiveForm(args: ActiveFormRenderEvent) {
+        return <React.Fragment>
+            <Input name={'name'} value={args.value.name} onChange={args.handleChange}/>
+            <Input name={'age'} value={args.value.age}/>
+            <Checkbox name={'vip'} checked={args.value.vip} onChange={(e) => {
+                args.handleChange(e);
+            }} />
+        </React.Fragment>
+    }
+    handleFormChange(e: ActiveFormChangeEvent) {
+        let { formData } = this.state,
+            { value } = e;
+
+        console.log(e);
+        formData = {
+            ...formData,
+            ...value,
+        };
+        
+        this.setState({ formData });
     }
     handleOk(e: any) {
         alert('ok!');

@@ -1,50 +1,58 @@
 import * as React from "react";
 import Tools from "../../utils/Tools";
-import { FormProps, FormState } from "../FormType";
-import Config from "./Config";
 import { FormContext } from "./FormContext";
 import { Report } from "./Validator";
-import { CSSAttrs, Omit, AnyFunction } from "../../utils/types";
+import { CSSAttrs, AnyFunction } from "../../utils/types";
 import FormItem, { FormItemProps } from "../FormItem";
 import Form from "../Form";
 import Log from "../../utils/Log";
 import { FormWidgetChangeEvent } from "./Widget";
+import { CheckboxChangeEvent } from "../Checkbox";
+import { RadioChangeEvent } from "../Radio";
 
-type FormValue = {[k in string]: any};
+type ValueType = {[k in string]: any};
 export interface ActiveFormSubmitEvent {
-    value: {[k in string] : any}
+    name: string;
+    value: ValueType;
 }
 export interface ActiveFormChangeEvent {
-    fieldName: string;
-    fieldValue: any;
-    value: FormValue;
+    name: string;
+    value: ValueType;
 }
 
-type FieldChangeEvent = React.ChangeEvent<any> | FormWidgetChangeEvent;
-interface ChildrenMethodParams {
-    value: FormValue, 
-    handleChange: AnyFunction, 
-    handleSubmit: AnyFunction, 
-    isValid: boolean, 
-    submitting: boolean
+type FieldChangeEvent = React.ChangeEvent<any> | FormWidgetChangeEvent | CheckboxChangeEvent | RadioChangeEvent;
+export interface ActiveFormRenderEvent {
+    value: ValueType;
+    fields: FormItemProps[];
+    handleChange: AnyFunction; 
+    handleSubmit: AnyFunction;
+    isValid: boolean;
+    submitting: boolean;
 }
-export interface ActiveFormProps extends CSSAttrs, Omit<FormProps, 'onSubmit' | 'isValid'> {
+export interface ActiveFormProps extends CSSAttrs {
     name?: string;
     initialFields?: FormItemProps[];
-    initialValue?: FormValue;
-    children?: (e: ChildrenMethodParams) => JSX.Element;
+    initialValue?: ValueType;
+    children?: (e: ActiveFormRenderEvent) => JSX.Element;
     onSubmit?: (e: ActiveFormSubmitEvent) => void | Promise<any>;
     onChange?: (e: ActiveFormChangeEvent) => void;
     onValid?: () => void;
     onInvalid?: () => void;
     // action: string;// TODO
     // method: 'post' | 'get';
+    // acceptCharset?: string;
+    // action?: string;
+    // autoComplete?: string;
+    // encType?: string;
+    // method?: string;
+    // noValidate?: boolean;
+    // target?: string;
 }
 export interface ActiveFormState {
-    value: FormValue;
+    value: ValueType;
     isValid: boolean;
     submitting: boolean;
-    fields: ActiveFormProps['initialFields'];
+    fields: FormItemProps[];
 }
 const tools = Tools.getInstance();
 export default class ActiveForm extends React.PureComponent<ActiveFormProps, ActiveFormState> {
@@ -60,23 +68,65 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleWidgetMount = this.handleWidgetMount.bind(this);
+        this.handleFieldChange = this.handleFieldChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-    private readonly widgets: any = [];
+    private getValueByProps() {
+        let { initialValue, initialFields } = this.props,
+            result: ValueType = {};
+
+        if (tools.isPlainObject(initialValue)) {
+            for (let k in initialValue) {
+                result[k] = initialValue[k];
+            }
+        } else {
+            if (tools.isArray(initialFields)) {
+                initialFields.forEach(field => {
+                    if (!tools.isPlainObject(field)) {
+                        return;
+                    }
+                    
+                    let { componentProps } = field;
+    
+                    if (!tools.isPlainObject(componentProps)) {
+                        return;
+                    }
+    
+                    let { name, value } = componentProps;
+    
+                    if (value !== undefined) {
+                        result[name] = value;
+                    }
+                });
+            }
+        }
+
+        return result;
+    }
+    private readonly widgets: React.ReactInstance[] = [];
     render() {
         let { props, state } = this,
-            { children } = props,
-            { fields, submitting, isValid, value } = state;
+            { name, children } = props,
+            { fields, submitting, isValid, value } = state,
+            formProps = { name };
 
-        let UnwrappedElement = children ? 
-                                    children({ value, handleChange: this.handleChange, handleSubmit: this.handleSubmit, isValid, submitting }) : 
-                                    fields ? 
-                                        <Form>{this.renderFields(fields, value)}</Form> : 
-                                        <div></div>;
-
+        let UnwrappedElement = <Form {...formProps}>
+            {
+                children ? 
+                    children({ 
+                        value, 
+                        fields,
+                        handleChange: this.handleFieldChange, 
+                        handleSubmit: this.handleSubmit, 
+                        isValid, 
+                        submitting 
+                    }) : 
+                    this.renderFields(fields, value)
+            }
+        </Form>
         return (
             <FormContext.Provider value={{ 
-                onWidgetChange: this.handleChange, 
+                onWidgetChange: this.handleFieldChange, 
                 onWidgetMount: this.handleWidgetMount,
                 submitting,
             }}>
@@ -84,7 +134,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
             </FormContext.Provider>
         )
     }
-    private renderFields(fields: FormItemProps[], initialValue: FormValue) {
+    private renderFields(fields: FormItemProps[], initialValue: ValueType) {
         let { submitting } = this.state,
             { onChange } = this.props;
         
@@ -107,99 +157,43 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
             </React.Fragment>
         )
     }
-    private getValueByProps() {
-        let { initialValue, initialFields } = this.props,
-            result: FormValue = {};
-
-        if (tools.isArray(initialFields)) {
-            initialFields.forEach(field => {
-                if (!tools.isPlainObject(field)) {
-                    return;
-                }
-                
-                let { componentProps } = field;
-
-                if (!tools.isPlainObject(componentProps)) {
-                    return;
-                }
-
-                let { name, value } = componentProps;
-
-                if (value !== undefined) {
-                    result[name] = value;
-                }
-            });
-        }
-        if (tools.isPlainObject(initialValue)) {
-            for (let k in initialValue) {
-                result[k] = initialValue[k];
-            }
-        }
-
-        return result;
-    }    
     private handleWidgetMount(widgetInstance: any) {
         this.widgets.push(widgetInstance);
     }
-    setValue(value: any): Promise<ActiveFormState['value']> {
-        return new Promise((resolve, reject) => {
-            if (!tools.isPlainObject(value)) {
+    private setValueTimer = 0;
+    private setValueQueue: Array<{value: ValueType, resolve: AnyFunction}> = [];
+    setValue(value: ValueType): Promise<{}> {
+        let promise = new Promise((resolve, reject) => {
+            if (tools.isPlainObject(value)) {
+                this.setValueQueue.push({ value, resolve });
+            } else {
                 let errorMsg = `[ActiveForm.setValue]value必须是对象类型，当前是${JSON.stringify(value)}`;
                 Log.error(errorMsg);
                 reject(errorMsg);
             }
-            this.setState({
-                value
-            }, () => {
-                resolve(this.state.value);
-            });
         });
+        window.clearTimeout(this.setValueTimer);
+        this.setValueTimer = window.setTimeout(() => {
+            let nextValue = {...this.state.value};
+
+            this.setValueQueue.forEach(info => {
+                nextValue = Object.assign(nextValue, info.value);
+            });
+            this.setState({ value: nextValue }, () => {
+                this.handleChange();
+                this.setValueQueue.forEach(info => {
+                    info.resolve();
+                });
+            });
+        }, 0);
+        return promise;
     }
     getValue() {
         return this.state.value;
     }
-    clean() {
-        this.setState({ value: {} });
-    }
-    // setValue(value: FormValue) {
-    //     if (!tools.isPlainObject(value)) {
-    //         Log.error(`[ActiveForm.setValue]value必须是对象类型，当前是${JSON.stringify(value)}`);
-    //         return false;
-    //     }
-
-    //     this.widgets.forEach((w: any) => {
-    //         if (!value.hasOwnProperty(w.props.name)) {
-    //             return;
-    //         }
-    //         w.setValue(value[w.props.name]);
-    //     });
-
-    //     return true;
-    // }
-    // getValue() {
-    //     let value = {};
-    //     this.widgets.forEach((w: any) => {
-    //         value[w.props.name] = w.getValue();
-    //     });
-
-    //     return value;
-    // }
-    // clean() {
-    //     this.widgets.forEach((w: any) => {
-    //         tools.isFunction(w.clean) && w.clean();
-    //     });
-    // }
-    // clean() {
-    //     let { value } = this.state;
-
-    //     for(let k in value) {
-    //         value[k] = undefined;
-    //     }
-    //     this.setState({ value });
-    // }
     // TODO 当瞬间多次触发submit时改如何处理
     submit() {
-        let { onSubmit, onValid, onInvalid } = this.props,
+        let { onSubmit, onValid, onInvalid, name = '' } = this.props,
             isValid = true,
             handleFinally = () => {
                 this.setState({ isValid }, () => {
@@ -216,7 +210,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
                     }
 
                     if (onSubmit) {
-                        let result = onSubmit({value: this.getValue()});
+                        let result = onSubmit({name, value: this.getValue()});
                     
                         if (result instanceof Promise) {
                             result.then(updateFormState).catch(updateFormState);
@@ -256,7 +250,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
         let isValid = true,
             invalidReports: Report[] = [],
             validCount = 0, invalidCount = 0,
-            processor = (resolve: (value?: any) => void, reject: (reason?: any) => void) => {
+            processor = (resolve: AnyFunction, reject: AnyFunction) => {
                 this.widgets.forEach((widget: any) => {
                     widget.validate().then((report: Report) => {
                         if (!report.isValid) {
@@ -292,30 +286,50 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
 
         this.submit();
     }
-    private handleChange(e: FieldChangeEvent) {
-        let { onChange } = this.props,
-            { value } = this.state,
-            targetName: string, 
-            targetValue: any,
-            nextValue = {...value};
+    private fetchFieldInfoByChangeEvent(e: FieldChangeEvent) {
+        let targetName: string,
+            targetValue: any;
 
-        if (isActiveFormChangeEvent(e)) {
-            targetName = e.name === undefined ? '' : e.name;
-            targetValue = e.value;
+        if (isRawEvent(e)) {
+            let target = e.target;
+
+            targetName = String(target.name);
+
+            if (target.nodeName === 'INPUT' && (target.type === 'checkbox' || target.type === 'radio')) {
+                targetValue = target.checked;
+            } else {
+                targetValue = target.value;
+            }
+        } else if (isCheckboxOrRadioEvent(e)) {
+            targetName = e.name;
+            targetValue = e.checked;
         } else {
-            targetName = String(e.target.name);
-            targetValue = e.target.value;
+            targetName = e.name;
+            targetValue = e.value;
         }
 
-        nextValue[targetName] = targetValue;
-        this.setState({
-            value: nextValue
-        }, () => {
-            onChange && onChange({ value: nextValue, fieldName: targetName, fieldValue: targetValue }); 
-        });
-
-        function isActiveFormChangeEvent(event: any): event is FormWidgetChangeEvent {
-            return event.formWidgetEvent;
+        function isRawEvent(event: any): event is React.ChangeEvent<any> {
+            return !!event.target;
         }
+
+        function isCheckboxOrRadioEvent(event: any): event is CheckboxChangeEvent | RadioChangeEvent {
+            return event.type === 'checkbox' || event.type === 'radio';
+        }
+
+        return {
+            name: targetName,
+            value: targetValue,
+        };
+    }
+    private handleFieldChange(e: FieldChangeEvent) {
+        let widgetInfo = this.fetchFieldInfoByChangeEvent(e);
+
+        this.setValue({[widgetInfo.name]: widgetInfo.value});
+    }
+    private handleChange() {
+        let { name = '', onChange } = this.props,
+            { value } = this.state;
+
+        onChange && onChange({ name, value });
     }
 }

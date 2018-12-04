@@ -1,6 +1,7 @@
-import { Toast, Button, Modal, Icon } from "..";
+
 import * as React from "react";
 import { iconNotifications, iconAlbums, iconRedo, iconClipboard, iconAlarm } from "../components/icons/SVGData";
+import { Button, Modal, Toast, Icon } from "../index";
 
 export default class ToastDemo extends React.PureComponent<any, any>{
     state = {

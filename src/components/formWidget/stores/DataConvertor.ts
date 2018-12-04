@@ -21,17 +21,13 @@ export default class DataConvertor {
         //
     }
     convertTo(data: any, dataType: DataType) {
-        let func = this[`convertTo${tools.upperCaseFirst(String(dataType))}`];
-
-        if (!tools.isFunction(func)) {
-            Log.throw(`不支持此数据格式的转换{ dataType=${dataType} }`);
-        }
+        let func = this[`to${tools.upperCaseFirst(String(dataType))}`];
         return func(data);
     }
-    convertToString(data: any) {
+    toString(data: any) {
         return tools.isString(data) ? data : data === null || data === undefined ? '' : JSON.stringify(data);
     }
-    convertToInteger(data: any) {
+    toInteger(data: any) {
         if (data === null || data === undefined || data === '' || tools.isEmptyObject(data) || (tools.isArray(data) && data.length === 0)) {
             return 0;
         }
@@ -40,13 +36,13 @@ export default class DataConvertor {
             return data ? 1 : 0;
         }
 
-        data = Number.parseInt(data);
+        data = Number.parseInt(data, 10);
         if (Number.isNaN(data)) {
-            Log.throw(`data无法转换为integer type{ data=${data} }`);
+            Log.error(`${data}无法转换为整数`);
         }
         return data;
     }
-    convertToFloat(data: any) {
+    toFloat(data: any) {
         if (data === null || data === undefined || data === '' || tools.isEmptyObject(data) || (tools.isArray(data) && data.length === 0)) {
             return 0;
         }
@@ -57,11 +53,11 @@ export default class DataConvertor {
 
         data = Number.parseFloat(data);
         if (Number.isNaN(data)) {
-            Log.throw(`data无法转换为float type{ data=${data} }`);
+            Log.error(`${data}无法转换为浮点数`);
         }
         return data;
     }
-    convertToBoolean(data: any) {
+    toBoolean(data: any) {
 			if (tools.isEmptyObject(data) || (tools.isArray(data) && data.length === 0)) {
 				return false;
 			} else if (tools.isString(data)) {
@@ -70,7 +66,7 @@ export default class DataConvertor {
             } else 
                 return !!data;
     }
-    convertToArray(data: any) {
+    toArray(data: any) {
         if (tools.isArray(data))
             return data;
         
@@ -78,6 +74,7 @@ export default class DataConvertor {
             try {
                 data = JSON.parse(data);
             } catch (e) {
+                Log.error(`${data}无法转换为数组, error: ${e}`);
                 data = [];
             }
         } else {
@@ -86,7 +83,7 @@ export default class DataConvertor {
 
         return data;
     }
-    convertToObject(data: any) {
+    toObject(data: any) {
         if (tools.isPlainObject(data))
             return data;
         
@@ -94,6 +91,7 @@ export default class DataConvertor {
             try {
                 data = JSON.parse(data);
             } catch (e) {
+                Log.error(`${data}无法转换为对象, error: ${e}`);
                 data = {};
             }
         } else {

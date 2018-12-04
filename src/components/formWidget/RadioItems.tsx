@@ -1,7 +1,7 @@
 import Widget, { FormWidgetProps, FormWidgetChangeEvent } from "./Widget";
 import * as React from "react";
 import Tools from "../../utils/Tools";
-import Radio from "../Radio";
+import Radio, { RadioChangeEvent } from "../Radio";
 import connectActiveForm from "./connectActiveForm";
 import { CSSAttrs } from "../../utils/types";
 import { WidgetWrapper } from "./WidgetWrapper";
@@ -20,14 +20,14 @@ export interface RadioItemsProps extends FormWidgetProps {
 
 const tools = Tools.getInstance();
 class RadioItems extends Widget<RadioItemsProps, any> {
-    static defaultProps: RadioItemsProps = {
+    static defaultProps = {
         items: [],
+        value: '',
     }
+    static widgetName = 'radioItems';
     render() {
-        let { name, items, className, style, disabled, readOnly } = this.props,
-            { validateReport } = this.state,
-            value = this.getParsedValue();
-
+        let { name, items, value, className, style, disabled, readOnly } = this.props,
+            { validateReport } = this.state;
         return (
             <React.Fragment>
                 <WidgetWrapper style={style} className={tools.classNames(cm.wrapper, className)} validateReport={ validateReport }>
@@ -51,10 +51,10 @@ class RadioItems extends Widget<RadioItemsProps, any> {
 
         )
     }
-    handleChange(e: FormWidgetChangeEvent) {
+    handleChange(e: RadioChangeEvent) {
         let { onChange } = this.props;
 
-        this.dispatchEvent(onChange, { value: e.value });
+        onChange && onChange(this.buildEvent({value: e.value}));
     }
 }
 

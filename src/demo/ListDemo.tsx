@@ -1,6 +1,5 @@
-import { List } from "..";
-import favoriteIcon from './favicon.ico';
 import * as React from "react";
+import { List } from "../index";
 
 export default () => <List dataSource={[
     {
@@ -170,7 +169,7 @@ export default () => <List dataSource={[
     },
     // tslint:disable-next-line:jsx-no-lambda
 ]} renderRow={(data) => {
-    return <div style={{ padding: '5px', display: 'flex', flexDirection: 'row' }}><img src={favoriteIcon} style={{ marginRight: '.5em' }} /><p>{`id = ${data.data.id}, name = ${data.data.name}`}</p></div>
+    return <div style={{ padding: '5px', display: 'flex', flexDirection: 'row' }}><img src='sss' alt={'sd'} style={{ marginRight: '.5em' }} /><p>{`id = ${data.data.id}, name = ${data.data.name}`}</p></div>
     // tslint:disable-next-line:jsx-no-lambda
 }} 
 />

@@ -9,9 +9,7 @@ export default function connectActiveForm<OriginProps extends FormWidgetProps>(U
     };
 
     class WidgetWrapper extends React.PureComponent<Props, any> {
-        static defaultProps: Partial<Props> = {
-            ...UnwrappedComponent.defaultProps as any
-        }
+        static defaultProps = UnwrappedComponent.defaultProps;
         private formContext: any;
         private widgetInstance: Widget<OriginProps, any> & React.Component;
         constructor(props: Props) {
@@ -64,8 +62,8 @@ export default function connectActiveForm<OriginProps extends FormWidgetProps>(U
         }
     }
 
-    let HoistedComponent = hoistNonReactStatics(WidgetWrapper, UnwrappedComponent) as React.ComponentClass<Props>;
+    let HoistedComponent = hoistNonReactStatics(WidgetWrapper, UnwrappedComponent) as React.ComponentType<Props>;
 
-    return React.forwardRef((props: Props, ref: React.RefObject<any>) => 
+    return React.forwardRef((props: OriginProps, ref: React.RefObject<any>) => 
             <HoistedComponent {...props} forwardedRef={ref} />);
 }
