@@ -5,7 +5,7 @@ import { CSSAttrs } from "../../utils/types";
 import Tools from "../../utils/Tools";
 import cm from './ValidateReportor.scss';
 interface Props extends CSSAttrs, Report {
-    popover?: boolean;
+    popover: boolean;
 }
 
 const tools = Tools.getInstance();
@@ -14,8 +14,9 @@ const fontColorMap = {
     warn: '#faad14',
 };
 export default class ValidateReportor extends React.PureComponent<Props> {
-    static defaultProps: Partial<Props> = {
+    static defaultProps = {
         popover: true,
+        level: 'error'
     }
     static getFontColor(validateReport: Report | undefined) {
         if (!validateReport || validateReport.isValid) {
@@ -28,7 +29,7 @@ export default class ValidateReportor extends React.PureComponent<Props> {
     }
     render() {
         let { props } = this,
-            { className, style, isValid, msg, level = 'error', popover } = props,
+            { className, style, isValid, msg, level, popover } = props,
             MessageTag = <Message style={style} className={tools.classNames(cm.msg, isValid && cm.isValid, className)}
                             type={level} showIcon={false}>{msg}</Message>;
         

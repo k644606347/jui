@@ -4,7 +4,7 @@ import './App.scss';
 import Hello from '../components/Hello';
 
 import { FormWidgetTest } from './FormWidget.test';
-import FormTest from './Form.test';
+import FormDemo from './FormDemo';
 import { Icon, Tools, Menu, Button, Pagination, List, Log, JUIApp, Toast, FormItem } from '..';
 import { IconProps } from '../components/Icon';
 import MessageTest from './Message.test';
@@ -34,7 +34,7 @@ class App extends React.Component<any, any> {
                 <RowTagNestedDemo />
                 <MessageTest />
                 <FormWidgetTest />
-                <FormTest />
+                <FormDemo />
                 <HTMLForm />
                 <MenuDemo />
                 {/* <MenuDemo /> */}

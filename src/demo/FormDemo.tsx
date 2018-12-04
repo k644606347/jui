@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Tools, Icon, Form, Log, FormItem, Pagination, CheckboxItems, Button, Input, RadioItems } from "..";
+import { Tools, Icon, Form, Log, FormItem, Pagination, CheckboxItems, Button, Input, RadioItems, Label, Radio } from "..";
 import ActiveForm, { ActiveFormProps } from "../components/formWidget/ActiveForm";
 import Textarea from "../components/formWidget/Textarea";
 import { FormItemProps } from "src/components/FormItem";
@@ -8,7 +8,7 @@ import { iconDoneAll, iconCloudDone } from "../components/icons/SVGData";
 interface FormTestProps {}
 
 const tools = Tools.getInstance();
-export default class FormTest extends React.PureComponent<FormTestProps, { fields: FormItemProps[], form2: any, testInputValue: string }> {
+export default class FormDemo extends React.PureComponent<FormTestProps, { fields: FormItemProps[], form2: any, testInputValue: string }> {
     formForFieldsRef: React.RefObject<ActiveForm>;
     inputRef: React.RefObject<any>;
     constructor(props: FormTestProps) {
@@ -170,9 +170,27 @@ export default class FormTest extends React.PureComponent<FormTestProps, { field
                 >{
                     ({ value, handleChange }) => {
                         return <React.Fragment>
-                        <label>x: 
+                        <Label>x: 
                             <input type="text" name="x" value={value.x} onChange={handleChange} />
-                        </label>
+                        </Label>
+                        <br/>
+                        <Label>
+                            radio items1:
+                            <RadioItems items={[
+                                {
+                                    label: '北京',
+                                    value: 'beijing'
+                                },
+                                {
+                                    label: '上海',
+                                    value: 'shanghai',
+                                },
+                                {
+                                    label: '百度',
+                                    value: 'baidu',
+                                }
+                            ]} name="radioItems1" value={value.radioItems1}></RadioItems>
+                        </Label>
                         <Button onClick={this.handleSetValue}>setValue</Button>
                         <Button onClick={e => {
                             this.formForFieldsRef.current!.submit();

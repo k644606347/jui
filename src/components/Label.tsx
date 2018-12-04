@@ -1,7 +1,7 @@
 import * as React from "react";
 import Tools from "../utils/Tools";
 import Log from "../utils/Log";
-import labelCSS from './Label.scss';
+import cssModules from './Label.scss';
 
 interface Props extends React.HTMLProps<HTMLLabelElement> {
     forRef?: React.RefObject<any>;
@@ -24,7 +24,7 @@ export default class Label extends React.PureComponent<Props, any> {
 
         return (
             <label {...restProps} className={
-                tools.classNames(labelCSS.wrapper, required && labelCSS.required, className)
+                tools.classNames(cssModules.wrapper, required && cssModules.required, className)
             } onClick={this.handleLabelClick}>{children}</label>
         )
     }

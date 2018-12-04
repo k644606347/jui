@@ -72,7 +72,7 @@ export default class MenuItem extends React.PureComponent<MenuItemProps, MenuIte
                 className: tools.classNames(cssModules.input)
             };
 
-        return multiSelect ? <Checkbox {...propsConfig} /> : checked ? <Radio {...propsConfig} /> : '';
+        return multiSelect ? <Checkbox {...propsConfig} /> : checked ? <Radio {...propsConfig} theme='checkmark' /> : '';
     }
     private handleTouchStart(e: React.TouchEvent<HTMLElement>) {
         this.setState({ clicked: true });

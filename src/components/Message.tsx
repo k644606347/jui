@@ -2,7 +2,7 @@ import * as React from 'react';
 import { CSSAttrs } from '../utils/types';
 import Tools from '../utils/Tools';
 import Icon, { IconDefinition } from './Icon';
-import cm from './Message.scss';
+import cssModules from './Message.scss';
 import { iconCloseCircleOutline, iconAlert, iconInfoCircleOutline } from './icons/SVGData';
 
 interface Props extends CSSAttrs {
@@ -27,10 +27,10 @@ export default class Message extends React.PureComponent<Props, any> {
         return (
             <div
                 style={style}
-                className={tools.classNames(cm.wrapper, cm[type], className)}
+                className={tools.classNames(cssModules.wrapper, cssModules[type], className)}
             >
-                { showIcon && iconMap[type] ? <div className={cm.icon}><Icon icon={iconMap[type]} /></div> : '' }
-                <div className={cm.message}>{ children }</div>
+                { showIcon && iconMap[type] ? <div className={cssModules.icon}><Icon icon={iconMap[type]} /></div> : '' }
+                <div className={cssModules.message}>{ children }</div>
             </div>
         );
     }

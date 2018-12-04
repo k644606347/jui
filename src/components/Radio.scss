@@ -17,6 +17,11 @@
         display: inline-block;
         margin-left: 5px;
     }
+    &.theme-checkmark {
+        .icon {
+            color: #aaa;
+        }
+    }
     &.disabled {
         cursor: not-allowed;
         opacity: .5;

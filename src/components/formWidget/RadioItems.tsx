@@ -1,46 +1,46 @@
 import Widget, { FormWidgetProps, FormWidgetChangeEvent } from "./Widget";
 import * as React from "react";
 import Tools from "../../utils/Tools";
-import Radio, { RadioChangeEvent } from "../Radio";
+import Radio, { RadioChangeEvent, RadioProps } from "../Radio";
 import connectActiveForm from "./connectActiveForm";
 import { CSSAttrs } from "../../utils/types";
 import { WidgetWrapper } from "./WidgetWrapper";
 import ValidateReportor from "./ValidateReportor";
 import cm from './RadioItems.scss';
-interface RadioItems extends CSSAttrs {
+interface RadioItem extends RadioProps {
     label: string;
     value: string;
-    readOnly?: boolean;
-    disabled?: boolean;
 }
 export interface RadioItemsProps extends FormWidgetProps {
-    items: RadioItems[];
-    value?: string | number;
+    items: RadioItem[];
+    value: string | number;
+    theme?: RadioProps['theme'];
 }
 
 const tools = Tools.getInstance();
 class RadioItems extends Widget<RadioItemsProps, any> {
-    static defaultProps = {
+    static defaultProps: Partial<RadioItemsProps> = {
         items: [],
         value: '',
+        theme: 'circle',
     }
     static widgetName = 'radioItems';
     render() {
-        let { name, items, value, className, style, disabled, readOnly } = this.props,
+        let { name, items, value, className, style, disabled, readOnly, theme } = this.props,
             { validateReport } = this.state;
         return (
             <React.Fragment>
                 <WidgetWrapper style={style} className={tools.classNames(cm.wrapper, className)} validateReport={ validateReport }>
                     {
-                        items.map((config, i) => {
-                            let mixedConfig = { disabled, readOnly, ...config };
+                        items && items.map((config, i) => {
+                            let radioProps = { theme, disabled, readOnly, ...config };
                             
                             return <div key={i} className={cm.item}>
-                                <Radio {...mixedConfig} name={name}
+                                <Radio {...radioProps} name={name}
                                     checked={value === config.value} 
                                     className={cm.item} 
                                     onChange={this.handleChange}>
-                                    { mixedConfig.label }
+                                    { radioProps.label }
                                 </Radio>
                             </div>
                         })
