@@ -1,15 +1,19 @@
-const constants = require('./constants');
+const params = require('./params');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 const path = require('path');
 
 const mode = 'development';
 module.exports = {
     mode,
     entry: {
+        'demo': [
+            params.demoIndex,
+            require.resolve('react-dev-utils/webpackHotDevClient'),
+        ],
         'jui': [
-            constants.appIndex,
-          ],
-          'demo': constants.demoIndex,
+            params.appIndex,
+        ]
     },
     output: {
         // Add /* filename */ comments to generated require()s in the output.
@@ -66,7 +70,7 @@ module.exports = {
                             }, {
                                 loader: "css-loader",
                                 options: {
-                                    localIdentName: constants.classNamePrefix + '-' + "[name]-[local]_[hash:base64:3]",
+                                    localIdentName: params.classNamePrefix + '-' + "[name]-[local]_[hash:base64:3]",
                                     modules: true,
                                     sourceMap: true,
                                     camelCase: true,
@@ -91,6 +95,7 @@ module.exports = {
         new HtmlWebpackPlugin({
             inject: true,
             template: path.resolve('./public/index.html')
-        })
+        }),
+        new WatchMissingNodeModulesPlugin(params.nodeModulesPath),
     ]
 };

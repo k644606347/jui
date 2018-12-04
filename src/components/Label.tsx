@@ -1,7 +1,7 @@
 import * as React from "react";
 import Tools from "../utils/Tools";
 import Log from "../utils/Log";
-import cm from './Label.scss';
+import labelCSS from './Label.scss';
 
 interface Props extends React.HTMLProps<HTMLLabelElement> {
     forRef?: React.RefObject<any>;
@@ -24,7 +24,7 @@ export default class Label extends React.PureComponent<Props, any> {
 
         return (
             <label {...restProps} className={
-                tools.classNames(cm.wrapper, required && cm.required, className)
+                tools.classNames(labelCSS.wrapper, required && labelCSS.required, className)
             } onClick={this.handleLabelClick}>{children}</label>
         )
     }
@@ -32,7 +32,7 @@ export default class Label extends React.PureComponent<Props, any> {
         let { onClick, forRef } = this.props;
 
         onClick && onClick(e);
-    
+    //
         if (forRef && forRef.current) {
             if (!tools.isFunction(forRef.current.focus)) {
                 Log.warn('forRef.current缺少focus方法，无法触发focus行为');

@@ -1,9 +1,10 @@
 import * as React from "react";
 import Tools from "../utils/Tools";
 import Icon from "./Icon";
-import { CSSAttrs, Omit } from "../utils/types";
+import { Omit } from "../utils/types";
 import cm from './Checkbox.scss';
 import { iconCheckCircle, iconCheckCircleOutline } from "./icons/SVGData";
+import Label from "./Label";
 
 const tools = Tools.getInstance();
 
@@ -41,7 +42,7 @@ export default class Checkbox extends React.PureComponent<CheckboxProps, Checkbo
 
         // TODO icon风格需优化，细边框
         return (
-            <label style={style} className={
+            <Label style={style} className={
                 tools.classNames(
                     cm.wrapper,
                     checked && cm.checked,
@@ -55,7 +56,7 @@ export default class Checkbox extends React.PureComponent<CheckboxProps, Checkbo
                 />
                 <div className={cm.icon}><Icon icon={checked ? iconCheckCircle : iconCheckCircleOutline} /></div>
                 {children !== undefined ? <div className={cm.description}>{children}</div> : ''}
-            </label>
+            </Label>
         );
     }
     componentDidUpdate(prevProps: CheckboxProps, prevState: CheckboxState) {

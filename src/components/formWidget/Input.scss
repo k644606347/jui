@@ -4,6 +4,7 @@
     width: 100%;
     font-size: $input-font-size;
     color: $input-color;
+    -webkit-tap-highlight-color: transparent;
     // padding: 2px 0;
     border: 0;
     background-color: transparent;

@@ -3,6 +3,7 @@
 
 .wrapper {
     font-size: 17px;
+    -webkit-tap-highlight-color: transparent;
     &.required::after {
         margin-left: 3px;
         content: "*";

@@ -18,6 +18,7 @@ import cm from "./index.scss";
 import RowTagNestedDemo from './NestedRowTagDemo';
 import ToastDemo from './ToastDemo';
 import { iconAddCircle, iconAddCircleOutline, iconAlert, iconInfo, iconMore } from '../components/icons/SVGData';
+import MenuDemo from './MenuDemo';
 
 window.console.log(process.env.NODE_ENV);
 const tools = Tools.getInstance();
@@ -35,6 +36,7 @@ class App extends React.Component<any, any> {
                 <FormWidgetTest />
                 <FormTest />
                 <HTMLForm />
+                <MenuDemo />
                 {/* <MenuDemo /> */}
                 <Button>btn1</Button>
                 <Button type={'primary'} icon={iconMore}>btn2</Button>

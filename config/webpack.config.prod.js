@@ -1,7 +1,7 @@
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const path = require('path');
-const constants = require('./constants');
+const params = require('./params');
 
 const mode = 'production';
 
@@ -13,10 +13,10 @@ if (process.env.npm_config_analyze) {
 module.exports = {
     mode,
     entry: {
-        'jui': constants.appIndex
+        'jui': params.appIndex
     },
     output: {
-        path: constants.appBuild,
+        path: params.appBuild,
         // Add /* filename */ comments to generated require()s in the output.
         pathinfo: true,
         filename: '[name].js',

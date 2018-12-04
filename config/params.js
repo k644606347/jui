@@ -6,4 +6,5 @@ module.exports = {
     demoIndex: path.resolve('./src/demo/index.tsx'),
     appIndex: path.resolve('./src/index.tsx'),
     appBuild: path.resolve('../jui-release/lib'),
+    nodeModulesPath: path.resolve('./node_modules'),
 };

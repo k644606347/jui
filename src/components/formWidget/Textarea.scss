@@ -8,6 +8,7 @@
     border: 0;
     background-color: transparent;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
     -webkit-appearance: none;
     &:focus {
         outline: none;

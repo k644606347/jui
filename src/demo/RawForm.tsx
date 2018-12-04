@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Log from '../utils/Log';
 import { Form, Input } from '..';
-import { FormProps } from '../components/FormType';
+import { FormProps } from '../components/Form';
 interface Props extends FormProps {
     forwardedRef?: React.RefObject<any>;
 }

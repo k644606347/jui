@@ -5,6 +5,7 @@ import Icon from './Icon';
 import { Omit } from '../utils/types';
 import cm from './Radio.scss';
 import { iconRadioBtnOn, iconRadioBtnOff } from './icons/SVGData';
+import Label from './Label';
 
 const tools = Tools.getInstance();
 export interface RadioChangeEvent {
@@ -42,7 +43,7 @@ export default class Radio extends React.PureComponent<RadioProps, RadioState> {
 
         // TODO icon风格需优化，细边框
         return (
-            <label style={style} className={
+            <Label style={style} className={
                 tools.classNames(
                     cm.wrapper,
                     checked && cm.checked,
@@ -58,7 +59,7 @@ export default class Radio extends React.PureComponent<RadioProps, RadioState> {
                 />
                 <div className={cm.icon}><Icon icon={checked ? iconRadioBtnOn : iconRadioBtnOff} /></div>
                 {children !== undefined ? <div className={cm.description}>{children}</div> : ''}
-            </label>
+            </Label>
         );
     }
     protected handleChange(e: React.ChangeEvent<HTMLInputElement>) {
