@@ -29,7 +29,7 @@ export default class Message extends React.PureComponent<Props, any> {
                 style={style}
                 className={tools.classNames(cm.wrapper, cm[type], className)}
             >
-                { showIcon && iconMap[type] ? <Icon className={cm.icon} icon={iconMap[type]} /> : '' }
+                { showIcon && iconMap[type] ? <div className={cm.icon}><Icon icon={iconMap[type]} /></div> : '' }
                 <div className={cm.message}>{ children }</div>
             </div>
         );
