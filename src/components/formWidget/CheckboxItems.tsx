@@ -18,6 +18,7 @@ interface CheckboxItem extends CSSAttrs {
 export interface CheckboxItemsProps extends FormWidgetProps {
     items: CheckboxItem[];
     value: Array<CheckboxItem['value']>;
+    theme?: CheckboxProps['theme'];
 }
 
 const tools = Tools.getInstance();

@@ -171,7 +171,10 @@ const Validator = {
 
         return report;
     },
-    required(value: any) {
+    required(value: any, rule: Rule) {
+        if (!rule.value)
+            return true;
+            
         if (tools.isArray(value)) {
             return value.length > 0;
         } else if (tools.isPlainObject(value)) {

@@ -207,6 +207,12 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                         value: 'beijing'
                     }
                 ]} />
+                <CheckboxItems theme="square" items={[
+                    {
+                        label: 'shanghai label',
+                        value: 'shanghai'
+                    }
+                ]} />
                 <Input value={'baiduyixia'} onChange={e => { Log.warn(e); }}/>
                 <Button>block btn</Button>
                 <Button inline={true}>inline btn</Button>
