@@ -70,13 +70,12 @@ module.exports = {
             }
         ]
     },
-    devtool: 'none',
+    devtool: 'source-map',
     externals: {
         react: 'react',
         'react-is': 'react-is'
     },
     plugins: [
-        analyze && new BundleAnalyzerPlugin(),
         new UglifyJsPlugin({
             parallel: true,
             cache: true,
@@ -87,5 +86,6 @@ module.exports = {
                 },
             },
         }),
+        analyze && new BundleAnalyzerPlugin(),
     ].filter(n => !!n)
 };
