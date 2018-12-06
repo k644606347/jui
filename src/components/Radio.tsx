@@ -26,15 +26,15 @@ export interface RadioState {}
 
 const themeIconMap: {[k in ThemeType]: {
     checked: IconDefinition,
-    uncheck: IconDefinition,
+    unchecked: IconDefinition,
 }} = {
     circle: {
         checked: iconRadioBtnOn,
-        uncheck: iconRadioBtnOff,
+        unchecked: iconRadioBtnOff,
     },
     checkmark: {
         checked: iconCheck,
-        uncheck: iconCheck,
+        unchecked: iconCheck,
     }
 }
 export default class Radio extends React.PureComponent<RadioProps, RadioState> {
@@ -74,7 +74,7 @@ export default class Radio extends React.PureComponent<RadioProps, RadioState> {
                     type="radio" checked={checked} disabled={disabled} readOnly={readOnly}
                     onChange={this.handleChange} 
                 />
-                <div className={cm.icon}><Icon icon={checked ? themeIcon.checked : themeIcon.uncheck} /></div>
+                <div className={cm.icon}><Icon icon={checked ? themeIcon.checked : themeIcon.unchecked} /></div>
                 {children !== undefined ? <div className={cm.description}>{children}</div> : ''}
             </Label>
         );

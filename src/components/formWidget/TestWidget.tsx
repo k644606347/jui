@@ -6,6 +6,7 @@ interface Props extends FormWidgetProps {
 }
 class TestWidget extends Widget<Props, FormWidgetState> {
     static defaultProps = {
+        ...Widget.defaultProps,
         id: 'testWidget',
         value: '',
         // validateTrigger: 'onBlur',
@@ -26,4 +27,4 @@ class TestWidget extends Widget<Props, FormWidgetState> {
     }
 }
 
-export default connectActiveForm(TestWidget);
+export default connectActiveForm<typeof TestWidget, FormWidgetProps>(TestWidget);

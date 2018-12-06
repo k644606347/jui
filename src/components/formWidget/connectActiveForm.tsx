@@ -3,7 +3,7 @@ import * as React from "react";
 import { FormContext } from "./FormContext";
 import hoistNonReactStatics from "../../utils/hoistNonReactStatics";
 
-export default function connectActiveForm<OriginProps extends FormWidgetProps>(UnwrappedComponent: React.ComponentType<OriginProps>) {
+export default function connectActiveForm<ClassType, OriginProps extends FormWidgetProps>(UnwrappedComponent: React.ComponentType<OriginProps>) {
     type Props = OriginProps & {
         forwardedRef?: React.RefObject<any>;
     };
@@ -64,6 +64,8 @@ export default function connectActiveForm<OriginProps extends FormWidgetProps>(U
 
     let HoistedComponent = hoistNonReactStatics(WidgetWrapper, UnwrappedComponent) as React.ComponentType<Props>;
 
-    return React.forwardRef((props: OriginProps, ref: React.RefObject<any>) => 
-            <HoistedComponent {...props} forwardedRef={ref} />);
+    // 通过JSX.LibraryManagedAttributes实现props和Class.defaultProps的关联
+    return React.forwardRef((props: JSX.LibraryManagedAttributes<ClassType, OriginProps>, ref: React.RefObject<any>) => {
+        return <HoistedComponent {...props as any} forwardedRef={ref} />;
+    });
 }

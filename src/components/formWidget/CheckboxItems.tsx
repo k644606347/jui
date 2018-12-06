@@ -17,12 +17,13 @@ interface CheckboxItem extends CSSAttrs {
 }
 export interface CheckboxItemsProps extends FormWidgetProps {
     items: CheckboxItem[];
-    value?: Array<CheckboxItem['value']>;
+    value: Array<CheckboxItem['value']>;
 }
 
 const tools = Tools.getInstance();
 class CheckboxItems extends Widget<CheckboxItemsProps, FormWidgetState> {
     static defaultProps = {
+        ...Widget.defaultProps,
         items: [],
         value: [],
     }
@@ -90,4 +91,4 @@ class CheckboxItems extends Widget<CheckboxItemsProps, FormWidgetState> {
     }
 }
 
-export default connectActiveForm(CheckboxItems);
+export default connectActiveForm<typeof CheckboxItems, CheckboxItemsProps>(CheckboxItems);

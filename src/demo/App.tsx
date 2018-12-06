@@ -19,6 +19,7 @@ import RowTagNestedDemo from './NestedRowTagDemo';
 import ToastDemo from './ToastDemo';
 import { iconAddCircle, iconAddCircleOutline, iconAlert, iconInfo, iconMore } from '../components/icons/SVGData';
 import MenuDemo from './MenuDemo';
+import DefaultPropsDemo from './DefaultPropsDemo';
 
 window.console.log(process.env.NODE_ENV);
 const tools = Tools.getInstance();
@@ -37,7 +38,6 @@ class App extends React.Component<any, any> {
                 <FormDemo />
                 <HTMLForm />
                 <MenuDemo />
-                {/* <MenuDemo /> */}
                 <Button>btn1</Button>
                 <Button type={'primary'} icon={iconMore}>btn2</Button>
                 <Button type="warning" size="large" loading={true}>btn3</Button>
@@ -59,6 +59,7 @@ class App extends React.Component<any, any> {
                 <Hello name="TypeScript" enthusiasmLevel={10} />
                 <MultiContextProvider />
                 <FormItem label="test" component="test" layout="vertical"></FormItem>
+                <DefaultPropsDemo />
             </JUIApp>
         );
     }

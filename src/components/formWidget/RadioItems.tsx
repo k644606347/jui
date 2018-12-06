@@ -19,10 +19,10 @@ export interface RadioItemsProps extends FormWidgetProps {
 
 const tools = Tools.getInstance();
 class RadioItems extends Widget<RadioItemsProps, any> {
-    static defaultProps: Partial<RadioItemsProps> = {
+    static defaultProps = {
+        ...Widget.defaultProps,
         items: [],
         value: '',
-        theme: 'circle',
     }
     static widgetName = 'radioItems';
     render() {
@@ -58,4 +58,4 @@ class RadioItems extends Widget<RadioItemsProps, any> {
     }
 }
 
-export default connectActiveForm(RadioItems);
+export default connectActiveForm<typeof RadioItems, RadioItemsProps>(RadioItems);

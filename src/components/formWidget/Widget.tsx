@@ -26,15 +26,15 @@ export interface FormWidgetValidEvent {
 type ValidateTrigger = 'onChange' | 'onBlur';
 
 export interface FormWidgetProps extends CSSAttrs {
-    id?: string;
-    name?: string;
-    value?: ValueType;
+    id: string;
+    name: string;
+    value: ValueType;
     defaultValidateReport?: Report;
-    autoFocus?: boolean;
-    disabled?: boolean;
-    readOnly?: boolean;
-    placeholder?: string;
-    required?: boolean;
+    autoFocus: boolean;
+    disabled: boolean;
+    readOnly: boolean;
+    placeholder: string;
+    required: boolean;
     maxLength?: number;
     minLength?: number;
     rules?: Rule[];
@@ -62,8 +62,16 @@ const allowedInputElAttrs: Array<keyof React.InputHTMLAttributes<HTMLInputElemen
 export default abstract class Widget<P extends FormWidgetProps = FormWidgetProps, S extends FormWidgetState = FormWidgetState> extends React.PureComponent<P, S> {
     static dataType: DataType = 'string';
     static widgetName = 'widget';
-    static defaultProps: FormWidgetProps = {
+    static defaultProps: Partial<FormWidgetProps> = {
+        id: '',
+        name: '',
         value: '',
+        placeholder: '',
+        autoFocus: false,
+        disabled: false,
+        readOnly: false,
+        required: false,
+
     }
     static convertor = DataConvertor.getInstance();
     state: S;
@@ -166,7 +174,7 @@ export default abstract class Widget<P extends FormWidgetProps = FormWidgetProps
         this.handleBlur = proxyHandler.bind(this);
     }
     protected buildEvent(rawEvent: any = {}): FormWidgetEvent {
-        let { id = '', name = '', disabled = false, readOnly = false, value = this.getValue() } = this.props,
+        let { id, name, disabled = false, readOnly = false, value = this.getValue() } = this.props,
             { focused } = this.state, 
             defaultEvent: FormWidgetEvent = {
                 id,

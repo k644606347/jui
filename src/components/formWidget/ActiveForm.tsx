@@ -24,7 +24,7 @@ type FieldChangeEvent = React.ChangeEvent<any> | FormWidgetChangeEvent | Checkbo
 export interface ActiveFormRenderEvent {
     value: ValueType;
     fields: FormItemProps[];
-    handleChange: AnyFunction; 
+    handleChange: AnyFunction;
     handleSubmit: AnyFunction;
     isValid: boolean;
     submitting: boolean;

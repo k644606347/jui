@@ -3,7 +3,7 @@ import Tools from "../utils/Tools";
 import Icon from "./Icon";
 import { Omit } from "../utils/types";
 import cm from './Checkbox.scss';
-import { iconCheckCircle, iconCheckCircleOutline } from "./icons/SVGData";
+import { iconCheckCircle, iconCheckCircleOutline, IconDefinition, iconCheckSquare, iconCheckSquareOutline } from "./icons/SVGData";
 import Label from "./Label";
 
 const tools = Tools.getInstance();
@@ -17,14 +17,27 @@ export interface CheckboxChangeEvent {
     readOnly: boolean;
     type: string;
 }
+type ThemeType = 'circle' | 'square';
 export interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
     onChange?: (e: CheckboxChangeEvent) => void;
+    theme: ThemeType;
 };
 export interface CheckboxState {}
 
+const themeIconMap: {[k in ThemeType]: {checked: IconDefinition, unchecked: IconDefinition}} = {
+    circle: {
+        checked: iconCheckCircle,
+        unchecked: iconCheckCircleOutline,
+    },
+    square: {
+        checked: iconCheckSquare,
+        unchecked: iconCheckSquareOutline,
+    }
+}
 export default class Checkbox extends React.PureComponent<CheckboxProps, CheckboxState>{
-    static defaultProps: Partial<CheckboxProps> = {
+    static defaultProps = {
         checked: false,
+        theme: "circle",
     }
     getInitialState(props: CheckboxProps) {
         return {
@@ -38,9 +51,9 @@ export default class Checkbox extends React.PureComponent<CheckboxProps, Checkbo
         this.handleChange = this.handleChange.bind(this);
     }
     render() {
-        let { children, checked, disabled, readOnly, className, style, ...restProps } = this.props;
+        let { children, checked, disabled, readOnly, className, style, theme, ...restProps } = this.props,
+            themeIcon = themeIconMap[theme];
 
-        // TODO icon风格需优化，细边框
         return (
             <Label style={style} className={
                 tools.classNames(
@@ -54,7 +67,7 @@ export default class Checkbox extends React.PureComponent<CheckboxProps, Checkbo
                     checked={checked} disabled={disabled} readOnly={readOnly} 
                     onChange={this.handleChange}
                 />
-                <div className={cm.icon}><Icon icon={checked ? iconCheckCircle : iconCheckCircleOutline} /></div>
+                <div className={cm.icon}><Icon icon={checked ? themeIcon.checked : themeIcon.unchecked} /></div>
                 {children !== undefined ? <div className={cm.description}>{children}</div> : ''}
             </Label>
         );

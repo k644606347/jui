@@ -11,9 +11,6 @@ import DataConvertor from './stores/DataConvertor';
 const tools = Tools.getInstance();
 class Input extends Widget<FormWidgetProps, FormWidgetState> {
     static widgetName = 'input';
-    static defaultProps = {
-        value: '',
-    }
     constructor(props: FormWidgetProps) {
         super(props);
 
@@ -50,4 +47,4 @@ class Input extends Widget<FormWidgetProps, FormWidgetState> {
         }));
     }
 }
-export default connectActiveForm(Input);
+export default connectActiveForm<typeof Input, FormWidgetProps>(Input);

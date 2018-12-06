@@ -10,9 +10,6 @@ import DataConvertor from "./stores/DataConvertor";
 const tools = Tools.getInstance();
 class Textarea extends Widget {
     static widgetName = 'textarea';
-    static defaultProps = {
-        value: '',
-    }
     constructor(props: FormWidgetProps) {
         super(props);
 
@@ -45,4 +42,4 @@ class Textarea extends Widget {
     }
 }
 
-export default connectActiveForm(Textarea);
+export default connectActiveForm<typeof Textarea, FormWidgetProps>(Textarea);
