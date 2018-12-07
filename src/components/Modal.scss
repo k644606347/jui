@@ -18,6 +18,14 @@
         .title {
             font-weight: 600;
         }
+        .ok-btn, .cancel-btn, .close-btn {
+            padding: 0 5px;
+            display: inline-block;
+            text-align: center;
+        }
+        .close-btn {
+            margin-left: 10px;
+        }
     }
     .body {
 

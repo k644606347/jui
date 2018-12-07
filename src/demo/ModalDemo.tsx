@@ -1,4 +1,4 @@
-import { Modal, Button, ActiveForm, Input, CheckboxItems, Checkbox } from "..";
+import { Modal, Button, ActiveForm, Input, CheckboxItems, Checkbox, Toast } from "..";
 import * as React from "react";
 import { ActiveFormChangeEvent, ActiveFormRenderEvent } from "../components/formWidget/ActiveForm";
 
@@ -14,7 +14,6 @@ export default class ModalDemo extends React.PureComponent<any,any> {
     constructor(props: any) {
         super(props);
 
-        this.handleOk = this.handleOk.bind(this);
         this.handleFormChange = this.handleFormChange.bind(this);
         this.renderActiveForm = this.renderActiveForm.bind(this);
     }
@@ -26,10 +25,18 @@ export default class ModalDemo extends React.PureComponent<any,any> {
                 <Button onClick={this.handleBtnClick}>toggle a Modal</Button>
                 <Modal 
                     title={'this is a Modal'} 
-                    onOk={this.handleOk} 
+                    closeBtn={true}
+                    onOk={e => {
+                        Toast.info('ok btn clicked!');
+                        this.setState({ show: false });
+                    }} 
+                    onClose={e => {
+                        Toast.info('close btn clicked!');
+                        this.setState({ show: false});
+                    }}
                     onCancel={e => {
                         this.setState((prevState: any) => {
-                            alert('cancel!');
+                            Toast.info('cancel btn clicked!');
                             return { show: false };
                         })
                     }} show={show}>
@@ -62,10 +69,6 @@ export default class ModalDemo extends React.PureComponent<any,any> {
         };
         
         this.setState({ formData });
-    }
-    handleOk(e: any) {
-        alert('ok!');
-        this.setState({ show: false });
     }
     handleBtnClick = (e: React.MouseEvent) => {
         this.setState({ show: !this.state.show });

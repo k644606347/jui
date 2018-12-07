@@ -15,7 +15,7 @@ export default class ToastDemo extends React.PureComponent<any, any>{
                 }>Toast Demo</Button>
                 <Modal show={this.state.show} onOk={
                     e => this.setState({ show: false })
-                } onClose={
+                } onCancel={
                     e => this.setState({ show: false })
                 }>
                     <React.Fragment>
