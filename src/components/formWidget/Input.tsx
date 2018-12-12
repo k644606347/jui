@@ -1,41 +1,42 @@
 import * as React from 'react';
 import Tools from '../../utils/Tools';
-import Widget, { FormWidgetProps, FormWidgetState } from './Widget';
-import PureInput from '../PureInput';
-import connectActiveForm from './connectActiveForm';
-import { WidgetWrapper } from './WidgetWrapper';
-import ValidateReportor from './ValidateReportor';
+import Widget, { FormWidgetProps } from './Widget';
 import inputCSS from './Input.scss';
-import DataConvertor from './stores/DataConvertor';
+import { Omit } from '../../utils/types';
+import { DataType } from './stores/DataConvertor';
+import bindActiveForm from './bindActiveForm';
 
 const tools = Tools.getInstance();
-class Input extends Widget<FormWidgetProps, FormWidgetState> {
-    static widgetName = 'input';
-    constructor(props: FormWidgetProps) {
+
+interface InputProps extends FormWidgetProps {
+    value?: string;
+    defaultValue?: string;
+}
+class Input extends Widget<InputProps> {
+    widgetName = 'input';
+    dataType: DataType = 'string';
+    constructor(props: InputProps) {
         super(props);
 
         this.handleChange = this.handleChange.bind(this);
     }
     render() {
-        let { props, state } = this,
-            { className, style, value, ...restProps } = props,
-            { validateReport } = state,
-            allowedInputElProps = this.getAllowedInputElAttrs(restProps);
+        let { props } = this,
+            { value, defaultValue, className, style, onValid, onInvalid, onDidMount, ...restProps } = props;
 
         return (
-            <React.Fragment>
-                <WidgetWrapper style={style} className={className} validateReport={validateReport}>
-                    <input {...allowedInputElProps}
-                        value={this.getValue()} 
-                        onChange={this.handleChange}
-                        style={{
-                            color: ValidateReportor.getFontColor(validateReport)
-                        }}
-                        className={tools.classNames(inputCSS.input, className)}
-                    />
-                </WidgetWrapper>
-                { validateReport ? <ValidateReportor {...validateReport} /> : '' }
-            </React.Fragment>
+            <input {...restProps}
+                value={value === undefined ? this.parseValue() : value} 
+                defaultValue={defaultValue === undefined ? this.parseValue(defaultValue) : defaultValue} 
+                onFocus={this.handleFocus}
+                onBlur={this.handleBlur}
+                onChange={this.handleChange}
+                onKeyDown={this.handleKeyDown}
+                onKeyUp={this.handleKeyUp}
+                onKeyPress={this.handleKeyPress} 
+                style={style}
+                className={tools.classNames(inputCSS.input, className)}
+            />
         );
     }
     protected handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -47,4 +48,4 @@ class Input extends Widget<FormWidgetProps, FormWidgetState> {
         }));
     }
 }
-export default connectActiveForm<typeof Input, FormWidgetProps>(Input);
+export default bindActiveForm<typeof Input, InputProps>(Input);

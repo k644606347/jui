@@ -37,21 +37,18 @@ const themeIconMap: {[k in ThemeType]: {
         unchecked: iconCheck,
     }
 }
-export default class Radio extends React.PureComponent<RadioProps, RadioState> {
-    static defaultProps: Partial<RadioProps> = {
+export default class Radio extends React.PureComponent<RadioProps> {
+    static defaultProps = {
         name: '',
         value: '',
         checked: false,
         disabled: false,
         theme: 'circle',
     };
-    getInitialState(props: RadioProps) {
-        return {};
-    }
     constructor(props: RadioProps) {
         super(props);
 
-        this.state = this.getInitialState(props);
+        this.state = {};
         this.handleChange = this.handleChange.bind(this);
     }
     render() {

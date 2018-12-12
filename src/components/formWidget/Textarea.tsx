@@ -1,36 +1,41 @@
 import * as React from "react";
-import Widget, { FormWidgetProps, FormWidgetState } from "./Widget";
-import connectActiveForm from "./connectActiveForm";
-import { WidgetWrapper } from "./WidgetWrapper";
-import ValidateReportor from "./ValidateReportor";
+import Widget, { FormWidgetProps } from "./Widget";
 import textareaCSS from './Textarea.scss';
 import Tools from "../../utils/Tools";
-import DataConvertor from "./stores/DataConvertor";
+import { DataType } from "./stores/DataConvertor";
+import bindActiveForm from "./bindActiveForm";
 
 const tools = Tools.getInstance();
-class Textarea extends Widget {
-    static widgetName = 'textarea';
-    constructor(props: FormWidgetProps) {
+
+interface TextareaProps extends FormWidgetProps {
+    value?: string;
+    defaultValue?: string;
+}
+class Textarea extends Widget<TextareaProps> {
+    widgetName = 'textarea';
+    dataType: DataType = 'string';
+    constructor(props: TextareaProps) {
         super(props);
 
         this.handleChange = this.handleChange.bind(this);
     }
     render() {
         let { props, state } = this,
-            { className, style, value } = props,
-            { validateReport } = state;
+            { value, defaultValue, className, style, onValid, onInvalid, onDidMount, ...restProps } = props;
 
-        return <React.Fragment>
-            <WidgetWrapper style={style} className={className} validateReport={validateReport}>
-                <textarea {...this.getAllowedInputElAttrs(props)} value={DataConvertor.getInstance().toString(value)} 
-                    onChange={this.handleChange} 
-                    style={{
-                        color: ValidateReportor.getFontColor(validateReport)
-                    }} 
-                    className={tools.classNames(textareaCSS.wrapper, className)}/>
-            </WidgetWrapper>
-            { validateReport ? <ValidateReportor {...validateReport} /> : '' }
-            </React.Fragment>
+        return (
+            <textarea {...restProps}
+                value={value === undefined ? this.parseValue() : value} 
+                defaultValue={defaultValue === undefined ? this.parseValue(defaultValue) : defaultValue} 
+                onFocus={this.handleFocus}
+                onBlur={this.handleBlur}
+                onChange={this.handleChange}
+                onKeyDown={this.handleKeyDown}
+                onKeyUp={this.handleKeyUp}
+                onKeyPress={this.handleKeyPress} 
+                style={style} 
+                className={tools.classNames(textareaCSS.wrapper, className)}/>
+        );
     }
     handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
         let { onChange } = this.props,
@@ -42,4 +47,4 @@ class Textarea extends Widget {
     }
 }
 
-export default connectActiveForm<typeof Textarea, FormWidgetProps>(Textarea);
+export default bindActiveForm<typeof Textarea, TextareaProps>(Textarea);

@@ -61,6 +61,17 @@ const Validator = {
             msg: '',
         }
     },
+    compareReport(report: Report, prevReport: Report) {
+        let isEqual = false;
+
+        if (prevReport === report) {
+            isEqual = true;
+        }
+        if (prevReport.isValid !== report.isValid || prevReport.level !== report.level || prevReport.msg !== report.msg) {
+            isEqual = false;
+        }
+        return isEqual;
+    },
     async validate(value: any, rules: Rule[]) {
         let hitRule, processReport;
 

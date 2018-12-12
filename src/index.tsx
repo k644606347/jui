@@ -20,6 +20,7 @@ import FormItem from "./components/FormItem";
 import Form from "./components/Form";
 import ActiveForm from "./components/formWidget/ActiveForm";
 import FormWidgetConfig from "./components/formWidget/Config";
+import ValidateMessage from './components/formWidget/ValidateMessage';
 
 import List from "./components/List";
 import Pagination from "./components/Pagination";
@@ -51,6 +52,7 @@ export {
     Log,
     Tools,
     ActiveForm,
+    ValidateMessage,
     FormWidgetConfig,
     Input,
     Textarea,

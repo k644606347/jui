@@ -20,6 +20,7 @@ import ToastDemo from './ToastDemo';
 import { iconAddCircle, iconAddCircleOutline, iconAlert, iconInfo, iconMore } from '../components/icons/SVGData';
 import MenuDemo from './MenuDemo';
 import DefaultPropsDemo from './DefaultPropsDemo';
+import SearchBarDemo from './SearchBarDemo';
 
 window.console.log(process.env.NODE_ENV);
 const tools = Tools.getInstance();
@@ -32,6 +33,7 @@ class App extends React.Component<any, any> {
             <JUIApp className={'App'}>
                 <ToastDemo />
                 <NavBarDemo />
+                <SearchBarDemo />
                 <RowTagNestedDemo />
                 <MessageTest />
                 <FormWidgetTest />

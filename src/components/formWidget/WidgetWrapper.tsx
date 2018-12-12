@@ -3,8 +3,6 @@ import * as React from "react";
 import cm from './WidgetWrapper.scss';
 import { CSSAttrs } from "../../utils/types";
 import Tools from "../../utils/Tools";
-import ValidateReportor from "./ValidateReportor";
-
 interface Props extends CSSAttrs {
     validateReport?: Report
 }

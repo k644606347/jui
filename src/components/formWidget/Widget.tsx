@@ -1,5 +1,5 @@
 import * as React from "react";
-import { CSSAttrs } from "../../utils/types";
+import { CSSAttrs, AnyPlainObject } from "../../utils/types";
 import Tools from "../../utils/Tools";
 import Validator, { Rule, Report } from "./Validator";
 import DataConvertor, { DataType } from "./stores/DataConvertor";
@@ -15,26 +15,28 @@ interface FormWidgetEvent {
     readOnly: boolean;
     focused: boolean;
     type: string;
+    widgetName: string;
 }
 export interface FormWidgetChangeEvent extends FormWidgetEvent {}
 export interface FormWidgetMountEvent extends FormWidgetEvent {}
 export interface FormWidgetFocusEvent extends FormWidgetEvent {}
+export interface FormWidgetKeyboardEvent extends FormWidgetEvent {}
+
 export type MsgLevelType = 'error' | 'warn' | 'info';
-export interface FormWidgetValidEvent {
+export interface FormWidgetValidEvent extends FormWidgetEvent {
     report: Report
 }
 type ValidateTrigger = 'onChange' | 'onBlur';
 
 export interface FormWidgetProps extends CSSAttrs {
-    id: string;
-    name: string;
-    value: ValueType;
-    defaultValidateReport?: Report;
-    autoFocus: boolean;
-    disabled: boolean;
-    readOnly: boolean;
-    placeholder: string;
-    required: boolean;
+    id?: string;
+    name?: string;
+    value?: ValueType;
+    autoFocus?: boolean;
+    disabled?: boolean;
+    readOnly?: boolean;
+    placeholder?: string;
+    required?: boolean;
     maxLength?: number;
     minLength?: number;
     rules?: Rule[];
@@ -42,43 +44,27 @@ export interface FormWidgetProps extends CSSAttrs {
     onChange?: (e: FormWidgetChangeEvent) => void;
     onFocus?: (e: FormWidgetFocusEvent) => void;
     onBlur?: (e: FormWidgetFocusEvent) => void;
+    onKeyDown?(e: FormWidgetKeyboardEvent): void;
+    onKeyUp?(e: FormWidgetKeyboardEvent): void;
+    onKeyPress?(e: FormWidgetKeyboardEvent): void;
     onDidMount?: (e: FormWidgetMountEvent) => void;
+    onValidating?: (e: FormWidgetValidEvent) => void;
     onValid?: (e: FormWidgetValidEvent) => void;
     onInvalid?: (e: FormWidgetValidEvent) => void;
 }
 export interface FormWidgetState {
-    value: any;
-    validateReport?: Report;
     focused: boolean;
+    validating: boolean;
 }
-
-const allowedInputElAttrs: Array<keyof React.InputHTMLAttributes<HTMLInputElement>> = [
-    'id', 'name', 'disabled', 'readOnly', 'required', 
-    'value',
-    'maxLength', 'minLength', 'placeholder', 
-    'onChange', 'onFocus', 'onBlur',
-    'autoFocus',
-];
 export default abstract class Widget<P extends FormWidgetProps = FormWidgetProps, S extends FormWidgetState = FormWidgetState> extends React.PureComponent<P, S> {
-    static dataType: DataType = 'string';
-    static widgetName = 'widget';
-    static defaultProps: Partial<FormWidgetProps> = {
-        id: '',
-        name: '',
-        value: '',
-        placeholder: '',
-        autoFocus: false,
-        disabled: false,
-        readOnly: false,
-        required: false,
-
-    }
     static convertor = DataConvertor.getInstance();
     state: S;
+    protected abstract dataType: DataType;
+    protected abstract widgetName = 'widget';
     getInitialState(props: P): S {
         return {
-            validateReport: props.defaultValidateReport || Validator.getDefaultReport(),
             focused: !!props.autoFocus,
+            validating: false,
         } as S;
     }
     constructor(props: P) {
@@ -89,6 +75,9 @@ export default abstract class Widget<P extends FormWidgetProps = FormWidgetProps
         this.initChangeHandler();
         this.handleFocus = this.handleFocus.bind(this);
         this.initBlurHandler();
+        this.handleKeyDown = this.handleKeyDown.bind(this);
+        this.handleKeyUp =  this.handleKeyPress.bind(this);
+        this.handleKeyPress = this.handleKeyPress.bind(this);
         this.validateReport = this.validateReport.bind(this);
     }
     componentDidMount() {
@@ -96,7 +85,7 @@ export default abstract class Widget<P extends FormWidgetProps = FormWidgetProps
 
         onDidMount && onDidMount(this.buildEvent());
     }
-    getValue() {
+    getParsedValue() {
         return this.parseValue();
     }
     parseValue(value: any = this.props.value) {
@@ -108,8 +97,8 @@ export default abstract class Widget<P extends FormWidgetProps = FormWidgetProps
     getWidgetName() {
         return this.getClass().widgetName;
     }
-    getDataType(): DataType {
-        return this.getClass().dataType;
+    getDataType() {
+        return this.dataType;
     }
     getClass(): any {
         return this.constructor;
@@ -126,22 +115,14 @@ export default abstract class Widget<P extends FormWidgetProps = FormWidgetProps
         return tools.isArray(validateTrigger) ? validateTrigger : 
                 tools.isString(validateTrigger) ? [validateTrigger] : ['onChange'];
     }
-    protected handleFocus(e?: any) {
-        let { onFocus } = this.props,
-            { focused } = this.state;
+    protected handleFocus(e: React.FocusEvent) {
+        let { onFocus } = this.props;
 
         this.setState({ focused: true }, () => {
             onFocus && onFocus(this.buildEvent());
         });
     }
-    protected handleChange(e?: any) {
-        let { value } = e,
-            { onChange } = this.props;
-
-        onChange && onChange(this.buildEvent({
-            value,
-        }));
-    }
+    protected abstract handleChange(e: any): void;
     protected initChangeHandler() {
         let handler = this.handleChange.bind(this),
             proxyHandler = (...args: any[]) => {
@@ -150,18 +131,32 @@ export default abstract class Widget<P extends FormWidgetProps = FormWidgetProps
             }
 
             handler(...args);
-    
             if (this.getValidateTriggers().indexOf('onChange') !== -1)
                 this.dispatchValidation();
         }
         this.handleChange = proxyHandler.bind(this);
     }
-    protected handleBlur(e?: any) {
+    protected handleBlur(e: React.FocusEvent) {
         let { onBlur } = this.props;
 
         this.setState({ focused: false }, () => {
             onBlur && onBlur(this.buildEvent());
         });
+    }
+    protected handleKeyDown(e: React.KeyboardEvent) {
+        let { onKeyDown } = this.props;
+
+        onKeyDown && onKeyDown(this.buildEvent());
+    }
+    protected handleKeyUp(e: React.KeyboardEvent) {
+        let { onKeyUp } = this.props;
+
+        onKeyUp && onKeyUp(this.buildEvent());
+    }
+    protected handleKeyPress(e: React.KeyboardEvent) {
+        let { onKeyPress } = this.props;
+
+        onKeyPress && onKeyPress(this.buildEvent());
     }
     protected initBlurHandler() {
         let handler = this.handleBlur.bind(this),
@@ -173,8 +168,8 @@ export default abstract class Widget<P extends FormWidgetProps = FormWidgetProps
             }
         this.handleBlur = proxyHandler.bind(this);
     }
-    protected buildEvent(rawEvent: any = {}): FormWidgetEvent {
-        let { id, name, disabled = false, readOnly = false, value = this.getValue() } = this.props,
+    protected buildEvent(rawEvent: AnyPlainObject = {}): any {
+        let { id = '', name = '', disabled = false, readOnly = false, value = this.getParsedValue() } = this.props,
             { focused } = this.state, 
             defaultEvent: FormWidgetEvent = {
                 id,
@@ -183,23 +178,11 @@ export default abstract class Widget<P extends FormWidgetProps = FormWidgetProps
                 disabled,
                 readOnly,
                 focused,
-                type: this.getWidgetName(),
+                type: 'widget',
+                widgetName: this.getWidgetName(),
             };
 
         return tools.isPlainObject(rawEvent) ? Object.assign(defaultEvent, rawEvent) : defaultEvent;
-    }
-    protected getAllowedInputElAttrs(obj: any = this.props) {
-        let inputElAttrs = {};
-
-        for (let key in obj) {
-            let val = obj[key];
-        
-            if (allowedInputElAttrs.indexOf(key as any) !== -1) {
-                inputElAttrs[key] = val;
-            }
-        }
-
-        return inputElAttrs;
     }
     protected getRules() {
         let { required, maxLength, minLength, rules } = this.props,
@@ -226,33 +209,42 @@ export default abstract class Widget<P extends FormWidgetProps = FormWidgetProps
     private dispatchValidation() {
         window.clearTimeout(this.validateTimer);
         this.validateTimer = window.setTimeout(() => {
-            let promise: Promise<any> = this.validatePromise = this.validate()
-                .then((report: Report) => {
-                    if (this.validatePromise === promise) {
-                        this.validateReport(report);
-                    }
-                });
-        }, 100);
+            this.validate();
+        }, 200);
     }
-    validate(value: any = this.getValue()): Promise<Report> {
-        let promise = Validator.validate(value, this.getRules()),
-            { name } = this.props;
+    // TODO 当一个方法中存在多处validate调用时，如何处理已过期的返回结果？reject还是resolve？
+    validate(value: ValueType = this.getParsedValue()): Promise<Report> {
+        let promise = this.validatePromise = Validator.validate(value, this.getRules()),
+            { onValidating } = this.props,
+            { validating } = this.state,
+            { name = '' } = this.props;
             
-        return promise.then(report => {
-            if (name) {
+        if (validating === false) {
+            onValidating && onValidating(this.buildEvent());
+        }
+
+        return new Promise((resolve, reject) => {
+            promise.then((report: Report) => {
                 report.fieldName = name;
-            }
-            return report;
+                
+                if (this.validatePromise !== promise) {
+                    resolve(report);
+                }
+
+                this.setState({ validating: false }, () => {
+                    this.validateReport(report);
+                    resolve(report);
+                });
+            });
         });
     }
     validateReport(report: Report) {
         let { onValid, onInvalid } = this.props,
             { isValid } = report,
-            event = {
+            event = this.buildEvent({
                 report
-            };
+            });
 
-        this.setState({ validateReport: report });
         if (isValid) {
             onValid && onValid(event);
         } else {

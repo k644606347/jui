@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Tools, Icon, Form, Log, FormItem, Pagination, CheckboxItems, Button, Input, RadioItems, Label, Radio } from "..";
+import { Tools, Icon, Form, Log, FormItem, Pagination, CheckboxItems, Button, Input, RadioItems, Label, Radio, ValidateMessage } from "..";
 import ActiveForm, { ActiveFormProps } from "../components/formWidget/ActiveForm";
 import Textarea from "../components/formWidget/Textarea";
 import { FormItemProps } from "src/components/FormItem";
@@ -69,7 +69,16 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                                 rule: 'maxLength',
                                 value: 10,
                             }
-                        ]
+                        ],
+                        onValidating(e: any) {
+                            console.log('validating', e);
+                        },
+                        onInvalid(e: any) {
+                            console.error('invalid', e);
+                        },
+                        onValid(e: any) {
+                            console.info('valid', e);
+                        }
                     }
                 },
                 {
@@ -151,13 +160,36 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                         this.setState({ fields: nextFields });
                     }
                 } /> */}
-                <ActiveForm initialFields={fields}
+                <ActiveForm
                     onSubmit={(e: any) => {
                         Log.info('onSubmit', e);
                     }}
                     onChange={(e: any) => {
                         Log.info('onChange', e);
-                    }}></ActiveForm>
+                    }}>{
+                        ({ submitting, value, handleChange }) => {
+                            return <React.Fragment>
+                                {
+                                    fields.map((field: FormItemProps, i) => {
+                                        let { component, label, componentProps = {}, render} = field;
+                                        
+                                        componentProps = Object.assign({}, componentProps, {
+                                            submitting,
+                                            value: value[componentProps.name],
+                                            onChange: handleChange,
+                                        });
+                                        console.log(componentProps);
+                                        return (
+                                            <React.Fragment>
+                                                <FormItem key={i} label={label} component={component} componentProps={componentProps} render={render}></FormItem>
+                                                <ValidateMessage popover={true} fieldName={componentProps.name} />
+                                            </React.Fragment>
+                                        )
+                                    })
+                                }
+                            </React.Fragment>
+                        }
+                    }</ActiveForm>
                 <ActiveForm initialValue={{x:1, y:2}}
                     onChange={e => {
                         console.log('onChange', e);

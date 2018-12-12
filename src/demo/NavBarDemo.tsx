@@ -37,7 +37,7 @@ export default class NavBarDemo extends React.PureComponent<any, any> {
                         } rightContent={'确定'} onLeftClick={
                             e => Log.log('后退')
                         }></NavBar>
-                        <NavBar>默认导航</NavBar>
+                        <NavBar leftContent={''}><input type={'search'} />取消</NavBar>
                     </React.Fragment>
                 </Modal>
             </React.Fragment>

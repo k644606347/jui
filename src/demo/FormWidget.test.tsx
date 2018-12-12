@@ -1,7 +1,7 @@
 import * as React from "react";
-import TestWidget from "../components/formWidget/TestWidget";
 import { CheckboxItems, Form, Log, Label, RadioItems } from "..";
 import { CheckboxItemsProps } from "../components/formWidget/CheckboxItems";
+import CustomWidgetDemo from "./formWidget/CustomWidgetDemo";
 
 export class FormWidgetTest extends React.PureComponent<any, any> {
     readonly state: any = {
@@ -77,7 +77,7 @@ export class FormWidgetTest extends React.PureComponent<any, any> {
         window.console.log(this.checkboxItemsRef);
         window.console.log(([CheckboxItems] as Array<string | React.ComponentClass<any> | React.StatelessComponent<any>>).indexOf(checkboxItemsEl.type));
         return (<React.Fragment>
-            <TestWidget />
+            <CustomWidgetDemo />
             <Label>多选项: </Label>
             { checkboxItemsEl }
             <Label>单选项: </Label>

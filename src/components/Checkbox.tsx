@@ -34,20 +34,15 @@ const themeIconMap: {[k in ThemeType]: {checked: IconDefinition, unchecked: Icon
         unchecked: iconCheckSquareOutline,
     }
 }
-export default class Checkbox extends React.PureComponent<CheckboxProps, CheckboxState>{
+export default class Checkbox extends React.PureComponent<CheckboxProps>{
     static defaultProps = {
         checked: false,
         theme: "circle",
     }
-    getInitialState(props: CheckboxProps) {
-        return {
-            checked: props.checked,
-        }
-    }
     constructor(props: CheckboxProps) {
         super(props);
 
-        this.state = this.getInitialState(props);
+        this.state = {};
         this.handleChange = this.handleChange.bind(this);
     }
     render() {
@@ -71,13 +66,6 @@ export default class Checkbox extends React.PureComponent<CheckboxProps, Checkbo
                 {children !== undefined ? <div className={cm.description}>{children}</div> : ''}
             </Label>
         );
-    }
-    componentDidUpdate(prevProps: CheckboxProps, prevState: CheckboxState) {
-        let { checked } = this.props;
-
-        if (prevProps.checked !== checked) {
-            this.setState({ checked });
-        }
     }
     protected handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         let { value, checked, disabled, readOnly } = e.target,

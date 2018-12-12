@@ -8,18 +8,20 @@ $navbar-height: 45 * $hd;
     line-height: $navbar-height;
     align-items: center;
     font-size: 18px;
-    .leftContent, .rightContent {
+    > * {
+        padding: 0 5px;
+    }
+    > :first-child {
+        padding-left: 10px;
+    }
+    > :last-child {
+        padding-right: 10px;
+    }
+    > .leftContent, > .rightContent {
         flex: 0 0 auto;
         cursor: pointer;
     }
-    .leftContent {
-        padding: 0 10px;
-    }
-    .rightContent {
-        justify-content: flex-end;
-        padding: 0 10px;
-    }
-    .content {
+    > .content {
         flex: 1 1 0%;
         display: flex;
         justify-content: center;

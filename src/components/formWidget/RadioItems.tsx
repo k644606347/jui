@@ -2,11 +2,9 @@ import Widget, { FormWidgetProps, FormWidgetChangeEvent } from "./Widget";
 import * as React from "react";
 import Tools from "../../utils/Tools";
 import Radio, { RadioChangeEvent, RadioProps } from "../Radio";
-import connectActiveForm from "./connectActiveForm";
-import { CSSAttrs } from "../../utils/types";
-import { WidgetWrapper } from "./WidgetWrapper";
-import ValidateReportor from "./ValidateReportor";
 import cm from './RadioItems.scss';
+import { DataType } from "./stores/DataConvertor";
+import bindActiveForm from "./bindActiveForm";
 interface RadioItem extends RadioProps {
     label: string;
     value: string;
@@ -18,36 +16,32 @@ export interface RadioItemsProps extends FormWidgetProps {
 }
 
 const tools = Tools.getInstance();
-class RadioItems extends Widget<RadioItemsProps, any> {
+class RadioItems extends Widget<RadioItemsProps> {
     static defaultProps = {
-        ...Widget.defaultProps,
         items: [],
         value: '',
     }
-    static widgetName = 'radioItems';
+    widgetName = 'radioItems';
+    dataType: DataType = 'string';
     render() {
-        let { name, items, value, className, style, disabled, readOnly, theme } = this.props,
-            { validateReport } = this.state;
+        let { name, items, value, className, style, disabled, readOnly, theme } = this.props;
         return (
-            <React.Fragment>
-                <WidgetWrapper style={style} className={tools.classNames(cm.wrapper, className)} validateReport={ validateReport }>
-                    {
-                        items && items.map((config, i) => {
-                            let radioProps = { theme, disabled, readOnly, ...config };
-                            
-                            return <div key={i} className={cm.item}>
-                                <Radio {...radioProps} name={name}
-                                    checked={value === config.value} 
-                                    className={cm.item} 
-                                    onChange={this.handleChange}>
-                                    { radioProps.label }
-                                </Radio>
-                            </div>
-                        })
-                    }
-                </WidgetWrapper>
-                { validateReport ? <ValidateReportor {...validateReport} /> : '' }
-            </React.Fragment>
+            <div style={style} className={tools.classNames(cm.wrapper, className)}>
+                {
+                    items && items.map((config, i) => {
+                        let radioProps = { theme, disabled, readOnly, ...config };
+                        
+                        return <div key={i} className={cm.item}>
+                            <Radio {...radioProps} name={name}
+                                checked={value === config.value} 
+                                className={cm.item} 
+                                onChange={this.handleChange}>
+                                { radioProps.label }
+                            </Radio>
+                        </div>
+                    })
+                }
+            </div>
 
         )
     }
@@ -58,4 +52,4 @@ class RadioItems extends Widget<RadioItemsProps, any> {
     }
 }
 
-export default connectActiveForm<typeof RadioItems, RadioItemsProps>(RadioItems);
+export default bindActiveForm<typeof RadioItems, RadioItemsProps>(RadioItems);
