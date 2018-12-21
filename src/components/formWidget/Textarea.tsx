@@ -4,6 +4,7 @@ import textareaCSS from './Textarea.scss';
 import Tools from "../../utils/Tools";
 import { DataType } from "./stores/DataConvertor";
 import bindActiveForm from "./bindActiveForm";
+import { AnyPlainObject } from "../../utils/types";
 
 const tools = Tools.getInstance();
 
@@ -21,12 +22,24 @@ class Textarea extends Widget<TextareaProps> {
     }
     render() {
         let { props, state } = this,
-            { value, defaultValue, className, style, onValid, onInvalid, onDidMount, ...restProps } = props;
+            { value, defaultValue, 
+                className, style, 
+                onValid, onInvalid, onValidating, 
+                onDidMount, onWillUnmount,
+                ...restProps
+            } = props,
+            valueProps: AnyPlainObject = {};
+
+            if (value !== undefined) {
+                valueProps.value = this.parseValue();
+            }
+            if (defaultValue !== undefined) {
+                valueProps.defaultValue = this.parseValue(defaultValue);
+            }
 
         return (
             <textarea {...restProps}
-                value={value === undefined ? this.parseValue() : value} 
-                defaultValue={defaultValue === undefined ? this.parseValue(defaultValue) : defaultValue} 
+                {...valueProps}
                 onFocus={this.handleFocus}
                 onBlur={this.handleBlur}
                 onChange={this.handleChange}

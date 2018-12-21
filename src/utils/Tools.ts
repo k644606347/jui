@@ -125,6 +125,10 @@ export default class Tools {
         });
     }
 
+    /**
+     * @example 
+     * tools.classNames('c1', 'c2', ['c3_1', 'c3_2'], 'c4'); // return 'c1 c2 c3_1 c3_2 c4'
+     */
     classNames(...args: Array<string | Array<string | undefined> | undefined>): string {
         return args.filter(n => !!n).map(n => Array.isArray(n) ? this.classNames.apply(this, n) : n).join(' ');
     }

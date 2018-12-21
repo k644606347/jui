@@ -1,15 +1,17 @@
 import * as React from "react";
 import Tools from "../../utils/Tools";
 import { ActiveFormContext } from "./ActiveFormContext";
-import Validator, { Report } from "./Validator";
+import Validator, { Report, Rule } from "./Validator";
 import { CSSAttrs, AnyFunction } from "../../utils/types";
 import Form from "../Form";
 import Log from "../../utils/Log";
-import Widget, { FormWidgetChangeEvent, FormWidgetValidEvent, FormWidgetProps } from "./Widget";
+import Widget, { FormWidgetChangeEvent, FormWidgetProps } from "./Widget";
 import { CheckboxChangeEvent } from "../Checkbox";
 import { RadioChangeEvent } from "../Radio";
 
 type ValueType = {[k in string]: any};
+type ReportMap = {[k in string]: Report};
+interface ValidateResult {isValid: boolean, reportMap: ReportMap}
 export interface ActiveFormSubmitEvent {
     name: string;
     value: ValueType;
@@ -26,6 +28,7 @@ export interface ActiveFormRenderEvent {
     handleSubmit: AnyFunction;
     isValid: boolean;
     submitting: boolean;
+    validating: boolean;
 }
 export interface ActiveFormProps extends CSSAttrs {
     name?: string;
@@ -33,9 +36,13 @@ export interface ActiveFormProps extends CSSAttrs {
     children?(e: ActiveFormRenderEvent): React.ReactNode;
     onSubmit?(e: ActiveFormSubmitEvent): void | Promise<any>;
     onChange?(e: ActiveFormChangeEvent): void;
-    onValidating?(): void;
     onValid?(): void;
     onInvalid?(): void;
+    onValidating?(): void;
+    onValidate?(): boolean;
+    validateRules?: {[k in string]: Rule | Rule[]};
+    validateOnChange: boolean;
+    validateOnBlur?: boolean;
     // action: string;// TODO
     // method: 'post' | 'get';
     // acceptCharset?: string;
@@ -48,30 +55,36 @@ export interface ActiveFormProps extends CSSAttrs {
 }
 export interface ActiveFormState {
     value: ValueType;
-    isValid: boolean;
     submitting: boolean;
-    validateResult: {[k in string]: Report};
+    isValid: boolean;
+    validating: boolean;
+    validateReportMap: ReportMap;
 }
 const tools = Tools.getInstance();
+
 export default class ActiveForm extends React.PureComponent<ActiveFormProps, ActiveFormState> {
+    static defaultProps = {
+        validateOnChange: false,
+    };
     readonly state: ActiveFormState;
     private readonly widgets: Array<React.Component<FormWidgetProps> & Widget> = [];
     constructor(props: ActiveFormProps) {
         super(props);
 
         this.state = {
-            isValid: true,
             submitting: false,
             value: this.getValueByProps(),
-            validateResult: {}
+            isValid: true,
+            validating: false,
+            validateReportMap: {}
         };
         this.handleChange = this.handleChange.bind(this);
-        this.handleWidgetMount = this.handleWidgetMount.bind(this);
-        this.handleWidgetValidating = this.handleWidgetValidating.bind(this);
-        this.handleWidgetValid = this.handleWidgetValid.bind(this);
-        this.handleWidgetInValid = this.handleWidgetInValid.bind(this);
+        this.handleValidating = this.handleValidating.bind(this);
+        this.handleValid = this.handleValid.bind(this);
+        this.handleInvalid = this.handleInvalid.bind(this);
         this.handleFieldChange = this.handleFieldChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleWidgetMount = this.handleWidgetMount.bind(this);
     }
     private getValueByProps() {
         let { initialValue } = this.props,
@@ -88,7 +101,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
     render() {
         let { props, state } = this,
             { name, children } = props,
-            { submitting, isValid, value } = state,
+            { value, validating, isValid, validateReportMap, submitting } = state,
             formProps = { name };
 
         let UnwrappedElement = <Form {...formProps}>
@@ -99,19 +112,18 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
                         handleChange: this.handleFieldChange, 
                         handleSubmit: this.handleSubmit, 
                         isValid, 
+                        validating,
                         submitting,
                     }) : ''
             }
         </Form>
         return (
             <ActiveFormContext.Provider value={{
-                onWidgetChange: this.handleFieldChange, 
-                onWidgetMount: this.handleWidgetMount,
-                onWidgetValidating: this.handleWidgetValidating,
-                onWidgetValid: this.handleWidgetValid,
-                onWidgetInvalid: this.handleWidgetInValid,
+                validating,
+                isValid,
+                validateReportMap,
                 submitting,
-                validateResult: state.validateResult,
+                onWidgetMount: this.handleWidgetMount,
             }}>
                 { UnwrappedElement }
             </ActiveFormContext.Provider>
@@ -120,64 +132,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
     private handleWidgetMount(widgetInstance: any) {
         this.widgets.push(widgetInstance);
     }
-    private handleWidgetValidating(e: FormWidgetValidEvent) {
-        let { onValidating } = this.props;
-        
-        onValidating && onValidating();
-    }
-    private handleWidgetValid(e: FormWidgetValidEvent) {
-        let { onValid } = this.props,
-            { validateResult } = this.state,
-            { report } = e,
-            { fieldName = '' } = report,
-            nextState: any = { isValid: true };
-
-        if (fieldName) {
-            let prevReport = validateResult[fieldName],
-                needUpdateReport = prevReport === undefined || !Validator.compareReport(report, prevReport);
-
-
-            if (needUpdateReport) {
-                validateResult = {...validateResult};
-                validateResult[fieldName] = report;
-    
-                nextState.validateResult = validateResult;
-            }
-        }
-        for(let k in validateResult) {
-            if (!validateResult[k].isValid) {
-                nextState.isValid = false;
-                break;
-            }
-        }
-        this.setState(nextState, () => {
-            this.state.isValid && onValid && onValid();
-        });
-    }
-    private handleWidgetInValid(e: FormWidgetValidEvent) {
-        let { onInvalid } = this.props,
-            { validateResult } = this.state,
-            { report } = e,
-            { fieldName = '' } = report,
-            nextState: any = { isValid: false };
-        
-        if (fieldName) {
-            let prevReport = validateResult[fieldName],
-                needUpdateReport = prevReport === undefined || !Validator.compareReport(report, prevReport);
-
-
-            if (needUpdateReport) {
-                validateResult = {...validateResult};
-                validateResult[fieldName] = report;
-    
-                nextState.validateResult = validateResult;
-            }
-        }
-        this.setState(nextState, () => {
-            onInvalid && onInvalid();
-        });
-    }
-    private setValueTimer = 0;
+    private setValueTimer: number;
     private setValueQueue: Array<{value: ValueType, resolve: AnyFunction}> = [];
     setValue(value: ValueType): Promise<{}> {
         let promise = new Promise((resolve, reject) => {
@@ -201,6 +156,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
                 this.setValueQueue.forEach(info => {
                     info.resolve();
                 });
+                this.setValueQueue = [];
             });
         }, 0);
         return promise;
@@ -208,94 +164,147 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
     getValue() {
         return this.state.value;
     }
-    // TODO 当瞬间多次触发submit时改如何处理
-    submit() {
-        let { onSubmit, onValid, onInvalid, name = '' } = this.props,
-            isValid = true,
-            handleFinally = () => {
-                this.setState({ isValid }, () => {
-                    let updateFormState = () => {
-                        this.setState({ submitting: false });
-                    };
+    updateValidateResult({ isValid, reportMap }: ValidateResult) {
+        let { validateReportMap } = this.state,
+            nextValidateReportMap = {...validateReportMap},
+            needRerender;
 
-                    if (isValid) {
-                        onValid && onValid();
-                    } else {
-                        onInvalid && onInvalid();
-                        updateFormState();
-                        return;
-                    }
+        if (isValid !== this.state.isValid) {
+            needRerender = true;
+        }
 
-                    if (onSubmit) {
-                        let result = onSubmit({name, value: this.getValue()});
-                    
-                        if (result instanceof Promise) {
-                            result.then(updateFormState).catch(updateFormState);
-                        } else {
-                            updateFormState();
-                        }
-                    } else {
-                        updateFormState();
-                    }
-                })
+        for (let fieldName in reportMap) {
+            let report = reportMap[fieldName],
+                prevReport = validateReportMap[fieldName];
+
+            if (!tools.isPlainObject(prevReport) || !Validator.compareReport(report, prevReport)) {
+                needRerender = true;
+
+                nextValidateReportMap[fieldName] = report;
             }
+        }
 
-        this.setState({ submitting: true });
-        this.validate()
-            .then(handleFinally)
-            .catch((error) => {
-                isValid = false;
-                if (error instanceof Error) {
-                    Log.error(error);
-                    alert(error);
-                } else {
-                    this.validateReport(error);
-                }
-                handleFinally();
+        if (needRerender) {
+            this.setState({ isValid, validateReportMap: nextValidateReportMap });
+        }
+    }
+    runFieldValidate(fieldName: string) {
+        let { validating } = this.state,
+            { onValidating, onValid, onInvalid } = this.props;
+
+        if (!validating) {
+            this.setState({ validating: true });
+            onValidating && onValidating();
+        }
+        this.validateField(fieldName)
+            .then(report => {
+                this.updateValidateResult({isValid: report.isValid, reportMap: { [fieldName]: report }});
+                onValid && onValid();
+            }).catch(report => {
+                this.updateValidateResult({isValid: report.isValid, reportMap: { [fieldName]: report }});
+                onInvalid && onInvalid();
+            }).then(() => {
+                this.setState({ validating: false });
             });
     }
-    validateReport(reports: Report[]) {
-        let { widgets } = this;
-
-        widgets.forEach((widget: any) => {
-            let targetReport = reports.find(report => report.fieldName === widget.props.name);
-
-            targetReport && widget.validateReport(targetReport);
-        });
-    }
-    validate(): Promise<any> {
+    validate(): Promise<ValidateResult> {
         let isValid = true,
-            invalidReports: Report[] = [],
-            validCount = 0, invalidCount = 0,
-            processor = (resolve: AnyFunction, reject: AnyFunction) => {
-                this.widgets.forEach((widget) => {
-                    widget.validate().then((report: Report) => {
-                        if (!report.isValid) {
-                            isValid = false;
-                            invalidCount ++;
-                            invalidReports.push(report);
-                        } else {
-                            validCount ++;
-                        }
-                    }).catch((e: Error) => {
-                        let report: Report = {
-                            fieldName: widget.props.name,
-                            msg: e.message,
-                            isValid,
-                        };
+            reportMap: ReportMap = {},
+            validCount = 0, invalidCount = 0;
+
+        return new Promise((resolve: AnyFunction, reject: AnyFunction) => {
+            let fieldNames = Object.keys(reportMap);
+
+            fieldNames.forEach(fieldName => {
+                this.validateField(fieldName)
+                    .then((report: Report) => {
+                        validCount ++;
+
+                        if (report.fieldName)
+                            reportMap[report.fieldName] = report;
+                    }).catch((report: Report) => {
                         isValid = false;
                         invalidCount ++;
-                        invalidReports.push(report);
+                        
+                        if (report.fieldName)
+                            reportMap[report.fieldName] = report;
                     }).then(() => {
-                        if (validCount + invalidCount < this.widgets.length) {
+                        if (validCount + invalidCount < fieldNames.length) {
                             return;
                         }
-                        isValid ? resolve() : reject(invalidReports);
-                    })
-                });
-            };
+                        resolve({ isValid, reportMap });
+                    });
+            });
+        });
+    }
+    validateField(fieldName: string): Promise<Report> {
+        let { validateRules } = this.props,
+            { value } = this.state,
+            fieldValue = value[fieldName],
+            fieldRules = validateRules && validateRules[fieldName];
 
-        return new Promise(processor.bind(this));
+        return new Promise((resolve, reject) => {
+            if (!fieldRules) {
+                resolve({isValid: true, fieldName, msg: ''});
+                return;
+            }
+
+            if (!Array.isArray(fieldRules))
+                fieldRules = [fieldRules];
+
+            Validator.validate(fieldValue, fieldRules).then((report: Report) => {
+                report.fieldName = fieldName;
+                report.isValid ? resolve(report) : reject(report);
+            }).catch((e: Error) => {
+                reject({
+                    fieldName,
+                    msg: e.message,
+                    isValid: false,
+                    level: 'error'
+                });
+            })
+        });
+    }
+    // TODO 当瞬间多次触发submit时改如何处理
+    submit() {
+        let { onSubmit, onValidating, onValid, onInvalid, name = '' } = this.props,
+            { submitting, validating } = this.state;
+
+        if (submitting === false) {
+            this.setState({ submitting: true });
+        }
+        if (validating === false) {
+            this.setState({ validating: true });
+            onValidating && onValidating();
+        }
+        this.validate()
+            .then(({ isValid, reportMap }) => {
+                this.updateValidateResult({ isValid, reportMap });
+                
+                let setSubmitting = () => {
+                    this.setState({ submitting: false });
+                };
+
+                if (!isValid) {
+                    onInvalid && onInvalid();
+                    setSubmitting();
+                    return;
+                } else {
+                    onValid && onValid();
+                }
+
+                if (onSubmit) {
+                    let result = onSubmit({name, value: this.getValue()});
+                
+                    if (result instanceof Promise) {
+                        result.then(setSubmitting).catch(setSubmitting);
+                    } else {
+                        setSubmitting();
+                    }
+                } else {
+                    setSubmitting();
+                }
+            });
     }
     private handleSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -307,7 +316,13 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
         let targetName: string,
             targetValue: any;
 
-        if (isRawEvent(e)) {
+        if (isWidgetEvent(e)) {// widget event
+            targetName = e.name;
+            targetValue = e.value;
+        } else if (isCheckboxOrRadioEvent(e)) {// checkbox and radio component event
+            targetName = e.name;
+            targetValue = e.checked;
+        } else { // dom event
             let target = e.target;
 
             targetName = String(target.name);
@@ -317,14 +332,11 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
             } else {
                 targetValue = target.value;
             }
-        } else if (isCheckboxOrRadioEvent(e)) {
-            targetName = e.name;
-            targetValue = e.checked;
-        } else {
-            targetName = e.name;
-            targetValue = e.value;
         }
 
+        function isWidgetEvent(event: any): event is FormWidgetChangeEvent {
+            return event.type === 'widget';
+        }
         function isRawEvent(event: any): event is React.ChangeEvent<any> {
             return !!event.target;
         }
@@ -339,9 +351,27 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
         };
     }
     private handleFieldChange(e: FieldChangeEvent) {
-        let widgetInfo = this.fetchFieldInfoByChangeEvent(e);
+        let { validateOnChange } = this.props,
+            { name, value } = this.fetchFieldInfoByChangeEvent(e),
+            prevValue = this.getValue()[name];
 
-        this.setValue({[widgetInfo.name]: widgetInfo.value});
+        if (prevValue !== value) {
+            this.setValue({[name]: value}).then(() => {
+                validateOnChange && this.runFieldValidate(name);
+            });
+        }
+    }
+    private handleFieldBlur() {
+        // TODO   
+    }
+    handleValid() {
+        this.props.onValid && this.props.onValid();
+    }
+    handleInvalid() {
+        this.props.onInvalid && this.props.onInvalid();
+    }
+    handleValidating() {
+        this.props.onValidating && this.props.onValidating();
     }
     private handleChange() {
         let { name = '', onChange } = this.props,

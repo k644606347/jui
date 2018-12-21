@@ -7,7 +7,7 @@ export default function connectActiveForm<ClassType, OriginProps>(UnwrappedCompo
         forwardedRef?: React.RefObject<any>;
     };
 
-    class Wrapper extends React.PureComponent<Props, any> {
+    class ConnectActiveForm extends React.PureComponent<Props, any> {
         static defaultProps = UnwrappedComponent.defaultProps;
         constructor(props: Props) {
             super(props);
@@ -36,7 +36,7 @@ export default function connectActiveForm<ClassType, OriginProps>(UnwrappedCompo
         }
     }
 
-    let HoistedComponent = hoistNonReactStatics(Wrapper, UnwrappedComponent) as React.ComponentType<Props>;
+    let HoistedComponent = hoistNonReactStatics(ConnectActiveForm, UnwrappedComponent) as React.ComponentType<Props>;
 
     // 通过JSX.LibraryManagedAttributes实现props和Class.defaultProps的关联
     return React.forwardRef((props: JSX.LibraryManagedAttributes<ClassType, OriginProps>, ref: React.RefObject<any>) => {

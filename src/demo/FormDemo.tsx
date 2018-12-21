@@ -160,12 +160,16 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                         this.setState({ fields: nextFields });
                     }
                 } /> */}
-                <ActiveForm
+                <ActiveForm 
+                    validateRules={{
+                        input1: [
+                            { rule: 'required' },
+                            { rule: 'maxLength', value: 10 },
+                        ],
+                    }}
+                    validateOnChange={true} 
                     onSubmit={(e: any) => {
                         Log.info('onSubmit', e);
-                    }}
-                    onChange={(e: any) => {
-                        Log.info('onChange', e);
                     }}>{
                         ({ submitting, value, handleChange }) => {
                             return <React.Fragment>
@@ -174,14 +178,18 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                                         let { component, label, componentProps = {}, render} = field;
                                         
                                         componentProps = Object.assign({}, componentProps, {
-                                            submitting,
+                                            // submitting,
                                             value: value[componentProps.name],
-                                            onChange: handleChange,
+                                            onChange: (e: any) => {
+                                                handleChange(e);
+                                                handleChange(e);
+                                                handleChange(e);
+                                            },
                                         });
                                         console.log(componentProps);
                                         return (
-                                            <React.Fragment>
-                                                <FormItem key={i} label={label} component={component} componentProps={componentProps} render={render}></FormItem>
+                                            <React.Fragment key={i}>
+                                                <FormItem label={label} component={component} componentProps={componentProps} render={render}></FormItem>
                                                 <ValidateMessage popover={true} fieldName={componentProps.name} />
                                             </React.Fragment>
                                         )
@@ -191,9 +199,9 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                         }
                     }</ActiveForm>
                 <ActiveForm initialValue={{x:1, y:2}}
-                    onChange={e => {
-                        console.log('onChange', e);
-                    }}
+                    // onChange={e => {
+                    //     console.log('onChange', e);
+                    // }}
                     onSubmit={e => {
                         debugger;
                     }} 
@@ -257,11 +265,17 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
     handleSetValue = () => {
         let activeForm = this.formForFieldsRef.current!;
 
-        activeForm.setValue({x: 3333}).then(() => {
-            console.log(activeForm.getValue());
-        });
-        activeForm.setValue({x: 4444}).then(() => {
-            console.log(activeForm.getValue());
-        });
+        // Promise.resolve().then(() => {
+        //     activeForm.setValue({x: 2222}, () => {
+        //         console.log('in Promise', activeForm.getValue());
+        //     });
+        // });
+        // activeForm.setValue({x: 3333}, () => {
+        //     console.log(activeForm.getValue());
+        // });
+        // console.log(activeForm.getValue()); // 因为setValue不一定会立即更新，所以应该在回调中使用getValue();
+        // activeForm.setValue({x: 4444}, () => {
+        //     console.log(activeForm.getValue());
+        // });
     }
 }

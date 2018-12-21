@@ -2,7 +2,7 @@ import * as React from 'react';
 import Tools from '../../utils/Tools';
 import Widget, { FormWidgetProps } from './Widget';
 import inputCSS from './Input.scss';
-import { Omit } from '../../utils/types';
+import { Omit, AnyPlainObject } from '../../utils/types';
 import { DataType } from './stores/DataConvertor';
 import bindActiveForm from './bindActiveForm';
 
@@ -22,12 +22,24 @@ class Input extends Widget<InputProps> {
     }
     render() {
         let { props } = this,
-            { value, defaultValue, className, style, onValid, onInvalid, onDidMount, ...restProps } = props;
+            { value, defaultValue, 
+                className, style, 
+                onValid, onInvalid, onValidating, 
+                onDidMount, onWillUnmount,
+                ...restProps 
+            } = props,
+            valueProps: AnyPlainObject = {};
+
+            if (value !== undefined) {
+                valueProps.value = this.parseValue();
+            }
+            if (defaultValue !== undefined) {
+                valueProps.defaultValue = this.parseValue(defaultValue);
+            }
 
         return (
             <input {...restProps}
-                value={value === undefined ? this.parseValue() : value} 
-                defaultValue={defaultValue === undefined ? this.parseValue(defaultValue) : defaultValue} 
+                {...valueProps}
                 onFocus={this.handleFocus}
                 onBlur={this.handleBlur}
                 onChange={this.handleChange}

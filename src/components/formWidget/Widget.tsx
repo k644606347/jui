@@ -48,6 +48,7 @@ export interface FormWidgetProps extends CSSAttrs {
     onKeyUp?(e: FormWidgetKeyboardEvent): void;
     onKeyPress?(e: FormWidgetKeyboardEvent): void;
     onDidMount?: (e: FormWidgetMountEvent) => void;
+    onWillUnmount?: (e: FormWidgetMountEvent) => void;
     onValidating?: (e: FormWidgetValidEvent) => void;
     onValid?: (e: FormWidgetValidEvent) => void;
     onInvalid?: (e: FormWidgetValidEvent) => void;
@@ -84,6 +85,9 @@ export default abstract class Widget<P extends FormWidgetProps = FormWidgetProps
         let { onDidMount } = this.props;
 
         onDidMount && onDidMount(this.buildEvent());
+    }
+    componentWillUnmount() {
+        this.props.onWillUnmount && this.props.onWillUnmount(this.buildEvent());
     }
     getParsedValue() {
         return this.parseValue();
@@ -132,7 +136,7 @@ export default abstract class Widget<P extends FormWidgetProps = FormWidgetProps
 
             handler(...args);
             if (this.getValidateTriggers().indexOf('onChange') !== -1)
-                this.dispatchValidation();
+                this.runValidateOnUserAction();
         }
         this.handleChange = proxyHandler.bind(this);
     }
@@ -164,7 +168,7 @@ export default abstract class Widget<P extends FormWidgetProps = FormWidgetProps
                 handler(...args);
 
                 if (this.getValidateTriggers().indexOf('onBlur') !== -1)
-                    this.dispatchValidation();        
+                    this.runValidateOnUserAction();        
             }
         this.handleBlur = proxyHandler.bind(this);
     }
@@ -206,7 +210,7 @@ export default abstract class Widget<P extends FormWidgetProps = FormWidgetProps
     }
     private validatePromise: Promise<any>;
     private validateTimer: number = 0;
-    private dispatchValidation() {
+    private runValidateOnUserAction() {
         window.clearTimeout(this.validateTimer);
         this.validateTimer = window.setTimeout(() => {
             this.validate();
@@ -221,6 +225,7 @@ export default abstract class Widget<P extends FormWidgetProps = FormWidgetProps
             
         if (validating === false) {
             onValidating && onValidating(this.buildEvent());
+            this.setState({ validating: true });
         }
 
         return new Promise((resolve, reject) => {

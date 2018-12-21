@@ -40,7 +40,7 @@ export default class ModalDemo extends React.PureComponent<any,any> {
                             return { show: false };
                         })
                     }} show={show}>
-                    <ActiveForm initialValue={this.state.formData} onChange={this.handleFormChange}>
+                    <ActiveForm initialValue={this.state.formData}>
                         {
                             this.renderActiveForm
                         }
