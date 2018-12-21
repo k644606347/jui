@@ -1,4 +1,4 @@
-// TODO 因为使用style-loader加载css，此处的import顺序影响到了<syle>的注入顺序，继而影响了css优先级，这不是好事情，css注入顺序应由使用组件时的先后顺序决定
+// 注意: import顺序会影响<syle>的加载顺序，继而影响css优先级
 import JUIApp from './components/JUIApp';
 
 import TouchFeedback from "./components/TouchFeedback";
