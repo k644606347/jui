@@ -1,3 +1,5 @@
+import { AnyFunction } from "./types";
+
 export default class Tools {
     static getInstance() {
         const instances = Tools.instances;
@@ -167,5 +169,22 @@ export default class Tools {
     // 需要依赖webpack变量注入
     isDev() {
         return process && process.env && process.env.NODE_ENV === "development";
+    }
+
+    /**
+     * 节流函数
+     * 使用TS中的泛型剩余参数以及相应的元组类型推断的技术:
+     * https://www.tslang.cn/docs/release-notes/typescript-3.0.html#generic-rest-parameters
+     * @param method 
+     * @param delay 
+     */
+    throttle<P extends any[]>(method: (...args: P) => any, delay: number) {
+        let timer;
+        return function(...args: P) {
+            window.clearTimeout(timer);
+            timer = window.setTimeout(() => {
+                method.apply(this, args);
+            }, delay);
+        }
     }
 }

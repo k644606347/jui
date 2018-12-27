@@ -21,7 +21,8 @@
     "curly": false,
     "no-empty": false,
     "ban-types": false,
-    "no-shadowed-variable": false
+    "no-shadowed-variable": false,
+    "only-arrow-functions": false
   },
   "linterOptions": {
     "exclude": [

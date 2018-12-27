@@ -2,7 +2,7 @@ import * as React from "react";
 import Tools from "../../utils/Tools";
 import { ActiveFormContext } from "./ActiveFormContext";
 import Validator, { Report, Rule } from "./Validator";
-import { CSSAttrs, AnyFunction } from "../../utils/types";
+import { CSSAttrs, AnyFunction, AnyPlainObject } from "../../utils/types";
 import Form from "../Form";
 import Log from "../../utils/Log";
 import Widget, { FormWidgetChangeEvent, FormWidgetProps } from "./Widget";
@@ -63,6 +63,7 @@ export interface ActiveFormState {
 }
 const tools = Tools.getInstance();
 
+const THROTTLE_VALIDATE_DELAY = 300;
 export default class ActiveForm extends React.PureComponent<ActiveFormProps, ActiveFormState> {
     static defaultProps = {
         validateOnChange: false,
@@ -141,7 +142,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
     }
     private setValueTimer: number;
     private setValueQueue: Array<{value: ValueType, resolve: AnyFunction}> = [];
-    setValue(value: ValueType): Promise<{}> {
+    setValue(value: ValueType, options: AnyPlainObject = {}): Promise<{}> {
         let promise = new Promise((resolve, reject) => {
                 if (tools.isPlainObject(value)) {
                     this.setValueQueue.push({ value, resolve });
@@ -160,21 +161,30 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
             this.setValueQueue.forEach(info => {
                 nextValue = Object.assign(nextValue, info.value);
             });
-            this.setState({ value: nextValue, validating: !!validateOnChange }, () => {
-                this.setValueQueue.forEach(info => {
-                    info.resolve();
-                });
-                this.setValueQueue = [];
+            this.setState(
+                { value: nextValue, validating: !!validateOnChange }, 
+                () => {
+                    this.setValueQueue.forEach(info => {
+                        info.resolve();
+                    });
+                    this.setValueQueue = [];
 
-                validateOnChange && this.runValiate();
-            });
+                    if (validateOnChange) {
+                        if (options.throttleValidate) {
+                            this.throttleRunValidate();
+                        } else {
+                            this.runValidate();
+                        }
+                    }
+                }
+            );
         }, 0);
         return promise;
     }
     getValue() {
         return this.state.value;
     }
-    setFieldValue(fieldName: string, fieldValue) {
+    setFieldValue(fieldName: string, fieldValue, options: AnyPlainObject = {}) {
         let { validateOnChange } = this.props,
             { value } = this.state,
             prevFieldValue = value[fieldName];
@@ -184,14 +194,25 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
         }
 
         value = {...value, [fieldName]: fieldValue};
-        this.setState({ value, validating: !!validateOnChange }, () => {
-            validateOnChange && this.runFieldValidate(fieldName);
-        });
+
+        this.setState(
+            { value, validating: !!validateOnChange }, 
+            () => {
+                if (validateOnChange) {
+                    if (options.throllValidate) {
+                        this.throttleRunFieldValidate(fieldName);
+                    } else {
+                        this.runFieldValidate(fieldName);
+                    }
+                }
+            }
+        );
     }
     getFieldValue(fieldName: string) {
         return this.state.value[fieldName];
     }
-    private runValiate() {
+    private throttleRunValidate = tools.throttle(this.runValidate, THROTTLE_VALIDATE_DELAY);
+    private runValidate() {
         let { onValidating, onValid, onInvalid } = this.props,
             { validating, validateReportMap } = this.state,
             validatePostProcess = ({ isValid, reportMap }: ValidateResult) => {
@@ -210,6 +231,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
             validatePostProcess({ isValid: false, reportMap: validateReportMap });
         });
     }
+    private throttleRunFieldValidate = tools.throttle(this.runFieldValidate, THROTTLE_VALIDATE_DELAY);
     private runFieldValidate(fieldName: string) {
         let { validating } = this.state,
             { onValidating, onValid, onInvalid } = this.props,
@@ -391,7 +413,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
             }
                 
         this.setState({ submitting: true });
-        this.runValiate().then(() => {
+        this.runValidate().then(() => {
             if (onSubmit) {
                 let result = onSubmit({name, value: this.getValue()});
             
@@ -443,14 +465,12 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
             value: targetValue,
         };
     }
-    private handleFieldChangeTimer;
     private handleFieldChange(e: FieldChangeEvent) {
         let { name, value } = this.fetchFieldInfoByChangeEvent(e),
             prevValue = this.getValue()[name];
 
-        window.clearTimeout(this.handleFieldChangeTimer);
         if (prevValue !== value) {
-            window.setTimeout(this.setFieldValue, 300, name, value);
+            this.setFieldValue(name, value, { throllValidate: true });
         }
     }
     private handleFieldBlur() {
