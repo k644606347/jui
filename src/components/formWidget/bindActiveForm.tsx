@@ -10,7 +10,7 @@ export default function bindActiveForm<ClassType, OriginProps extends FormWidget
 
     class BindActiveForm extends React.PureComponent<Props, any> {
         static defaultProps = UnwrappedComponent.defaultProps;
-        private activeformContext: ActiveFormContextType;;
+        private activeformContext: ActiveFormContextType;
         private widgetInstance: Widget<OriginProps, any> & React.Component;
         constructor(props: Props) {
             super(props);
@@ -41,9 +41,9 @@ export default function bindActiveForm<ClassType, OriginProps extends FormWidget
         }
         componentDidMount() {
             if (this.activeformContext) {
-                let { onWidgetMount } = this.activeformContext;
+                let { onFieldMount } = this.activeformContext;
 
-                onWidgetMount && onWidgetMount(this.widgetInstance);
+                onFieldMount && onFieldMount(this.widgetInstance);
             }
         }
     }

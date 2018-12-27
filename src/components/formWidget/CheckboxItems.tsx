@@ -84,4 +84,5 @@ class CheckboxItems extends Widget<CheckboxItemsProps> {
     }
 }
 
-export default bindActiveForm<typeof CheckboxItems, CheckboxItemsProps>(CheckboxItems);
+// export default bindActiveForm<typeof CheckboxItems, CheckboxItemsProps>(CheckboxItems);
+export default CheckboxItems;

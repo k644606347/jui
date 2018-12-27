@@ -34,10 +34,12 @@ interface CheckRuleResult {
     msg: string,
     index?: number,
 }
-const ALLOWED_RULES = [
+const allowedRules = [
     'required', 'maxLength', 'minLength', 'maxZhLength', 'minZhLength', 
     'email', 'url', 'domain', 'mobilePhone', 'date', 'datetime', 'callback'
 ];
+const defaultLevel = 'error';
+
 const tools = Tools.getInstance(),
     presetReport = {
         'required': { msg: '该字段不能为空' },
@@ -55,6 +57,7 @@ const tools = Tools.getInstance(),
     };
 
 const Validator = {
+    defaultLevel,
     getDefaultReport(): Report {
         return {
             isValid: true,
@@ -62,12 +65,14 @@ const Validator = {
         }
     },
     compareReport(report: Report, prevReport: Report) {
-        let isEqual = false;
+        let isEqual = true,
+            prevLevel = prevReport.level || defaultLevel,
+            level = report.level || defaultLevel;
 
         if (prevReport === report) {
-            isEqual = true;
+            return isEqual;
         }
-        if (prevReport.isValid !== report.isValid || prevReport.level !== report.level || prevReport.msg !== report.msg) {
+        if (prevReport.isValid !== report.isValid || prevLevel !== level || prevReport.msg !== report.msg) {
             isEqual = false;
         }
         return isEqual;
@@ -107,7 +112,7 @@ const Validator = {
             };
         }
 
-        return this.report(value, hitRule, processReport as Report);
+        return this.report(value, hitRule, processReport);
     },
     checkRule(rule: any): CheckRuleResult {
         let result: CheckRuleResult = {
@@ -127,9 +132,9 @@ const Validator = {
             return result;
         }
 
-        if (ALLOWED_RULES.indexOf(rule.rule) === -1) {
+        if (allowedRules.indexOf(rule.rule) === -1) {
             result.isValid = false;
-            result.msg = `"${rule.rule}"是无效的校验规则,请检查配置,可以使用的校验规则有:\n${JSON.stringify(ALLOWED_RULES)}`;
+            result.msg = `"${rule.rule}"是无效的校验规则,请检查配置,可以使用的校验规则有:\n${JSON.stringify(allowedRules)}`;
             return result;
         }
 
@@ -166,13 +171,12 @@ const Validator = {
 
         if (hitRule) {
             let { rule, level } = hitRule,
-                { msg } = presetReport[rule];
+                { msg: presetMsg } = presetReport[rule];
 
             report = Object.assign(report, {
-                value,
                 isValid: false,
-                level: level || 'error',
-                msg: tools.isFunction(msg) ? msg(hitRule, value) : msg
+                level: level || defaultLevel,
+                msg: tools.isFunction(presetMsg) ? presetMsg(hitRule, value) : presetMsg
             });
         }
 

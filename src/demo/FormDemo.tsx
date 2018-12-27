@@ -4,18 +4,19 @@ import ActiveForm, { ActiveFormProps } from "../components/formWidget/ActiveForm
 import Textarea from "../components/formWidget/Textarea";
 import { FormItemProps } from "src/components/FormItem";
 import { iconDoneAll, iconCloudDone } from "../components/icons/SVGData";
+import Field from "../components/formWidget/Field";
 
 interface FormTestProps {}
 
 const tools = Tools.getInstance();
 export default class FormDemo extends React.PureComponent<FormTestProps, { fields: FormItemProps[], form2: any, testInputValue: string }> {
     formForFieldsRef: React.RefObject<ActiveForm>;
-    inputRef: React.RefObject<any>;
+    fieldInputRef: React.RefObject<any>;
     constructor(props: FormTestProps) {
         super(props);
 
         this.formForFieldsRef = React.createRef();
-        this.inputRef = React.createRef();
+        this.fieldInputRef = React.createRef();
         this.state = {
             fields: [
                 {
@@ -182,11 +183,10 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                                             value: value[componentProps.name],
                                             onChange: (e: any) => {
                                                 handleChange(e);
-                                                handleChange(e);
-                                                handleChange(e);
+                                                // handleChange(e);
+                                                // handleChange(e);
                                             },
                                         });
-                                        console.log(componentProps);
                                         return (
                                             <React.Fragment key={i}>
                                                 <FormItem label={label} component={component} componentProps={componentProps} render={render}></FormItem>
@@ -206,7 +206,13 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                         debugger;
                     }} 
                     ref={this.formForFieldsRef} 
-
+                    onValidate={(value) => {
+                        return true as any;
+                    }}
+                    validateRules={{
+                        field_input: 1 as any
+                    }}
+                    validateOnChange={true}
                 >{
                     ({ value, handleChange }) => {
                         return <React.Fragment>
@@ -216,21 +222,26 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                         <br/>
                         <Label>
                             radio items1:
-                            <RadioItems items={[
-                                {
-                                    label: '北京',
-                                    value: 'beijing'
-                                },
-                                {
-                                    label: '上海',
-                                    value: 'shanghai',
-                                },
-                                {
-                                    label: '百度',
-                                    value: 'baidu',
-                                }
-                            ]} name="radioItems1" value={value.radioItems1}></RadioItems>
+                            <Field>
+                                <RadioItems items={[
+                                    {
+                                        label: '北京',
+                                        value: 'beijing'
+                                    },
+                                    {
+                                        label: '上海',
+                                        value: 'shanghai',
+                                    },
+                                    {
+                                        label: '百度',
+                                        value: 'baidu',
+                                    }
+                                ]} name="radioItems1" value={value.radioItems1}></RadioItems>
+                            </Field>
                         </Label>
+                        <Label>field input:</Label>
+                        <Field><Input ref={this.fieldInputRef} name="field_input"/></Field>
+                        <ValidateMessage fieldName={'field_input'} />
                         <Button onClick={this.handleSetValue}>setValue</Button>
                         <Button onClick={e => {
                             this.formForFieldsRef.current!.submit();
@@ -253,14 +264,14 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                         value: 'shanghai'
                     }
                 ]} />
-                <Input value={'baiduyixia'} onChange={e => { Log.warn(e); }}/>
+                <Label>testInput</Label><Input onChange={e => { Log.warn(e); }}/>
                 <Button>block btn</Button>
                 <Button inline={true}>inline btn</Button>
             </div>
         )
     }
     componentDidMount() {
-        Log.log('this.inputRef=', this.inputRef);
+        Log.log('FormDemo.fieldInputRef=', this.fieldInputRef);
     }
     handleSetValue = () => {
         let activeForm = this.formForFieldsRef.current!;

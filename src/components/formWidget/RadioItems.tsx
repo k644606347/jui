@@ -52,4 +52,5 @@ class RadioItems extends Widget<RadioItemsProps> {
     }
 }
 
-export default bindActiveForm<typeof RadioItems, RadioItemsProps>(RadioItems);
+// export default bindActiveForm<typeof RadioItems, RadioItemsProps>(RadioItems);
+export default RadioItems;

@@ -60,4 +60,5 @@ class Textarea extends Widget<TextareaProps> {
     }
 }
 
-export default bindActiveForm<typeof Textarea, TextareaProps>(Textarea);
+// export default bindActiveForm<typeof Textarea, TextareaProps>(Textarea);
+export default Textarea;

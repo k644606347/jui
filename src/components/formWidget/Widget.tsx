@@ -26,7 +26,6 @@ export type MsgLevelType = 'error' | 'warn' | 'info';
 export interface FormWidgetValidEvent extends FormWidgetEvent {
     report: Report
 }
-type ValidateTrigger = 'onChange' | 'onBlur';
 
 export interface FormWidgetProps extends CSSAttrs {
     id?: string;
@@ -40,7 +39,6 @@ export interface FormWidgetProps extends CSSAttrs {
     maxLength?: number;
     minLength?: number;
     rules?: Rule[];
-    validateTrigger?: ValidateTrigger[] | ValidateTrigger;
     onChange?: (e: FormWidgetChangeEvent) => void;
     onFocus?: (e: FormWidgetFocusEvent) => void;
     onBlur?: (e: FormWidgetFocusEvent) => void;
@@ -59,6 +57,9 @@ export interface FormWidgetState {
 }
 export default abstract class Widget<P extends FormWidgetProps = FormWidgetProps, S extends FormWidgetState = FormWidgetState> extends React.PureComponent<P, S> {
     static convertor = DataConvertor.getInstance();
+    static validate(value: any): Promise<Report> {
+        return Promise.resolve({...Validator.getDefaultReport(), isValid: true});
+    }
     state: S;
     protected abstract dataType: DataType;
     protected abstract widgetName = 'widget';
@@ -75,11 +76,10 @@ export default abstract class Widget<P extends FormWidgetProps = FormWidgetProps
 
         this.initChangeHandler();
         this.handleFocus = this.handleFocus.bind(this);
-        this.initBlurHandler();
+        this.handleBlur = this.handleBlur.bind(this);
         this.handleKeyDown = this.handleKeyDown.bind(this);
         this.handleKeyUp =  this.handleKeyPress.bind(this);
         this.handleKeyPress = this.handleKeyPress.bind(this);
-        this.validateReport = this.validateReport.bind(this);
     }
     componentDidMount() {
         let { onDidMount } = this.props;
@@ -98,6 +98,9 @@ export default abstract class Widget<P extends FormWidgetProps = FormWidgetProps
     getDataConvertor() {
         return this.getClass().convertor;
     }
+    getName() {
+        return this.props.name || '';
+    }
     getWidgetName() {
         return this.getClass().widgetName;
     }
@@ -113,12 +116,6 @@ export default abstract class Widget<P extends FormWidgetProps = FormWidgetProps
     isReadOnly() {
         return !!this.props.readOnly;
     }
-    getValidateTriggers() {
-        let { validateTrigger } = this.props;
-
-        return tools.isArray(validateTrigger) ? validateTrigger : 
-                tools.isString(validateTrigger) ? [validateTrigger] : ['onChange'];
-    }
     protected handleFocus(e: React.FocusEvent) {
         let { onFocus } = this.props;
 
@@ -130,14 +127,12 @@ export default abstract class Widget<P extends FormWidgetProps = FormWidgetProps
     protected initChangeHandler() {
         let handler = this.handleChange.bind(this),
             proxyHandler = (...args: any[]) => {
-            if (this.isDisabled() || this.isReadOnly()) {
-                return;
-            }
+                if (this.isDisabled() || this.isReadOnly()) {
+                    return;
+                }
 
-            handler(...args);
-            if (this.getValidateTriggers().indexOf('onChange') !== -1)
-                this.runValidateOnUserAction();
-        }
+                handler(...args);
+            }
         this.handleChange = proxyHandler.bind(this);
     }
     protected handleBlur(e: React.FocusEvent) {
@@ -161,16 +156,6 @@ export default abstract class Widget<P extends FormWidgetProps = FormWidgetProps
         let { onKeyPress } = this.props;
 
         onKeyPress && onKeyPress(this.buildEvent());
-    }
-    protected initBlurHandler() {
-        let handler = this.handleBlur.bind(this),
-            proxyHandler = (...args: any[]) => {
-                handler(...args);
-
-                if (this.getValidateTriggers().indexOf('onBlur') !== -1)
-                    this.runValidateOnUserAction();        
-            }
-        this.handleBlur = proxyHandler.bind(this);
     }
     protected buildEvent(rawEvent: AnyPlainObject = {}): any {
         let { id = '', name = '', disabled = false, readOnly = false, value = this.getParsedValue() } = this.props,
@@ -207,53 +192,5 @@ export default abstract class Widget<P extends FormWidgetProps = FormWidgetProps
         Object.assign(mixedRules, rules);
 
         return mixedRules;
-    }
-    private validatePromise: Promise<any>;
-    private validateTimer: number = 0;
-    private runValidateOnUserAction() {
-        window.clearTimeout(this.validateTimer);
-        this.validateTimer = window.setTimeout(() => {
-            this.validate();
-        }, 200);
-    }
-    // TODO 当一个方法中存在多处validate调用时，如何处理已过期的返回结果？reject还是resolve？
-    validate(value: ValueType = this.getParsedValue()): Promise<Report> {
-        let promise = this.validatePromise = Validator.validate(value, this.getRules()),
-            { onValidating } = this.props,
-            { validating } = this.state,
-            { name = '' } = this.props;
-            
-        if (validating === false) {
-            onValidating && onValidating(this.buildEvent());
-            this.setState({ validating: true });
-        }
-
-        return new Promise((resolve, reject) => {
-            promise.then((report: Report) => {
-                report.fieldName = name;
-                
-                if (this.validatePromise !== promise) {
-                    resolve(report);
-                }
-
-                this.setState({ validating: false }, () => {
-                    this.validateReport(report);
-                    resolve(report);
-                });
-            });
-        });
-    }
-    validateReport(report: Report) {
-        let { onValid, onInvalid } = this.props,
-            { isValid } = report,
-            event = this.buildEvent({
-                report
-            });
-
-        if (isValid) {
-            onValid && onValid(event);
-        } else {
-            onInvalid && onInvalid(event);
-        }
     }
 }

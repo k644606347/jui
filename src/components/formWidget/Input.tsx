@@ -22,7 +22,8 @@ class Input extends Widget<InputProps> {
     }
     render() {
         let { props } = this,
-            { value, defaultValue, 
+            { 
+                value, defaultValue, 
                 className, style, 
                 onValid, onInvalid, onValidating, 
                 onDidMount, onWillUnmount,
@@ -38,7 +39,8 @@ class Input extends Widget<InputProps> {
             }
 
         return (
-            <input {...restProps}
+            <input type="text" 
+                {...restProps}
                 {...valueProps}
                 onFocus={this.handleFocus}
                 onBlur={this.handleBlur}
@@ -60,4 +62,5 @@ class Input extends Widget<InputProps> {
         }));
     }
 }
-export default bindActiveForm<typeof Input, InputProps>(Input);
+// export default bindActiveForm<typeof Input, InputProps>(Input);
+export default Input;
