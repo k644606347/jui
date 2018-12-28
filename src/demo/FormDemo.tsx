@@ -216,6 +216,10 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                     // validateRules={{
                     //     field_input: 1 as any
                     // }}
+                    validateRules={{
+                        field_input: { rule: 'required' },
+                        rawInput: { rule: 'maxLength', value: 10 }
+                    }}
                     validateOnChange={true}
                 >{
                     ({ value, handleChange }) => {
@@ -245,8 +249,9 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                         </Label>
                         <Label>field input:</Label>
                         <Field><Input ref={this.fieldInputRef} name="field_input"/></Field>
-                        <Field><input name="rawInput" /></Field>
                         <ValidateMessage fieldName={'field_input'} />
+                        <Field><input name="rawInput" /></Field>
+                        <ValidateMessage fieldName={"rawInput"}></ValidateMessage>
                         <Button onClick={this.handleSetValue}>setValue</Button>
                         <Button onClick={e => {
                             this.formForFieldsRef.current!.submit();
