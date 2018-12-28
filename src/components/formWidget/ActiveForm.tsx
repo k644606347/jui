@@ -31,23 +31,25 @@ export interface ActiveFormRenderEvent extends ActiveFormState{
     value: ValueType;
     handleChange: AnyFunction;
     handleSubmit: AnyFunction;
+    handleReset: AnyFunction;
     isValid: boolean;
     submitting: boolean;
     validating: boolean;
 }
 export interface ActiveFormProps extends CSSAttrs {
-    name?: string;
-    initialValue?: ValueType;
+    name: string;
+    initialValue: ValueType;
     children?(e: ActiveFormRenderEvent): React.ReactNode;
+    validateOnChange: boolean;
+    validateOnBlur: boolean;
     onSubmit?(e: ActiveFormSubmitEvent): void | Promise<any>;
+    onReset?(): void;
     // onChange?(e: ActiveFormChangeEvent): void;
     onValid?(): void;
     onInvalid?(): void;
     onValidating?(): void;
     onValidate?(value: ValueType): Promise<Report> | Report;
     validateRules?: {[k in string]: Rule | Rule[]};
-    validateOnChange: boolean;
-    validateOnBlur?: boolean;
     // action: string;// TODO
     // method: 'post' | 'get';
     // acceptCharset?: string;
@@ -59,6 +61,7 @@ export interface ActiveFormProps extends CSSAttrs {
     // target?: string;
 }
 export interface ActiveFormState {
+    parsedInitialValue: ValueType;
     value: ValueType;
     submitting: boolean;
     isValid: boolean;
@@ -70,7 +73,10 @@ const tools = Tools.getInstance();
 const DEBOUNCE_VALIDATE_DELAY = 300;
 export default class ActiveForm extends React.PureComponent<ActiveFormProps, ActiveFormState> {
     static defaultProps = {
+        name: '',
+        initialValue: {},
         validateOnChange: false,
+        validateOnBlur: false,
     };
     readonly state: ActiveFormState;
     private readonly fields: React.ReactInstance[] = [];
@@ -79,6 +85,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
         super(props);
 
         this.state = {
+            parsedInitialValue: {},
             value: {},
             isValid: true,
             submitting: false,
@@ -87,6 +94,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
         };
         // this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleReset = this.handleReset.bind(this);
         this.handleValidating = this.handleValidating.bind(this);
         this.handleValid = this.handleValid.bind(this);
         this.handleInvalid = this.handleInvalid.bind(this);
@@ -107,7 +115,8 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
                     children({
                         ...state,
                         handleChange: this.handleFieldChange, 
-                        handleSubmit: this.handleSubmit, 
+                        handleSubmit: this.handleSubmit,
+                        handleReset: this.handleReset,
                     }) : ''
             }
         </Form>
@@ -132,16 +141,31 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
     }
     componentDidMount() {
         let { initialValue } = this.props,
-            newValue: ValueType = {};
+            parsedInitialValue: ValueType = {};
 
-        for (let fieldName in initialValue) {
+        this.fields.forEach(field => {
+            let fieldName;
+
+            if (React.isValidElement(field)) {
+                let fieldProps = field.props as any;
+                fieldName = fieldProps.name || '';
+            } else if (field instanceof HTMLElement) {
+                fieldName = field.getAttribute('value');
+            } else {
+                fieldName = '';
+            }
+
             let rawValue = initialValue[fieldName],
                 widget = this.widgets.find(widget => widget && widget.getName() === fieldName);
+            
+            if (widget) {
+                parsedInitialValue[fieldName] = widget.parseValue(rawValue);
+            } else {
+                parsedInitialValue[fieldName] = (rawValue !== undefined && rawValue !== null ? rawValue : '');
+            }
+        });
 
-            newValue[fieldName] = widget ? widget.parseValue(rawValue) : rawValue;
-        }
-
-        this.setState({ value: newValue });
+        this.setState({ value: parsedInitialValue, parsedInitialValue });
     }
     setValue(value: ValueType, callbackOrOptions?: AnyFunction | SetValueOptions) {
         let { validateOnChange } = this.props,
@@ -414,7 +438,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
     }
     // TODO 当瞬间多次触发submit时改如何处理
     submit() {
-        let { onSubmit, name = '' } = this.props,
+        let { onSubmit, name } = this.props,
             submitPostProcess = () => {
                 this.setState({ submitting: false });
             }
@@ -436,6 +460,14 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
     }
     private handleSubmit() {
         this.submit();
+    }
+    reset() {
+        this.setValue({ value: this.state.parsedInitialValue }, () => {
+            this.props.onReset && this.props.onReset();
+        });
+    }
+    private handleReset() {
+        this.reset();
     }
     private fetchFieldInfoByChangeEvent(e: FieldChangeEvent) {
         let targetName: string,

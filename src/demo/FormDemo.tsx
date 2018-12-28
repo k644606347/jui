@@ -198,7 +198,11 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                             </React.Fragment>
                         }
                     }</ActiveForm>
-                <ActiveForm initialValue={{x:1, y:2}}
+                <ActiveForm initialValue={{
+                    x:1, 
+                    y:2,
+                    rawInput: 'this is a rawInput',
+                }}
                     // onChange={e => {
                     //     console.log('onChange', e);
                     // }}
@@ -241,6 +245,7 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                         </Label>
                         <Label>field input:</Label>
                         <Field><Input ref={this.fieldInputRef} name="field_input"/></Field>
+                        <Field><input name="rawInput" /></Field>
                         <ValidateMessage fieldName={'field_input'} />
                         <Button onClick={this.handleSetValue}>setValue</Button>
                         <Button onClick={e => {
