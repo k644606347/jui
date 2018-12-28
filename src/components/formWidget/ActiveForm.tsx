@@ -63,7 +63,7 @@ export interface ActiveFormState {
 }
 const tools = Tools.getInstance();
 
-const THROTTLE_VALIDATE_DELAY = 300;
+const DEBOUNCE_VALIDATE_DELAY = 300;
 export default class ActiveForm extends React.PureComponent<ActiveFormProps, ActiveFormState> {
     static defaultProps = {
         validateOnChange: false,
@@ -171,7 +171,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
 
                     if (validateOnChange) {
                         if (options.throttleValidate) {
-                            this.throttleRunValidate();
+                            this.debounceRunValidate();
                         } else {
                             this.runValidate();
                         }
@@ -200,7 +200,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
             () => {
                 if (validateOnChange) {
                     if (options.throllValidate) {
-                        this.throttleRunFieldValidate(fieldName);
+                        this.debounceRunFieldValidate(fieldName);
                     } else {
                         this.runFieldValidate(fieldName);
                     }
@@ -211,7 +211,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
     getFieldValue(fieldName: string) {
         return this.state.value[fieldName];
     }
-    private throttleRunValidate = tools.debounce(this.runValidate, THROTTLE_VALIDATE_DELAY);
+    private debounceRunValidate = tools.debounce(this.runValidate, DEBOUNCE_VALIDATE_DELAY);
     private runValidate() {
         let { onValidating, onValid, onInvalid } = this.props,
             { validating, validateReportMap } = this.state,
@@ -231,7 +231,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
             validatePostProcess({ isValid: false, reportMap: validateReportMap });
         });
     }
-    private throttleRunFieldValidate = tools.debounce(this.runFieldValidate, THROTTLE_VALIDATE_DELAY);
+    private debounceRunFieldValidate = tools.debounce(this.runFieldValidate, DEBOUNCE_VALIDATE_DELAY);
     private runFieldValidate(fieldName: string) {
         let { validating } = this.state,
             { onValidating, onValid, onInvalid } = this.props,
