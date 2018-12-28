@@ -163,7 +163,7 @@ const Validator = {
         }
         return result;
     },
-    report(value: string, hitRule?: Rule, injectReport?: Report): Report {
+    report(value: string, hitRule?: Rule, injectReport?: Report) {
         let report: Report = {
             isValid: true,
             msg: "",
@@ -199,44 +199,32 @@ const Validator = {
         }
     },
     maxLength(value: any, rule: Rule) {
-        let result = true;
-
-        if (tools.isString(value) || tools.isArray(value))
-            result = value.length <= Number(rule.value)
-        else 
-            Log.warn(`maxLength校验无法生效，value必须是string / array，但是当前value=${JSON.stringify(value)}，将略过此次校验`);
-        
-        return result;
+        if (!tools.isString(value) && !tools.isArray(value)) {
+            value = String(value);
+            Log.warn(`校验maxLength时，值必须是string/array，但当前值是${JSON.stringify(value)}，将会强制转换值为string做校验`);
+        }
+        return value.length <= Number(rule.value);
     },
     minLength(value: string | any[], rule: Rule) {
-        let result = true;
-
-        if (tools.isString(value) || tools.isArray(value))
-            result = value.length >= Number(rule.value)
-        else 
-            Log.warn(`minLength校验无法生效，value必须是string / array，但是当前value=${JSON.stringify(value)}，将略过此次校验`);
-        
-        return result;
+        if (!tools.isString(value) && !tools.isArray(value)) {
+            value = String(value);
+            Log.warn(`校验minLength时，值必须是string/array，但当前值是${JSON.stringify(value)}，将会强制转换值为string做校验`);
+        }
+        return value.length >= Number(rule.value);   
     },
     maxZhLength(value: any, rule: Rule) {
-        let result = true;
-
-        if (tools.isString(value))
-            result = tools.calculateCharsByteLength(value) / 2 <= Number(rule.value);
-        else 
-            Log.warn(`maxZhLength校验无法生效，value必须是string，但是当前value=${JSON.stringify(value)}，将略过此次校验`);
-        
-        return result;
+        if (!tools.isString(value) && !tools.isArray(value)) {
+            value = String(value);
+            Log.warn(`校验maxZhLength时，值必须是string/array，但当前值是${JSON.stringify(value)}，将会强制转换值为string做校验`);
+        }
+        return tools.calculateCharsByteLength(value) / 2 <= Number(rule.value);
     },
     minZhLength(value: any, rule: Rule) {
-        let result = true;
-
-        if (tools.isString(value))
-            result = tools.calculateCharsByteLength(value) / 2 >= Number(rule.value);
-        else 
-            Log.warn(`minZhLength校验无法生效，value必须是string，但是当前value=${JSON.stringify(value)}，将略过此次校验`);
-        
-        return result;
+        if (!tools.isString(value) && !tools.isArray(value)) {
+            value = String(value);
+            Log.warn(`校验minZhLength时，值必须是string/array，但当前值是${JSON.stringify(value)}，将会强制转换值为string做校验`);
+        }
+        return tools.calculateCharsByteLength(value) / 2 >= Number(rule.value);
     },
     email(value: any) {
         return /^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/.test(String(value));
