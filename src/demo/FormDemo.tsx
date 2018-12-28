@@ -209,9 +209,9 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                     onValidate={(value) => {
                         return true as any;
                     }}
-                    validateRules={{
-                        field_input: 1 as any
-                    }}
+                    // validateRules={{
+                    //     field_input: 1 as any
+                    // }}
                     validateOnChange={true}
                 >{
                     ({ value, handleChange }) => {
@@ -276,17 +276,25 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
     handleSetValue = () => {
         let activeForm = this.formForFieldsRef.current!;
 
-        // Promise.resolve().then(() => {
-        //     activeForm.setValue({x: 2222}, () => {
-        //         console.log('in Promise', activeForm.getValue());
-        //     });
-        // });
-        // activeForm.setValue({x: 3333}, () => {
-        //     console.log(activeForm.getValue());
-        // });
+        // 在Promise/setTimeout/原生dom事件中的setState和rerender是同步的
+        Promise.resolve().then(() => {
+            activeForm.setValue({x: 222}, () => {
+                console.log('setValue callback', activeForm.getValue());
+            });
+            activeForm.setValue({x: 2222}, {
+                success() {
+                    console.log('setValue options.succes', activeForm.getValue());
+                }
+            });
+        });
+
+        // react的合成事件/钩子函数中的setState会批量更新，不会立即rerender，需要在回调中获得新的state
+        activeForm.setValue({x: 3333}, () => {
+            console.log(activeForm.getValue());
+        });
         // console.log(activeForm.getValue()); // 因为setValue不一定会立即更新，所以应该在回调中使用getValue();
-        // activeForm.setValue({x: 4444}, () => {
-        //     console.log(activeForm.getValue());
-        // });
+        activeForm.setValue({x: 4444}, () => {
+            console.log(activeForm.getValue());
+        });
     }
 }

@@ -14,6 +14,10 @@ import { Toast } from "../..";
 type ValueType = {[k in string]: any};
 type ReportMap = {[k in string]: Report};
 interface ValidateResult {isValid: boolean, reportMap: ReportMap}
+interface SetValueOptions {
+    success?: AnyFunction;
+    debounceValidate?: boolean;
+};
 export interface ActiveFormSubmitEvent {
     name: string;
     value: ValueType;
@@ -96,8 +100,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
             { validating, isValid, validateReportMap, submitting } = state,
             formProps = { name };
 
-        // console.log('ActiveForm rerender');
-        console.log(this.state);
+        console.log('ActiveForm rerender', JSON.stringify(this.state));
         let UnwrappedElement = <Form {...formProps}>
             {
                 children ? 
@@ -140,56 +143,59 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
 
         this.setState({ value: newValue });
     }
-    private setValueTimer: number;
-    private setValueQueue: Array<{value: ValueType, resolve: AnyFunction}> = [];
-    setValue(value: ValueType, options: AnyPlainObject = {}): Promise<{}> {
-        let promise = new Promise((resolve, reject) => {
-                if (tools.isPlainObject(value)) {
-                    this.setValueQueue.push({ value, resolve });
-                } else {
-                    let errorMsg = `[ActiveForm.setValue]value必须是对象类型，当前是${JSON.stringify(value)}`;
-                    Log.error(errorMsg);
-                    reject(errorMsg);
-                }
-            }),
-            { validateOnChange } = this.props;
-            
-        window.clearTimeout(this.setValueTimer);
-        this.setValueTimer = window.setTimeout(() => {
-            let nextValue = {...this.state.value};
+    setValue(value: ValueType, callbackOrOptions?: AnyFunction | SetValueOptions) {
+        let { validateOnChange } = this.props,
+            prevValue = this.state.value,
+            callback: AnyFunction = () => {}, options: SetValueOptions = {};
+        
+        if (tools.isFunction(callbackOrOptions)) {
+            callback = callbackOrOptions;
+        } else if (tools.isPlainObject(callbackOrOptions)) {
+            options = callbackOrOptions;
+            if (tools.isFunction(options.success))
+                callback = options.success;
+        }
 
-            this.setValueQueue.forEach(info => {
-                nextValue = Object.assign(nextValue, info.value);
-            });
-            this.setState(
-                { value: nextValue, validating: !!validateOnChange }, 
-                () => {
-                    this.setValueQueue.forEach(info => {
-                        info.resolve();
-                    });
-                    this.setValueQueue = [];
+        if (value === prevValue) {
+            callback();
+            return;
+        }
 
-                    if (validateOnChange) {
-                        if (options.throttleValidate) {
-                            this.debounceRunValidate();
-                        } else {
-                            this.runValidate();
-                        }
+        value = {...prevValue, ...value};
+
+        this.setState(
+            { value, validating: !!validateOnChange }, 
+            () => {
+                callback();
+                if (validateOnChange) {
+                    if (options.debounceValidate) {
+                        this.debounceRunValidate();
+                    } else {
+                        this.runValidate();
                     }
                 }
-            );
-        }, 0);
-        return promise;
+            }
+        );
     }
     getValue() {
         return this.state.value;
     }
-    setFieldValue(fieldName: string, fieldValue, options: AnyPlainObject = {}) {
+    setFieldValue(fieldName: string, fieldValue, callbackOrOptions?: AnyFunction | SetValueOptions) {
         let { validateOnChange } = this.props,
             { value } = this.state,
-            prevFieldValue = value[fieldName];
+            prevFieldValue = value[fieldName],
+            callback: AnyFunction = () => {}, options: SetValueOptions = {};
+
+        if (tools.isFunction(callbackOrOptions)) {
+            callback = callbackOrOptions;
+        } else if (tools.isPlainObject(callbackOrOptions)) {
+            options = callbackOrOptions;
+            if (tools.isFunction(options.success))
+                callback = options.success;
+        }
 
         if (fieldValue === prevFieldValue) {
+            callback();
             return;
         }
 
@@ -198,8 +204,9 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
         this.setState(
             { value, validating: !!validateOnChange }, 
             () => {
+                callback();
                 if (validateOnChange) {
-                    if (options.throllValidate) {
+                    if (options.debounceValidate) {
                         this.debounceRunFieldValidate(fieldName);
                     } else {
                         this.runFieldValidate(fieldName);
@@ -470,7 +477,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
             prevValue = this.getValue()[name];
 
         if (prevValue !== value) {
-            this.setFieldValue(name, value, { throllValidate: true });
+            this.setFieldValue(name, value, { debounceValidate: true });
         }
     }
     private handleFieldBlur() {
