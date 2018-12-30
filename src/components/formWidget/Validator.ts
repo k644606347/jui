@@ -1,25 +1,23 @@
 import Tools from "../../utils/Tools";
 import Log from "../../utils/Log";
 
-// TODO 待实现，考虑启用此接口作为Rule传参规范，但运行时获取的配置无法用到此检测
-// interface RuleMap {
-//     required?: boolean;
-//     maxLength?: number;
-//     minLength?: number;
-//     maxZhLength?: number;
-//     minZhLength?: number;
-//     email?: boolean | RegExp | string;
-//     url?: boolean | RegExp | string;
-//     domain?: boolean | RegExp | string;
-//     mobilePhone?: boolean | RegExp | string;
-//     date?: boolean | RegExp | string;
-//     datetime?: boolean | RegExp | string;
-//     callback?: (value: any) => Report;
-// }
-
+interface RuleMap {
+    required: boolean;
+    maxLength: number;
+    minLength: number;
+    maxZhLength: number;
+    minZhLength: number;
+    email: boolean | RegExp | string;
+    url: boolean | RegExp | string;
+    domain: boolean | RegExp | string;
+    mobilePhone: boolean | RegExp | string;
+    date: boolean | RegExp | string;
+    datetime: boolean | RegExp | string;
+    callback: (value: any) => Promise<Report | boolean>;
+}
 export interface Rule {
-    rule: string;
-    value?: any;
+    rule: keyof RuleMap;
+    value?: RuleMap[Rule['rule']];
     level?: 'error' | 'warn';
 }
 export interface Report {

@@ -11,24 +11,24 @@ import { RadioChangeEvent } from "../Radio";
 import { FieldChangeEvent } from "./Field";
 import { Toast } from "../..";
 
-type ValueType = {[k in string]: any};
 type ReportMap = {[k in string]: Report};
 interface ValidateResult {isValid: boolean, reportMap: ReportMap}
 interface SetValueOptions {
     success?: AnyFunction;
     debounceValidate?: boolean;
 };
+export type ActiveFormValue = {[k in string]: any};
 export interface ActiveFormSubmitEvent {
     name: string;
-    value: ValueType;
+    value: ActiveFormValue;
 }
 export interface ActiveFormChangeEvent {
     name: string;
-    value: ValueType;
+    value: ActiveFormValue;
 }
 
 export interface ActiveFormRenderEvent extends ActiveFormState{
-    value: ValueType;
+    value: ActiveFormValue;
     handleChange: AnyFunction;
     handleSubmit: AnyFunction;
     handleReset: AnyFunction;
@@ -38,7 +38,7 @@ export interface ActiveFormRenderEvent extends ActiveFormState{
 }
 export interface ActiveFormProps extends CSSAttrs {
     name: string;
-    initialValue: ValueType;
+    initialValue: ActiveFormValue;
     children?(e: ActiveFormRenderEvent): React.ReactNode;
     validateOnChange: boolean;
     validateOnBlur: boolean;
@@ -48,8 +48,8 @@ export interface ActiveFormProps extends CSSAttrs {
     onValid?(): void;
     onInvalid?(): void;
     onValidating?(): void;
-    onValidate?(value: ValueType): Promise<Report> | Report;
-    validateRules?: {[k in string]: Rule | Rule[]};
+    onValidate?(value: ActiveFormValue): Promise<Report> | Report;
+    validateRules?: {[k: string]: Rule | Rule[]};
     // action: string;// TODO
     // method: 'post' | 'get';
     // acceptCharset?: string;
@@ -61,8 +61,8 @@ export interface ActiveFormProps extends CSSAttrs {
     // target?: string;
 }
 export interface ActiveFormState {
-    parsedInitialValue: ValueType;
-    value: ValueType;
+    parsedInitialValue: ActiveFormValue;
+    value: ActiveFormValue;
     submitting: boolean;
     isValid: boolean;
     validating: boolean;
@@ -105,10 +105,10 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
     render() {
         let { props, state } = this,
             { name, children } = props,
-            { validating, isValid, validateReportMap, submitting } = state,
+            { value, validating, isValid, validateReportMap, submitting } = state,
             formProps = { name };
 
-        // console.log('ActiveForm rerender', JSON.stringify(this.state));
+        console.log('ActiveForm rerender', JSON.stringify(this.state));
         let UnwrappedElement = <Form {...formProps}>
             {
                 children ? 
@@ -122,6 +122,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
         </Form>
         return (
             <ActiveFormContext.Provider value={{
+                value,
                 validating,
                 isValid,
                 validateReportMap,
@@ -141,16 +142,16 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
     }
     componentDidMount() {
         let { initialValue } = this.props,
-            parsedInitialValue: ValueType = {};
+            parsedInitialValue: ActiveFormValue = {};
 
-        this.fields.forEach(field => {
+        this.fields.forEach((field: any) => {
             let fieldName;
 
-            if (React.isValidElement(field)) {
-                let fieldProps = field.props as any;
-                fieldName = fieldProps.name || '';
+            if (tools.isPlainObject(field.props)) {
+                let fieldProps = field.props;
+                fieldName = fieldProps.hasOwnProperty('name') ? fieldProps.name : '';
             } else if (field instanceof HTMLElement) {
-                fieldName = field.getAttribute('value');
+                fieldName = field.getAttribute('name') || '';
             } else {
                 fieldName = '';
             }
@@ -167,7 +168,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormProps, Act
 
         this.setState({ value: parsedInitialValue, parsedInitialValue });
     }
-    setValue(value: ValueType, callbackOrOptions?: AnyFunction | SetValueOptions) {
+    setValue(value: ActiveFormValue, callbackOrOptions?: AnyFunction | SetValueOptions) {
         let { validateOnChange } = this.props,
             prevValue = this.state.value,
             callback: AnyFunction = () => {}, options: SetValueOptions = {};

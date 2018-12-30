@@ -173,24 +173,4 @@ export default abstract class Widget<P extends FormWidgetProps = FormWidgetProps
 
         return tools.isPlainObject(rawEvent) ? Object.assign(defaultEvent, rawEvent) : defaultEvent;
     }
-    protected getRules() {
-        let { required, maxLength, minLength, rules } = this.props,
-            ruleMap = {
-                required,
-                maxLength,
-                minLength,
-            },
-            mixedRules: Rule[] = [];
-
-        Object.keys(ruleMap).forEach(k => {
-            let val = ruleMap[k];
-            val !== undefined && mixedRules.push({
-                rule: k,
-                value: ruleMap[k],
-            });
-        });
-        Object.assign(mixedRules, rules);
-
-        return mixedRules;
-    }
 }

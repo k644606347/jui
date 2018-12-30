@@ -1,11 +1,12 @@
 import * as React from "react";
 import { Report } from "./Validator";
-import Widget, { FormWidgetProps } from "./Widget";
 import { FieldChangeEvent } from "./Field";
+import { ActiveFormValue } from "./ActiveForm";
 type ReportMap = {[k in string]: Report};
 
 // React.Component<FormWidgetProps> & Widget
 export interface ActiveFormContextType {
+    value: ActiveFormValue,
     validating: boolean,
     isValid: boolean,
     validateReportMap: ReportMap,

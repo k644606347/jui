@@ -207,7 +207,7 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                     //     console.log('onChange', e);
                     // }}
                     onSubmit={e => {
-                        debugger;
+                        console.log('onSubmit call', e);
                     }} 
                     ref={this.formForFieldsRef} 
                     onValidate={(value) => {
@@ -218,7 +218,11 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                     // }}
                     validateRules={{
                         field_input: { rule: 'required' },
-                        rawInput: { rule: 'maxLength', value: 10 }
+                        rawInput: [
+                            { rule: 'maxLength', value: 10 },
+                            { rule: 'required' },
+                            { rule: 'minLength', value: 2 }
+                        ],
                     }}
                     validateOnChange={true}
                 >{

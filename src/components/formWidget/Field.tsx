@@ -25,12 +25,18 @@ class Field extends React.PureComponent<Props>{
         return (
             <ActiveFormContext.Consumer>
                 {context => {
-                    this.activeformContext = context;
+                    let activeFormValue = context.value,
+                        originProps = children.props,
+                        fieldName = originProps.name,
+                        originValue = originProps.value,
+                        hasOriginValue = originProps.hasOwnProperty('value');
 
+                    this.activeformContext = context;
                     return React.cloneElement(children, {
+                        value: hasOriginValue ? originValue : activeFormValue[fieldName],
                         ref: this.handleRef,
                         onChange: this.handleChange
-                    })
+                    });
                 }}
             </ActiveFormContext.Consumer>
         )
