@@ -35,10 +35,9 @@ export interface FormWidgetProps extends CSSAttrs {
     disabled?: boolean;
     readOnly?: boolean;
     placeholder?: string;
-    required?: boolean;
     maxLength?: number;
     minLength?: number;
-    rules?: Rule[];
+    validateReport?: Report;
     onChange?: (e: FormWidgetChangeEvent) => void;
     onFocus?: (e: FormWidgetFocusEvent) => void;
     onBlur?: (e: FormWidgetFocusEvent) => void;

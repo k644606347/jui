@@ -3,6 +3,7 @@ import { ActiveFormContext, ActiveFormContextType } from "./ActiveFormContext";
 import { FormWidgetChangeEvent } from "./Widget";
 import { CheckboxChangeEvent } from "../Checkbox";
 import { RadioChangeEvent } from "../Radio";
+import Validator from "./Validator";
 
 interface Props {
     children: JSX.Element;
@@ -31,11 +32,16 @@ class Field extends React.PureComponent<Props>{
                         originValue = originProps.value,
                         hasOriginValue = originProps.hasOwnProperty('value');
 
+                    
+                    let { validateReportMap } = context,
+                        validateReport = validateReportMap[fieldName];
+
                     this.activeformContext = context;
                     return React.cloneElement(children, {
                         value: hasOriginValue ? originValue : activeFormValue[fieldName],
                         ref: this.handleRef,
-                        onChange: this.handleChange
+                        onChange: this.handleChange,
+                        validateReport,
                     });
                 }}
             </ActiveFormContext.Consumer>

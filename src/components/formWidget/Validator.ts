@@ -21,10 +21,10 @@ export interface Rule {
     level?: 'error' | 'warn';
 }
 export interface Report {
-    fieldName?: string;
     isValid: boolean;
-    msg: string;
+    msg?: string;
     level?: 'error' | 'warn';
+    fieldName?: string;
 }
 
 interface CheckRuleResult {
@@ -61,6 +61,16 @@ const Validator = {
             isValid: true,
             msg: '',
         }
+    },
+    isValidReport(report: any) {
+        if (!tools.isPlainObject(report)) {
+            return false;
+        }
+
+        if (!report.hasOwnProperty('isValid')) {
+            return false;
+        }
+        return true;
     },
     compareReport(report: Report, prevReport: Report) {
         let isEqual = true,
