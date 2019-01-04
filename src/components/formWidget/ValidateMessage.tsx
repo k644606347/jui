@@ -35,10 +35,10 @@ class ValidateMessage extends React.PureComponent<Props> {
             { fieldName, className, style, popover, activeFormContext } = props,
             fieldValidateReport;
         
-        if (activeFormContext && activeFormContext.validateReportMap) {
-            let { validateReportMap } = activeFormContext;
+        if (activeFormContext && activeFormContext.fieldReportMap) {
+            let { fieldReportMap } = activeFormContext;
 
-            fieldValidateReport = validateReportMap[fieldName];
+            fieldValidateReport = fieldReportMap[fieldName];
         }
         if (!tools.isPlainObject(fieldValidateReport)) {
             return '';

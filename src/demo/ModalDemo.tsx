@@ -1,6 +1,5 @@
 import { Modal, Button, ActiveForm, Input, CheckboxItems, Checkbox, Toast } from "..";
 import * as React from "react";
-import { ActiveFormChangeEvent, ActiveFormRenderEvent } from "../components/formWidget/ActiveForm";
 
 export default class ModalDemo extends React.PureComponent<any,any> {
     readonly state = {
@@ -49,7 +48,7 @@ export default class ModalDemo extends React.PureComponent<any,any> {
             </React.Fragment>
         );
     }
-    renderActiveForm(args: ActiveFormRenderEvent) {
+    renderActiveForm(args) {
         return <React.Fragment>
             <Input name={'name'} value={args.value.name} onChange={args.handleChange}/>
             <Input name={'age'} value={args.value.age}/>
@@ -58,7 +57,7 @@ export default class ModalDemo extends React.PureComponent<any,any> {
             }} />
         </React.Fragment>
     }
-    handleFormChange(e: ActiveFormChangeEvent) {
+    handleFormChange(e) {
         let { formData } = this.state,
             { value } = e;
 

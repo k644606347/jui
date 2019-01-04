@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Tools, Icon, Form, Log, FormItem, Pagination, CheckboxItems, Button, Input, RadioItems, Label, Radio, ValidateMessage } from "..";
-import ActiveForm, { ActiveFormProps } from "../components/formWidget/ActiveForm";
+import ActiveForm from "../components/formWidget/ActiveForm";
 import Textarea from "../components/formWidget/Textarea";
 import { FormItemProps } from "src/components/FormItem";
 import { iconDoneAll, iconCloudDone } from "../components/icons/SVGData";
@@ -211,6 +211,7 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                     }} 
                     ref={this.formForFieldsRef} 
                     onValidate={(value) => {
+                        throw new Error('dddd');
                         return true as any;
                     }}
                     // validateRules={{
@@ -223,6 +224,15 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                             { rule: 'required' },
                             { rule: 'minLength', value: 2 }
                         ],
+                    }}
+                    onValid={e => {
+                        console.log(e);
+                    }}
+                    onInvalid={e => {
+                        console.log(e);
+                    }}
+                    onValidating={e => {
+                        console.log(e);
                     }}
                     validateOnChange={true}
                 >{

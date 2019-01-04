@@ -62,7 +62,7 @@ const Validator = {
             msg: '',
         }
     },
-    isValidReport(report: any) {
+    isValidReport(report: any): report is Report {
         if (!tools.isPlainObject(report)) {
             return false;
         }

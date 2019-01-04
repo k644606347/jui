@@ -33,15 +33,15 @@ class Field extends React.PureComponent<Props>{
                         hasOriginValue = originProps.hasOwnProperty('value');
 
                     
-                    let { validateReportMap } = context,
-                        validateReport = validateReportMap[fieldName];
+                    let { fieldReportMap } = context,
+                        fieldReport = fieldReportMap[fieldName];
 
                     this.activeformContext = context;
                     return React.cloneElement(children, {
                         value: hasOriginValue ? originValue : activeFormValue[fieldName],
                         ref: this.handleRef,
                         onChange: this.handleChange,
-                        validateReport,
+                        validateReport: fieldReport,
                     });
                 }}
             </ActiveFormContext.Consumer>

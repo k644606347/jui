@@ -76,3 +76,5 @@ typings/
 
 #根目录build/
 /build/
+#过滤jetbrains配置
+/.idea
