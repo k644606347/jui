@@ -31,12 +31,28 @@ export default class Tools {
         return v && Object.prototype.toString.call(v) === '[object Function]';
     }
 
+    isBoolean(v: any): v is boolean {
+        return typeof v === 'boolean';
+    }
+
+    isNumber(v: any): v is Number {
+        return typeof v === 'number';
+    }
+
     isString(v: any): v is string {
         return Object.prototype.toString.call(v) === '[object String]';
     }
 
     isArray(v: any): v is any[] {
         return Array.isArray(v);
+    }
+
+    isError(v): v is Error {
+        return Object.prototype.toString.call(v) === '[object Error]';
+    }
+
+    isPromise(v): v is Promise<any> {
+        return Object.prototype.toString.call(v) === '[object Promise]';
     }
 
     genID(prefix?: string): string {

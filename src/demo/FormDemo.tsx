@@ -164,8 +164,8 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                 <ActiveForm 
                     validateRules={{
                         input1: [
-                            { rule: 'required' },
-                            { rule: 'maxLength', value: 10 },
+                            { type: 'required' },
+                            { type: 'maxLength', value: 10 },
                         ],
                     }}
                     validateOnChange={true} 
@@ -211,18 +211,24 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                     }} 
                     ref={this.formForFieldsRef} 
                     onValidate={(value) => {
-                        throw new Error('dddd');
+                        // throw new Error('dddd');
                         return true as any;
                     }}
                     // validateRules={{
                     //     field_input: 1 as any
                     // }}
                     validateRules={{
-                        field_input: { rule: 'required' },
+                        field_input: { type: 'required' },
                         rawInput: [
-                            { rule: 'maxLength', value: 10 },
-                            { rule: 'required' },
-                            { rule: 'minLength', value: 2 }
+                            { type: 'maxLength', value: 10 },
+                            { type: 'required' },
+                            { type: 'minLength', value: 2 },
+                            { type: 'callback', value: () => {
+                                // throw new Error('validateRules callback');
+                                // return { isValid: true, msg: '', level: 'error' };
+                                return { isValid: 1 } as any;
+                                // return '';
+                            }}
                         ],
                     }}
                     onValid={e => {

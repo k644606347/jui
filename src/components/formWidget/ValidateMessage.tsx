@@ -46,7 +46,7 @@ class ValidateMessage extends React.PureComponent<Props> {
 
         let { level, isValid, msg } = fieldValidateReport;
 
-        if (isValid || msg === '') {
+        if (isValid) {
             return '';
         }
 

@@ -13,11 +13,11 @@ interface RuleMap {
     mobilePhone: boolean | RegExp | string;
     date: boolean | RegExp | string;
     datetime: boolean | RegExp | string;
-    callback: (value: any) => Promise<Report | boolean>;
+    callback: (value: any) => Promise<Report | boolean | string> | Report | boolean | string;
 }
 export interface Rule {
-    rule: keyof RuleMap;
-    value?: RuleMap[Rule['rule']];
+    type: keyof RuleMap;
+    value?: RuleMap[Rule['type']];
     level?: 'error' | 'warn';
 }
 export interface Report {
@@ -51,7 +51,7 @@ const tools = Tools.getInstance(),
         'datetime': { msg: '时间格式不正确' },
         'date': { msg: '日期格式不正确' },
         'mobilePhone': { msg: (rule: Rule, value: any) => `${value}不是有效的手机号码` },
-        'callback': { msg: (rule: Rule, value: any) => `未通过校验, value=${JSON.stringify(value)}, rule=${JSON.stringify(rule)}` },
+        'callback': { msg: (rule: Rule, value: any) => `未通过校验, value=${JSON.stringify(value)}, rule.type=callback, rule.value=${rule.value}` },
     };
 
 const Validator = {
@@ -67,10 +67,14 @@ const Validator = {
             return false;
         }
 
-        if (!report.hasOwnProperty('isValid')) {
-            return false;
+        if (
+            report.hasOwnProperty('isValid') && 
+            tools.isBoolean(report.isValid) &&
+            report.hasOwnProperty('msg')
+        ) {
+            return true;
         }
-        return true;
+        return false;
     },
     compareReport(report: Report, prevReport: Report) {
         let isEqual = true,
@@ -94,7 +98,7 @@ const Validator = {
             // tslint:disable-next-line:prefer-for-of
             for (let i = 0; i < rules.length; i++) {
                 let rule = rules[i], 
-                    processor = Validator[rule.rule];
+                    processor = Validator[rule.type];
 
                 let processResult = await processor(value, rule);
                 if (tools.isPlainObject(processResult)) {
@@ -134,15 +138,15 @@ const Validator = {
             return result;
         }
 
-        if (!rule.rule) {
+        if (!rule.type) {
             result.isValid = false;
-            result.msg = `校验规则必须包含非空的rule字段,请检查配置,当前是:\n${JSON.stringify(rule)}`;
+            result.msg = `校验规则必须包含非空的type字段,请检查配置,当前是:\n${JSON.stringify(rule)}`;
             return result;
         }
 
-        if (allowedRules.indexOf(rule.rule) === -1) {
+        if (allowedRules.indexOf(rule.type) === -1) {
             result.isValid = false;
-            result.msg = `"${rule.rule}"是无效的校验规则,请检查配置,可以使用的校验规则有:\n${JSON.stringify(allowedRules)}`;
+            result.msg = `"${rule.type}"是无效的校验规则,请检查配置,可以使用的校验规则有:\n${JSON.stringify(allowedRules)}`;
             return result;
         }
 
@@ -178,18 +182,20 @@ const Validator = {
         };
 
         if (hitRule) {
-            let { rule, level } = hitRule,
-                { msg: presetMsg } = presetReport[rule];
-
+            let { level } = hitRule;
             report = Object.assign(report, {
                 isValid: false,
                 level: level || defaultLevel,
-                msg: tools.isFunction(presetMsg) ? presetMsg(hitRule, value) : presetMsg
             });
         }
 
         if (injectReport) {
             report = Object.assign(report, injectReport);
+        }
+
+        if (report.msg === '' && hitRule) {
+            let { msg } = presetReport[hitRule.type];
+            report.msg = tools.isFunction(msg) ? msg(hitRule, value) : msg
         }
 
         return report;
@@ -251,44 +257,45 @@ const Validator = {
     date(value: any) {
         return /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(String(value));
     },
-    async callback(value: string, rule: Rule): Promise<Report | boolean> {
-        let callbackResult: Report | boolean;
+    async callback(value: string, rule: Rule): Promise<Report> {
+        let callbackResult: boolean | string | Report,
+            result: Report,
+            isValid = false;
 
-        if (tools.isFunction(rule.value)) {
-            try {
-                // valid case
-                callbackResult = Boolean(await rule.value(value));
-            } catch (e) {
-                // invalid case
-                if (e instanceof Error) {
-                    let errorMsg = `callback函数执行报错, 无法完成校验, 报错信息: ${e}`;
-
-                    // throw error时level设置为error级别
-                    callbackResult = {
-                        msg: errorMsg,
-                        isValid: false,
-                        level: "error"
-                    };
-                    Log.error(errorMsg);
-                } else {
-                    // 正常的驳回流程
-                    callbackResult = {
-                        isValid: false,
-                        msg: tools.isString(e) ? e : JSON.stringify(e)
-                    };
-                }
+        if (!tools.isFunction(rule.value)) {
+            throw new Error(`无效的校验配置，当rule.type=callback时，rule.value必须是函数, 当前是: ${rule.value}`);
+        }
+        try {
+            callbackResult = await rule.value(value);
+            isValid = true;
+        } catch (e) {
+            isValid = false;
+            if (tools.isError(e)) {
+                throw e;
+            } else {
+                callbackResult = e;
             }
-        } else {
-            let errorMsg = `配置错误，无法校验，当rule是callback时，value必须是函数, 当前是: ${rule.value}`;
-            callbackResult = {
-                msg: errorMsg,
-                isValid: false,
-                level: "error"
-            };
-            Log.error(errorMsg);
         }
 
-        return callbackResult;
+        if (tools.isString(callbackResult) || tools.isBoolean(callbackResult)) {
+            result = {
+                isValid: !!callbackResult,
+                msg: tools.isString(callbackResult) ? callbackResult : '',
+            };
+            if (!result.isValid)
+                result.level = 'error';
+        } else if (Validator.isValidReport(callbackResult)) {
+            result = callbackResult;
+        } else {
+            isValid = false;
+            let errorMsg = `无效的校验逻辑，请检查校验逻辑的返回结果, 
+            当前返回: ${JSON.stringify(callbackResult)}, 
+            有效的返回: { isValid: boolean, level: 'error' | 'warn', msg: string, fieldName: string} | boolean | string`;
+
+            throw new Error(errorMsg);
+        }
+
+        return result;
     },
 };
 export default Validator;

@@ -79,7 +79,7 @@ declare namespace ActiveForm {
 }
 const tools = Tools.getInstance();
 
-const DEBOUNCE_VALIDATE_DELAY = 300;
+const DEBOUNCE_VALIDATE_DELAY = 500;
 export default class ActiveForm extends React.PureComponent<ActiveForm.Props, ActiveForm.State> {
     static defaultProps = {
         name: '',
@@ -182,7 +182,7 @@ export default class ActiveForm extends React.PureComponent<ActiveForm.Props, Ac
     setValue(value: ActiveForm.Value, callbackOrOptions?: AnyFunction | ActiveForm.SetValueOptions) {
         let { validateOnChange } = this.props,
             prevValue = this.state.value,
-            callback: AnyFunction = () => {}, options: ActiveForm.SetValueOptions = {};
+            callback = () => {}, options: ActiveForm.SetValueOptions = {};
         
         if (tools.isFunction(callbackOrOptions)) {
             callback = callbackOrOptions;
@@ -192,26 +192,16 @@ export default class ActiveForm extends React.PureComponent<ActiveForm.Props, Ac
                 callback = options.success;
         }
 
-        if (value === prevValue) {
-            callback();
-            return;
-        }
-
         value = {...prevValue, ...value};
 
-        this.setState(
-            { value }, 
-            () => {
-                callback();
-                if (validateOnChange) {
-                    if (options.debounceValidate) {
-                        this.debounceRunValidate({ action: 'change' });
-                    } else {
-                        this.runValidate({ action: 'change' });
-                    }
-                }
+        this.setState({ value }, callback);
+        if (validateOnChange) {
+            if (options.debounceValidate) {
+                this.debounceRunValidate({ action: 'change' });
+            } else {
+                this.runValidate({ action: 'change' });
             }
-        );
+        }
     }
     getValue() {
         return this.state.value;
@@ -219,8 +209,7 @@ export default class ActiveForm extends React.PureComponent<ActiveForm.Props, Ac
     setFieldValue(fieldName: string, fieldValue, callbackOrOptions?: AnyFunction | ActiveForm.SetValueOptions) {
         let { validateOnChange } = this.props,
             { value } = this.state,
-            prevFieldValue = value[fieldName],
-            callback: AnyFunction = () => {}, options: ActiveForm.SetValueOptions = {};
+            callback = () => {}, options: ActiveForm.SetValueOptions = {};
 
         if (tools.isFunction(callbackOrOptions)) {
             callback = callbackOrOptions;
@@ -230,26 +219,16 @@ export default class ActiveForm extends React.PureComponent<ActiveForm.Props, Ac
                 callback = options.success;
         }
 
-        if (fieldValue === prevFieldValue) {
-            callback();
-            return;
-        }
-
         value = {...value, [fieldName]: fieldValue};
 
-        this.setState(
-            { value }, 
-            () => {
-                callback();
-                if (validateOnChange) {
-                    if (options.debounceValidate) {
-                        this.debounceRunFieldValidate(fieldName, { action: 'change' });
-                    } else {
-                        this.runFieldValidate(fieldName, { action: 'change' });
-                    }
-                }
+        this.setState({ value }, callback);
+        if (validateOnChange) {
+            if (options.debounceValidate) {
+                this.debounceRunFieldValidate(fieldName, { action: 'change' });
+            } else {
+                this.runFieldValidate(fieldName, { action: 'change' });
             }
-        );
+        }
     }
     getFieldValue(fieldName: string) {
         return this.state.value[fieldName];
@@ -259,11 +238,11 @@ export default class ActiveForm extends React.PureComponent<ActiveForm.Props, Ac
         this.validatePreProcess();
         return this.validate().then(validateResult => {
             this.validatePostProcess({...validateResult, action});
-        }).catch(error => {
+        }).catch((error: Error) => {
             Log.error('[ActiveForm.validate]', error);
             this.validatePostProcess({ 
                 isValid: false, 
-                validateReport: { 
+                validateReport: {
                     isValid: false, 
                     msg: error + '', 
                     level: 'error'
@@ -312,8 +291,9 @@ export default class ActiveForm extends React.PureComponent<ActiveForm.Props, Ac
             });
         }
     }
-    private validatePostProcess({ isValid, validateReport, fieldReportMap, action }: ActiveForm.ValidateResult & { action?: ActiveForm.Action }) {
-        let { name } = this.props,
+    private validatePostProcess(result: ActiveForm.ValidateResult & { action?: ActiveForm.Action }) {
+        let { isValid, validateReport, fieldReportMap, action } = result,
+            { name } = this.props,
             { value } = this.state,
             validateReportEvent = {
                 name,
@@ -329,53 +309,34 @@ export default class ActiveForm extends React.PureComponent<ActiveForm.Props, Ac
         isValid ? this.handleValid(validateReportEvent) : this.handleInvalid(validateReportEvent);
     }
     validate(): Promise<ActiveForm.ValidateResult> {
-        return new Promise((resolve, reject) => {
-            let isValid = false,
-                { validateRules } = this.props,
-                ruleKeys = validateRules ? Object.keys(validateRules) : [],
-                validateReport: Report = Validator.getDefaultReport(),
-                fieldReportMap = {},
-                validCount = 0, invalidCount = 0,
-                promiseQueue: Array<Promise<Report>> = [];
+        let { validateRules } = this.props,
+            ruleKeys = validateRules ? Object.keys(validateRules) : [],
+            promiseQueue: Array<Promise<Report>> = [],
+            validateReport,
+            fieldReportMap = {},
+            isValid = true;
 
-            ruleKeys.forEach(fieldName => {
-                promiseQueue.push(this.validateField(fieldName));
-            });
-            promiseQueue.push(this.handleValidate());
-
-            promiseQueue.forEach((promise, i) => {
-                let fieldName = ruleKeys[i];
-                promise.then(report => {
-                    if (!report.isValid)
-                        isValid = false;
-
-                    report.isValid ? validCount++ : invalidCount++;
-                    fieldReportMap[fieldName] = report;
-
-                    return report;
-                }).catch((error: Error) => {
-                    let report: Report = {
-                        isValid: false,
-                        msg: error + '',
-                        level: 'error',
-                    };
-                    isValid = false;
-                    invalidCount++;
-                    fieldReportMap[fieldName] = report;
-                    Log.error('[ActiveForm.validateField]', error);
-
-                    return report;
-                }).then(report => {
-                    if (!report.isValid && validateReport === undefined) {
-                        validateReport = report;
-                    }
-                    if (validCount + invalidCount < promiseQueue.length) {
-                        return;
-                    }
-                    resolve({ isValid, validateReport, fieldReportMap });
-                });
-            });
+        ruleKeys.forEach(fieldName => {
+            promiseQueue.push(this.validateField(fieldName));
         });
+        promiseQueue.push(this.handleValidate());
+
+        return Promise.all(promiseQueue)
+            .then(reports => {
+                let firstInvalidReport;
+                reports.forEach(report => {
+                    let { fieldName } = report;
+                    if (fieldName)
+                        fieldReportMap[fieldName] = report;
+
+                    if (!report.isValid && firstInvalidReport === undefined) {
+                        isValid = false;
+                        firstInvalidReport = report;
+                    }
+                });
+                validateReport = firstInvalidReport || Validator.getDefaultReport();
+                return { isValid, validateReport, fieldReportMap};
+            });
     }
     validateField(fieldName: string): Promise<Report> {
         let { validateRules } = this.props,
@@ -384,8 +345,13 @@ export default class ActiveForm extends React.PureComponent<ActiveForm.Props, Ac
             fieldRules = validateRules && validateRules[fieldName],
             widget = this.widgets.find(widget => widget && widget.getName() === fieldName),
             widgetClass = widget && widget.getClass(),
-            promiseQueue = [validateByFieldRules()];
+            promiseQueue: Array<Promise<Report>> = [];
 
+        if (fieldRules) {
+            if (!Array.isArray(fieldRules))
+                fieldRules = [fieldRules];
+            promiseQueue.push(Validator.validate(fieldValue, fieldRules));
+        }
         if (widgetClass && tools.isFunction(widgetClass.validate)) {
             promiseQueue.push(widgetClass.validate(fieldValue));
             // promiseQueue.push(new Promise(() => {throw new Error('demo Error')}));
@@ -393,10 +359,10 @@ export default class ActiveForm extends React.PureComponent<ActiveForm.Props, Ac
 
         return Promise.all(promiseQueue)
             .then((reportArr: Report[]) => {
-                let invalidReport = reportArr.find(report => !report.isValid),
-                    returnReport = invalidReport ? 
+                let firstInvalidReport = reportArr.find(report => !report.isValid),
+                    returnReport = firstInvalidReport ? 
                         {
-                            ...invalidReport,
+                            ...firstInvalidReport,
                             fieldName
                         } : 
                         {
@@ -407,7 +373,7 @@ export default class ActiveForm extends React.PureComponent<ActiveForm.Props, Ac
 
                 return Promise.resolve(returnReport);
             }).catch((result: Report | Error) => {
-                if (result instanceof Error) {
+                if (tools.isError(result)) {
                     throw result;
                 } else {
                     return Promise.resolve({
@@ -416,23 +382,6 @@ export default class ActiveForm extends React.PureComponent<ActiveForm.Props, Ac
                     })
                 }
             });
-
-        function validateByFieldRules() {
-            return new Promise((resolve, reject) => {
-                if (!fieldRules) {
-                    resolve({isValid: true, fieldName, msg: ''});
-                    return;
-                }
-    
-                if (!Array.isArray(fieldRules))
-                    fieldRules = [fieldRules];
-    
-                Validator.validate(fieldValue, fieldRules).then((report: Report) => {
-                    report.fieldName = fieldName;
-                    resolve(report);
-                });
-            });
-        }
     }
     private updateValidateResult(validateResult: ActiveForm.ValidateResult) {
         let { validateReport, fieldReportMap } = this.state,
@@ -470,18 +419,22 @@ export default class ActiveForm extends React.PureComponent<ActiveForm.Props, Ac
 
         return new Promise((resolve, reject) => {
             if (tools.isFunction(onValidate)) {
-                let result = onValidate(this.getValue());
-
-                if (result instanceof Promise) {
-                    result.then(resolve, (result: Report | Error) => {
-                        if (result instanceof Error) {
+                let result = onValidate(this.getValue()),
+                    processResult = result => {
+                        if (tools.isError(result)) {
                             reject(result);
-                        } else {
+                        } else if (Validator.isValidReport(result)) {
                             resolve(result);
+                        } else {
+                            reject(new Error(`无效的校验逻辑，请检查onValidate返回结果是否正确，当前返回: ${JSON.stringify(result)},有效的返回: { fieldName: string, isValid: boolean, level: 'error' | 'warn', msg: string}`));
                         }
-                    });
+                    }
+
+                if (tools.isPromise(result)) {
+                    result.then(processResult, processResult);
                 } else {
-                    resolve(result);
+                    processResult(result);
+                    
                 }
             } else {
                 resolve({
