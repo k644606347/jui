@@ -1,4 +1,4 @@
-// 注意: import顺序会影响<syle>的加载顺序，继而影响css优先级
+// import顺序可能会影响<style>的注入顺序，继而影响css优先级
 import JUIApp from './components/JUIApp';
 
 import TouchFeedback from "./components/TouchFeedback";
