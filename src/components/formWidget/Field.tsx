@@ -3,7 +3,6 @@ import { ActiveFormContext, ActiveFormContextType } from "./ActiveFormContext";
 import { FormWidgetChangeEvent } from "./Widget";
 import { CheckboxChangeEvent } from "../Checkbox";
 import { RadioChangeEvent } from "../Radio";
-import Validator from "./Validator";
 
 interface Props {
     children: JSX.Element;

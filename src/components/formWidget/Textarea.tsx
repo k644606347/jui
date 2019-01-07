@@ -8,11 +8,23 @@ import { AnyPlainObject } from "../../utils/types";
 
 const tools = Tools.getInstance();
 
+const allowedInputAttrs = ['id', 'name', 'value', 'readOnly', 'disabled', 'placeholder', 'title', 'className', 'style'];
+
 interface TextareaProps extends FormWidgetProps {
     value?: string;
     defaultValue?: string;
 }
 class Textarea extends Widget<TextareaProps> {
+    static getAttrsByProps(props) {
+        let result = {};
+        for (let k in props) {
+            if (allowedInputAttrs.indexOf(k) !== -1) {
+                result[k] = props[k];
+            }
+        }
+
+        return result;
+    };
     widgetName = 'textarea';
     dataType: DataType = 'string';
     constructor(props: TextareaProps) {
@@ -22,12 +34,8 @@ class Textarea extends Widget<TextareaProps> {
     }
     render() {
         let { props, state } = this,
-            { value, defaultValue, 
-                className, style, 
-                onValid, onInvalid, onValidating, 
-                onDidMount, onWillUnmount,
-                ...restProps
-            } = props,
+            { value, defaultValue, className } = props,
+            attrs = Textarea.getAttrsByProps(props),
             valueProps: AnyPlainObject = {};
 
             if (value !== undefined) {
@@ -38,7 +46,7 @@ class Textarea extends Widget<TextareaProps> {
             }
 
         return (
-            <textarea {...restProps}
+            <textarea {...attrs}
                 {...valueProps}
                 onFocus={this.handleFocus}
                 onBlur={this.handleBlur}
@@ -46,7 +54,6 @@ class Textarea extends Widget<TextareaProps> {
                 onKeyDown={this.handleKeyDown}
                 onKeyUp={this.handleKeyUp}
                 onKeyPress={this.handleKeyPress} 
-                style={style} 
                 className={tools.classNames(textareaCSS.wrapper, className)}/>
         );
     }

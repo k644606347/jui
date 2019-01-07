@@ -12,7 +12,19 @@ interface InputProps extends FormWidgetProps {
     value?: string;
     defaultValue?: string;
 }
+
+const allowedInputAttrs = ['id', 'name', 'value', 'readOnly', 'disabled', 'placeholder', 'title', 'className', 'style'];
 class Input extends Widget<InputProps> {
+    static getAttrsByProps(props: InputProps) {
+        let result = {};
+        for (let k in props) {
+            if (allowedInputAttrs.indexOf(k) !== -1) {
+                result[k] = props[k];
+            }
+        }
+
+        return result;
+    };
     widgetName = 'input';
     dataType: DataType = 'string';
     constructor(props: InputProps) {
@@ -24,11 +36,9 @@ class Input extends Widget<InputProps> {
         let { props } = this,
             { 
                 value, defaultValue, 
-                className, style, 
-                onValid, onInvalid, onValidating, 
-                onDidMount, onWillUnmount,
-                ...restProps 
+                className, 
             } = props,
+            attrs = Input.getAttrsByProps(props),
             valueProps: AnyPlainObject = {};
 
             if (value !== undefined) {
@@ -40,7 +50,7 @@ class Input extends Widget<InputProps> {
 
         return (
             <input type="text" 
-                {...restProps}
+                {...attrs}
                 {...valueProps}
                 onFocus={this.handleFocus}
                 onBlur={this.handleBlur}
@@ -48,7 +58,6 @@ class Input extends Widget<InputProps> {
                 onKeyDown={this.handleKeyDown}
                 onKeyUp={this.handleKeyUp}
                 onKeyPress={this.handleKeyPress} 
-                style={style}
                 className={tools.classNames(inputCSS.input, className)}
             />
         );
