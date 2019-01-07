@@ -115,11 +115,10 @@ export default class ActiveForm extends React.PureComponent<ActiveForm.Props, Ac
     render() {
         let { props, state } = this,
             { name, children } = props,
-            { value, validating, isValid, validateReport, fieldReportMap, submitting } = state,
-            formProps = { name };
+            { value, validating, isValid, validateReport, fieldReportMap, submitting } = state;
 
         console.log('ActiveForm rerender', JSON.stringify(this.state));
-        let UnwrappedElement = <Form {...formProps}>
+        let UnwrappedElement = <React.Fragment>
             {
                 children ? 
                     children({
@@ -129,7 +128,7 @@ export default class ActiveForm extends React.PureComponent<ActiveForm.Props, Ac
                         handleReset: this.handleReset,
                     }) : ''
             }
-        </Form>
+        </React.Fragment>
         return (
             <ActiveFormContext.Provider value={{
                 value,

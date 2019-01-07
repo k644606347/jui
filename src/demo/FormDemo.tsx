@@ -297,6 +297,15 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                 <Label>testInput</Label><Input onChange={e => { Log.warn(e); }}/>
                 <Button>block btn</Button>
                 <Button inline={true}>inline btn</Button>
+                <form onSubmit={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    return false;
+                }} action="form_action.asp" method="get">
+                    <p>First name: <input type="text" name="fname" /></p>
+                    <p>Last name: <input type="text" name="lname" /></p>
+                    <input type="submit" value="Submit" />
+                </form>
             </div>
         )
     }
