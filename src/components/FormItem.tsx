@@ -1,7 +1,6 @@
 import * as React from "react";
 import Tools from '../utils/Tools';
 import Label, { LabelProps } from "./Label";
-import Config, { FormWidgetName } from "./formWidget/Config";
 import { CSSAttrs } from "../utils/types";
 import formItemCSS from './FormItem.scss';
 import { ActiveFormContext } from "./formWidget/ActiveFormContext";
@@ -13,11 +12,10 @@ interface RenderChildrenEvent {
     label?: React.ComponentElement<LabelProps, Label>;
 }
 export interface FormItemProps extends CSSAttrs {
-    fieldName: string;
-    component: JSX.Element | FormWidgetName;
+    component: JSX.Element;
+    componentProps?: {[k in string]: any};
     label?: any;
     children?(e: RenderChildrenEvent): React.ReactNode;
-    componentProps?: {[k in string]: any};
     layout?: 'vertical' | 'horizontal';
 }
 
@@ -32,27 +30,18 @@ export default class FormItem extends React.PureComponent<FormItemProps> {
     }
     render() {
         let { props } = this,
-            { className, style, label, component, layout, children } = props,
-            componentNode: JSX.Element;
+            { className, style, label, component: field, layout, children } = props,
+            fieldNode = field;
 
-        if (tools.isString(component)) {
-            if (Config[component]) {
-                componentNode = this.buildWidgetByName(component);
-            } else {
-                componentNode = <React.Fragment>{component}</React.Fragment>;
-            }
-        } else {
-            componentNode = component;
+        if (fieldNode.type !== Field) {
+            fieldNode = <Field>{fieldNode}</Field>;
         }
-
-        componentNode = <Field>{componentNode}</Field>;
         return (
             <ActiveFormContext.Consumer>{
                 context => {
                     this.activeFormContext = context;
 
                     let labelNode;
-
                     if (label === undefined || label === null || label === false) {
                         labelNode = '';
                     } else {
@@ -71,13 +60,13 @@ export default class FormItem extends React.PureComponent<FormItemProps> {
                             {
                                 children ? 
                                     children({
-                                        component: componentNode as RenderChildrenEvent['component'],
+                                        component: fieldNode as RenderChildrenEvent['component'],
                                         label: labelNode,
                                     }) : 
                                     <React.Fragment>
                                         { labelNode }
                                         <div className={formItemCSS.formitemControl}>
-                                        { componentNode }
+                                        { fieldNode }
                                         </div>
                                     </React.Fragment>
                             }
@@ -88,9 +77,9 @@ export default class FormItem extends React.PureComponent<FormItemProps> {
         );
     }
     private isRequired() {
-        let { fieldName } = this.props,
+        let { component: field } = this.props,
             { validateRules } = this.activeFormContext,
-            fieldRule = validateRules[fieldName],
+            fieldRule = validateRules[field.props.name],
             required;
 
         if (Array.isArray(fieldRule)) {
@@ -102,11 +91,5 @@ export default class FormItem extends React.PureComponent<FormItemProps> {
         }
 
         return required;
-    }
-    private buildWidgetByName(widgetName: string) {
-        let { componentProps } = this.props,
-            widgetClass = Config[widgetName].class;
-
-        return React.createElement(widgetClass, {...componentProps});
     }
 }

@@ -66,7 +66,7 @@ class App extends React.Component<any, any> {
                 <a onClick={this.link2}>link2</a>
                 <Hello name="TypeScript" enthusiasmLevel={10} />
                 <MultiContextProvider />
-                <FormItem label="test" component="test" layout="vertical"></FormItem>
+                <FormItem label="test" component={<input type="select" />} layout="vertical"></FormItem>
                 <DefaultPropsDemo />
             </JUIApp>
         );

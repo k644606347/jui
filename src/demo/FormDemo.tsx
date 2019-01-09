@@ -2,15 +2,22 @@ import * as React from "react";
 import { Tools, Icon, Form, Log, FormItem, Pagination, CheckboxItems, Button, Input, RadioItems, Label, Radio, ValidateMessage } from "..";
 import ActiveForm from "../components/formWidget/ActiveForm";
 import Textarea from "../components/formWidget/Textarea";
-import { FormItemProps } from "src/components/FormItem";
 import { iconDoneAll, iconCloudDone } from "../components/icons/SVGData";
 import Field from "../components/formWidget/Field";
-import { isWidgetElement } from "../components/formWidget/Config";
+import Config, { FormWidgetName } from "./config";
+import { FormItemProps } from "../components/FormItem";
 
 interface FormTestProps {}
 
 const tools = Tools.getInstance();
-export default class FormDemo extends React.PureComponent<FormTestProps, { fields: FormItemProps[], form2: any, testInputValue: string }> {
+interface FieldType {
+    name: string;
+    component: FormWidgetName | JSX.Element;
+    componentProps?: {[k: string]: any};
+    label?: string;
+    render?: FormItemProps['children'];
+}
+export default class FormDemo extends React.PureComponent<FormTestProps, { fields: FieldType[], form2: any, testInputValue: string }> {
     formForFieldsRef: React.RefObject<ActiveForm>;
     fieldInputRef: React.RefObject<any>;
     constructor(props: FormTestProps) {
@@ -21,7 +28,7 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
         this.state = {
             fields: [
                 {
-                    fieldName: 'check1',
+                    name: 'check1',
                     label: '复选1',
                     component: 'checkboxItems',
                     componentProps: {
@@ -40,7 +47,7 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                     }
                 },
                 {
-                    fieldName: 'radio1',
+                    name: 'radio1',
                     label: '单选1',
                     component: 'radioItems',
                     componentProps: {
@@ -61,7 +68,7 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                     }
                 },
                 {
-                    fieldName: 'input1',
+                    name: 'input1',
                     label: '输入1',
                     component: 'text',
                     componentProps: {
@@ -84,22 +91,22 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                     }
                 },
                 {
-                    fieldName: 'input2',
+                    name: 'input2',
                     label: '输入2',
                     component: 'text',
                     componentProps: {
                         value: 'input2 value',
                     },
-                    children: ({ component, label }) => <React.Fragment>{label}{component}<Icon icon={iconDoneAll} /></React.Fragment>
+                    render: ({ component, label }) => <React.Fragment>{label}{component}<Icon icon={iconDoneAll} /></React.Fragment>
                 },
                 {
-                    fieldName: 'textarea1',
+                    name: 'textarea1',
                     label: 'textarea1',
                     component: 'textarea',
                     componentProps: {
                         value: 'textarea1',
                     },
-                    children: ({ component, label }) => <React.Fragment>{label}{component}<Icon icon={iconCloudDone} /></React.Fragment>
+                    render: ({ component, label }) => <React.Fragment>{label}{component}<Icon icon={iconCloudDone} /></React.Fragment>
                 }
             ],
             form2: {
@@ -176,12 +183,27 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                         ({ submitting, value, handleChange }) => {
                             return <React.Fragment>
                                 {
-                                    fields.map((field: FormItemProps, i) => {
-                                        let { fieldName, component, label, componentProps = {}, children} = field;
+                                    fields.map((field: FieldType, i) => {
+                                        let { name, component, label, componentProps = {}, render } = field,
+                                            componentNode;
+
+                                        if (tools.isString(component)) {
+                                            let widgetConfig = Config[component];
+                                            if (widgetConfig) {
+                                                componentNode = React.createElement(widgetConfig.class as any, {
+                                                    ...componentProps,
+                                                    name,
+                                                });
+                                            } else {
+                                                componentNode = <React.Fragment>{component}</React.Fragment>
+                                            }
+                                        } else {
+                                            componentNode = component;
+                                        }
                                         
                                         componentProps = Object.assign({}, componentProps, {
                                             // submitting,
-                                            value: value[componentProps.name],
+                                            value: value[name],
                                             onChange: (e: any) => {
                                                 handleChange(e);
                                                 // handleChange(e);
@@ -190,7 +212,9 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                                         });
                                         return (
                                             <React.Fragment key={i}>
-                                                <FormItem fieldName={fieldName} label={label} component={component} componentProps={componentProps}>{children}</FormItem>
+                                                <FormItem label={label} component={componentNode} componentProps={componentProps}>
+                                                    {render}
+                                                </FormItem>
                                                 <ValidateMessage popover={true} fieldName={componentProps.name} />
                                             </React.Fragment>
                                         )

@@ -54,10 +54,19 @@ export interface FormWidgetState {
     focused: boolean;
     validating: boolean;
 }
-export default abstract class Widget<P extends FormWidgetProps = FormWidgetProps, S extends FormWidgetState = FormWidgetState> extends React.PureComponent<P, S> {
+type Props = FormWidgetProps;
+type State = FormWidgetState;
+export default abstract class Widget<P extends Props = Props, S extends State = State> extends React.PureComponent<P, S> {
     static convertor = DataConvertor.getInstance();
     static validate(value: any): Promise<Report> {
         return Promise.resolve({...Validator.getDefaultReport(), isValid: true});
+    }
+    static isWidgetElement(el: any): el is React.ComponentElement<Props, React.Component<Props>> {
+        if (!React.isValidElement(el)) {
+            return false;
+        }
+
+        return el instanceof Widget;
     }
     state: S;
     protected abstract dataType: DataType;

@@ -9,10 +9,8 @@ import Widget, { FormWidgetChangeEvent, FormWidgetProps } from "./Widget";
 import { CheckboxChangeEvent } from "../Checkbox";
 import { RadioChangeEvent } from "../Radio";
 import { FieldChangeEvent } from "./Field";
-import Config from "./Config";
 
-export { ActiveForm };
-declare namespace ActiveForm {
+declare namespace ActiveFormType {
     type Value = {[k in string]: any};
     type Action = 'submit' | 'change' | 'blur';
     type FieldReportMap = {[k in string]: Report}
@@ -20,7 +18,7 @@ declare namespace ActiveForm {
     interface ValidateResult {
         isValid: boolean;
         validateReport: Report;
-        fieldReportMap?: ActiveForm.FieldReportMap;
+        fieldReportMap?: ActiveFormType.FieldReportMap;
     }
     interface SetValueOptions {
         success?: AnyFunction;
@@ -28,16 +26,16 @@ declare namespace ActiveForm {
     }
     interface Event {
         name: string;
-        value: ActiveForm.Value;
+        value: ActiveFormType.Value;
     }
     interface SubmitEvent extends Event {}
     interface ChangeEvent extends Event {}
     
     interface ValidateReportEvent extends Event, ValidateResult {
-        action?: ActiveForm.Action;
+        action?: ActiveFormType.Action;
     }
     interface RenderChildrenEvent extends State {
-        value: ActiveForm.Value;
+        value: ActiveFormType.Value;
         handleChange: AnyFunction;
         handleSubmit: AnyFunction;
         handleReset: AnyFunction;
@@ -47,7 +45,7 @@ declare namespace ActiveForm {
     }
     interface Props extends CSSAttrs {
         name: string;
-        initialValue: ActiveForm.Value;
+        initialValue: ActiveFormType.Value;
         children?(e: RenderChildrenEvent): React.ReactNode;
         validateOnChange: boolean;
         validateOnBlur: boolean;
@@ -57,7 +55,7 @@ declare namespace ActiveForm {
         onValid?(e: ValidateReportEvent): void;
         onInvalid?(e: ValidateReportEvent): void;
         onValidating?(e: ValidateReportEvent): void;
-        onValidate?(value: ActiveForm.Value): Promise<Report> | Report;
+        onValidate?(value: ActiveFormType.Value): Promise<Report> | Report;
         validateRules: ValidateRules;
         // action: string;// TODO
         // method: 'post' | 'get';
@@ -70,19 +68,20 @@ declare namespace ActiveForm {
         // target?: string;
     }
     interface State {
-        parsedInitialValue: ActiveForm.Value;
-        value: ActiveForm.Value;
+        parsedInitialValue: ActiveFormType.Value;
+        value: ActiveFormType.Value;
         submitting: boolean;
         validating: boolean;
         isValid: boolean;
         validateReport: Report;
-        fieldReportMap: ActiveForm.FieldReportMap;
+        fieldReportMap: ActiveFormType.FieldReportMap;
     }
 }
-const tools = Tools.getInstance();
+export { ActiveFormType };
 
+const tools = Tools.getInstance();
 const DEBOUNCE_VALIDATE_DELAY = 500;
-export default class ActiveForm extends React.PureComponent<ActiveForm.Props, ActiveForm.State> {
+export default class ActiveForm extends React.PureComponent<ActiveFormType.Props, ActiveFormType.State> {
     static defaultProps = {
         name: '',
         initialValue: {},
@@ -90,10 +89,10 @@ export default class ActiveForm extends React.PureComponent<ActiveForm.Props, Ac
         validateOnBlur: false,
         validateRules: {},
     };
-    readonly state: ActiveForm.State;
+    readonly state: ActiveFormType.State;
     private readonly fields: React.ReactInstance[] = [];
     private readonly widgets: Array<React.Component<FormWidgetProps> & Widget> = [];
-    constructor(props: ActiveForm.Props) {
+    constructor(props: ActiveFormType.Props) {
         super(props);
 
         this.state = {
@@ -156,7 +155,7 @@ export default class ActiveForm extends React.PureComponent<ActiveForm.Props, Ac
     }
     componentDidMount() {
         let { initialValue } = this.props,
-            parsedInitialValue: ActiveForm.Value = {};
+            parsedInitialValue: ActiveFormType.Value = {};
 
         this.fields.forEach((field: any) => {
             let fieldName;
@@ -182,10 +181,10 @@ export default class ActiveForm extends React.PureComponent<ActiveForm.Props, Ac
 
         this.setState({ value: parsedInitialValue, parsedInitialValue });
     }
-    setValue(value: ActiveForm.Value, callbackOrOptions?: AnyFunction | ActiveForm.SetValueOptions) {
+    setValue(value: ActiveFormType.Value, callbackOrOptions?: AnyFunction | ActiveFormType.SetValueOptions) {
         let { validateOnChange } = this.props,
             prevValue = this.state.value,
-            callback = () => {}, options: ActiveForm.SetValueOptions = {};
+            callback = () => {}, options: ActiveFormType.SetValueOptions = {};
         
         if (tools.isFunction(callbackOrOptions)) {
             callback = callbackOrOptions;
@@ -209,10 +208,10 @@ export default class ActiveForm extends React.PureComponent<ActiveForm.Props, Ac
     getValue() {
         return this.state.value;
     }
-    setFieldValue(fieldName: string, fieldValue, callbackOrOptions?: AnyFunction | ActiveForm.SetValueOptions) {
+    setFieldValue(fieldName: string, fieldValue, callbackOrOptions?: AnyFunction | ActiveFormType.SetValueOptions) {
         let { validateOnChange } = this.props,
             { value } = this.state,
-            callback = () => {}, options: ActiveForm.SetValueOptions = {};
+            callback = () => {}, options: ActiveFormType.SetValueOptions = {};
 
         if (tools.isFunction(callbackOrOptions)) {
             callback = callbackOrOptions;
@@ -237,7 +236,7 @@ export default class ActiveForm extends React.PureComponent<ActiveForm.Props, Ac
         return this.state.value[fieldName];
     }
     private debounceRunValidate = tools.debounce(this.runValidate, DEBOUNCE_VALIDATE_DELAY);
-    private runValidate({ action }: { action?: ActiveForm.Action } = {}) {
+    private runValidate({ action }: { action?: ActiveFormType.Action } = {}) {
         this.validatePreProcess();
         return this.validate().then(validateResult => {
             this.validatePostProcess({...validateResult, action});
@@ -255,7 +254,7 @@ export default class ActiveForm extends React.PureComponent<ActiveForm.Props, Ac
         });
     }
     private debounceRunFieldValidate = tools.debounce(this.runFieldValidate, DEBOUNCE_VALIDATE_DELAY);
-    private runFieldValidate(fieldName: string, { action }: { action?: ActiveForm.Action } = {}) {        
+    private runFieldValidate(fieldName: string, { action }: { action?: ActiveFormType.Action } = {}) {        
         this.validatePreProcess();
         return this.validateField(fieldName).then(report => {
             this.validatePostProcess(
@@ -278,7 +277,7 @@ export default class ActiveForm extends React.PureComponent<ActiveForm.Props, Ac
             });
         });
     }
-    private validatePreProcess({ action }: { action?: ActiveForm.Action } = {}) {
+    private validatePreProcess({ action }: { action?: ActiveFormType.Action } = {}) {
         let { name } = this.props,
             { value, validating, isValid, validateReport, fieldReportMap } = this.state;
 
@@ -294,7 +293,7 @@ export default class ActiveForm extends React.PureComponent<ActiveForm.Props, Ac
             });
         }
     }
-    private validatePostProcess(result: ActiveForm.ValidateResult & { action?: ActiveForm.Action }) {
+    private validatePostProcess(result: ActiveFormType.ValidateResult & { action?: ActiveFormType.Action }) {
         let { isValid, validateReport, fieldReportMap, action } = result,
             { name } = this.props,
             { value } = this.state,
@@ -311,7 +310,7 @@ export default class ActiveForm extends React.PureComponent<ActiveForm.Props, Ac
 
         isValid ? this.handleValid(validateReportEvent) : this.handleInvalid(validateReportEvent);
     }
-    validate(): Promise<ActiveForm.ValidateResult> {
+    validate(): Promise<ActiveFormType.ValidateResult> {
         let { validateRules } = this.props,
             ruleKeys = validateRules ? Object.keys(validateRules) : [],
             promiseQueue: Array<Promise<Report>> = [],
@@ -386,11 +385,11 @@ export default class ActiveForm extends React.PureComponent<ActiveForm.Props, Ac
                 }
             });
     }
-    private updateValidateResult(validateResult: ActiveForm.ValidateResult) {
+    private updateValidateResult(validateResult: ActiveFormType.ValidateResult) {
         let { validateReport, fieldReportMap } = this.state,
             nextFieldReportMap = {...fieldReportMap},
             needUpdateReportMap = false,
-            nextState: Partial<ActiveForm.State> = {
+            nextState: Partial<ActiveFormType.State> = {
                 isValid: validateResult.isValid,
                 validating: false,
             };
@@ -415,7 +414,7 @@ export default class ActiveForm extends React.PureComponent<ActiveForm.Props, Ac
             nextState.fieldReportMap = nextFieldReportMap;
         }
 
-        this.setState(nextState as ActiveForm.State);
+        this.setState(nextState as ActiveFormType.State);
     }
     private handleValidate(): Promise<Report> {
         let { onValidate } = this.props;
@@ -526,13 +525,13 @@ export default class ActiveForm extends React.PureComponent<ActiveForm.Props, Ac
     private handleFieldBlur() {
         // TODO   
     }
-    private handleValid(e: ActiveForm.ValidateReportEvent) {
+    private handleValid(e: ActiveFormType.ValidateReportEvent) {
         this.props.onValid && this.props.onValid(e);
     }
-    private handleInvalid(e: ActiveForm.ValidateReportEvent) {
+    private handleInvalid(e: ActiveFormType.ValidateReportEvent) {
         this.props.onInvalid && this.props.onInvalid(e);
     }
-    private handleValidating(e: ActiveForm.ValidateReportEvent) {
+    private handleValidating(e: ActiveFormType.ValidateReportEvent) {
         this.props.onValidating && this.props.onValidating(e);
     }
     // private handleChange() {

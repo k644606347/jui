@@ -19,7 +19,6 @@ import Toast from "./components/Toast";
 import FormItem from "./components/FormItem";
 import Form from "./components/Form";
 import ActiveForm from "./components/formWidget/ActiveForm";
-import FormWidgetConfig from "./components/formWidget/Config";
 import ValidateMessage from './components/formWidget/ValidateMessage';
 
 import List from "./components/List";
@@ -53,7 +52,6 @@ export {
     Tools,
     ActiveForm,
     ValidateMessage,
-    FormWidgetConfig,
     Input,
     Textarea,
     RadioItems,

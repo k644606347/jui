@@ -1,10 +1,9 @@
 import * as React from "react";
 import { ActiveFormContext, ActiveFormContextType } from "./ActiveFormContext";
-import { FormWidgetChangeEvent } from "./Widget";
+import Widget, { FormWidgetChangeEvent } from "./Widget";
 import { CheckboxChangeEvent } from "../Checkbox";
 import { RadioChangeEvent } from "../Radio";
 import { AnyPlainObject } from "../../utils/types";
-import { isWidgetElement } from "./Config";
 
 export interface FieldProps {
     children: JSX.Element;
@@ -28,7 +27,7 @@ class Field extends React.PureComponent<FieldProps>{
             <ActiveFormContext.Consumer>
                 {context => {
                     this.activeformContext = context;
-                    
+
                     let { value, fieldReportMap } = context,
                         originProps = children.props,
                         fieldName = originProps.name,
@@ -40,10 +39,10 @@ class Field extends React.PureComponent<FieldProps>{
                             ref: this.handleRef,
                             onChange: this.handleChange,
                         }
-                        if (isWidgetElement(children)) {
+                        if (Widget.isWidgetElement(children)) {
                             newProps.validateReport = fieldReport;
                         }
-                        console.log('isWidgetElement(children)', isWidgetElement(children));
+                        console.log('isWidgetElement(children)', Widget.isWidgetElement(children));
                         return React.cloneElement(children, newProps);
                 }}
             </ActiveFormContext.Consumer>
