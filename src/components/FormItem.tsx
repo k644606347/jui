@@ -5,20 +5,19 @@ import { CSSAttrs } from "../utils/types";
 import formItemCSS from './FormItem.scss';
 import { ActiveFormContext } from "./formWidget/ActiveFormContext";
 import Field, { FieldProps } from "./formWidget/Field";
-const tools = Tools.getInstance();
 
 interface RenderChildrenEvent {
     component: React.ComponentElement<FieldProps, Field>;
     label?: React.ComponentElement<LabelProps, Label>;
 }
 export interface FormItemProps extends CSSAttrs {
-    component: JSX.Element;
-    componentProps?: {[k in string]: any};
+    field: JSX.Element;
     label?: any;
     children?(e: RenderChildrenEvent): React.ReactNode;
     layout?: 'vertical' | 'horizontal';
 }
 
+const tools = Tools.getInstance();
 export default class FormItem extends React.PureComponent<FormItemProps> {
     static defaultProps = {
         componentProps: {},
@@ -30,7 +29,7 @@ export default class FormItem extends React.PureComponent<FormItemProps> {
     }
     render() {
         let { props } = this,
-            { className, style, label, component: field, layout, children } = props,
+            { className, style, label, field: field, layout, children } = props,
             fieldNode = field;
 
         if (fieldNode.type !== Field) {
@@ -77,9 +76,10 @@ export default class FormItem extends React.PureComponent<FormItemProps> {
         );
     }
     private isRequired() {
-        let { component: field } = this.props,
-            { validateRules } = this.activeFormContext,
-            fieldRule = validateRules[field.props.name],
+        let { field } = this.props,
+            fieldName = field.props.name || '',
+            { validateRules = {} } = this.activeFormContext,
+            fieldRule = validateRules[fieldName],
             required;
 
         if (Array.isArray(fieldRule)) {

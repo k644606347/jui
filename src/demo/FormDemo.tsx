@@ -6,18 +6,20 @@ import { iconDoneAll, iconCloudDone } from "../components/icons/SVGData";
 import Field from "../components/formWidget/Field";
 import Config, { FormWidgetName } from "./config";
 import { FormItemProps } from "../components/FormItem";
+import FormDemoData from "./FormDemoData";
 
 interface FormTestProps {}
 
 const tools = Tools.getInstance();
 interface FieldType {
     name: string;
-    component: FormWidgetName | JSX.Element;
+    component: string | JSX.Element;
     componentProps?: {[k: string]: any};
     label?: string;
+    value?: any;
     render?: FormItemProps['children'];
 }
-export default class FormDemo extends React.PureComponent<FormTestProps, { fields: FieldType[], form2: any, testInputValue: string }> {
+export default class FormDemo extends React.PureComponent<FormTestProps, { initValue: any, fields: FieldType[], form2: any, testInputValue: string }> {
     formForFieldsRef: React.RefObject<ActiveForm>;
     fieldInputRef: React.RefObject<any>;
     constructor(props: FormTestProps) {
@@ -25,90 +27,14 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
 
         this.formForFieldsRef = React.createRef();
         this.fieldInputRef = React.createRef();
+
+        let initValue = {};
+        FormDemoData.forEach(d => {
+            initValue[d.name] = d.value;
+        });
         this.state = {
-            fields: [
-                {
-                    name: 'check1',
-                    label: '复选1',
-                    component: 'checkboxItems',
-                    componentProps: {
-                        value: ['check1value'],
-                        required: true,
-                        items: [
-                            {
-                                label: 'check1',
-                                value: 'check1value',
-                            }
-                        ],
-                        className: 'cls1',
-                        style: {
-                            color: 'red',
-                        },
-                    }
-                },
-                {
-                    name: 'radio1',
-                    label: '单选1',
-                    component: 'radioItems',
-                    componentProps: {
-                        // value: 'radio1value',
-                        items: [
-                            {
-                                label: 'radio1',
-                                value: 'radio1value',
-                            }
-                        ],
-                        rules: [
-                            {
-                                rule: 'required',
-                                level: 'warn',
-                            }
-                        ],
-                        disabled: false,
-                    }
-                },
-                {
-                    name: 'input1',
-                    label: '输入1',
-                    component: 'text',
-                    componentProps: {
-                        value: 'input1 value',
-                        rules: [
-                            {
-                                rule: 'maxLength',
-                                value: 10,
-                            }
-                        ],
-                        onValidating(e: any) {
-                            console.log('validating', e);
-                        },
-                        onInvalid(e: any) {
-                            console.error('invalid', e);
-                        },
-                        onValid(e: any) {
-                            console.info('valid', e);
-                        }
-                    }
-                },
-                {
-                    name: 'input2',
-                    label: '输入2',
-                    component: 'text',
-                    componentProps: {
-                        value: 'input2 value',
-                    },
-                    render: ({ component, label }) => <React.Fragment>{label}{component}<Icon icon={iconDoneAll} /></React.Fragment>
-                },
-                {
-                    name: 'textarea1',
-                    label: 'textarea1',
-                    component: 'textarea',
-                    componentProps: {
-                        value: 'textarea1',
-                    },
-                    render: ({ component, label }) => <React.Fragment>{label}{component}<Icon icon={iconCloudDone} /></React.Fragment>
-                }
-            ],
+            initValue,
+            fields: FormDemoData,
             form2: {
                 city: {
                     name: 'city',
@@ -170,6 +96,7 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                     }
                 } /> */}
                 <ActiveForm 
+                    initialValue={state.initValue}
                     validateRules={{
                         input1: [
                             { type: 'required' },
@@ -198,24 +125,17 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                                                 componentNode = <React.Fragment>{component}</React.Fragment>
                                             }
                                         } else {
-                                            componentNode = component;
+                                            componentNode = React.cloneElement(component, {
+                                                ...componentProps,
+                                                name,
+                                            });
                                         }
-                                        
-                                        componentProps = Object.assign({}, componentProps, {
-                                            // submitting,
-                                            value: value[name],
-                                            onChange: (e: any) => {
-                                                handleChange(e);
-                                                // handleChange(e);
-                                                // handleChange(e);
-                                            },
-                                        });
                                         return (
                                             <React.Fragment key={i}>
-                                                <FormItem label={label} component={componentNode} componentProps={componentProps}>
+                                                <FormItem label={label} field={componentNode}>
                                                     {render}
                                                 </FormItem>
-                                                <ValidateMessage popover={true} fieldName={componentProps.name} />
+                                                <ValidateMessage popover={true} fieldName={name} />
                                             </React.Fragment>
                                         )
                                     })

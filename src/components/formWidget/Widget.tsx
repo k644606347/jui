@@ -34,9 +34,6 @@ export interface FormWidgetProps extends CSSAttrs {
     autoFocus?: boolean;
     disabled?: boolean;
     readOnly?: boolean;
-    placeholder?: string;
-    maxLength?: number;
-    minLength?: number;
     validateReport?: Report;
     onChange?: (e: FormWidgetChangeEvent) => void;
     onFocus?: (e: FormWidgetFocusEvent) => void;
@@ -46,9 +43,6 @@ export interface FormWidgetProps extends CSSAttrs {
     onKeyPress?(e: FormWidgetKeyboardEvent): void;
     onDidMount?: (e: FormWidgetMountEvent) => void;
     onWillUnmount?: (e: FormWidgetMountEvent) => void;
-    onValidating?: (e: FormWidgetValidEvent) => void;
-    onValid?: (e: FormWidgetValidEvent) => void;
-    onInvalid?: (e: FormWidgetValidEvent) => void;
 }
 export interface FormWidgetState {
     focused: boolean;
@@ -66,7 +60,23 @@ export default abstract class Widget<P extends Props = Props, S extends State = 
             return false;
         }
 
-        return el instanceof Widget;
+        let type = el.type;
+        if (!tools.isFunction(type)) {
+            return false;
+        }
+
+        let proto =  type.prototype,
+            isWidget = false;
+
+        while (proto !== null) {
+            if (proto.constructor === Widget) {
+                isWidget = true;
+                break;
+            } else
+                proto =  Object.getPrototypeOf(proto);
+        }
+        
+        return isWidget;
     }
     state: S;
     protected abstract dataType: DataType;

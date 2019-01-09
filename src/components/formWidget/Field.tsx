@@ -4,12 +4,14 @@ import Widget, { FormWidgetChangeEvent } from "./Widget";
 import { CheckboxChangeEvent } from "../Checkbox";
 import { RadioChangeEvent } from "../Radio";
 import { AnyPlainObject } from "../../utils/types";
+import Tools from "../../utils/Tools";
 
 export interface FieldProps {
     children: JSX.Element;
 }
 export type FieldChangeEvent = React.ChangeEvent<any> | FormWidgetChangeEvent | CheckboxChangeEvent | RadioChangeEvent;
 
+const tools = Tools.getInstance();
 class Field extends React.PureComponent<FieldProps>{
     private activeformContext: ActiveFormContextType;
     private fieldInstance: React.ReactInstance;
@@ -28,14 +30,14 @@ class Field extends React.PureComponent<FieldProps>{
                 {context => {
                     this.activeformContext = context;
 
-                    let { value, fieldReportMap } = context,
+                    let { value = {}, fieldReportMap = {} } = context,
                         originProps = children.props,
                         fieldName = originProps.name,
                         originValue = originProps.value,
                         hasOriginValue = originProps.hasOwnProperty('value'),
                         fieldReport = fieldReportMap[fieldName],
                         newProps: AnyPlainObject = {
-                            value: hasOriginValue ? originValue : value[fieldName],
+                            value: hasOriginValue ? originValue : (value[fieldName] || ''),
                             ref: this.handleRef,
                             onChange: this.handleChange,
                         }

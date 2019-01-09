@@ -2,28 +2,17 @@ import * as React from 'react';
 import Tools from '../../utils/Tools';
 import Widget, { FormWidgetProps } from './Widget';
 import inputCSS from './Input.scss';
-import { AnyPlainObject } from '../../utils/types';
+import { Omit } from '../../utils/types';
 import { DataType } from './stores/DataConvertor';
 
 const tools = Tools.getInstance();
 
-export interface InputProps extends FormWidgetProps {
+type OmitAttrs = 'onChange' | 'onFocus' | 'onBlur' | 'onKeyDown' | 'onKeyUp' | 'onKeyPress';
+export interface InputProps extends FormWidgetProps, Omit<React.InputHTMLAttributes<HTMLInputElement>, OmitAttrs> {
     value?: string;
-    defaultValue?: string;
 }
-
-const allowedInputAttrs = ['id', 'name', 'value', 'readOnly', 'disabled', 'placeholder', 'title', 'className', 'style'];
+const omitAttrs = ['validateReport', 'onChange', 'onFocus', 'onBlur', 'onKeyDown', 'onKeyUp', 'onKeyPress'];
 class Input extends Widget<InputProps> {
-    static getAttrsByProps(props: InputProps) {
-        let result = {};
-        for (let k in props) {
-            if (allowedInputAttrs.indexOf(k) !== -1) {
-                result[k] = props[k];
-            }
-        }
-
-        return result;
-    };
     widgetName = 'input';
     dataType: DataType = 'string';
     constructor(props: InputProps) {
@@ -33,24 +22,13 @@ class Input extends Widget<InputProps> {
     }
     render() {
         let { props } = this,
-            { 
-                value, defaultValue, 
-                className, 
-            } = props,
-            attrs = Input.getAttrsByProps(props),
-            valueProps: AnyPlainObject = {};
+            {  className, ...restProps } = props,
+            attrs = tools.omit(restProps, omitAttrs);
 
-            if (value !== undefined) {
-                valueProps.value = this.parseValue();
-            }
-            if (defaultValue !== undefined) {
-                valueProps.defaultValue = this.parseValue(defaultValue);
-            }
-
+        // console.log('attrs', JSON.stringify(attrs));
         return (
             <input type="text" 
                 {...attrs}
-                {...valueProps}
                 onFocus={this.handleFocus}
                 onBlur={this.handleBlur}
                 onChange={this.handleChange}
@@ -70,5 +48,4 @@ class Input extends Widget<InputProps> {
         }));
     }
 }
-// export default bindActiveForm<typeof Input, InputProps>(Input);
 export default Input;

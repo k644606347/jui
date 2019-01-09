@@ -1,4 +1,4 @@
-import { AnyFunction } from "./types";
+import { AnyFunction, AnyPlainObject } from "./types";
 
 export default class Tools {
     static getInstance() {
@@ -202,5 +202,19 @@ export default class Tools {
                 method.apply(this, args);
             }, delay);
         }
+    }
+    omit(obj: AnyPlainObject = {}, omitKeys: string[] = []) {
+        let result = {};
+
+        if(!Array.isArray(omitKeys) || omitKeys.length === 0) {
+            return {...obj};
+        }
+        for (let k in obj) {
+            if (omitKeys.indexOf(k) === -1) {
+                result[k] = obj[k];
+            }
+        }
+
+        return result;
     }
 }

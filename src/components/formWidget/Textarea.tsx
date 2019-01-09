@@ -4,27 +4,20 @@ import textareaCSS from './Textarea.scss';
 import Tools from "../../utils/Tools";
 import { DataType } from "./stores/DataConvertor";
 import bindActiveForm from "./bindActiveForm";
-import { AnyPlainObject } from "../../utils/types";
+import { Omit } from "../../utils/types";
 
-const tools = Tools.getInstance();
-
-const allowedInputAttrs = ['id', 'name', 'value', 'readOnly', 'disabled', 'placeholder', 'title', 'className', 'style'];
-
+type OmitAttrs = 'onChange' | 'onFocus' | 'onBlur' | 'onKeyDown' | 'onKeyUp' | 'onKeyPress';
+export interface InputProps extends FormWidgetProps, Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, OmitAttrs> {
+    value?: string;
+}
 interface TextareaProps extends FormWidgetProps {
     value?: string;
     defaultValue?: string;
 }
-class Textarea extends Widget<TextareaProps> {
-    static getAttrsByProps(props) {
-        let result = {};
-        for (let k in props) {
-            if (allowedInputAttrs.indexOf(k) !== -1) {
-                result[k] = props[k];
-            }
-        }
 
-        return result;
-    };
+const tools = Tools.getInstance();
+const omitAttrs = ['validateReport', 'onChange', 'onFocus', 'onBlur', 'onKeyDown', 'onKeyUp', 'onKeyPress'];
+class Textarea extends Widget<TextareaProps> {
     widgetName = 'textarea';
     dataType: DataType = 'string';
     constructor(props: TextareaProps) {
@@ -34,20 +27,10 @@ class Textarea extends Widget<TextareaProps> {
     }
     render() {
         let { props, state } = this,
-            { value, defaultValue, className } = props,
-            attrs = Textarea.getAttrsByProps(props),
-            valueProps: AnyPlainObject = {};
-
-            if (value !== undefined) {
-                valueProps.value = this.parseValue();
-            }
-            if (defaultValue !== undefined) {
-                valueProps.defaultValue = this.parseValue(defaultValue);
-            }
-
+            { className, ...restProps } = props,
+            attrs = tools.omit(restProps, omitAttrs);
         return (
             <textarea {...attrs}
-                {...valueProps}
                 onFocus={this.handleFocus}
                 onBlur={this.handleBlur}
                 onChange={this.handleChange}
