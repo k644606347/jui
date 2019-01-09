@@ -1,107 +1,112 @@
 import * as React from "react";
 import Tools from '../utils/Tools';
-import Label from "./Label";
+import Label, { LabelProps } from "./Label";
 import Config, { FormWidgetName } from "./formWidget/Config";
-import { FormWidgetProps } from "./formWidget/Widget";
 import { CSSAttrs } from "../utils/types";
-import cm from './FormItem.scss';
+import formItemCSS from './FormItem.scss';
+import { ActiveFormContext } from "./formWidget/ActiveFormContext";
+import Field, { FieldProps } from "./formWidget/Field";
 const tools = Tools.getInstance();
 
+interface RenderChildrenEvent {
+    component: React.ComponentElement<FieldProps, Field>;
+    label?: React.ComponentElement<LabelProps, Label>;
+}
 export interface FormItemProps extends CSSAttrs {
-    label?: JSX.Element | string;
-    component: JSX.Element | FormWidgetName | string;
-    render?: (component: JSX.Element | string, label?: JSX.Element | string) => React.ReactNode;
-    // componentProps?: { [key in keyof FormWidgetProps]: any};
+    fieldName: string;
+    component: JSX.Element | FormWidgetName;
+    label?: any;
+    children?(e: RenderChildrenEvent): React.ReactNode;
     componentProps?: {[k in string]: any};
     layout?: 'vertical' | 'horizontal';
 }
 
-export default class FormItem extends React.PureComponent<FormItemProps, any> {
-    static isWidgetElement = (node: React.ReactNode): node is React.ReactElement<FormWidgetProps> => {
-        let isWidget = false;
-        if (!React.isValidElement(node)) {
-            return false;
-        }
-        for (let key in Config) {
-            if (node.type === Config[key].widget) {
-                isWidget = true;
-                break;
-            }
-        }
-        return isWidget;
-    }
-    static defaultProps: Partial<FormItemProps> = {
+export default class FormItem extends React.PureComponent<FormItemProps> {
+    static defaultProps = {
+        componentProps: {},
         layout: 'horizontal',
     }
+    private activeFormContext;
     constructor(props: FormItemProps) {
         super(props);
     }
     render() {
         let { props } = this,
-            { className, style, label, component, render, layout } = props,
-            componentNode: JSX.Element | string;
+            { className, style, label, component, layout, children } = props,
+            componentNode: JSX.Element;
 
         if (tools.isString(component)) {
             if (Config[component]) {
                 componentNode = this.buildWidgetByName(component);
             } else {
-                componentNode = component;
+                componentNode = <React.Fragment>{component}</React.Fragment>;
             }
         } else {
             componentNode = component;
         }
 
-        let required, labelNode;
-        if (React.isValidElement(componentNode)) {
-            // tslint:disable-next-line:no-string-literal
-            required = componentNode.props['required'];
-        }
-        if (label !== undefined) {
-            labelNode = Label.isLabelElement(label) ? 
-                React.cloneElement(label, {
-                    className: cm.label,
-                    required,
-                }) : 
-                <Label required={required} className={cm.label}>{label}</Label>;
+        componentNode = <Field>{componentNode}</Field>;
+        return (
+            <ActiveFormContext.Consumer>{
+                context => {
+                    this.activeFormContext = context;
+
+                    let labelNode;
+
+                    if (label === undefined || label === null || label === false) {
+                        labelNode = '';
+                    } else {
+                        let required = this.isRequired();
+                        labelNode = <Label required={required} className={formItemCSS.label}>{label}</Label>;
+                    }
+
+                    return (
+                        <div style={style} 
+                            className={tools.classNames(
+                                formItemCSS.wrapper,
+                                className,
+                                layout && formItemCSS[layout],
+                            )}
+                        >
+                            {
+                                children ? 
+                                    children({
+                                        component: componentNode as RenderChildrenEvent['component'],
+                                        label: labelNode,
+                                    }) : 
+                                    <React.Fragment>
+                                        { labelNode }
+                                        <div className={formItemCSS.formitemControl}>
+                                        { componentNode }
+                                        </div>
+                                    </React.Fragment>
+                            }
+                        </div>
+                    )
+                }
+            }</ActiveFormContext.Consumer>
+        );
+    }
+    private isRequired() {
+        let { fieldName } = this.props,
+            { validateRules } = this.activeFormContext,
+            fieldRule = validateRules[fieldName],
+            required;
+
+        if (Array.isArray(fieldRule)) {
+            required = !!fieldRule.find(rule => rule.type === 'required');
+        } else if (tools.isPlainObject(fieldRule)) {
+            required = fieldRule.type === 'required';
         } else {
-            labelNode = '';
+            required = false;
         }
 
-        return (
-            <div style={style} className={
-                tools.classNames(
-                    cm.wrapper,
-                    className,
-                    layout && cm[layout],
-                )
-            }>
-            {
-                render ? 
-                    render(componentNode, labelNode) : 
-                    <React.Fragment>
-                        { labelNode }
-                        <div className={cm.formitemControl}>
-                        { componentNode }
-                        </div>
-                    </React.Fragment>
-            }
-            </div>
-        );
+        return required;
     }
     private buildWidgetByName(widgetName: string) {
         let { componentProps } = this.props,
-            widgetEl: JSX.Element,
-            injectedProps: any = {},
-            widgetConfig = Config[widgetName];
+            widgetClass = Config[widgetName].class;
 
-        let widgetClass = widgetConfig.widget;
-
-        if (componentProps) {
-            injectedProps = { ...componentProps, ...injectedProps };
-        }
-
-        widgetEl = React.createElement(widgetClass, injectedProps);
-        
-        return widgetEl;
+        return React.createElement(widgetClass, {...componentProps});
     }
 }

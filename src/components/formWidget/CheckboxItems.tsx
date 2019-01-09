@@ -5,7 +5,6 @@ import Tools from "../../utils/Tools";
 import { CSSAttrs } from "../../utils/types";
 import { DataType } from "./stores/DataConvertor";
 import cm from './CheckboxItems.scss';
-import bindActiveForm from "./bindActiveForm";
 
 interface CheckboxItem extends CSSAttrs {
     label: string;
@@ -83,6 +82,4 @@ class CheckboxItems extends Widget<CheckboxItemsProps> {
         onChange && onChange(this.buildEvent({ value: nextValue }));
     }
 }
-
-// export default bindActiveForm<typeof CheckboxItems, CheckboxItemsProps>(CheckboxItems);
 export default CheckboxItems;

@@ -3,13 +3,15 @@ import { ActiveFormContext, ActiveFormContextType } from "./ActiveFormContext";
 import { FormWidgetChangeEvent } from "./Widget";
 import { CheckboxChangeEvent } from "../Checkbox";
 import { RadioChangeEvent } from "../Radio";
+import { AnyPlainObject } from "../../utils/types";
+import { isWidgetElement } from "./Config";
 
-interface Props {
+export interface FieldProps {
     children: JSX.Element;
 }
 export type FieldChangeEvent = React.ChangeEvent<any> | FormWidgetChangeEvent | CheckboxChangeEvent | RadioChangeEvent;
 
-class Field extends React.PureComponent<Props>{
+class Field extends React.PureComponent<FieldProps>{
     private activeformContext: ActiveFormContextType;
     private fieldInstance: React.ReactInstance;
     constructor(props) {
@@ -25,23 +27,24 @@ class Field extends React.PureComponent<Props>{
         return (
             <ActiveFormContext.Consumer>
                 {context => {
-                    let activeFormValue = context.value,
+                    this.activeformContext = context;
+                    
+                    let { value, fieldReportMap } = context,
                         originProps = children.props,
                         fieldName = originProps.name,
                         originValue = originProps.value,
-                        hasOriginValue = originProps.hasOwnProperty('value');
-
-                    
-                    let { fieldReportMap } = context,
-                        fieldReport = fieldReportMap[fieldName];
-
-                    this.activeformContext = context;
-                    return React.cloneElement(children, {
-                        value: hasOriginValue ? originValue : activeFormValue[fieldName],
-                        ref: this.handleRef,
-                        onChange: this.handleChange,
-                        validateReport: fieldReport,
-                    });
+                        hasOriginValue = originProps.hasOwnProperty('value'),
+                        fieldReport = fieldReportMap[fieldName],
+                        newProps: AnyPlainObject = {
+                            value: hasOriginValue ? originValue : value[fieldName],
+                            ref: this.handleRef,
+                            onChange: this.handleChange,
+                        }
+                        if (isWidgetElement(children)) {
+                            newProps.validateReport = fieldReport;
+                        }
+                        console.log('isWidgetElement(children)', isWidgetElement(children));
+                        return React.cloneElement(children, newProps);
                 }}
             </ActiveFormContext.Consumer>
         )

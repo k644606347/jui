@@ -3,18 +3,18 @@ import Tools from "../utils/Tools";
 import Log from "../utils/Log";
 import cssModules from './Label.scss';
 
-interface Props extends React.HTMLProps<HTMLLabelElement> {
+export interface LabelProps extends React.HTMLProps<HTMLLabelElement> {
     forRef?: React.RefObject<any>;
     onClick?: (e: React.MouseEvent<HTMLLabelElement>) => void;
     required?: boolean;
 }
 
 const tools = Tools.getInstance();
-export default class Label extends React.PureComponent<Props, any> {
-    static isLabelElement(el: any): el is React.ReactElement<Props> {
+export default class Label extends React.PureComponent<LabelProps> {
+    static isLabelElement(el: any): el is React.ReactElement<LabelProps> {
         return React.isValidElement(el) && el.type === Label;
     }
-    constructor(props: Props) {
+    constructor(props: LabelProps) {
         super(props);
 
         this.handleLabelClick = this.handleLabelClick.bind(this);

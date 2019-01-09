@@ -110,7 +110,7 @@ export default class Tools {
         if (target === undefined || target === null) {
             return '';
         } else {
-            return this.removeZWSP(String(target).replace(/^\s*|\s*$/g, ''));
+            return String(target).replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
         }
     }
     

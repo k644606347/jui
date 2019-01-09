@@ -1,26 +1,53 @@
-import CheckboxItems from "./CheckboxItems";
-import RadioItems from "./RadioItems";
-import InputWidget from './Input';
+import CheckboxItems, { CheckboxItemsProps } from "./CheckboxItems";
+import RadioItems, { RadioItemsProps } from "./RadioItems";
+import InputWidget, { InputProps } from "./Input";
 import TextareaWidget from "./Textarea";
 import { FormWidgetProps } from "./Widget";
+import * as React from "react";
 
+// type CClass<P = FormWidgetProps> = React.ComponentClass<P>;
+// type Props = CheckboxItemsProps & RadioItemsProps & InputProps;
 export type FormWidgetName = 'checkboxItems' | 'radioItems' | 'text' | 'textarea';
-export type FormWidgetConfig =  {
+export type FormWidgetClass =
+    | typeof CheckboxItems
+    | typeof RadioItems
+    | typeof InputWidget
+    | typeof TextareaWidget;
+export type FormWidget = 
+    | CheckboxItems
+    | RadioItems
+    | InputWidget
+    | TextareaWidget;
+export type FormWidgetConfig = {
     [key in FormWidgetName]: {
-        widget: React.ComponentClass<FormWidgetProps> | React.ForwardRefExoticComponent<FormWidgetProps>
+        class: FormWidgetClass;
     }
-}
-export default {
+};
+const Config = {
     checkboxItems: {
-        widget: CheckboxItems
+        class: CheckboxItems
     },
     radioItems: {
-        widget: RadioItems
+        class: RadioItems
     },
     text: {
-        widget: InputWidget
+        class: InputWidget
     },
     textarea: {
-        widget: TextareaWidget,
+        class: TextareaWidget
     }
 } as FormWidgetConfig;
+export default Config;
+
+let isWidgetElement = <P = FormWidgetProps>(el: any): el is React.ComponentElement<P, React.Component<P>> => {
+    if (!React.isValidElement(el)) {
+        return false;
+    }
+    for (let widgetName in Config) {
+        if (el.type === Config[widgetName].class) {
+            return true;
+        }
+    }
+    return false;
+};
+export { isWidgetElement };

@@ -13,5 +13,6 @@ export interface ActiveFormContextType {
     submitting: boolean,
     onFieldMount(instace: React.ReactInstance): void,
     onFieldChange(e: FieldChangeEvent): void,
+    validateRules: ActiveForm.ValidateRules,
 }
 export const ActiveFormContext = React.createContext({} as ActiveFormContextType);

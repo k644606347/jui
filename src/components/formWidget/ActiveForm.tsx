@@ -9,12 +9,14 @@ import Widget, { FormWidgetChangeEvent, FormWidgetProps } from "./Widget";
 import { CheckboxChangeEvent } from "../Checkbox";
 import { RadioChangeEvent } from "../Radio";
 import { FieldChangeEvent } from "./Field";
+import Config from "./Config";
 
 export { ActiveForm };
 declare namespace ActiveForm {
     type Value = {[k in string]: any};
     type Action = 'submit' | 'change' | 'blur';
     type FieldReportMap = {[k in string]: Report}
+    interface ValidateRules {[k: string]: Rule | Rule[]}
     interface ValidateResult {
         isValid: boolean;
         validateReport: Report;
@@ -56,7 +58,7 @@ declare namespace ActiveForm {
         onInvalid?(e: ValidateReportEvent): void;
         onValidating?(e: ValidateReportEvent): void;
         onValidate?(value: ActiveForm.Value): Promise<Report> | Report;
-        validateRules?: {[k: string]: Rule | Rule[]};
+        validateRules: ValidateRules;
         // action: string;// TODO
         // method: 'post' | 'get';
         // acceptCharset?: string;
@@ -86,6 +88,7 @@ export default class ActiveForm extends React.PureComponent<ActiveForm.Props, Ac
         initialValue: {},
         validateOnChange: false,
         validateOnBlur: false,
+        validateRules: {},
     };
     readonly state: ActiveForm.State;
     private readonly fields: React.ReactInstance[] = [];
@@ -114,7 +117,7 @@ export default class ActiveForm extends React.PureComponent<ActiveForm.Props, Ac
     }
     render() {
         let { props, state } = this,
-            { name, children } = props,
+            { name, children, validateRules } = props,
             { value, validating, isValid, validateReport, fieldReportMap, submitting } = state;
 
         console.log('ActiveForm rerender', JSON.stringify(this.state));
@@ -139,6 +142,7 @@ export default class ActiveForm extends React.PureComponent<ActiveForm.Props, Ac
                 submitting,
                 onFieldMount: this.handleFieldMount,
                 onFieldChange: this.handleFieldChange,
+                validateRules: validateRules
             }}>
                 { UnwrappedElement }
             </ActiveFormContext.Provider>

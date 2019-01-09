@@ -2,13 +2,12 @@ import * as React from 'react';
 import Tools from '../../utils/Tools';
 import Widget, { FormWidgetProps } from './Widget';
 import inputCSS from './Input.scss';
-import { Omit, AnyPlainObject } from '../../utils/types';
+import { AnyPlainObject } from '../../utils/types';
 import { DataType } from './stores/DataConvertor';
-import bindActiveForm from './bindActiveForm';
 
 const tools = Tools.getInstance();
 
-interface InputProps extends FormWidgetProps {
+export interface InputProps extends FormWidgetProps {
     value?: string;
     defaultValue?: string;
 }

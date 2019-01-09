@@ -5,6 +5,7 @@ import Textarea from "../components/formWidget/Textarea";
 import { FormItemProps } from "src/components/FormItem";
 import { iconDoneAll, iconCloudDone } from "../components/icons/SVGData";
 import Field from "../components/formWidget/Field";
+import { isWidgetElement } from "../components/formWidget/Config";
 
 interface FormTestProps {}
 
@@ -20,10 +21,10 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
         this.state = {
             fields: [
                 {
+                    fieldName: 'check1',
                     label: '复选1',
                     component: 'checkboxItems',
                     componentProps: {
-                        name: 'check1',
                         value: ['check1value'],
                         required: true,
                         items: [
@@ -39,10 +40,10 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                     }
                 },
                 {
+                    fieldName: 'radio1',
                     label: '单选1',
                     component: 'radioItems',
                     componentProps: {
-                        name: 'radio1',
                         // value: 'radio1value',
                         items: [
                             {
@@ -60,10 +61,10 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                     }
                 },
                 {
+                    fieldName: 'input1',
                     label: '输入1',
                     component: 'text',
                     componentProps: {
-                        name: 'input1',
                         value: 'input1 value',
                         rules: [
                             {
@@ -83,22 +84,22 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                     }
                 },
                 {
+                    fieldName: 'input2',
                     label: '输入2',
                     component: 'text',
                     componentProps: {
-                        name: 'input2',
                         value: 'input2 value',
                     },
-                    render: (widget: any, label: any) => <React.Fragment>{label}{widget}<Icon icon={iconDoneAll} /></React.Fragment>
+                    children: ({ component, label }) => <React.Fragment>{label}{component}<Icon icon={iconDoneAll} /></React.Fragment>
                 },
                 {
+                    fieldName: 'textarea1',
                     label: 'textarea1',
                     component: 'textarea',
                     componentProps: {
-                        name: 'textarea1',
                         value: 'textarea1',
                     },
-                    render: (widget: any, label) => <React.Fragment>{label}{widget}<Icon icon={iconCloudDone} /></React.Fragment>
+                    children: ({ component, label }) => <React.Fragment>{label}{component}<Icon icon={iconCloudDone} /></React.Fragment>
                 }
             ],
             form2: {
@@ -176,7 +177,7 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                             return <React.Fragment>
                                 {
                                     fields.map((field: FormItemProps, i) => {
-                                        let { component, label, componentProps = {}, render} = field;
+                                        let { fieldName, component, label, componentProps = {}, children} = field;
                                         
                                         componentProps = Object.assign({}, componentProps, {
                                             // submitting,
@@ -189,7 +190,7 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                                         });
                                         return (
                                             <React.Fragment key={i}>
-                                                <FormItem label={label} component={component} componentProps={componentProps} render={render}></FormItem>
+                                                <FormItem fieldName={fieldName} label={label} component={component} componentProps={componentProps}>{children}</FormItem>
                                                 <ValidateMessage popover={true} fieldName={componentProps.name} />
                                             </React.Fragment>
                                         )
@@ -201,7 +202,7 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { field
                 <ActiveForm initialValue={{
                     x:1, 
                     y:2,
-                    rawInput: 'this is a rawInput',
+                    // rawInput: 'this is a rawInput',
                 }}
                     // onChange={e => {
                     //     console.log('onChange', e);
