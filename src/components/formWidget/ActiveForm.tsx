@@ -3,7 +3,6 @@ import Tools from "../../utils/Tools";
 import { ActiveFormContext } from "./ActiveFormContext";
 import Validator, { Report, Rule } from "./Validator";
 import { CSSAttrs, AnyFunction, AnyPlainObject } from "../../utils/types";
-import Form from "../Form";
 import Log from "../../utils/Log";
 import Widget, { FormWidgetChangeEvent, FormWidgetProps } from "./Widget";
 import { CheckboxChangeEvent } from "../Checkbox";
@@ -428,7 +427,9 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
                         } else if (Validator.isValidReport(result)) {
                             resolve(result);
                         } else {
-                            reject(new Error(`无效的校验逻辑，请检查onValidate返回结果是否正确，当前返回: ${JSON.stringify(result)},有效的返回: { fieldName: string, isValid: boolean, level: 'error' | 'warn', msg: string}`));
+                            reject(new Error(`无效的校验逻辑，请检查onValidate返回结果是否正确，
+                                当前返回: ${JSON.stringify(result)},
+                                有效的返回: { fieldName: string, isValid: boolean, level: 'error' | 'warn', msg: string}`));
                         }
                     }
 

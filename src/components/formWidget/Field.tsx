@@ -44,7 +44,7 @@ class Field extends React.PureComponent<FieldProps>{
                         if (Widget.isWidgetElement(children)) {
                             newProps.validateReport = fieldReport;
                         }
-                        console.log('isWidgetElement(children)', Widget.isWidgetElement(children));
+                        // console.log('isWidgetElement(children)', Widget.isWidgetElement(children));
                         return React.cloneElement(children, newProps);
                 }}
             </ActiveFormContext.Consumer>

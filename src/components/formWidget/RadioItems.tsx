@@ -4,7 +4,6 @@ import Tools from "../../utils/Tools";
 import Radio, { RadioChangeEvent, RadioProps } from "../Radio";
 import cm from './RadioItems.scss';
 import { DataType } from "./stores/DataConvertor";
-import bindActiveForm from "./bindActiveForm";
 interface RadioItem extends RadioProps {
     label: string;
     value: string;
@@ -52,5 +51,4 @@ class RadioItems extends Widget<RadioItemsProps> {
     }
 }
 
-// export default bindActiveForm<typeof RadioItems, RadioItemsProps>(RadioItems);
 export default RadioItems;
