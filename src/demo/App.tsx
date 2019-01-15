@@ -21,6 +21,7 @@ import { iconAddCircle, iconAddCircleOutline, iconAlert, iconInfo, iconMore } fr
 import MenuDemo from './MenuDemo';
 import DefaultPropsDemo from './DefaultPropsDemo';
 import SearchBarDemo from './SearchBarDemo';
+import ActiveFormApp from './activeForm/App';
 
 window.console.log(process.env.NODE_ENV);
 const tools = Tools.getInstance();
@@ -42,8 +43,9 @@ class App extends React.Component<any, any> {
                 <SearchBarDemo />
                 <RowTagNestedDemo />
                 <MessageTest />
-                <FormWidgetTest />
-                <FormDemo />
+                {/* <FormWidgetTest /> */}
+                {/* <FormDemo /> */}
+                <ActiveFormApp />
                 <HTMLForm />
                 <MenuDemo />
                 <Button>btn1</Button>

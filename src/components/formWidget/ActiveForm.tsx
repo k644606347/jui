@@ -119,17 +119,15 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
             { value, validating, isValid, validateReport, fieldReportMap, submitting } = state;
 
         console.log('ActiveForm rerender', JSON.stringify(this.state));
-        let UnwrappedElement = <React.Fragment>
-            {
-                children ? 
-                    children({
-                        ...state,
-                        handleChange: this.handleFieldChange, 
-                        handleSubmit: this.handleSubmit,
-                        handleReset: this.handleReset,
-                    }) : ''
-            }
-        </React.Fragment>
+        let UnwrappedElement = children
+            ? children({
+                    ...state,
+                    handleChange: this.handleFieldChange, 
+                    handleSubmit: this.handleSubmit,
+                    handleReset: this.handleReset,
+                })
+            : '';
+            
         return (
             <ActiveFormContext.Provider value={{
                 value,
@@ -473,7 +471,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
         this.submit();
     }
     reset() {
-        this.setValue({ value: this.state.parsedInitialValue }, () => {
+        this.setValue(this.state.parsedInitialValue, () => {
             this.props.onReset && this.props.onReset();
         });
     }

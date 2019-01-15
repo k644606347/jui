@@ -16,6 +16,7 @@ import Message from "./components/Message";
 import NavBar from "./components/NavBar";
 import Toast from "./components/Toast";
 
+import Field from "./components/formWidget/Field";
 import FormItem from "./components/FormItem";
 import Form from "./components/Form";
 import ActiveForm from "./components/formWidget/ActiveForm";
@@ -36,6 +37,7 @@ export {
     JUIApp,
     Form,
     FormItem,
+    Field,
     Button,
     Icon,
     Checkbox,

@@ -131,7 +131,6 @@ export default class Tools {
             "'": '&#39;',
             '<': '&lt;',
             '>': '&gt;',
-            // tslint:disable-next-line:object-literal-sort-keys
             '&': '&amp;',
         };
         return html.replace(/["'&<>]/g, char => htmlEntities[char] || char);
