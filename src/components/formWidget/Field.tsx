@@ -20,6 +20,7 @@ class Field extends React.PureComponent<FieldProps>{
 
         this.handleRef = this.handleRef.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.handleBlur = this.handleBlur.bind(this);
     }
     render() {
         let { props } = this,
@@ -40,6 +41,7 @@ class Field extends React.PureComponent<FieldProps>{
                             value: hasOriginValue ? originValue : (value[fieldName] || ''),
                             ref: this.handleRef,
                             onChange: this.handleChange,
+                            onBlur: this.handleBlur,
                         }
                         if (Widget.isWidgetElement(children)) {
                             newProps.validateReport = fieldReport;

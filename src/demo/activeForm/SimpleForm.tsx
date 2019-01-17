@@ -5,6 +5,7 @@ export default class SimpleForm extends React.PureComponent {
     render() {
         return <ActiveForm 
         validateOnChange={true}
+        validateOnBlur={true}
         validateRules={{
             name: { type: 'required' }
         }} onSubmit={this.handleSubmit}>{

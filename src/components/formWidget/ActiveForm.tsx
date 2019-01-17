@@ -523,8 +523,9 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
         }
     }
     private handleFieldBlur(e: FieldBlurEvent) {
-        let { name } = this.fetchFieldInfoByFieldEvent(e);
-        this.runFieldValidate(name, { action: 'blur' });
+        let { validateOnBlur } = this.props,
+            { name } = this.fetchFieldInfoByFieldEvent(e);
+        validateOnBlur && this.runFieldValidate(name, { action: 'blur' });
     }
     private handleValid(e: ActiveFormType.ValidateReportEvent) {
         this.props.onValid && this.props.onValid(e);
