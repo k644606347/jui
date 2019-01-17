@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ActiveFormContext, ActiveFormContextType } from "./ActiveFormContext";
-import Widget, { FormWidgetChangeEvent } from "./Widget";
+import Widget, { FormWidgetChangeEvent, FormWidgetFocusEvent } from "./Widget";
 import { CheckboxChangeEvent } from "../Checkbox";
 import { RadioChangeEvent } from "../Radio";
 import { AnyPlainObject } from "../../utils/types";
@@ -10,7 +10,7 @@ export interface FieldProps {
     children: JSX.Element;
 }
 export type FieldChangeEvent = React.ChangeEvent<any> | FormWidgetChangeEvent | CheckboxChangeEvent | RadioChangeEvent;
-
+export type FieldBlurEvent = FormWidgetFocusEvent | React.FocusEvent<any>;
 const tools = Tools.getInstance();
 class Field extends React.PureComponent<FieldProps>{
     private activeformContext: ActiveFormContextType;
@@ -76,6 +76,15 @@ class Field extends React.PureComponent<FieldProps>{
 
         if (this.activeformContext.onFieldChange) {
             this.activeformContext.onFieldChange(e);
+        }
+    }
+    handleBlur(e: FieldBlurEvent) {
+        let childrenProps = this.props.children.props;
+
+        childrenProps.onBlur && childrenProps.onBlur(e);
+
+        if (this.activeformContext.onFieldBlur) {
+            this.activeformContext.onFieldBlur(e);
         }
     }
 }

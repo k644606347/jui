@@ -14,8 +14,9 @@ interface FormWidgetEvent {
     disabled: boolean;
     readOnly: boolean;
     focused: boolean;
-    type: string;
+    component: string;
     widgetName: string;
+    type: string;
 }
 export interface FormWidgetChangeEvent extends FormWidgetEvent {}
 export interface FormWidgetMountEvent extends FormWidgetEvent {}
@@ -185,8 +186,9 @@ export default abstract class Widget<P extends Props = Props, S extends State = 
                 disabled,
                 readOnly,
                 focused,
-                type: 'widget',
+                component: 'widget',
                 widgetName: this.getWidgetName(),
+                type: rawEvent.type,
             };
 
         return tools.isPlainObject(rawEvent) ? Object.assign(defaultEvent, rawEvent) : defaultEvent;

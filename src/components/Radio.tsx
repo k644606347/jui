@@ -15,7 +15,7 @@ export interface RadioChangeEvent {
     checked: boolean;
     disabled: boolean;
     readOnly: boolean;
-    type: string;
+    component: string;
 }
 type ThemeType = 'circle' | 'checkmark';
 export interface RadioProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
@@ -87,7 +87,7 @@ export default class Radio extends React.PureComponent<RadioProps> {
             checked,
             readOnly,
             disabled,
-            type: 'radio',
+            component: 'radio',
         });
     }
 }

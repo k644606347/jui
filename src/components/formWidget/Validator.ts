@@ -19,11 +19,12 @@ export interface Rule {
     type: keyof RuleMap;
     value?: RuleMap[Rule['type']];
     level?: 'error' | 'warn';
+    msg?: string;
 }
 export interface Report {
     isValid: boolean;
-    msg?: string;
     level?: 'error' | 'warn';
+    msg?: string;
     fieldName?: string;
 }
 
@@ -39,7 +40,7 @@ const allowedRules = [
 const defaultLevel = 'error';
 
 const tools = Tools.getInstance(),
-    presetReport = {
+    presetReports = {
         'required': { msg: '该字段不能为空' },
         'maxLength': { msg: (rule: Rule, value: any) => `字符个数不能大于${rule.value}` },
         'minLength': { msg: (rule: Rule, value: any) => `字符个数不能小于${rule.value}` },
@@ -114,17 +115,16 @@ const Validator = {
                     }
                 }
             }
+            return this.report(value, hitRule, processReport);
         } else {
             let msg = checkRulesResult.msg;
             Log.error(msg);
-            processReport = {
+            return {
                 msg,
                 isValid: false,
                 level: "error"
             };
         }
-
-        return this.report(value, hitRule, processReport);
     },
     checkRule(rule: any): CheckRuleResult {
         let result: CheckRuleResult = {
@@ -177,25 +177,26 @@ const Validator = {
     },
     report(value: string, hitRule?: Rule, injectReport?: Report) {
         let report: Report = {
-            isValid: true,
-            msg: "",
-        };
+                isValid: true,
+                msg: "",
+            };
 
         if (hitRule) {
-            let { level } = hitRule;
+            let { level, msg = '' } = hitRule;
             report = Object.assign(report, {
                 isValid: false,
                 level: level || defaultLevel,
+                msg,
             });
+
+            if (report.msg === '') {
+                let { msg } = presetReports[hitRule.type];
+                report.msg = tools.isFunction(msg) ? msg(hitRule, value) : msg + ''
+            }
         }
 
         if (injectReport) {
             report = Object.assign(report, injectReport);
-        }
-
-        if (report.msg === '' && hitRule) {
-            let { msg } = presetReport[hitRule.type];
-            report.msg = tools.isFunction(msg) ? msg(hitRule, value) : msg
         }
 
         return report;

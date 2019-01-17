@@ -15,7 +15,7 @@ export interface CheckboxChangeEvent {
     checked: boolean;
     disabled: boolean;
     readOnly: boolean;
-    type: string;
+    component: string;
 }
 type ThemeType = 'circle' | 'square';
 export interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
@@ -78,7 +78,7 @@ export default class Checkbox extends React.PureComponent<CheckboxProps>{
             checked,
             disabled,
             readOnly,
-            type: 'checkbox',
+            component: 'checkbox',
         });
     }
 }

@@ -7,7 +7,7 @@ import Log from "../../utils/Log";
 import Widget, { FormWidgetChangeEvent, FormWidgetProps } from "./Widget";
 import { CheckboxChangeEvent } from "../Checkbox";
 import { RadioChangeEvent } from "../Radio";
-import { FieldChangeEvent } from "./Field";
+import { FieldChangeEvent, FieldBlurEvent } from "./Field";
 
 declare namespace ActiveFormType {
     type Value = {[k in string]: any};
@@ -111,6 +111,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
         this.handleInvalid = this.handleInvalid.bind(this);
         this.handleFieldMount = this.handleFieldMount.bind(this);
         this.handleFieldChange = this.handleFieldChange.bind(this);
+        this.handleFieldBlur = this.handleFieldBlur.bind(this);
         this.setFieldValue = this.setFieldValue.bind(this);
     }
     render() {
@@ -138,6 +139,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
                 submitting,
                 onFieldMount: this.handleFieldMount,
                 onFieldChange: this.handleFieldChange,
+                onFieldBlur: this.handleFieldBlur,
                 validateRules: validateRules
             }}>
                 { UnwrappedElement }
@@ -235,44 +237,43 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
     private debounceRunValidate = tools.debounce(this.runValidate, DEBOUNCE_VALIDATE_DELAY);
     private runValidate({ action }: { action?: ActiveFormType.Action } = {}) {
         this.validatePreProcess();
-        return this.validate().then(validateResult => {
-            this.validatePostProcess({...validateResult, action});
-        }).catch((error: Error) => {
-            Log.error('[ActiveForm.validate]', error);
-            this.validatePostProcess({ 
-                isValid: false, 
-                validateReport: {
+        return this.validate()
+            .catch((error: Error) => {
+                Log.error('[ActiveForm.validate]', error);
+                return {
                     isValid: false, 
-                    msg: error + '', 
-                    level: 'error'
-                }, 
-                action 
+                    validateReport: {
+                        isValid: false, 
+                        msg: error + '', 
+                        level: 'error'
+                    }, 
+                } as ActiveFormType.ValidateResult;
+            })
+            .then(validateResult => {
+                this.validatePostProcess({...validateResult, action});
             });
-        });
     }
     private debounceRunFieldValidate = tools.debounce(this.runFieldValidate, DEBOUNCE_VALIDATE_DELAY);
     private runFieldValidate(fieldName: string, { action }: { action?: ActiveFormType.Action } = {}) {        
         this.validatePreProcess();
-        return this.validateField(fieldName).then(report => {
-            this.validatePostProcess(
-                { isValid: report.isValid, validateReport: report, fieldReportMap: { [fieldName]: report }, action });
-        }).catch(error => {
-            Log.error('[ActiveForm.validateField]', error);
+        return this.validateField(fieldName)
+            .catch(error => {
+                Log.error('[ActiveForm.validateField]', error);
 
-            let report: Report = {
-                isValid: false,
-                msg: error + '',
-                level: 'error'
-            };
-            this.validatePostProcess({ 
-                isValid: false, 
-                validateReport: report,
-                fieldReportMap: { 
-                    [fieldName]: report,
-                },
-                action
+                return {
+                    isValid: false,
+                    msg: error + '',
+                    level: 'error'
+                } as Report;
+            })
+            .then(report => {
+                this.validatePostProcess({ 
+                    isValid: report.isValid, 
+                    validateReport: report, 
+                    fieldReportMap: { [fieldName]: report }, 
+                    action 
+                });
             });
-        });
     }
     private validatePreProcess({ action }: { action?: ActiveFormType.Action } = {}) {
         let { name } = this.props,
@@ -478,7 +479,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
     private handleReset() {
         this.reset();
     }
-    private fetchFieldInfoByChangeEvent(e: FieldChangeEvent) {
+    private fetchFieldInfoByFieldEvent(e: FieldChangeEvent | FieldBlurEvent) {
         let targetName: string,
             targetValue: any;
 
@@ -501,11 +502,11 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
         }
 
         function isWidgetEvent(event: any): event is FormWidgetChangeEvent {
-            return event.type === 'widget';
+            return event.component === 'widget';
         }
 
         function isCheckboxOrRadioEvent(event: any): event is CheckboxChangeEvent | RadioChangeEvent {
-            return event.type === 'checkbox' || event.type === 'radio';
+            return event.component === 'checkbox' || event.component === 'radio';
         }
 
         return {
@@ -514,15 +515,16 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
         };
     }
     private handleFieldChange(e: FieldChangeEvent) {
-        let { name, value } = this.fetchFieldInfoByChangeEvent(e),
+        let { name, value } = this.fetchFieldInfoByFieldEvent(e),
             prevValue = this.getValue()[name];
 
         if (prevValue !== value) {
             this.setFieldValue(name, value, { debounceValidate: true });
         }
     }
-    private handleFieldBlur() {
-        // TODO   
+    private handleFieldBlur(e: FieldBlurEvent) {
+        let { name } = this.fetchFieldInfoByFieldEvent(e);
+        this.runFieldValidate(name, { action: 'blur' });
     }
     private handleValid(e: ActiveFormType.ValidateReportEvent) {
         this.props.onValid && this.props.onValid(e);
