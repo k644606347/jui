@@ -13,6 +13,9 @@ export interface InputProps extends FormWidgetProps, Omit<React.InputHTMLAttribu
 }
 const omitAttrs = ['validateReport', 'onChange', 'onFocus', 'onBlur', 'onKeyDown', 'onKeyUp', 'onKeyPress'];
 class Input extends Widget<InputProps> {
+    static defaultProps = {
+        value: ''
+    }
     widgetName = 'input';
     dataType: DataType = 'string';
     constructor(props: InputProps) {

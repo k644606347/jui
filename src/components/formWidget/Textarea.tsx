@@ -18,6 +18,9 @@ interface TextareaProps extends FormWidgetProps {
 const tools = Tools.getInstance();
 const omitAttrs = ['validateReport', 'onChange', 'onFocus', 'onBlur', 'onKeyDown', 'onKeyUp', 'onKeyPress'];
 class Textarea extends Widget<TextareaProps> {
+    static defaultProps = {
+        value: ''
+    }
     widgetName = 'textarea';
     dataType: DataType = 'string';
     constructor(props: TextareaProps) {

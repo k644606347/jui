@@ -34,11 +34,9 @@ class Field extends React.PureComponent<FieldProps>{
                     let { value = {}, fieldReportMap = {} } = context,
                         originProps = children.props,
                         fieldName = originProps.name,
-                        originValue = originProps.value,
-                        hasOriginValue = originProps.hasOwnProperty('value'),
                         fieldReport = fieldReportMap[fieldName],
                         newProps: AnyObject = {
-                            value: hasOriginValue ? originValue : (value[fieldName] || ''),
+                            value: value[fieldName],
                             ref: this.handleRef,
                             onChange: this.handleChange,
                             onBlur: this.handleBlur,
@@ -46,7 +44,6 @@ class Field extends React.PureComponent<FieldProps>{
                         if (Widget.isWidgetElement(children)) {
                             newProps.validateReport = fieldReport;
                         }
-                        // console.log('isWidgetElement(children)', Widget.isWidgetElement(children));
                         return React.cloneElement(children, newProps);
                 }}
             </ActiveFormContext.Consumer>
