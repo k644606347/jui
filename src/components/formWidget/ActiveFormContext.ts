@@ -1,7 +1,7 @@
 import * as React from "react";
 import { FieldChangeEvent, FieldBlurEvent } from "./Field";
 import { ActiveFormType } from "./ActiveForm";
-import { Report } from "./Validator";
+import { Report } from "../../validate/Validator";
 
 // React.Component<FormWidgetProps> & Widget
 export interface ActiveFormContextType {

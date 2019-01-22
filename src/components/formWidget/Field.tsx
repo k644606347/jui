@@ -3,7 +3,7 @@ import { ActiveFormContext, ActiveFormContextType } from "./ActiveFormContext";
 import Widget, { FormWidgetChangeEvent, FormWidgetFocusEvent } from "./Widget";
 import { CheckboxChangeEvent } from "../Checkbox";
 import { RadioChangeEvent } from "../Radio";
-import { AnyPlainObject } from "../../utils/types";
+import { AnyObject } from "../../utils/types";
 import Tools from "../../utils/Tools";
 
 export interface FieldProps {
@@ -37,7 +37,7 @@ class Field extends React.PureComponent<FieldProps>{
                         originValue = originProps.value,
                         hasOriginValue = originProps.hasOwnProperty('value'),
                         fieldReport = fieldReportMap[fieldName],
-                        newProps: AnyPlainObject = {
+                        newProps: AnyObject = {
                             value: hasOriginValue ? originValue : (value[fieldName] || ''),
                             ref: this.handleRef,
                             onChange: this.handleChange,

@@ -1,6 +1,6 @@
 import * as React from "react";
 import NavBar from "./NavBar";
-import { CSSAttrs, NoResultFunction, AnyPlainObject } from "../utils/types";
+import { CSSAttrs, NoResultFunction, AnyObject } from "../utils/types";
 import Tools from "../utils/Tools";
 import { iconArrowBack, iconClose } from "./icons/SVGData";
 import Icon from "./Icon";
@@ -94,7 +94,7 @@ export default class Modal extends React.PureComponent<ModalProps, ModalState> {
             </div>
         );
     }
-    private buildBtn(btn: BtnType, btnProps: AnyPlainObject) {
+    private buildBtn(btn: BtnType, btnProps: AnyObject) {
         if (!btn) {
             return '';
         } else {

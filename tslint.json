@@ -22,7 +22,8 @@
     "no-empty": false,
     "ban-types": false,
     "no-shadowed-variable": false,
-    "only-arrow-functions": false
+    "only-arrow-functions": false,
+    "prefer-for-of": false,
   },
   "linterOptions": {
     "exclude": [

@@ -1,4 +1,4 @@
-import { Report } from "./Validator";
+import { Report } from "../../validate/Validator";
 import * as React from "react";
 import cm from './WidgetWrapper.scss';
 import { CSSAttrs } from "../../utils/types";

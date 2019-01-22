@@ -1,7 +1,7 @@
 import * as React from "react";
-import { CSSAttrs, AnyPlainObject } from "../../utils/types";
+import { CSSAttrs, AnyObject } from "../../utils/types";
 import Tools from "../../utils/Tools";
-import Validator, { Rule, Report } from "./Validator";
+import { validator, Report } from "../../validate/Validator";
 import DataConvertor, { DataType } from "./stores/DataConvertor";
 
 const tools = Tools.getInstance();
@@ -54,7 +54,7 @@ type State = FormWidgetState;
 export default abstract class Widget<P extends Props = Props, S extends State = State> extends React.PureComponent<P, S> {
     static convertor = DataConvertor.getInstance();
     static validate(value: any): Promise<Report> {
-        return Promise.resolve({...Validator.getDefaultReport(), isValid: true});
+        return Promise.resolve({...validator.getDefaultReport(), isValid: true});
     }
     static isWidgetElement(el: any): el is React.ComponentElement<Props, React.Component<Props>> {
         if (!React.isValidElement(el)) {
@@ -176,7 +176,7 @@ export default abstract class Widget<P extends Props = Props, S extends State = 
 
         onKeyPress && onKeyPress(this.buildEvent());
     }
-    protected buildEvent(rawEvent: AnyPlainObject = {}): any {
+    protected buildEvent(rawEvent: AnyObject = {}): any {
         let { id = '', name = '', disabled = false, readOnly = false, value = this.getParsedValue() } = this.props,
             { focused } = this.state, 
             defaultEvent: FormWidgetEvent = {

@@ -1,12 +1,12 @@
-import { AnyFunction, AnyPlainObject } from "./types";
+import { AnyObject } from "./types";
 
 export default class Tools {
+    private static instances: Tools[] = [];
     static getInstance() {
         const instances = Tools.instances;
 
         return instances.length === 0 ? new Tools() : instances[0];
     }
-    private static instances: Tools[] = [];
     constructor() {
         // logic
     }
@@ -46,7 +46,9 @@ export default class Tools {
     isArray(v: any): v is any[] {
         return Array.isArray(v);
     }
-
+    isRegExp(v): v is RegExp {
+        return Object.prototype.toString.call(v) === '[object RegExp]';
+    }
     isError(v): v is Error {
         return Object.prototype.toString.call(v) === '[object Error]';
     }
@@ -202,7 +204,7 @@ export default class Tools {
             }, delay);
         }
     }
-    omit(obj: AnyPlainObject = {}, omitKeys: string[] = []) {
+    omit(obj: AnyObject = {}, omitKeys: string[] = []) {
         let result = {};
 
         if(!Array.isArray(omitKeys) || omitKeys.length === 0) {
@@ -217,3 +219,6 @@ export default class Tools {
         return result;
     }
 }
+
+let tools = Tools.getInstance();
+export { tools }

@@ -7,9 +7,9 @@ import Field from "../components/formWidget/Field";
 import Config, { FormWidgetName } from "./config";
 import { FormItemProps } from "../components/FormItem";
 import FormDemoData from "./FormDemoData";
+import { RuleParam } from "../validate/Validator";
 
 interface FormTestProps {}
-
 const tools = Tools.getInstance();
 interface FieldType {
     name: string;
@@ -166,14 +166,14 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { initV
                         field_input: { type: 'required' },
                         rawInput: [
                             { type: 'maxLength', value: 10 },
-                            { type: 'required' },
+                            'required',
                             { type: 'minLength', value: 2 },
-                            { type: 'callback', value: () => {
+                            () => {
                                 // throw new Error('validateRules callback');
                                 // return { isValid: true, msg: '', level: 'error' };
                                 return { isValid: 1 } as any;
                                 // return '';
-                            }}
+                            }
                         ],
                     }}
                     onValid={e => {

@@ -7,7 +7,9 @@ export default class SimpleForm extends React.PureComponent {
         validateOnChange={true}
         validateOnBlur={true}
         validateRules={{
-            name: { type: 'required' }
+            name: ['required', /\d+/, (value) => {
+                return value === 'baidu';
+            }],
         }} onSubmit={this.handleSubmit}>{
             (args) => {
                 return (

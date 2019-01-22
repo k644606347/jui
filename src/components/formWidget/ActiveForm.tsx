@@ -1,8 +1,8 @@
 import * as React from "react";
 import Tools from "../../utils/Tools";
 import { ActiveFormContext } from "./ActiveFormContext";
-import Validator, { Report, Rule } from "./Validator";
-import { CSSAttrs, AnyFunction, AnyPlainObject } from "../../utils/types";
+import { validator, Report, RuleParam } from "../../validate/Validator";
+import { CSSAttrs, AnyFunction, AnyObject } from "../../utils/types";
 import Log from "../../utils/Log";
 import Widget, { FormWidgetChangeEvent, FormWidgetProps } from "./Widget";
 import { CheckboxChangeEvent } from "../Checkbox";
@@ -13,7 +13,7 @@ declare namespace ActiveFormType {
     type Value = {[k in string]: any};
     type Action = 'submit' | 'change' | 'blur';
     type FieldReportMap = {[k in string]: Report}
-    interface ValidateRules {[k: string]: Rule | Rule[]}
+    interface ValidateRules {[k: string]: RuleParam | RuleParam[]}
     interface ValidateResult {
         isValid: boolean;
         validateReport: Report;
@@ -100,7 +100,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
             submitting: false,
             validating: false,
             isValid: true,
-            validateReport: Validator.getDefaultReport(),
+            validateReport: validator.getDefaultReport(),
             fieldReportMap: {}
         };
         // this.handleChange = this.handleChange.bind(this);
@@ -334,7 +334,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
                         firstInvalidReport = report;
                     }
                 });
-                validateReport = firstInvalidReport || Validator.getDefaultReport();
+                validateReport = firstInvalidReport || validator.getDefaultReport();
                 return { isValid, validateReport, fieldReportMap};
             });
     }
@@ -350,7 +350,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
         if (fieldRules) {
             if (!Array.isArray(fieldRules))
                 fieldRules = [fieldRules];
-            promiseQueue.push(Validator.validate(fieldValue, fieldRules));
+            promiseQueue.push(validator.validate(fieldValue, fieldRules));
         }
         if (widgetClass && tools.isFunction(widgetClass.validate)) {
             promiseQueue.push(widgetClass.validate(fieldValue));
@@ -392,7 +392,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
                 validating: false,
             };
 
-        if (!Validator.compareReport(validateResult.validateReport, validateReport)) {
+        if (!validator.compareReport(validateResult.validateReport, validateReport)) {
             nextState.validateReport = validateResult.validateReport;
         }
         for (let fieldName in validateResult.fieldReportMap) {
@@ -402,7 +402,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
             if (!tools.isPlainObject(report)) {
                 continue;
             }
-            if (!tools.isPlainObject(prevReport) || !Validator.compareReport(report, prevReport)) {
+            if (!tools.isPlainObject(prevReport) || !validator.compareReport(report, prevReport)) {
                 needUpdateReportMap = true;
 
                 nextFieldReportMap[fieldName] = report;
@@ -423,7 +423,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
                     processResult = result => {
                         if (tools.isError(result)) {
                             reject(result);
-                        } else if (Validator.isValidReport(result)) {
+                        } else if (validator.isValidReport(result)) {
                             resolve(result);
                         } else {
                             reject(new Error(`无效的校验逻辑，请检查onValidate返回结果是否正确，
