@@ -2,7 +2,8 @@
 @import "./style/Variables.scss";
 
 .wrapper {
-    font-size: 17px;
+    display: inline-block;
+    font-size: $form-font-size;
     line-height: 34px;
     -webkit-tap-highlight-color: transparent;
     &.required::after {

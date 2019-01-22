@@ -4,7 +4,7 @@
 
 .wrapper {
     display: flex;
-    font-size: 17px;
+    font-size: $form-font-size;
     padding: 10px 0;
     background-color: $bg-color;
     &.horizontal {

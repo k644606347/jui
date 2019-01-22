@@ -3,7 +3,7 @@
 @import "./style/mixins/Hairline.scss";
 
 .wrapper {
-    font-size: 17px;
+    font-size: $form-font-size;
     padding: 1px 8px 0 8px;
     margin: 8px 0;
     background-color: $bg-color;

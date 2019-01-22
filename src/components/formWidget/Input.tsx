@@ -7,11 +7,11 @@ import { DataType } from './stores/DataConvertor';
 
 const tools = Tools.getInstance();
 
-type OmitAttrs = 'onChange' | 'onFocus' | 'onBlur' | 'onKeyDown' | 'onKeyUp' | 'onKeyPress';
+type OmitAttrs = 'onChange' | 'onFocus' | 'onBlur';
 export interface InputProps extends FormWidgetProps, Omit<React.InputHTMLAttributes<HTMLInputElement>, OmitAttrs> {
     value?: string;
 }
-const omitAttrs = ['validateReport', 'onChange', 'onFocus', 'onBlur', 'onKeyDown', 'onKeyUp', 'onKeyPress'];
+const omitAttrs = ['validateReport', 'onChange', 'onFocus', 'onBlur'];
 class Input extends Widget<InputProps> {
     static defaultProps = {
         value: ''
@@ -35,9 +35,6 @@ class Input extends Widget<InputProps> {
                 onFocus={this.handleFocus}
                 onBlur={this.handleBlur}
                 onChange={this.handleChange}
-                onKeyDown={this.handleKeyDown}
-                onKeyUp={this.handleKeyUp}
-                onKeyPress={this.handleKeyPress} 
                 className={tools.classNames(inputCSS.input, className)}
             />
         );

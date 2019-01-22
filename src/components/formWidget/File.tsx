@@ -24,10 +24,7 @@ export default class File extends Widget<FileProps> {
                 multiple={multiple}
                 onChange={this.handleChange}
                 onFocus={this.handleFocus}
-                onBlur={this.handleBlur} 
-                onKeyDown={this.handleKeyDown}
-                onKeyUp={this.handleKeyUp}
-                onKeyPress={this.handleKeyPress} 
+                onBlur={this.handleBlur}
                 ref={this.inputRef}
             />
         );

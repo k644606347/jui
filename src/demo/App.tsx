@@ -3,7 +3,6 @@ import * as React from 'react';
 import './App.scss';
 import Hello from '../components/Hello';
 
-import { FormWidgetTest } from './FormWidget.test';
 import FormDemo from './FormDemo';
 import { Icon, Tools, Menu, Button, Pagination, List, Log, JUIApp, Toast, FormItem } from '..';
 import { IconProps } from '../components/Icon';

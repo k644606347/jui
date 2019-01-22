@@ -4,6 +4,9 @@ import { ActiveForm, Input, Field, Textarea, ValidateMessage, Button, FormItem, 
 export default class SimpleForm extends React.PureComponent {
     render() {
         return <ActiveForm 
+        initialValue={{
+            isStudent: '0'
+        }}
         validateOnChange={true}
         validateOnBlur={true}
         validateRules={{
@@ -14,9 +17,9 @@ export default class SimpleForm extends React.PureComponent {
             (args) => {
                 return (
                     <React.Fragment>
-                        <FormItem label="姓名" field={<Input name="name" />}></FormItem>
+                        <FormItem label="姓名" field={<Input placeholder="姓名" name="name" />}></FormItem>
                         <ValidateMessage fieldName="name" />
-                        <FormItem label="描述" field={<Textarea name="description" />}></FormItem>
+                        <FormItem label="描述" field={<Textarea placeholder="描述" name="description" />}></FormItem>
                         <ValidateMessage fieldName="description" />
                         <FormItem label="是否学生" field={<RadioItems name="isStudent" items={[
                             { label: '是', value: '1' },

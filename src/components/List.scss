@@ -54,7 +54,7 @@ $list-name: list;
             overflow: hidden;
             text-overflow: ellipsis;
             padding: 0 15px;
-            font-size: 17px;
+            font-size: $list-font-size;
         }
         .row-separator {
             background-color: rgb(245, 245, 249);

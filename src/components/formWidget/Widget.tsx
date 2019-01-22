@@ -39,9 +39,9 @@ export interface FormWidgetProps extends CSSAttrs {
     onChange?: (e: FormWidgetChangeEvent) => void;
     onFocus?: (e: FormWidgetFocusEvent) => void;
     onBlur?: (e: FormWidgetFocusEvent) => void;
-    onKeyDown?(e: FormWidgetKeyboardEvent): void;
-    onKeyUp?(e: FormWidgetKeyboardEvent): void;
-    onKeyPress?(e: FormWidgetKeyboardEvent): void;
+    // onKeyDown?(e: FormWidgetKeyboardEvent): void;
+    // onKeyUp?(e: FormWidgetKeyboardEvent): void;
+    // onKeyPress?(e: FormWidgetKeyboardEvent): void;
     onDidMount?: (e: FormWidgetMountEvent) => void;
     onWillUnmount?: (e: FormWidgetMountEvent) => void;
 }
@@ -96,9 +96,9 @@ export default abstract class Widget<P extends Props = Props, S extends State = 
         this.initChangeHandler();
         this.handleFocus = this.handleFocus.bind(this);
         this.handleBlur = this.handleBlur.bind(this);
-        this.handleKeyDown = this.handleKeyDown.bind(this);
-        this.handleKeyUp =  this.handleKeyPress.bind(this);
-        this.handleKeyPress = this.handleKeyPress.bind(this);
+        // this.handleKeyDown = this.handleKeyDown.bind(this);
+        // this.handleKeyUp =  this.handleKeyPress.bind(this);
+        // this.handleKeyPress = this.handleKeyPress.bind(this);
     }
     componentDidMount() {
         let { onDidMount } = this.props;
@@ -161,21 +161,21 @@ export default abstract class Widget<P extends Props = Props, S extends State = 
             onBlur && onBlur(this.buildEvent());
         });
     }
-    protected handleKeyDown(e: React.KeyboardEvent) {
-        let { onKeyDown } = this.props;
+    // protected handleKeyDown(e: React.KeyboardEvent) {
+    //     let { onKeyDown } = this.props;
 
-        onKeyDown && onKeyDown(this.buildEvent());
-    }
-    protected handleKeyUp(e: React.KeyboardEvent) {
-        let { onKeyUp } = this.props;
+    //     onKeyDown && onKeyDown(this.buildEvent());
+    // }
+    // protected handleKeyUp(e: React.KeyboardEvent) {
+    //     let { onKeyUp } = this.props;
 
-        onKeyUp && onKeyUp(this.buildEvent());
-    }
-    protected handleKeyPress(e: React.KeyboardEvent) {
-        let { onKeyPress } = this.props;
+    //     onKeyUp && onKeyUp(this.buildEvent());
+    // }
+    // protected handleKeyPress(e: React.KeyboardEvent) {
+    //     let { onKeyPress } = this.props;
 
-        onKeyPress && onKeyPress(this.buildEvent());
-    }
+    //     onKeyPress && onKeyPress(this.buildEvent());
+    // }
     protected buildEvent(rawEvent: AnyObject = {}): any {
         let { id = '', name = '', disabled = false, readOnly = false, value = this.getParsedValue() } = this.props,
             { focused } = this.state, 

@@ -6,17 +6,14 @@ import { DataType } from "./stores/DataConvertor";
 import bindActiveForm from "./bindActiveForm";
 import { Omit } from "../../utils/types";
 
-type OmitAttrs = 'onChange' | 'onFocus' | 'onBlur' | 'onKeyDown' | 'onKeyUp' | 'onKeyPress';
-export interface InputProps extends FormWidgetProps, Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, OmitAttrs> {
-    value?: string;
-}
-interface TextareaProps extends FormWidgetProps {
+type OmitAttrs = 'onChange' | 'onFocus' | 'onBlur';
+export interface TextareaProps extends FormWidgetProps, Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, OmitAttrs> {
     value?: string;
     defaultValue?: string;
 }
 
 const tools = Tools.getInstance();
-const omitAttrs = ['validateReport', 'onChange', 'onFocus', 'onBlur', 'onKeyDown', 'onKeyUp', 'onKeyPress'];
+const omitAttrs = ['validateReport', 'onChange', 'onFocus', 'onBlur'];
 class Textarea extends Widget<TextareaProps> {
     static defaultProps = {
         value: ''
@@ -37,9 +34,6 @@ class Textarea extends Widget<TextareaProps> {
                 onFocus={this.handleFocus}
                 onBlur={this.handleBlur}
                 onChange={this.handleChange}
-                onKeyDown={this.handleKeyDown}
-                onKeyUp={this.handleKeyUp}
-                onKeyPress={this.handleKeyPress} 
                 className={tools.classNames(textareaCSS.wrapper, className)}/>
         );
     }

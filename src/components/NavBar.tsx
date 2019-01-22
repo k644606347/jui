@@ -25,7 +25,7 @@ export default class NavBar extends React.PureComponent<NavBarProps, any> {
 
         return (
             <div className={tools.classNames(navBarCSS.wrapper, theme && navBarCSS[theme], className)} style={style}>
-                {leftContent ? <a className={navBarCSS.leftContent} onClick={this.handleLeftClick}>{leftContent}</a> : ''}
+                <div className={navBarCSS.leftContent} onClick={this.handleLeftClick}>{leftContent}</div>
                 {
                     children ? 
                         <div className={navBarCSS.content}>
@@ -36,7 +36,7 @@ export default class NavBar extends React.PureComponent<NavBarProps, any> {
                             </div>
                         </div> : ''
                 }
-                {rightContent ? <a className={navBarCSS.rightContent} onClick={this.handleRightClick}>{rightContent}</a> : ''}
+                <div className={navBarCSS.rightContent} onClick={this.handleRightClick}>{rightContent}</div>
             </div>
         )
     }
