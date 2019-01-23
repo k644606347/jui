@@ -464,13 +464,13 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
             }
         });
     }
-    private handleSubmit() {
-        this.submit();
-    }
     reset() {
         this.setValue(this.state.parsedInitialValue, () => {
             this.props.onReset && this.props.onReset();
         });
+    }
+    private handleSubmit() {
+        this.submit();
     }
     private handleReset() {
         this.reset();
