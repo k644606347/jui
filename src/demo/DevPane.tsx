@@ -31,6 +31,7 @@ export default class DevPane extends React.PureComponent<DevPaneProps, DevPaneSt
                 }
                 </a>
                 <div className={cssModules.main}>
+                    <p>process.env.NODE_ENV: {process.env.NODE_ENV}</p>
                     <p>ontouchstart/move/end: {('ontouchstart' in document) + ''}/{('ontouchstart' in document) + ''}/{('ontouchstart' in document) + ''}</p>
                     <p>window innerWidth/Height: {window.innerWidth}/{window.innerHeight}</p>
                     <p>body offsetWidth/Height: {document.body.offsetWidth}/{document.body.offsetHeight}</p>

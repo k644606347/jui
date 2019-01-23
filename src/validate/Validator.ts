@@ -16,8 +16,6 @@ export interface Report {
     msg?: string;
     fieldName?: string;
 }
-const defaultLevel = 'error';
-
 const tools = Tools.getInstance(),
     presetReports: { [k in AllowedRule]: { msg: AnyFunction | string } } = {
         required: { msg: '该字段不能为空' },
@@ -42,7 +40,9 @@ class Validator {
 
         return instances.length === 0 ? new Validator() : instances[0];
     }
-    defaultLevel;
+    getDefaultLevel(): 'error' {
+        return 'error';
+    }
     getDefaultReport(): Report {
         return {
             isValid: true,
@@ -71,8 +71,8 @@ class Validator {
     }
     compareReport(report: Report, prevReport: Report) {
         let isEqual = true,
-            prevLevel = prevReport.level || defaultLevel,
-            level = report.level || defaultLevel;
+            prevLevel = prevReport.level || this.getDefaultLevel(),
+            level = report.level || this.getDefaultLevel();
 
         if (prevReport === report) {
             return isEqual;
@@ -118,7 +118,7 @@ class Validator {
             let { level, msg = '' } = hitRule;
             report = Object.assign(report, {
                 isValid: false,
-                level: level || defaultLevel,
+                level: level || this.getDefaultLevel(),
                 msg,
             });
 

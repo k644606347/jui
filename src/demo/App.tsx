@@ -22,13 +22,6 @@ import DefaultPropsDemo from './DefaultPropsDemo';
 import SearchBarDemo from './SearchBarDemo';
 import ActiveFormApp from './activeForm/App';
 
-window.console.log(process.env.NODE_ENV);
-const tools = Tools.getInstance();
-
-
-let DisplayDemo = function() {
-    return <div title={DisplayDemo.name}>this is DisplayDemo</div>;
-}
 class App extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
@@ -36,7 +29,6 @@ class App extends React.Component<any, any> {
     public render() {
         return (
             <JUIApp className={'App'}>
-                <DisplayDemo />
                 <ToastDemo />
                 <NavBarDemo />
                 <SearchBarDemo />

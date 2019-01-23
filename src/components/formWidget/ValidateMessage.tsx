@@ -5,6 +5,7 @@ import Tools from "../../utils/Tools";
 import { ActiveFormContextType } from "./ActiveFormContext";
 import connectActiveForm from "./connectActiveForm";
 import messageCSS from './ValidateMessage.scss';
+import { validator, Report } from "../../validate/Validator";
 
 interface Props extends CSSAttrs {
     fieldName: string;
@@ -13,42 +14,30 @@ interface Props extends CSSAttrs {
 }
 
 const tools = Tools.getInstance();
-// const fontColorMap = {
-//     error: '#f5222d',
-//     warn: '#faad14',
-// };
 class ValidateMessage extends React.PureComponent<Props> {
     static defaultProps = {
         popover: false,
     }
-    // static getFontColor(validateReport: Report | undefined) {
-    //     if (!validateReport || validateReport.isValid) {
-    //         return '';
-    //     }
-
-    //     let { level = '' } = validateReport;
-
-    //     return fontColorMap[level];
-    // }
     render() {
         let { props } = this,
             { fieldName, className, style, popover, activeFormContext } = props,
-            fieldValidateReport;
+            fieldReport: Report = validator.getDefaultReport();
         
         if (activeFormContext && activeFormContext.fieldReportMap) {
             let { fieldReportMap } = activeFormContext;
 
-            fieldValidateReport = fieldReportMap[fieldName];
+            if (validator.isValidReport(fieldReportMap[fieldName]))
+                fieldReport = fieldReportMap[fieldName];
         }
-        if (!tools.isPlainObject(fieldValidateReport)) {
+
+        let { level, msg } = fieldReport;
+        
+        if (!msg) {
             return '';
         }
 
-        let { level, isValid, msg } = fieldValidateReport;
-
-        if (isValid) {
-            return '';
-        }
+        if (!level)
+            level = validator.getDefaultLevel();
 
         let MessageTag = <Message style={style} 
                             className={tools.classNames(messageCSS.msg, level && messageCSS[level], className)}

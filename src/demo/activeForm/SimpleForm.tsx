@@ -1,5 +1,6 @@
 import * as React from "react";
 import { ActiveForm, Input, Field, Textarea, ValidateMessage, Button, FormItem, Toast, CheckboxItems, RadioItems } from "../..";
+import { Report } from "../../validate/Validator";
 
 export default class SimpleForm extends React.PureComponent {
     render() {
@@ -13,7 +14,14 @@ export default class SimpleForm extends React.PureComponent {
             name: ['required', /\d+/, (value) => {
                 return /\d+\w+/.test(value);
             }],
-        }} onSubmit={this.handleSubmit}>{
+        }} 
+        onValidate={() => {
+            let result: Report[] = [];
+
+            result.push({fieldName: 'description', isValid: false, msg: 'onValidate called!'});
+            return result;
+        }}
+        onSubmit={this.handleSubmit}>{
             (args) => {
                 return (
                     <React.Fragment>

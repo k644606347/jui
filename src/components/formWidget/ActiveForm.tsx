@@ -54,7 +54,7 @@ declare namespace ActiveFormType {
         onValid?(e: ValidateReportEvent): void;
         onInvalid?(e: ValidateReportEvent): void;
         onValidating?(e: ValidateReportEvent): void;
-        onValidate?(value: ActiveFormType.Value): Promise<Report> | Report;
+        onValidate?(value: ActiveFormType.Value): Promise<Report[]> | Report[];
         validateRules: ValidateRules;
         // action: string;// TODO
         // method: 'post' | 'get';
@@ -281,14 +281,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
 
         if (!validating) {
             this.setState({ validating: true });
-            this.handleValidating({
-                name,
-                value,
-                action,
-                isValid,
-                validateReport,
-                fieldReportMap,
-            });
+            this.handleValidating({ name, value, action, isValid, validateReport, fieldReportMap });
         }
     }
     private validatePostProcess(result: ActiveFormType.ValidateResult & { action?: ActiveFormType.Action }) {
@@ -319,24 +312,25 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
         ruleKeys.forEach(fieldName => {
             promiseQueue.push(this.validateField(fieldName));
         });
-        promiseQueue.push(this.handleValidate());
+        return Promise.all([
+            Promise.all(promiseQueue),
+            this.handleValidate()
+        ]).then((arr) => {
+            let reports = [...arr[0], ...arr[1]], firstInvalidReport;
 
-        return Promise.all(promiseQueue)
-            .then(reports => {
-                let firstInvalidReport;
-                reports.forEach(report => {
-                    let { fieldName } = report;
-                    if (fieldName)
-                        fieldReportMap[fieldName] = report;
+            reports.forEach(report => {
+                let { fieldName } = report;
+                if (fieldName)
+                    fieldReportMap[fieldName] = report;
 
-                    if (!report.isValid && firstInvalidReport === undefined) {
-                        isValid = false;
-                        firstInvalidReport = report;
-                    }
-                });
-                validateReport = firstInvalidReport || validator.getDefaultReport();
-                return { isValid, validateReport, fieldReportMap};
+                if (!report.isValid && firstInvalidReport === undefined) {
+                    isValid = false;
+                    firstInvalidReport = report;
+                }
             });
+            validateReport = firstInvalidReport || validator.getDefaultReport();
+            return { isValid, validateReport, fieldReportMap};
+        });
     }
     validateField(fieldName: string): Promise<Report> {
         let { validateRules } = this.props,
@@ -414,21 +408,21 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
 
         this.setState(nextState as ActiveFormType.State);
     }
-    private handleValidate(): Promise<Report> {
+    private handleValidate(): Promise<Report[]> {
         let { onValidate } = this.props;
 
         return new Promise((resolve, reject) => {
             if (tools.isFunction(onValidate)) {
                 let result = onValidate(this.getValue()),
                     processResult = result => {
-                        if (tools.isError(result)) {
+                        if (tools.isArray(result)) {
+                            resolve(result.filter(report => validator.isValidReport(report)));
+                        } else if (tools.isError(result)) {
                             reject(result);
-                        } else if (validator.isValidReport(result)) {
-                            resolve(result);
                         } else {
-                            reject(new Error(`无效的校验逻辑，请检查onValidate返回结果是否正确，
+                            reject(new Error(`onValidate只能返回数组，请检查，
                                 当前返回: ${JSON.stringify(result)},
-                                有效的返回: { fieldName: string, isValid: boolean, level: 'error' | 'warn', msg: string}`));
+                                有效的返回: Array<{ fieldName: string, isValid: boolean, level: 'error' | 'warn', msg: string}>`));
                         }
                     }
 
@@ -436,16 +430,18 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
                     result.then(processResult, processResult);
                 } else {
                     processResult(result);
-                    
                 }
             } else {
-                resolve({
-                    isValid: true,
-                    msg: ''
-                });
+                resolve([]);
             }
         });
     }
+    // onValidate() {
+
+    // }
+    // onAfterInit() {
+
+    // }
     // TODO 当瞬间多次触发submit时改如何处理
     submit() {
         let { onSubmit, name } = this.props,
