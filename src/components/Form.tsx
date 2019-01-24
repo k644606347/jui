@@ -4,7 +4,6 @@ import { CSSAttrs } from "../utils/types";
 import formCSS from './Form.scss';
 
 export interface FormProps extends CSSAttrs, React.FormHTMLAttributes<HTMLFormElement> {
-    onSubmit?: (e: React.FormEvent) => void;
 }
 const tools = Tools.getInstance();
 export default class Form extends React.PureComponent<FormProps> {
@@ -30,7 +29,7 @@ export default class Form extends React.PureComponent<FormProps> {
             </form>
         );
     }
-    private handleSubmit(e: React.FormEvent) {
+    private handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         let { onSubmit } = this.props;
 
         onSubmit && onSubmit(e);

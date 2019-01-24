@@ -8,6 +8,7 @@ import Widget, { FormWidgetChangeEvent, FormWidgetProps } from "./Widget";
 import { CheckboxChangeEvent } from "../Checkbox";
 import { RadioChangeEvent } from "../Radio";
 import { FieldChangeEvent, FieldBlurEvent } from "./Field";
+import activeFormCSS from './ActiveForm.scss';
 
 declare namespace ActiveFormType {
     type Value = {[k in string]: any};
@@ -27,9 +28,11 @@ declare namespace ActiveFormType {
         name: string;
         value: ActiveFormType.Value;
     }
-    interface SubmitEvent extends Event {}
+    interface SubmitEvent extends Event {
+        preventDefault: AnyFunction;
+    }
     interface ChangeEvent extends Event {}
-    
+
     interface ValidateReportEvent extends Event, ValidateResult {
         action?: ActiveFormType.Action;
     }
@@ -44,6 +47,11 @@ declare namespace ActiveFormType {
     }
     interface Props extends CSSAttrs {
         name: string;
+        action?: string;
+        method?: 'post' | 'get';
+        target?: string;
+        acceptCharset?: string;
+        encType?: string;
         initialValue: ActiveFormType.Value;
         children?(e: RenderChildrenEvent): React.ReactNode;
         validateOnChange: boolean;
@@ -56,15 +64,6 @@ declare namespace ActiveFormType {
         onValidating?(e: ValidateReportEvent): void;
         onValidate?(value: ActiveFormType.Value): Promise<Report[]> | Report[];
         validateRules: ValidateRules;
-        // action: string;// TODO
-        // method: 'post' | 'get';
-        // acceptCharset?: string;
-        // action?: string;
-        // autoComplete?: string;
-        // encType?: string;
-        // method?: string;
-        // noValidate?: boolean;
-        // target?: string;
     }
     interface State {
         parsedInitialValue: ActiveFormType.Value;
@@ -91,6 +90,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
     readonly state: ActiveFormType.State;
     private readonly fields: React.ReactInstance[] = [];
     private readonly widgets: Array<React.Component<FormWidgetProps> & Widget> = [];
+    private formRef = React.createRef<HTMLFormElement>();
     constructor(props: ActiveFormType.Props) {
         super(props);
 
@@ -116,34 +116,48 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
     }
     render() {
         let { props, state } = this,
-            { name, children, validateRules } = props,
-            { value, validating, isValid, validateReport, fieldReportMap, submitting } = state;
+            { name, children, validateRules, action, method, target } = props,
+            { value, validating, isValid, validateReport, fieldReportMap, submitting } = state,
+            formProps = { name, action, method, target };
 
         console.log('ActiveForm rerender', JSON.stringify(this.state));
         let UnwrappedElement = children
             ? children({
                     ...state,
-                    handleChange: this.handleFieldChange, 
+                    handleChange: this.handleFieldChange,
                     handleSubmit: this.handleSubmit,
                     handleReset: this.handleReset,
                 })
             : '';
-            
+
         return (
-            <ActiveFormContext.Provider value={{
-                value,
-                validating,
-                isValid,
-                validateReport,
-                fieldReportMap,
-                submitting,
-                onFieldMount: this.handleFieldMount,
-                onFieldChange: this.handleFieldChange,
-                onFieldBlur: this.handleFieldBlur,
-                validateRules: validateRules
-            }}>
-                { UnwrappedElement }
-            </ActiveFormContext.Provider>
+            <div className={activeFormCSS.wrapper}>
+                <ActiveFormContext.Provider value={{
+                    value,
+                    validating,
+                    isValid,
+                    validateReport,
+                    fieldReportMap,
+                    submitting,
+                    onFieldMount: this.handleFieldMount,
+                    onFieldChange: this.handleFieldChange,
+                    onFieldBlur: this.handleFieldBlur,
+                    validateRules: validateRules
+                }}>
+                    { UnwrappedElement }
+                    {action ? 
+                        <form ref={this.formRef} {...formProps} className={activeFormCSS.form}>
+                            {submitting ?
+                                Object.keys(value).map(name => {
+                                    let val = value[name];
+
+                                    return <input name={name} type="hidden" value={JSON.stringify(val)} />
+                                }) : ''
+                            }
+                        </form> : ''
+                    }
+                </ActiveFormContext.Provider>
+            </div>
         );
     }
     private handleFieldMount(instance: any) {
@@ -170,7 +184,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
 
             let rawValue = initialValue[fieldName],
                 widget = this.widgets.find(widget => widget && widget.getName() === fieldName);
-            
+
             if (widget) {
                 parsedInitialValue[fieldName] = widget.parseValue(rawValue);
             } else {
@@ -184,7 +198,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
         let { validateOnChange } = this.props,
             prevValue = this.state.value,
             callback = () => {}, options: ActiveFormType.SetValueOptions = {};
-        
+
         if (tools.isFunction(callbackOrOptions)) {
             callback = callbackOrOptions;
         } else if (tools.isPlainObject(callbackOrOptions)) {
@@ -241,12 +255,12 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
             .catch((error: Error) => {
                 Log.error('[ActiveForm.validate]', error);
                 return {
-                    isValid: false, 
+                    isValid: false,
                     validateReport: {
-                        isValid: false, 
-                        msg: error + '', 
+                        isValid: false,
+                        msg: error + '',
                         level: 'error'
-                    }, 
+                    },
                 } as ActiveFormType.ValidateResult;
             })
             .then(validateResult => {
@@ -254,7 +268,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
             });
     }
     private debounceRunFieldValidate = tools.debounce(this.runFieldValidate, DEBOUNCE_VALIDATE_DELAY);
-    private runFieldValidate(fieldName: string, { action }: { action?: ActiveFormType.Action } = {}) {        
+    private runFieldValidate(fieldName: string, { action }: { action?: ActiveFormType.Action } = {}) {
         this.validatePreProcess();
         return this.validateField(fieldName)
             .catch(error => {
@@ -267,11 +281,11 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
                 } as Report;
             })
             .then(report => {
-                this.validatePostProcess({ 
-                    isValid: report.isValid, 
-                    validateReport: report, 
-                    fieldReportMap: { [fieldName]: report }, 
-                    action 
+                this.validatePostProcess({
+                    isValid: report.isValid,
+                    validateReport: report,
+                    fieldReportMap: { [fieldName]: report },
+                    action
                 });
             });
     }
@@ -296,7 +310,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
                 validateReport,
                 fieldReportMap,
             };
-            
+
         this.updateValidateResult({ isValid, validateReport, fieldReportMap });
 
         isValid ? this.handleValid(validateReportEvent) : this.handleInvalid(validateReportEvent);
@@ -354,11 +368,11 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
         return Promise.all(promiseQueue)
             .then((reportArr: Report[]) => {
                 let firstInvalidReport = reportArr.find(report => !report.isValid),
-                    returnReport = firstInvalidReport ? 
+                    returnReport = firstInvalidReport ?
                         {
                             ...firstInvalidReport,
                             fieldName
-                        } : 
+                        } :
                         {
                             fieldName,
                             isValid: true,
@@ -442,25 +456,39 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
     // onAfterInit() {
 
     // }
-    // TODO 当瞬间多次触发submit时改如何处理
     submit() {
         let { onSubmit, name } = this.props,
-            submitPostProcess = () => {
+            postProcess = (args: AnyObject) => {
+                if (!args.preventDefault) {
+                    this.formRef && this.formRef.current && this.formRef.current.submit();
+                }
                 this.setState({ submitting: false });
-            }
-                
+            };
         this.setState({ submitting: true });
         this.runValidate({ action: 'submit' }).then(() => {
+            let preventDefault = false;
             if (onSubmit) {
-                let result = onSubmit({name, value: this.getValue()});
-            
-                if (result instanceof Promise) {
-                    result.then(submitPostProcess, submitPostProcess);
+                let result = onSubmit({
+                    name,
+                    value: this.getValue(),
+                    preventDefault: () => {
+                        preventDefault = true;
+                    }
+                });
+
+                if (tools.isPromise(result)) {
+                    result
+                        .then(() => {
+                            postProcess({preventDefault});
+                        })
+                        .catch(() => {
+                            postProcess({preventDefault});
+                        });
                 } else {
-                    submitPostProcess();
+                    postProcess({preventDefault});
                 }
             } else {
-                submitPostProcess();
+                postProcess({preventDefault});
             }
         });
     }
