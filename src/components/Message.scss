@@ -1,12 +1,12 @@
 @charset "UTF-8";
 @import './style/Variables.scss';
-
 .wrapper {
     line-height: 1.5;
     color: rgba(0, 0, 0, 0.75);
     margin: 0;
     padding: 5px;
     border-radius: 4px;
+    border: 1px solid transparent;
     display: flex;
 
     .icon {
@@ -22,7 +22,7 @@
     }
 
     &.error {
-        border: 1px solid $error-border-color;
+        border-color: $error-border-color;
         background-color: $error-bg-color;
 
         .icon {
@@ -30,7 +30,7 @@
         }
     }
     &.warn {
-        border: 1px solid $warn-border-color;
+        border-color: $warn-border-color;
         background-color: $warn-bg-color;
 
         .icon {
@@ -38,7 +38,7 @@
         }
     }
     &.info {
-        border: 1px solid $info-border-color;
+        border-color: $info-border-color;
         background-color: $info-bg-color;
 
         .icon {
@@ -46,7 +46,7 @@
         }
     }
     &.success {
-        border: 1px solid $success-border-color;
+        border-color: $success-border-color;
         background-color: $success-bg-color;
         .icon {
             color: $success-color;

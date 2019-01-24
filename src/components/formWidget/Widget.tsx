@@ -3,6 +3,7 @@ import { CSSAttrs, AnyObject } from "../../utils/types";
 import Tools from "../../utils/Tools";
 import { validator, Report } from "../../validate/Validator";
 import DataConvertor, { DataType } from "./stores/DataConvertor";
+import View from "../View";
 
 const tools = Tools.getInstance();
 
@@ -51,7 +52,7 @@ export interface FormWidgetState {
 }
 type Props = FormWidgetProps;
 type State = FormWidgetState;
-export default abstract class Widget<P extends Props = Props, S extends State = State> extends React.PureComponent<P, S> {
+export default abstract class Widget<P extends Props = Props, S extends State = State> extends View<P, S> {
     static convertor = DataConvertor.getInstance();
     static validate(value: any): Promise<Report> {
         return Promise.resolve({...validator.getDefaultReport(), isValid: true});

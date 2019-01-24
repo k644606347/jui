@@ -4,7 +4,7 @@
 .wrapper {
     display: inline-block;
     font-size: $form-font-size;
-    line-height: 34px;
+    padding: 12px 0;
     -webkit-tap-highlight-color: transparent;
     &.required::after {
         margin-left: 3px;

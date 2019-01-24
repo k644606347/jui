@@ -2,15 +2,14 @@
 @import "../style/Variables.scss";
 .wrapper {
     width: 100%;
-    line-height: 34px;
+    border: none;
+    padding: 12px 0;
+    margin: 0;
     font-size: $input-font-size;
     color: $input-color;
-    // padding: 2px 0;
-    border: 0;
-    padding: 0;
-    margin: 0;
     background-color: transparent;
     box-sizing: border-box;
+    resize: none;
     -webkit-tap-highlight-color: transparent;
     -webkit-appearance: none;
     &:focus {

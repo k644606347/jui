@@ -116,7 +116,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
     }
     render() {
         let { props, state } = this,
-            { name, children, validateRules, action, method, target } = props,
+            { name, children, validateRules, className, style, action, method, target } = props,
             { value, validating, isValid, validateReport, fieldReportMap, submitting } = state,
             formProps = { name, action, method, target };
 
@@ -131,7 +131,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
             : '';
 
         return (
-            <div className={activeFormCSS.wrapper}>
+            <div style={style} className={tools.classNames(activeFormCSS.wrapper, className)}>
                 <ActiveFormContext.Provider value={{
                     value,
                     validating,

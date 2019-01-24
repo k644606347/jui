@@ -1,34 +1,36 @@
 @import "../style/Variables.scss";
-
 .msg {
-    margin: 2px 0 5px 0;
+    margin: 0 0 10px 0;
     padding: 5px;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
     &.isValid {
         visibility: hidden;
         display: block;
     }
     &.error {
-        color: $error-color !important;
+        color: $error-color;
         input::placeholder, textarea::placeholder {
-            color: $error-color !important;
+            color: $error-color;
         }
     }
     &.warn {
-        color: $warn-color !important;
+        color: $warn-color;
         input::placeholder, textarea::placeholder {
-            color: $warn-color !important;
+            color: $warn-color;
         }
     }
     &.info {
-        color: $info-color !important;
+        color: $info-color;
         input::placeholder, textarea::placeholder {
-            color: $info-color !important;
+            color: $info-color;
         }
     }
     &.success {
-        color: $success-color !important;
+        color: $success-color;
         input::placeholder, textarea::placeholder {
-            color: $success-color !important;
+            color: $success-color;
         }
     }
 }

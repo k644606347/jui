@@ -21,22 +21,22 @@ export default class SimpleForm extends React.PureComponent {
         onValidate={() => {
             let result: Report[] = [];
 
-            result.push({fieldName: 'description', isValid: false, msg: 'onValidate called!'});
+            // result.push({fieldName: 'description', isValid: false, msg: 'onValidate called!'});
             return result;
         }}
         onSubmit={this.handleSubmit}>{
             (args) => {
                 return (
                     <React.Fragment>
-                        <FormItem label="姓名" field={
+                        <FormItem label="姓名" layout="vertical" field={
                             <Input placeholder="姓名" name="name" />
                         }></FormItem>
                         <ValidateMessage fieldName="name" />
-                        <FormItem label="描述" field={
+                        <FormItem label="描述" layout="vertical" field={
                             <Textarea placeholder="描述" name="description" />
                         }></FormItem>
                         <ValidateMessage fieldName="description" />
-                        <FormItem label="是否学生" field={
+                        <FormItem label="是否学生" layout="vertical" field={
                             <RadioItems name="isStudent" items={[
                                 { label: '是', value: '1' },
                                 { label: '否', value: '0' }

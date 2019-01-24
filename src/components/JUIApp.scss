@@ -1,8 +1,9 @@
+@import './style/Variables.scss';
 .wrapper {
     font-family: 'PingFang SC', 'Helvetica Neue', 'Hiragino Sans GB', Helvetica,
         'Microsoft YaHei', Arial;
     font-size: 14px;
-    line-height: 1.15;
+    line-height: $line-height;
     -webkit-text-size-adjust: 100%; //在iOS中变更横屏后，防止调整字体大小。
     margin: 0;
     // a {

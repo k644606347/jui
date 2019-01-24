@@ -5,6 +5,7 @@ import { CSSAttrs } from "../utils/types";
 import formItemCSS from './FormItem.scss';
 import { ActiveFormContext } from "./formWidget/ActiveFormContext";
 import Field, { FieldProps } from "./formWidget/Field";
+import View from "./View";
 
 interface RenderChildrenEvent {
     component: React.ComponentElement<FieldProps, Field>;
@@ -18,7 +19,7 @@ export interface FormItemProps extends CSSAttrs {
 }
 
 const tools = Tools.getInstance();
-export default class FormItem extends React.PureComponent<FormItemProps> {
+export default class FormItem extends View<FormItemProps> {
     static defaultProps = {
         componentProps: {},
         layout: 'horizontal',

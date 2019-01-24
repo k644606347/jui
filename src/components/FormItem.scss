@@ -1,12 +1,11 @@
 @charset "UTF-8";
 @import "./style/Variables.scss";
-@import "./style/mixins/Hairline.scss";
 
 .wrapper {
     display: flex;
     font-size: $form-font-size;
-    padding: 10px 0;
     background-color: $bg-color;
+    border-bottom: 1px solid $border-color;
     &.horizontal {
         flex-direction: row;
         .label + .formitem-control {
@@ -16,8 +15,8 @@
     &.vertical {
         flex-direction: column;
         .label {
+            padding-bottom: 0;
             font-size: 14px;
-            margin-bottom: 8px;
         }
     }
     .label {
