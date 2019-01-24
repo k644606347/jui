@@ -148,10 +148,10 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
                     {action ? 
                         <form ref={this.formRef} {...formProps} className={activeFormCSS.form}>
                             {submitting ?
-                                Object.keys(value).map(name => {
+                                Object.keys(value).map((name, i) => {
                                     let val = value[name];
 
-                                    return <input name={name} type="hidden" value={JSON.stringify(val)} />
+                                    return <input key={i} name={name} type="hidden" value={JSON.stringify(val)} />
                                 }) : ''
                             }
                         </form> : ''
@@ -265,6 +265,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
             })
             .then(validateResult => {
                 this.validatePostProcess({...validateResult, action});
+                return validateResult;
             });
     }
     private debounceRunFieldValidate = tools.debounce(this.runFieldValidate, DEBOUNCE_VALIDATE_DELAY);
@@ -287,6 +288,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
                     fieldReportMap: { [fieldName]: report },
                     action
                 });
+                return report;
             });
     }
     private validatePreProcess({ action }: { action?: ActiveFormType.Action } = {}) {
@@ -374,9 +376,8 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
                             fieldName
                         } :
                         {
-                            fieldName,
-                            isValid: true,
-                            msg: ''
+                            ...validator.getDefaultReport(),
+                            fieldName
                         };
 
                 return Promise.resolve(returnReport);
@@ -465,7 +466,12 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
                 this.setState({ submitting: false });
             };
         this.setState({ submitting: true });
-        this.runValidate({ action: 'submit' }).then(() => {
+        this.runValidate({ action: 'submit' }).then((validateResult) => {
+            if (!validateResult.isValid) {
+                this.setState({ submitting: false });
+                return;
+            }
+
             let preventDefault = false;
             if (onSubmit) {
                 let result = onSubmit({

@@ -5,7 +5,7 @@ import { Report } from "../../validate/Validator";
 export default class SimpleForm extends React.PureComponent {
     render() {
         return <ActiveForm 
-        // action="http://www.baidu.com"
+        action="http://www.baidu.com"
         method="post"
         // target="top"
         initialValue={{
@@ -51,7 +51,7 @@ export default class SimpleForm extends React.PureComponent {
         }</ActiveForm>
     }
     handleSubmit = (e) => {
-        // e.preventDefault();
+        e.preventDefault();
         Toast.info('submit data' + JSON.stringify(e.value));
     }
 }
