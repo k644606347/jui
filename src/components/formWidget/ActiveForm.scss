@@ -1,8 +1,6 @@
 @import "../style/Variables.scss";
 .wrapper {
     font-size: $form-font-size;
-    border-top: 1px solid $border-color;
-    border-bottom: 1px solid $border-color;
     background-color: $bg-color;
     .form {
         display: none;
