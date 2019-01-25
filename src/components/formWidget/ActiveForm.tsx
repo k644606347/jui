@@ -207,7 +207,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
 
         value = {...prevValue, ...value};
 
-        this.setState({ value }, callback);
+        this.setState({ value, validating: !!validateOnChange }, callback);
         if (validateOnChange) {
             if (options.debounceValidate) {
                 this.debounceRunValidate({ action: 'change' });
@@ -234,7 +234,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
 
         value = {...value, [fieldName]: fieldValue};
 
-        this.setState({ value }, callback);
+        this.setState({ value, validating: !!validateOnChange }, callback);
         if (validateOnChange) {
             if (options.debounceValidate) {
                 this.debounceRunFieldValidate(fieldName, { action: 'change' });
