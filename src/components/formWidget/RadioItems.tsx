@@ -1,7 +1,7 @@
 import Widget, { FormWidgetProps, FormWidgetChangeEvent } from "./Widget";
 import * as React from "react";
 import Tools from "../../utils/Tools";
-import Radio, { RadioChangeEvent, RadioProps } from "../Radio";
+import Radio, { RadioProps } from "../Radio";
 import cm from './RadioItems.scss';
 import { DataType } from "./stores/DataConvertor";
 interface RadioItem extends RadioProps {
@@ -20,7 +20,6 @@ class RadioItems extends Widget<RadioItemsProps> {
         items: [],
         value: '',
     }
-    widgetName = 'radioItems';
     dataType: DataType = 'string';
     render() {
         let { name, items, value, className, style, disabled, readOnly, theme } = this.props;
@@ -44,10 +43,10 @@ class RadioItems extends Widget<RadioItemsProps> {
 
         )
     }
-    handleChange(e: RadioChangeEvent) {
+    handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         let { onChange } = this.props;
 
-        onChange && onChange(this.buildEvent({value: e.value}));
+        onChange && onChange(this.buildEvent({value: e.target.value}));
     }
 }
 

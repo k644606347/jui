@@ -28,11 +28,11 @@ export default class SimpleForm extends React.PureComponent {
             (args) => {
                 return (
                     <React.Fragment>
-                        <FormItem label="姓名" layout="vertical" field={
-                            <Input placeholder="姓名" name="name" />
+                        <FormItem floatingLabel={true} label="姓名" layout="vertical" field={
+                            <Input autoFocus={true} placeholder="姓名" name="name" />
                         }></FormItem>
                         <ValidateMessage fieldName="name" />
-                        <FormItem label="描述" layout="vertical" field={
+                        <FormItem floatingLabel={true} label="描述" layout="vertical" field={
                             <Textarea placeholder="描述" name="description" />
                         }></FormItem>
                         <ValidateMessage fieldName="description" />

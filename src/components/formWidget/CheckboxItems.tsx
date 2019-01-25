@@ -1,5 +1,5 @@
 import Widget, { FormWidgetProps } from "./Widget";
-import Checkbox, { CheckboxProps, CheckboxChangeEvent } from "../Checkbox";
+import Checkbox, { CheckboxProps } from "../Checkbox";
 import * as React from "react";
 import Tools from "../../utils/Tools";
 import { CSSAttrs } from "../../utils/types";
@@ -24,7 +24,6 @@ class CheckboxItems extends Widget<CheckboxItemsProps> {
         items: [],
         value: [],
     }
-    widgetName = 'checkboxItems';
     dataType: DataType = 'array';
     private checkboxs: Array<React.ReactElement<CheckboxProps>> = [];
     constructor(props: CheckboxItemsProps) {
@@ -61,8 +60,9 @@ class CheckboxItems extends Widget<CheckboxItemsProps> {
         this.checkboxs.push(checkboxEl);
         return <div className={cm.item} key={key}>{ checkboxEl }</div>;
     }
-    handleChange(e: CheckboxChangeEvent) {
-        let { onChange } = this.props,
+    handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+        let { target } = e,
+            { onChange } = this.props,
             checkboxs = this.checkboxs,
             nextValue: Array<CheckboxItem['value']> = [];
             
@@ -70,8 +70,8 @@ class CheckboxItems extends Widget<CheckboxItemsProps> {
             let { id, value = '', checked } = checkbox.props;
 
             value = String(value);
-            if (id === e.id) {
-                if (e.checked) {
+            if (id === target.id) {
+                if (target.checked) {
                     nextValue.push(value);
                 }
             } else {

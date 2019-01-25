@@ -8,19 +8,9 @@ import { iconRadioBtnOn, iconRadioBtnOff, IconDefinition, iconCheck } from './ic
 import Label from './Label';
 
 const tools = Tools.getInstance();
-export interface RadioChangeEvent {
-    id: string;
-    name: string;
-    value: string;
-    checked: boolean;
-    disabled: boolean;
-    readOnly: boolean;
-    component: string;
-}
 type ThemeType = 'circle' | 'checkmark';
-export interface RadioProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
+export interface RadioProps extends React.InputHTMLAttributes<HTMLInputElement> {
     theme?: ThemeType;
-    onChange?: (e: RadioChangeEvent) => void;
 };
 export interface RadioState {}
 
@@ -77,17 +67,7 @@ export default class Radio extends React.PureComponent<RadioProps> {
         );
     }
     protected handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-        let { value, checked, readOnly, disabled } = e.target,
-            { id, name, onChange } = this.props;
-
-        onChange && onChange({
-            id: id || '',
-            name: name || '',
-            value,
-            checked,
-            readOnly,
-            disabled,
-            component: 'radio',
-        });
+        let { onChange } = this.props;
+        onChange && onChange(e);
     }
 }

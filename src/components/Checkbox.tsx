@@ -8,18 +8,8 @@ import Label from "./Label";
 
 const tools = Tools.getInstance();
 
-export interface CheckboxChangeEvent {
-    id: string;
-    name: string;
-    value: string;
-    checked: boolean;
-    disabled: boolean;
-    readOnly: boolean;
-    component: string;
-}
 type ThemeType = 'circle' | 'square';
-export interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
-    onChange?: (e: CheckboxChangeEvent) => void;
+export interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
     theme: ThemeType;
 };
 export interface CheckboxState {}
@@ -68,17 +58,7 @@ export default class Checkbox extends React.PureComponent<CheckboxProps>{
         );
     }
     protected handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-        let { value, checked, disabled, readOnly } = e.target,
-            { id, name, onChange } = this.props;
-
-        onChange && onChange({
-            id: id || '',
-            name: name || '',
-            value,
-            checked,
-            disabled,
-            readOnly,
-            component: 'checkbox',
-        });
+        let { onChange } = this.props;
+        onChange && onChange(e);
     }
 }

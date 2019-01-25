@@ -4,10 +4,8 @@ import { ActiveFormContext } from "./ActiveFormContext";
 import { validator, Report, RuleParam } from "../../validate/Validator";
 import { CSSAttrs, AnyFunction, AnyObject } from "../../utils/types";
 import Log from "../../utils/Log";
-import Widget, { FormWidgetChangeEvent, FormWidgetProps } from "./Widget";
-import { CheckboxChangeEvent } from "../Checkbox";
-import { RadioChangeEvent } from "../Radio";
-import { FieldChangeEvent, FieldBlurEvent } from "./Field";
+import Widget, { FormWidgetProps } from "./Widget";
+import Field, { FieldChangeEvent, FieldBlurEvent } from "./Field";
 import activeFormCSS from './ActiveForm.scss';
 
 declare namespace ActiveFormType {
@@ -509,43 +507,8 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
     private handleReset() {
         this.reset();
     }
-    private fetchFieldInfoByFieldEvent(e: FieldChangeEvent | FieldBlurEvent) {
-        let targetName: string,
-            targetValue: any;
-
-        if (isWidgetEvent(e)) {// widget event
-            targetName = e.name;
-            targetValue = e.value;
-        } else if (isCheckboxOrRadioEvent(e)) {// checkbox and radio component event
-            targetName = e.name;
-            targetValue = e.checked;
-        } else { // dom event
-            let target = e.target;
-
-            targetName = String(target.name);
-
-            if (target.nodeName === 'INPUT' && (target.type === 'checkbox' || target.type === 'radio')) {
-                targetValue = target.checked;
-            } else {
-                targetValue = target.value;
-            }
-        }
-
-        function isWidgetEvent(event: any): event is FormWidgetChangeEvent {
-            return event.component === 'widget';
-        }
-
-        function isCheckboxOrRadioEvent(event: any): event is CheckboxChangeEvent | RadioChangeEvent {
-            return event.component === 'checkbox' || event.component === 'radio';
-        }
-
-        return {
-            name: targetName,
-            value: targetValue,
-        };
-    }
     private handleFieldChange(e: FieldChangeEvent) {
-        let { name, value } = this.fetchFieldInfoByFieldEvent(e),
+        let { name, value } = Field.getInfoByFieldEvent(e),
             prevValue = this.getValue()[name];
 
         if (prevValue !== value) {
@@ -554,7 +517,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
     }
     private handleFieldBlur(e: FieldBlurEvent) {
         let { validateOnBlur } = this.props,
-            { name } = this.fetchFieldInfoByFieldEvent(e);
+            { name } = Field.getInfoByFieldEvent(e);
         validateOnBlur && this.runFieldValidate(name, { action: 'blur' });
     }
     private handleValid(e: ActiveFormType.ValidateReportEvent) {

@@ -16,7 +16,6 @@ class Input extends Widget<InputProps> {
     static defaultProps = {
         value: ''
     }
-    widgetName = 'input';
     dataType: DataType = 'string';
     constructor(props: InputProps) {
         super(props);

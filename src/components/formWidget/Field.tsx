@@ -1,18 +1,46 @@
 import * as React from "react";
 import { ActiveFormContext, ActiveFormContextType } from "./ActiveFormContext";
 import Widget, { FormWidgetChangeEvent, FormWidgetFocusEvent } from "./Widget";
-import { CheckboxChangeEvent } from "../Checkbox";
-import { RadioChangeEvent } from "../Radio";
 import { AnyObject } from "../../utils/types";
 import Tools from "../../utils/Tools";
 
 export interface FieldProps {
     children: JSX.Element;
 }
-export type FieldChangeEvent = React.ChangeEvent<any> | FormWidgetChangeEvent | CheckboxChangeEvent | RadioChangeEvent;
+export type FieldChangeEvent = React.ChangeEvent<any> | FormWidgetChangeEvent;
+export type FieldFocusEvent = FormWidgetFocusEvent | React.FocusEvent<any>;
 export type FieldBlurEvent = FormWidgetFocusEvent | React.FocusEvent<any>;
 const tools = Tools.getInstance();
 class Field extends React.PureComponent<FieldProps>{
+    static getInfoByFieldEvent(e: FieldChangeEvent | FieldFocusEvent | FieldBlurEvent) {
+        let result: AnyObject = {
+            eventType: e.type,
+        };
+
+        if (isWidgetEvent(e)) {// widget event
+            result = {
+                name: e.name,
+                value: e.value,
+                widgetName: e.widgetName,
+            };
+        } else {// dom event
+            let target = e.target;
+
+            result.name = target.name;
+
+            if (target.nodeName === 'INPUT' && (target.type === 'checkbox' || target.type === 'radio')) {
+                result.value = target.checked;
+            } else {
+                result.value = target.value;
+            }
+        }
+
+        function isWidgetEvent(event: any): event is FormWidgetChangeEvent {
+            return event.component === 'widget';
+        }
+
+        return result;
+    }
     private activeformContext: ActiveFormContextType;
     private fieldInstance: React.ReactInstance;
     constructor(props) {

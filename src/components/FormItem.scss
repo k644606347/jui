@@ -15,8 +15,18 @@
     &.vertical {
         flex-direction: column;
         .label {
-            padding-bottom: 0;
+            margin: 10px 0 3px 0;
             font-size: 14px;
+            &.floating-label {
+                font-size: $form-font-size;
+                transform: translate3d(0, 33px, 0);
+                transform-origin: left top;
+                transition: transform 150ms ease-in-out;
+                pointer-events: none;
+                &.field-focused {
+                    transform: translate3d(0,0,0) scale(.8);
+                }
+            }
         }
     }
     .label {

@@ -4,22 +4,28 @@ import Label, { LabelProps } from "./Label";
 import { CSSAttrs } from "../utils/types";
 import formItemCSS from './FormItem.scss';
 import { ActiveFormContext } from "./formWidget/ActiveFormContext";
-import Field, { FieldProps } from "./formWidget/Field";
+import Field, { FieldProps, FieldFocusEvent, FieldBlurEvent } from "./formWidget/Field";
 import View from "./View";
 
 interface RenderChildrenEvent {
-    component: React.ComponentElement<FieldProps, Field>;
-    label?: React.ComponentElement<LabelProps, Label>;
+    component: React.ComponentElement<FieldProps, Field> & Field;
+    label?: React.ComponentElement<LabelProps, Label> & Label;
 }
 export interface FormItemProps extends CSSAttrs {
     field: JSX.Element;
     label?: any;
     children?(e: RenderChildrenEvent): React.ReactNode;
     layout?: 'vertical' | 'horizontal';
+    floatingLabel?: boolean;
+}
+
+export interface FormItemState {
+    fieldFocused: boolean;
+    fieldValue: any;
 }
 
 const tools = Tools.getInstance();
-export default class FormItem extends View<FormItemProps> {
+export default class FormItem extends View<FormItemProps, FormItemState> {
     static defaultProps = {
         componentProps: {},
         layout: 'horizontal',
@@ -27,15 +33,30 @@ export default class FormItem extends View<FormItemProps> {
     private activeFormContext;
     constructor(props: FormItemProps) {
         super(props);
+
+        let { field } = this.props;
+
+        this.state = {
+            fieldFocused: !!field.props.autoFocus,
+            fieldValue: field.props.value || '',
+        };
+        this.handleFieldFocus = this.handleFieldFocus.bind(this);
+        this.handleFieldBlur = this.handleFieldBlur.bind(this);
     }
     render() {
-        let { props } = this,
-            { className, style, label, field: field, layout, children } = props,
+        let { props, state } = this,
+            { className, style, label, field, floatingLabel, layout, children } = props,
+            { fieldFocused, fieldValue } = state,
             fieldNode = field;
 
-        if (fieldNode.type !== Field) {
-            fieldNode = <Field>{fieldNode}</Field>;
+        if (floatingLabel) {
+            layout = 'vertical';
+            fieldNode = React.cloneElement(fieldNode, {
+                onFocus: this.handleFieldFocus,
+                onBlur: this.handleFieldBlur,
+            });
         }
+        fieldNode = <Field>{fieldNode}</Field>;
         return (
             <ActiveFormContext.Consumer>{
                 context => {
@@ -45,8 +66,16 @@ export default class FormItem extends View<FormItemProps> {
                     if (label === undefined || label === null || label === false) {
                         labelNode = '';
                     } else {
-                        let required = this.isRequired();
-                        labelNode = <Label required={required} className={formItemCSS.label}>{label}</Label>;
+                        let required = this.isRequired(),
+                            classList = [formItemCSS.label];
+
+                        if (floatingLabel) {
+                            classList.push(formItemCSS.floatingLabel);
+                            if (fieldFocused || fieldValue !== '') {
+                                classList.push(formItemCSS.fieldFocused);
+                            }
+                        }
+                        labelNode = <Label required={required} className={tools.classNames(classList)}>{label}</Label>;
                     }
 
                     return (
@@ -92,5 +121,14 @@ export default class FormItem extends View<FormItemProps> {
         }
 
         return required;
+    }
+    handleFieldFocus(e: FieldFocusEvent) {
+        let info = Field.getInfoByFieldEvent(e);
+
+        this.setState({ fieldFocused: true, fieldValue: info.value });
+    }
+    handleFieldBlur(e: FieldBlurEvent) {
+        let info = Field.getInfoByFieldEvent(e);
+        this.setState({ fieldFocused: false, fieldValue: info.value });
     }
 }

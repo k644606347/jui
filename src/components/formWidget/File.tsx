@@ -10,7 +10,6 @@ export default class File extends Widget<FileProps> {
     static defaultProps = {
         multiple: true
     };
-    widgetName = "file";
     dataType: DataType = "string";
     inputRef = React.createRef<HTMLInputElement>();
     constructor(props) {

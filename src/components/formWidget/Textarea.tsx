@@ -18,7 +18,6 @@ class Textarea extends Widget<TextareaProps> {
     static defaultProps = {
         value: ''
     }
-    widgetName = 'textarea';
     dataType: DataType = 'string';
     constructor(props: TextareaProps) {
         super(props);
@@ -47,5 +46,4 @@ class Textarea extends Widget<TextareaProps> {
     }
 }
 
-// export default bindActiveForm<typeof Textarea, TextareaProps>(Textarea);
 export default Textarea;
