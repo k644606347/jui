@@ -81,7 +81,7 @@ export class StatefulToast extends React.PureComponent<any, ToastState> {
         )
     }
     componentDidMount() {
-        Factory.toastObj = this;
+        Toast.toastObj = this;
 
         this.toggleDisplay();
     }
@@ -133,7 +133,7 @@ interface Factory {
     icon: AnyFunction;
 }
 
-const Factory: Factory = {
+const Toast: Factory = {
     toastObj: undefined,
     isShow() {
         return Boolean(this.toastObj && this.toastObj.state.show);
@@ -218,4 +218,4 @@ const Factory: Factory = {
         }
     }
 }
-export default Factory;
+export default Toast;

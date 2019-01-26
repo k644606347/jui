@@ -11,11 +11,11 @@ export default class Tools {
         // logic
     }
 
-    isPlainObject(v: any): v is {[k in string | number | symbol]: any} {
+    isPlainObject(v: any): v is AnyObject {
         return Object.prototype.toString.call(v) === '[object Object]';
     }
 
-    isEmptyObject(v: any): v is {[k in string | number | symbol]: any} {
+    isEmptyObject(v: any): v is AnyObject {
         if (!this.isPlainObject(v)) {
             return false;
         }

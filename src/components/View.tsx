@@ -13,7 +13,7 @@ class View<P = {}, S = {}, SS = any> extends React.PureComponent<P, S, SS> {
                 let dom = ReactDOM.findDOMNode(this);
                 
                 if (dom instanceof Element) {
-                    dom.setAttribute('jui-c', this.constructor.name);
+                    dom.setAttribute('jui-component', this.constructor.name);
                 }
                 componentDidMount();
             }

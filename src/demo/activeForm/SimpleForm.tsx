@@ -29,11 +29,11 @@ export default class SimpleForm extends React.PureComponent {
                 return (
                     <React.Fragment>
                         <FormItem floatingLabel={true} label="姓名" layout="vertical" field={
-                            <Input autoFocus={true} placeholder="姓名" name="name" />
+                            <Input autoFocus={true} name="name" />
                         }></FormItem>
                         <ValidateMessage fieldName="name" />
                         <FormItem floatingLabel={true} label="描述" layout="vertical" field={
-                            <Textarea placeholder="描述" name="description" />
+                            <Textarea name="description" />
                         }></FormItem>
                         <ValidateMessage fieldName="description" />
                         <FormItem label="是否学生" layout="vertical" field={
@@ -43,8 +43,8 @@ export default class SimpleForm extends React.PureComponent {
                             ]}></RadioItems>
                         }></FormItem>
                         <ValidateMessage fieldName="isStudent" />
-                        <Button onClick={args.handleSubmit}>submit!</Button>
-                        <Button onClick={args.handleReset}>reset!</Button>
+                        <Button type="primary" disabled={!args.isValid} onClick={args.handleSubmit}>submit!</Button>
+                        <Button disabled={!args.isValid} onClick={args.handleReset}>reset!</Button>
                     </React.Fragment>
                 )
             }

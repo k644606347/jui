@@ -7,6 +7,7 @@ import Log from "../../utils/Log";
 import Widget, { FormWidgetProps } from "./Widget";
 import Field, { FieldChangeEvent, FieldBlurEvent } from "./Field";
 import activeFormCSS from './ActiveForm.scss';
+import Toast from "../Toast";
 
 declare namespace ActiveFormType {
     type Value = {[k in string]: any};
@@ -15,8 +16,8 @@ declare namespace ActiveFormType {
     interface ValidateRules {[k: string]: RuleParam | RuleParam[]}
     interface ValidateResult {
         isValid: boolean;
-        validateReport: Report;
         fieldReportMap?: ActiveFormType.FieldReportMap;
+        validateError?: Error;
     }
     interface SetValueOptions {
         success?: AnyFunction;
@@ -54,6 +55,7 @@ declare namespace ActiveFormType {
         children?(e: RenderChildrenEvent): React.ReactNode;
         validateOnChange: boolean;
         validateOnBlur: boolean;
+        validateRules: ValidateRules;
         onSubmit?(e: SubmitEvent): void | Promise<any>;
         onReset?(): void;
         // onChange?(e: ActiveFormChangeEvent): void;
@@ -61,7 +63,6 @@ declare namespace ActiveFormType {
         onInvalid?(e: ValidateReportEvent): void;
         onValidating?(e: ValidateReportEvent): void;
         onValidate?(value: ActiveFormType.Value): Promise<Report[]> | Report[];
-        validateRules: ValidateRules;
     }
     interface State {
         parsedInitialValue: ActiveFormType.Value;
@@ -69,8 +70,8 @@ declare namespace ActiveFormType {
         submitting: boolean;
         validating: boolean;
         isValid: boolean;
-        validateReport: Report;
         fieldReportMap: ActiveFormType.FieldReportMap;
+        validateError?: Error;
     }
 }
 export { ActiveFormType };
@@ -98,7 +99,6 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
             submitting: false,
             validating: false,
             isValid: true,
-            validateReport: validator.getDefaultReport(),
             fieldReportMap: {}
         };
         // this.handleChange = this.handleChange.bind(this);
@@ -115,7 +115,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
     render() {
         let { props, state } = this,
             { name, children, validateRules, className, style, action, method, target } = props,
-            { value, validating, isValid, validateReport, fieldReportMap, submitting } = state,
+            { value, validating, isValid, fieldReportMap, validateError, submitting } = state,
             formProps = { name, action, method, target };
 
         console.log('ActiveForm rerender', JSON.stringify(this.state));
@@ -134,13 +134,13 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
                     value,
                     validating,
                     isValid,
-                    validateReport,
                     fieldReportMap,
+                    validateError,
                     submitting,
+                    validateRules,
                     onFieldMount: this.handleFieldMount,
                     onFieldChange: this.handleFieldChange,
                     onFieldBlur: this.handleFieldBlur,
-                    validateRules: validateRules
                 }}>
                     { UnwrappedElement }
                     {action ? 
@@ -166,7 +166,8 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
     }
     componentDidMount() {
         let { initialValue } = this.props,
-            parsedInitialValue: ActiveFormType.Value = {};
+            parsedInitialValue: ActiveFormType.Value = {},
+            fieldReportMap = {};
 
         this.fields.forEach((field: any) => {
             let fieldName;
@@ -188,9 +189,11 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
             } else {
                 parsedInitialValue[fieldName] = (rawValue !== undefined && rawValue !== null ? rawValue : '');
             }
+
+            fieldReportMap[fieldName] = validator.getDefaultReport();
         });
 
-        this.setState({ value: parsedInitialValue, parsedInitialValue });
+        this.setState({ value: parsedInitialValue, parsedInitialValue, fieldReportMap });
     }
     setValue(value: ActiveFormType.Value, callbackOrOptions?: AnyFunction | ActiveFormType.SetValueOptions) {
         let { validateOnChange } = this.props,
@@ -250,17 +253,6 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
     private runValidate({ action }: { action?: ActiveFormType.Action } = {}) {
         this.validatePreProcess();
         return this.validate()
-            .catch((error: Error) => {
-                Log.error('[ActiveForm.validate]', error);
-                return {
-                    isValid: false,
-                    validateReport: {
-                        isValid: false,
-                        msg: error + '',
-                        level: 'error'
-                    },
-                } as ActiveFormType.ValidateResult;
-            })
             .then(validateResult => {
                 this.validatePostProcess({...validateResult, action});
                 return validateResult;
@@ -270,19 +262,21 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
     private runFieldValidate(fieldName: string, { action }: { action?: ActiveFormType.Action } = {}) {
         this.validatePreProcess();
         return this.validateField(fieldName)
-            .catch(error => {
-                Log.error('[ActiveForm.validateField]', error);
-
-                return {
-                    isValid: false,
-                    msg: error + '',
-                    level: 'error'
-                } as Report;
-            })
             .then(report => {
+                let { fieldReportMap } = this.state,
+                    isValid = true;
+
+                if (!report.isValid) {
+                    isValid = false;
+                } else {
+                    for (let name in fieldReportMap) {
+                        if (name !== report.fieldName && !fieldReportMap[name].isValid) {
+                            isValid = false; break;
+                        }
+                    }
+                }
                 this.validatePostProcess({
-                    isValid: report.isValid,
-                    validateReport: report,
+                    isValid,
                     fieldReportMap: { [fieldName]: report },
                     action
                 });
@@ -291,59 +285,47 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
     }
     private validatePreProcess({ action }: { action?: ActiveFormType.Action } = {}) {
         let { name } = this.props,
-            { value, validating, isValid, validateReport, fieldReportMap } = this.state;
+            { value, validating, isValid, fieldReportMap, validateError } = this.state;
 
         if (!validating) {
             this.setState({ validating: true });
-            this.handleValidating({ name, value, action, isValid, validateReport, fieldReportMap });
+            this.handleValidating({ name, value, action, isValid, fieldReportMap, validateError });
         }
-    }
-    private validatePostProcess(result: ActiveFormType.ValidateResult & { action?: ActiveFormType.Action }) {
-        let { isValid, validateReport, fieldReportMap, action } = result,
-            { name } = this.props,
-            { value } = this.state,
-            validateReportEvent = {
-                name,
-                value,
-                action,
-                isValid,
-                validateReport,
-                fieldReportMap,
-            };
-
-        this.updateValidateResult({ isValid, validateReport, fieldReportMap });
-
-        isValid ? this.handleValid(validateReportEvent) : this.handleInvalid(validateReportEvent);
     }
     validate(): Promise<ActiveFormType.ValidateResult> {
         let { validateRules } = this.props,
-            ruleKeys = validateRules ? Object.keys(validateRules) : [],
             promiseQueue: Array<Promise<Report>> = [],
-            validateReport,
-            fieldReportMap = {},
-            isValid = true;
+            fieldReportMap = {};
 
-        ruleKeys.forEach(fieldName => {
+        for (let fieldName in validateRules) {
             promiseQueue.push(this.validateField(fieldName));
-        });
+        }
         return Promise.all([
             Promise.all(promiseQueue),
-            this.handleValidate()
+            this.handleValidate().catch((e: Error) => {
+                Log.error(e);
+                return e;
+            })
         ]).then((arr) => {
-            let reports = [...arr[0], ...arr[1]], firstInvalidReport;
+            let fieldReports = arr[0], validateReports = arr[1],
+                reports = [...fieldReports, ...tools.isArray(validateReports) ? validateReports : []],
+                isValid = true,
+                validateError;
 
             reports.forEach(report => {
                 let { fieldName } = report;
                 if (fieldName)
                     fieldReportMap[fieldName] = report;
-
-                if (!report.isValid && firstInvalidReport === undefined) {
+                
+                if (!report.isValid && isValid) {
                     isValid = false;
-                    firstInvalidReport = report;
                 }
             });
-            validateReport = firstInvalidReport || validator.getDefaultReport();
-            return { isValid, validateReport, fieldReportMap};
+            if (tools.isError(validateReports)) {
+                isValid = false;
+                validateError = validateReports;
+            }
+            return { isValid, fieldReportMap, validateError };
         });
     }
     validateField(fieldName: string): Promise<Report> {
@@ -368,66 +350,67 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
         return Promise.all(promiseQueue)
             .then((reportArr: Report[]) => {
                 let firstInvalidReport = reportArr.find(report => !report.isValid),
-                    returnReport = firstInvalidReport ?
-                        {
-                            ...firstInvalidReport,
-                            fieldName
-                        } :
-                        {
-                            ...validator.getDefaultReport(),
-                            fieldName
-                        };
+                    report = firstInvalidReport ? firstInvalidReport : validator.getDefaultReport();
 
-                return Promise.resolve(returnReport);
+                report.fieldName = fieldName;
+                return report;
             }).catch((result: Report | Error) => {
                 if (tools.isError(result)) {
-                    throw result;
-                } else {
-                    return Promise.resolve({
-                        ...result,
+                    Log.error('[ActiveForm.validateField]', result);
+
+                    return {
+                        isValid: false,
+                        msg: result + '',
+                        level: 'error',
                         fieldName,
-                    })
+                    } as Report;
+                } else {
+                    result.fieldName = fieldName;
+                    return result;
                 }
             });
     }
-    private updateValidateResult(validateResult: ActiveFormType.ValidateResult) {
-        let { validateReport, fieldReportMap } = this.state,
-            nextFieldReportMap = {...fieldReportMap},
-            needUpdateReportMap = false,
+    private validatePostProcess(validateResult: ActiveFormType.ValidateResult & { action?: ActiveFormType.Action }) {
+        let { name } = this.props,
+            { value } = this.state,
+            { isValid, fieldReportMap, validateError, action } = validateResult,
             nextState: Partial<ActiveFormType.State> = {
-                isValid: validateResult.isValid,
+                isValid,
                 validating: false,
+                validateError,
+                fieldReportMap: { ...this.state.fieldReportMap, ...fieldReportMap },
             };
-
-        if (!validator.compareReport(validateResult.validateReport, validateReport)) {
-            nextState.validateReport = validateResult.validateReport;
-        }
-        for (let fieldName in validateResult.fieldReportMap) {
-            let report = validateResult.fieldReportMap[fieldName],
-                prevReport = fieldReportMap[fieldName];
-
-            if (!tools.isPlainObject(report)) {
-                continue;
-            }
-            if (!tools.isPlainObject(prevReport) || !validator.compareReport(report, prevReport)) {
-                needUpdateReportMap = true;
-
-                nextFieldReportMap[fieldName] = report;
-            }
-        }
-        if (needUpdateReportMap) {
-            nextState.fieldReportMap = nextFieldReportMap;
-        }
-
         this.setState(nextState as ActiveFormType.State);
+
+        let validateReportEvent = {
+            name,
+            value,
+            action,
+            isValid,
+            fieldReportMap: nextState.fieldReportMap,
+            validateError,
+        };
+
+        isValid ? this.handleValid(validateReportEvent) : this.handleInvalid(validateReportEvent);
     }
     private handleValidate(): Promise<Report[]> {
         let { onValidate } = this.props;
 
         return new Promise((resolve, reject) => {
             if (tools.isFunction(onValidate)) {
-                let result = onValidate(this.getValue()),
-                    processResult = result => {
+                let result, catched = false;
+                
+                try {
+                    result = onValidate(this.getValue());
+                } catch(e) {
+                    reject(e);
+                    catched = true;
+                }
+
+                if (catched)
+                    return;
+
+                let processResult = result => {
                         if (tools.isArray(result)) {
                             resolve(result.filter(report => validator.isValidReport(report)));
                         } else if (tools.isError(result)) {
