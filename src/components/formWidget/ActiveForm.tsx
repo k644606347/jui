@@ -7,7 +7,6 @@ import Log from "../../utils/Log";
 import Widget, { FormWidgetProps } from "./Widget";
 import Field, { FieldChangeEvent, FieldBlurEvent } from "./Field";
 import activeFormCSS from './ActiveForm.scss';
-import Toast from "../Toast";
 
 declare namespace ActiveFormType {
     type Value = {[k in string]: any};

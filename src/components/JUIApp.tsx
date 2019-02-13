@@ -2,7 +2,6 @@ import * as React from 'react';
 import { CSSAttrs } from '../utils/types';
 import Tools from '../utils/Tools';
 import css from './JUIApp.scss';
-import { StatefulToast } from './Toast';
 
 interface Props extends CSSAttrs {
     children: any;
@@ -14,7 +13,6 @@ export default (props: Props) => {
 
     return (
         <div className={tools.classNames(css.wrapper, className)} style={style}>
-            <StatefulToast />
             {children}
         </div>
     );

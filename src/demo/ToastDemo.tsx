@@ -24,6 +24,71 @@ export default class ToastDemo extends React.PureComponent<any, any>{
                                 content: '纯文本toast，默认3秒消失'
                             })
                         }>纯文本Toast</Button>
+                        <Button onClick={
+                            e => Toast.show({
+                                content: '这是顶部toast',
+                                position: 'top',
+                                duration: 5000
+                            })
+                        }>顶部Toast</Button>
+                        <Button onClick={
+                            e => Toast.show({
+                                content: '这是底部toast',
+                                position: 'bottom',
+                                duration: 5000,
+                                onClose: () => {
+                                    console.log('Toast onClose event!');
+                                }
+                            })
+                        }>底部Toast</Button>
+                        <Button onClick={
+                            e => Toast.show({
+                                content: '这是bottom toast',
+                                position: 'bottom',
+                                duration: 5000,
+                                onClose: () => {
+                                    console.log('Toast onClose event!');
+                                },
+                                animate: false,
+                            })
+                        }>无动画效果</Button>
+                        <Button onClick={
+                            e => Toast.show({
+                                content: '这是middle toast',
+                                position: 'middle',
+                                duration: 5000,
+                                onClose: () => {
+                                    console.log('Toast onClose event!');
+                                },
+                                animate: false,
+                            })
+                        }>无动画效果2</Button>
+                        <Button onClick={
+                            e => Toast.show({
+                                content: '这是top toast',
+                                position: 'top',
+                                duration: 5000,
+                                onClose: () => {
+                                    console.log('Toast onClose event!');
+                                },
+                                animate: false,
+                            })
+                        }>无动画效果3</Button>
+                        <Button onClick={
+                            e => Toast.show({
+                                content: '这是top toast',
+                                position: 'top',
+                                duration: 5000,
+                                onClose: () => {
+                                    console.log('Toast onClose event!');
+                                },
+                                animate: false,
+                                overlay: true
+                            })
+                        }>无动画效果4</Button>
+                        <Button onClick={
+                            e => Toast.loading('', 0)
+                        }>只有图标</Button>
                         <Button type={'primary'} onClick={
                             e => Toast.info('info', 0)
                         }>info Toast</Button>

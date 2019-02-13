@@ -1,4 +1,3 @@
-// import顺序可能会影响<style>的注入顺序，继而影响css优先级
 import JUIApp from './components/JUIApp';
 
 import TouchFeedback from "./components/TouchFeedback";
@@ -14,7 +13,7 @@ import CheckboxItems from "./components/formWidget/CheckboxItems";
 
 import Message from "./components/Message";
 import NavBar from "./components/NavBar";
-import Toast from "./components/Toast";
+import ToastComponent from "./components/Toast";
 
 import Field from "./components/formWidget/Field";
 import FormItem from "./components/FormItem";
@@ -60,5 +59,5 @@ export {
     CheckboxItems,
     NavBar,
     Modal,
-    Toast,
+    ToastComponent as Toast,
 }

@@ -1,0 +1,44 @@
+@import './style/Variables.scss';
+
+.toast {
+    position: fixed;
+    z-index: $toast-zindex;
+    box-sizing: border-box;
+    top: 50%; // TODO 临时方案：通过left 50% + trnaslateX -50%来实现居中效果，但缺陷是内容较多时无法自动填充到100%宽度, 应使用其他方案替代
+    left: 50%;
+    max-width: 80vw;
+    transform: translate(-50%, -50%);
+    color: $text-inverse-color;
+    background-color: $toast-bg-color;
+    padding: 15px;
+    border-radius: 8px;
+    opacity: 0;
+    .icon {
+        font-size: 45px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .icon ~ .content {
+        margin-top: 5px;
+    }
+    &.show {
+        opacity: 1;
+    }
+    &.transition {
+        transition: opacity .12s ease-in;
+    }
+}
+.overlay {
+    background-color: $toast-overlay-bg-color;
+    z-index: $toast-zindex - 1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: none;
+}
+.show ~ .overlay {
+    display: block;
+}

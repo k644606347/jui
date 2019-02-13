@@ -39,7 +39,8 @@ $success-color: #52c41a;
 $success-border-color: #b7eb8f;
 $success-bg-color: #f6ffed;
 
-$toast-bg-color: rgba(58, 58, 58, 0.9);
+$toast-light-bg-color: rgb(242, 242, 242);
+$toast-dark-bg-color: rgba(58, 58, 58, 0.9);
 $toast-overlay-bg-color: rgba(58, 58, 58, 0.4);
 // // 透明度
 // $opacity-disabled: 0.3;   // switch checkbox radio 等组件禁用的透明度
@@ -181,7 +182,7 @@ $input-color: #000;
 // z-index
 $progress-zindex: 2000;
 $popover-zindex: 1999;
-$toast-zindex: 1999;
+$toast-zindex: 2999;
 // $action-sheet-zindex: 1000; // actonsheet 会放到 popup / modal 中
 // $picker-zindex: 1000;
 // $popup-zindex: 999;

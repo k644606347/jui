@@ -135,7 +135,7 @@ export default class Tools {
             '>': '&gt;',
             '&': '&amp;',
         };
-        return html.replace(/["'&<>]/g, char => htmlEntities[char] || char);
+        return String(html).replace(/["'&<>]/g, char => htmlEntities[char] || char);
     }
 
     bindSelfMethod(methodNames: string[], context: object) {

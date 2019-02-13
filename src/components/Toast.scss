@@ -1,42 +1,92 @@
 @import './style/Variables.scss';
 
-.toast {
+.wrapper {
     position: fixed;
     z-index: $toast-zindex;
-    box-sizing: border-box;
-    top: 50%; // TODO 临时方案：通过left 50% + trnaslateX -50%来实现居中效果，但缺陷是内容较多时无法自动填充到100%宽度, 应使用其他方案替代
-    left: 50%;
-    max-width: 80vw;
-    transform: translate(-50%, -50%);
-    color: $text-inverse-color;
-    background-color: $toast-bg-color;
-    padding: 15px;
-    border-radius: 8px;
-    transition: opacity .12s ease-in;
-    opacity: 0;
-    .icon {
-        font-size: 45px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    .icon ~ .content {
-        margin-top: 5px;
-    }
-    &.show {
-        opacity: 1;
-    }
-}
-.overlay {
-    background-color: $toast-overlay-bg-color;
-    z-index: $toast-zindex - 1;
-    position: fixed;
     top: 0;
-    left: 0;
     right: 0;
     bottom: 0;
+    left: 0;
+    pointer-events: none;
     display: none;
-}
-.show ~ .overlay {
-    display: block;
+    justify-content: center;
+    &.wrapper-show {
+        display: flex;
+    }
+    &.light {
+        .toast {
+            color: $text-color;
+            background-color: $toast-light-bg-color;
+            .icon {
+                color: #444;
+            }
+        }
+    }
+    &.dark {
+        .toast {
+            color: $text-inverse-color;
+            background-color: $toast-dark-bg-color;
+        }
+    }
+    .toast {
+        pointer-events: auto;
+        max-width: calc(100vw - 30px);
+        max-height: calc(100vh - 30px);
+        box-sizing: border-box;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 15px;
+        text-align: center;
+        transform: translate3d(0, 0, 0);
+        .icon {
+            font-size: 45px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .icon ~ .content {
+            margin-top: 5px;
+        }
+        &.middle {
+            align-self: center;
+            opacity: 0;
+            &.animate {
+                transition: opacity .15s ease-out;
+            }
+            &.show {
+                opacity: 1;
+            }
+        }
+        &.top {
+            align-self: flex-start;
+            transform: translate3d(0, -30vh, 0);
+            opacity: 0;
+            &.show {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+            &.animate {
+                transition: transform .15s ease-out, opacity .18s ease-out;
+            }
+        }
+        &.bottom {
+            align-self: flex-end;
+            transform: translate3d(0, 30vh, 0);
+            opacity: 0;
+            &.show {
+                transform: translate3d(0, 0, 0);
+                opacity: 1;
+            }
+            &.animate {
+                transition: transform .15s ease-out, opacity .18s ease-out;
+            }
+        }
+    }
+    &.overlay {
+        background-color: $toast-overlay-bg-color;
+        pointer-events: auto;
+        &.overlay-animate {
+            transition: background-color .15s ease-out;
+        }
+    }
 }

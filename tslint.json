@@ -24,6 +24,7 @@
     "no-shadowed-variable": false,
     "only-arrow-functions": false,
     "prefer-for-of": false,
+    "max-classes-per-file": false
   },
   "linterOptions": {
     "exclude": [

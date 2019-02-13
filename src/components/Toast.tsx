@@ -1,10 +1,28 @@
-import { CSSAttrs, Omit, AnyFunction } from "../utils/types";
-import * as React from "react";
+import View from "./View";
+import { CSSAttrs, Omit } from "../utils/types";
 import Icon, { IconProps } from "./Icon";
+import * as React from "react";
+import { tools } from "../utils/Tools";
+import { iconInfoCircleOutline, iconLoading, iconCheckCircleOutline, iconCloseCircleOutline, iconAlert } from "./icons/SVGData";
 import toastCSS from './Toast.scss';
-import Tools from "../utils/Tools";
-import { iconCloseCircleOutline, iconAlert, iconLoading, iconInfoCircleOutline, iconCheckCircleOutline } from "./icons/SVGData";
+import * as ReactDOM from "react-dom";
 
+export interface ToastProps extends CSSAttrs {
+    duration?: number;
+    overlay?: boolean;
+    type?: 'info' | 'loading' | 'success' | 'error' | 'warn';
+    content?: React.ReactNode;
+    animate?: boolean;
+    icon?: React.ReactElement<IconProps> | boolean;
+    showOnInit?: boolean;
+    onClose?: () => void;
+    onCloseAnimationEnd?: () => void;
+    position?: 'top' | 'middle' | 'bottom';
+    theme?: 'light' | 'dark';
+}
+export interface ToastState {
+    show: boolean;
+}
 const presetIconMap = {
     info: iconInfoCircleOutline,
     loading: iconLoading,
@@ -12,210 +30,252 @@ const presetIconMap = {
     error: iconCloseCircleOutline,
     warn: iconAlert
 }
-const tools = Tools.getInstance();
-
-interface ToastState extends CSSAttrs {
-    duration?: number;
-    onClose?: () => void;
-    overlay?: boolean;
-    type?: 'info' | 'loading' | 'success' | 'error' | 'warn' | '';
-    icon?: React.ReactElement<IconProps> | boolean;
-    content?: React.ReactNode;
-    show?: boolean;
-}
-
-const defaultState: ToastState = {
-    content: '',
-    duration: 3000,
-    overlay: false,
-    show: true,
-    type: '',
-    icon: true,
-}
-
-export class StatefulToast extends React.PureComponent<any, ToastState> {
-    private toggleAnimationDuration = 1000;
-    private toggleAnimationTimer: any;
-    private handleCloseTimer: any;
-    private wrapperRef: React.RefObject<any>;
-    readonly state: ToastState = {
-        ...defaultState,
-        show: false,
-    };
-    constructor(props: any) {
+class ToastComponent extends View<ToastProps, ToastState> {
+    static defaultProps: ToastProps = {
+        duration: 3000,
+        overlay: false,
+        content: '',
+        showOnInit: true,
+        animate: true,
+        icon: false,
+        position: 'middle',
+        theme: 'light',
+    }
+    private handleCloseTimer;
+    private wrapperRef = React.createRef<any>();
+    private toastRef = React.createRef<any>();
+    constructor(props: ToastProps) {
         super(props);
-
+        
+        this.state = {
+            show: !!props.showOnInit,
+        };
         this.handleClose = this.handleClose.bind(this);
-        this.wrapperRef = React.createRef();
+        this.handleTransitionEnd = this.handleTransitionEnd.bind(this);
     }
     render() {
-        let { state } = this,
-            { duration, overlay, content, className, style, show, type, icon } = state;
+        let { props } = this,
+            { overlay, content, className, style, type, icon, position, theme } = props,
+            iconEl;
 
-        window.clearTimeout(this.handleCloseTimer);
-        if (show) {
-            if (duration === 0)
-                duration = 10000000;
-            this.handleCloseTimer = window.setTimeout(this.handleClose, duration);
-        }
-
-        let iconEl;
-
-        if (icon) {
-            if (Icon.isIconElement(icon)) {
-                iconEl = icon;
-            } else {
-                iconEl = type ? <Icon icon={presetIconMap[type]} spin={type === 'loading'}/> : '';
-            }
+        if (Icon.isIconElement(icon)) {
+            iconEl = icon;
+        } else {
+            iconEl = type ? <Icon icon={presetIconMap[type]} spin={type === 'loading'}/> : '';
         }
         return (
-            <React.Fragment>
-                <div ref={this.wrapperRef} className={tools.classNames(toastCSS.toast, className)} style={style}>
-                    <div className={tools.classNames(toastCSS.icon)}>
-                        { iconEl }
-                    </div>
-                    <div className={tools.classNames(toastCSS.content)}>{ content }</div>
+            <div ref={this.wrapperRef} className={
+                tools.classNames(toastCSS.wrapper, theme && toastCSS[theme], overlay && toastCSS.overlay)
+                }>
+                <div ref={this.toastRef} className={
+                    tools.classNames(toastCSS.toast, position && toastCSS[position], className)
+                    } style={style}>
+                    {
+                        iconEl ? 
+                            <div className={tools.classNames(toastCSS.icon)}>
+                                { iconEl }
+                            </div>
+                            : ''
+                    }
+                    {
+                        content ? 
+                            <div className={tools.classNames(toastCSS.content)}>{ content }</div>
+                            : ''
+                    }
                 </div>
-                { overlay ? <div className={tools.classNames(toastCSS.overlay)}></div> : '' }
-            </React.Fragment>
-        )
+            </div>
+        );
+    }
+    handleClose() {
+        let { onClose } = this.props;
+
+        onClose && onClose();
     }
     componentDidMount() {
-        Toast.toastObj = this;
+        let { duration } = this.props,
+            { show } = this.state,
+            toastEl = this.toastRef.current;
 
+        toastEl.addEventListener("transitionend", this.handleTransitionEnd, false);
+        if (show && (duration && duration > 0)) {
+            this.handleCloseTimer = window.setTimeout(() => { this.setState({ show: false }) }, duration);
+        }
         this.toggleDisplay();
     }
-    componentDidUpdate() {
-        this.toggleDisplay();
+    componentDidUpdate(prevProps: ToastProps, prevState: ToastState) {
+        let { duration } = this.props,
+            { show } = this.state;
+
+        if (show !== prevState.show || duration !== prevProps.duration) {
+            window.clearTimeout(this.handleCloseTimer);
+            if (show && (duration && duration > 0)) {
+                this.handleCloseTimer = window.setTimeout(() => { this.setState({ show: false }) }, duration);
+            }
+        }
+        if (show !== prevState.show)
+            this.toggleDisplay();
     }
     toggleDisplay() {
         let wrapperEl = this.wrapperRef.current,
-            wrapperStyle = wrapperEl.style,
-            { show } = this.state;
+            toastEl = this.toastRef.current,
+            { animate } = this.props,
+            { show } = this.state,
+            wrapperClassList = wrapperEl.classList,
+            toastClassList = toastEl.classList;
 
         if (show) {
-            window.clearTimeout(this.toggleAnimationTimer);
-            wrapperStyle.display = 'block';
-            wrapperEl.classList.add(toastCSS.show);
-        } else {
-            wrapperEl.classList.remove(toastCSS.show);
-
-            if (wrapperStyle.display !== 'none')
-                this.toggleAnimationTimer = window.setTimeout(() => {
-                    wrapperStyle.display = 'none';
-                }, this.toggleAnimationDuration);
-        }
-    }
-    handleClose() {
-        let { onClose } = this.state;
-
-        this.setState({ show: false});
-        onClose && onClose();
-    }
-}
-
-type ToastHandler = (
-    content: ToastState['content'], duration?: ToastState['duration'], 
-    options?: Omit<Partial<ToastState>, 'content' | 'duration'>
-    ) => Factory;
-
-interface Factory {
-    toastObj?: React.Component<any, ToastState>;
-    isShow: () => boolean;
-    show: (args?: Partial<ToastState>) => Factory;
-    hide: () => Factory;
-    info: ToastHandler,
-    success: ToastHandler,
-    error: ToastHandler,
-    warn: ToastHandler,
-    loading: ToastHandler,
-    content: AnyFunction;
-    icon: AnyFunction;
-}
-
-const Toast: Factory = {
-    toastObj: undefined,
-    isShow() {
-        return Boolean(this.toastObj && this.toastObj.state.show);
-    },
-    show(args?: Partial<ToastState>) {
-        let nextState = { ...defaultState };
-
-        if (tools.isPlainObject(args)) {
-            for (let k in args) {
-                if (args[k] !== undefined) {
-                    nextState[k] = args[k];
-                }
+            wrapperClassList.add(toastCSS.wrapperShow);
+            if (animate) {
+                window.setTimeout(() => {
+                    toastClassList.add(toastCSS.show);
+                    this.toggleAnimateClass();
+                }, 50);
+            } else {
+                toastClassList.add(toastCSS.show);
+                this.toggleAnimateClass();
             }
+        } else {
+            toastClassList.remove(toastCSS.show);
+            if (!animate) {
+                wrapperClassList.remove(toastCSS.wrapperShow);
+            }
+            this.toggleAnimateClass();
+            this.handleClose();
         }
+    }
+    toggleAnimateClass() {
+        let { animate, overlay } = this.props,
+            wrapperEl = this.wrapperRef.current,
+            toastEl = this.toastRef.current,
+            wrapperClassList = wrapperEl.classList,
+            toastClassList = toastEl.classList;
+            
+        if (animate) {
+            toastClassList.add(toastCSS.animate);
+            overlay && wrapperClassList.add(toastCSS.overlayAnimate);
+        } else {
+            toastClassList.remove(toastCSS.animate);
+            overlay && wrapperClassList.remove(toastCSS.overlayAnimate);
+        }
+    }
+    handleTransitionEnd(e) {
+        if (e.target.classList.contains(toastCSS.show)) {
+            return;
+        }
+
+        let wrapperEl = this.wrapperRef.current,
+            wrapperClassList = wrapperEl.classList,
+            { onCloseAnimationEnd } = this.props;
+
+        wrapperClassList.remove(toastCSS.wrapperShow);
+        onCloseAnimationEnd && onCloseAnimationEnd();
+    }
+}
+
+type State = Omit<ToastProps, 'showOnInit'> & ToastState;
+class StatefulToast extends React.PureComponent<any, State> {
+    toastRef = React.createRef<ToastComponent>();
+    Component = ToastComponent;
+    constructor(props) {
+        super(props);
+        this.state = {
+            show: false,
+        };
+    }
+    render() {
+        let { show, ...restState } = this.state;
+        return <ToastComponent ref={this.toastRef} {...restState} showOnInit={show}/>
+    }
+    componentDidUpdate(prevProps, prevState: State) {
+        let { show } = this.state;
+        if (show !== prevState.show) {
+            this.toastRef.current && this.toastRef.current.setState({ show });
+        }
+    }
+    isShow() {
+        return Boolean(this.state.show);
+    }
+    show(args?: Partial<State>) {
+        let { onClose } = this.state,
+            nextState = { ...ToastComponent.defaultProps, ...args, show: true, onClose };
 
         if (this.isShow()) {
-            this.hide();
+            this.hide({ animate: false, onClose: undefined });
             window.setTimeout(() => {
-                this.toastObj && this.toastObj.setState({...nextState, show: true});
-            }, 100);
+                this.setState(nextState);
+            }, 0);
         } else {
-            this.toastObj && this.toastObj.setState({...nextState, show: true});
+            this.setState(nextState);
         }
         return this;
-    },
-    hide() {
-        this.toastObj && this.toastObj.setState({ ...defaultState, show: false });
+    }
+    hide(args?: Partial<State>) {
+        this.setState({ ...args, show: false });
         return this;
-    },
-    info(content, duration, options = {}) {
+    }
+    info(content: State['content'], duration?: State['duration'], options?) {
         return this.show({
+            ...ToastComponent.defaultProps,
             ...options,
             content,
             duration,
             type: 'info',
         });
-    },
-    success(content, duration, options = {}) {
+    }
+    success(content: State['content'], duration?: State['duration'], options?) {
         return this.show({
             ...options,
             content,
             duration,
             type: 'success',
         });
-    },
-    error(content, duration, options = {}) {
+    }
+    error(content: State['content'], duration?: State['duration'], options?) {
         return this.show({
+            ...ToastComponent.defaultProps,
             ...options,
             content,
             duration,
             type: 'error',
         });
-    },
-    warn(content, duration, options = {}) {
+    }
+    warn(content: State['content'], duration?: State['duration'], options?) {
         return this.show({
+            ...ToastComponent.defaultProps,
             ...options,
             content,
             duration,
             type: 'warn',
         });
-    },
-    loading(content, duration, options = {}) {
+    }
+    loading(content: State['content'], duration?: State['duration'], options?) {
         return this.show({
+            ...ToastComponent.defaultProps,
             ...options,
             content,
             duration,
             type: 'loading',
         });
-    },
-    content(content?: React.ReactNode): any {
+    }
+    content(content?: State['content']) {
         if (content !== undefined && content !== null) {
-            this.toastObj && this.toastObj.setState({ content });
+            this.setState({ content });
+            return;
         } else {
-            return this.toastObj && this.toastObj.state.content;
+            return this.state.content;
         }
-    },
-    icon(icon?: ToastState['icon']): any {
+    }
+    icon(icon?: State['icon']) {
         if (icon !== undefined && icon !== null) {
-            this.toastObj && this.toastObj.setState({ icon });
+            this.setState({ icon });
+            return;
         } else {
-            return this.toastObj && this.toastObj.state.icon;
+            return this.state.icon;
         }
     }
 }
+
+let wrapper = document.createElement('div');
+document.body.appendChild(wrapper);
+let Toast = ReactDOM.render(<StatefulToast></StatefulToast>, wrapper) as React.Component<any, State> & StatefulToast;
 export default Toast;

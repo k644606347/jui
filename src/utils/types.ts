@@ -8,3 +8,4 @@ export interface CSSAttrs {
     style?: CSSProperties;
     className?: string;
 }
+export const tuple = <T extends string[]>(...args: T) => args;
