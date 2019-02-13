@@ -39,7 +39,7 @@ class ToastComponent extends View<ToastProps, ToastState> {
         animate: true,
         icon: false,
         position: 'middle',
-        theme: 'light',
+        theme: 'dark',
     }
     private handleCloseTimer;
     private wrapperRef = React.createRef<any>();
