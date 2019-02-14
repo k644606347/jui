@@ -275,7 +275,9 @@ class StatefulToast extends React.PureComponent<any, State> {
     }
 }
 
-let wrapper = document.createElement('div');
-document.body.appendChild(wrapper);
+let wrapper = document.createElement('div'),
+    rootEl = document.body ? document.body : document.documentElement;
+rootEl.appendChild(wrapper);
+
 let Toast = ReactDOM.render(<StatefulToast></StatefulToast>, wrapper) as React.Component<any, State> & StatefulToast;
 export default Toast;
