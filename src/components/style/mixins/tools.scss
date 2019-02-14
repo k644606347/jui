@@ -1,0 +1,8 @@
+@mixin cssvar($name, $value) {
+    @if $name && $value {
+        --jui-#{$name}: #{$value};
+    }
+}
+@function cssvar($name) { 
+    @return var(--jui-#{$name}); 
+}

@@ -63,7 +63,7 @@ export default class Menu extends React.PureComponent<MenuProps, MenuState> {
         backdropClick: false,
         backdropCoverage: 'full',
     };
-    public readonly state: MenuState = {
+    readonly state: MenuState = {
         itemsStyle: {
             top: 0,
             left: 0,
@@ -80,7 +80,7 @@ export default class Menu extends React.PureComponent<MenuProps, MenuState> {
         this.handleBtnClick = this.handleBtnClick.bind(this);
         this.handleBackdropClick = this.handleBackdropClick.bind(this);
     }
-    public render() {
+    render() {
         let { props, state } = this,
             { id, label, className, style, icon, items, showItems, level, activeIndex, multiSelect, backdrop, backdropClick } = props,
             { itemsStyle, backdropStyle } = state;
@@ -98,7 +98,7 @@ export default class Menu extends React.PureComponent<MenuProps, MenuState> {
         </React.Fragment>;
     }
     private didMount:boolean = false;
-    public componentDidMount() {
+    componentDidMount() {
         let { backdrop, showItems } = this.props,
             nextState: any = {};
 
@@ -115,13 +115,12 @@ export default class Menu extends React.PureComponent<MenuProps, MenuState> {
         }
         Menu.instances.push(this);
     }
-    public componentDidUpdate(prevProps: MenuProps) {
+    componentDidUpdate(prevProps: MenuProps) {
         let { showItems, backdrop } = this.props,
             nextState = {} as MenuState,
             needUpdateItemsLayout = false,
             needUpdateBackdropLayout = false;
 
-        // window.console.log('componentDidUpdate');
         if (showItems) {
             if (showItems !== prevProps.showItems) {
                 needUpdateItemsLayout = true;
@@ -142,7 +141,7 @@ export default class Menu extends React.PureComponent<MenuProps, MenuState> {
 
         !tools.isEmptyObject(nextState) && this.setState(nextState);
     }
-    public componentWillUnmount() {
+    componentWillUnmount() {
         let index = Menu.instances.findIndex(instance => instance === this);
 
         if (index !== -1) {

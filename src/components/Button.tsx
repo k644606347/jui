@@ -7,7 +7,6 @@ import cssModule from './Button.scss';
 import { iconCloud, iconCloudDownload, iconCloudUpload, iconDownload, iconLoading, iconPower, iconSearch, iconCheckCircle, iconCheckCircleOutline, iconTime, iconTimeOutline, iconMoreVertical, iconMore, iconArrowUp, iconArrowForward, iconArrowDown, iconArrowBack } from './icons/SVGData';
 
 const tools = Tools.getInstance();
-const prefixCls = 'btn';
 const buttonIcons: PresetIcons = {
     cloud: iconCloud,
     'cloud-down': iconCloudDownload,
@@ -61,13 +60,13 @@ class Button extends React.PureComponent<ButtonProps, any> {
         className = tools.classNames(
             cssModule.btn,
             [ type, disabled && 'disabled', inline && 'inline', size, shape ].map(
-                n => cssModule[`${prefixCls}-${n}`]
+                n => n && cssModule[n]
             ),
             className
         );
 
         return (
-            <TouchFeedback activeClassName={cssModule[`${prefixCls}-active`]} disabled={disabled}>
+            <TouchFeedback activeClassName={cssModule.active} disabled={disabled}>
                 <a style={style} className={className} onClick={this.handleClick}>
                     {
                         presetIcon ?  
