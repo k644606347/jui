@@ -19,6 +19,9 @@ export default class ButtonDemo extends React.PureComponent<any, any>{
                 } onCancel={
                     e => this.setState({ show: false })
                 }>
+                    <h2>空button</h2>
+                    <Button></Button>
+                    <h2>常规</h2>
                     <Button icon={<Icon icon={iconAdd} spin />} title="normal btn">normal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btn</Button>
                     <Button icon={<Icon icon={iconAdd} pulse />} title="normal btn"><span>normal btn</span></Button>
                     <Button icon={<Icon icon={icon1212} />} title="normal btn">normal btn</Button>
