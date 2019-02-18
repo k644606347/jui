@@ -15,6 +15,7 @@ $button-font-size-lg: 24 * $hd;
 .btn {
     display: inline-block;
     -webkit-appearance: none;
+    -webkit-tap-highlight-color: transparent;
     box-sizing: border-box;
     padding: 0 $h-spacing-lg;
     text-align: center;
