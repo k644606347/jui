@@ -13,8 +13,9 @@ $button-height-lg: 64 * $hd;
 $button-font-size-lg: 24 * $hd;
 
 .btn {
+    max-width: 100vw;
     display: inline-block;
-    -webkit-appearance: none;
+    appearance: none;
     -webkit-tap-highlight-color: transparent;
     box-sizing: border-box;
     padding: 0 $h-spacing-lg;
@@ -31,7 +32,7 @@ $button-font-size-lg: 24 * $hd;
     border: .5px solid $border-color;
     border-radius: $radius-md;
     .icon, .content {
-        display: inline-block;
+        display: inline;
         line-height: inherit;
     }
     .icon ~ .content {

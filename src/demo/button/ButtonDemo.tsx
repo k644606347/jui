@@ -20,7 +20,7 @@ export default class ButtonDemo extends React.PureComponent<any, any>{
                     e => this.setState({ show: false })
                 }>
                     <Button icon={<Icon icon={iconAdd} spin />} title="normal btn">normal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btn</Button>
-                    <Button icon={<Icon icon={iconAdd} pulse />} title="normal btn">normal btn</Button>
+                    <Button icon={<Icon icon={iconAdd} pulse />} title="normal btn"><span>normal btn</span></Button>
                     <Button icon={<Icon icon={icon1212} />} title="normal btn">normal btn</Button>
                     <Button type={'primary'} icon={iconMore} block={false}>primary btn</Button>
                     <Button type="danger" size="large" loading>danger btn</Button>
