@@ -1,10 +1,52 @@
 import * as React from 'react';
-import { PresetIcons, ButtonProps } from './ButtonType';
 import Icon, { IconProps } from './Icon';
 import TouchFeedback from './TouchFeedback';
 import Tools from '../utils/Tools';
-import cssModule from './Button.scss';
-import { iconCloud, iconCloudDownload, iconCloudUpload, iconDownload, iconLoading, iconPower, iconSearch, iconCheckCircle, iconCheckCircleOutline, iconTime, iconTimeOutline, iconMoreVertical, iconMore, iconArrowUp, iconArrowForward, iconArrowDown, iconArrowBack } from './icons/SVGData';
+import buttonCSS from './Button.scss';
+import { iconCloud, iconCloudDownload, iconCloudUpload, iconDownload, iconLoading, iconPower, iconSearch, iconCheckCircle, iconCheckCircleOutline, iconTime, iconTimeOutline, iconMoreVertical, iconMore, iconArrowUp, iconArrowForward, iconArrowDown, iconArrowBack, IconDefinition } from './icons/SVGData';
+
+export interface PresetIcons {
+    cloud: IconDefinition;
+    'cloud-down': IconDefinition;
+    'cloud-upload': IconDefinition;
+    download: IconDefinition;
+    loading: IconDefinition;
+    'power-off': IconDefinition;
+    search: IconDefinition;
+    'check-circle': IconDefinition;
+    'check-circle-o': IconDefinition;
+    'time-circle': IconDefinition;
+    'time-circle-o': IconDefinition;
+    more: IconDefinition;
+    'more-v': IconDefinition;
+    up: IconDefinition;
+    right: IconDefinition;
+    down: IconDefinition;
+    left: IconDefinition;
+}
+
+type ButtonType = 'primary' | 'default' | 'danger';
+type IconType = keyof PresetIcons;
+type SizeType = 'small' | 'default' | 'large';
+type ShapeType = 'default' |'circle';
+
+export interface ButtonProps {
+    className?: string;
+    activeClassName?: string;
+    style?: React.CSSProperties;
+    title?: string;
+    type?: ButtonType;
+    size?: SizeType;
+    disabled?: boolean;
+    icon?: IconType | IconDefinition | React.ReactElement<IconProps>;
+    loading?: boolean;
+    block?: boolean;
+    full?: boolean;
+    shape?: ShapeType;
+    outline?: boolean;
+    clear?: boolean;
+    onClick?: React.MouseEventHandler<HTMLAnchorElement>;
+}
 
 const tools = Tools.getInstance();
 const buttonIcons: PresetIcons = {
@@ -26,13 +68,15 @@ const buttonIcons: PresetIcons = {
     'down': iconArrowDown,
     'left': iconArrowBack,
 };
-class Button extends React.PureComponent<ButtonProps, any> {
-    public static defaultProps = {
+class Button extends React.PureComponent<ButtonProps> {
+    static defaultProps: ButtonProps = {
         disabled: false,
-        icon: '',
-        inline: false,
+        block: false,
+        full: false,
         loading: false,
+        type: 'default',
         size: 'default',
+        shape: 'default',
     };
     constructor(props: ButtonProps) {
         super(props);
@@ -40,59 +84,52 @@ class Button extends React.PureComponent<ButtonProps, any> {
         this.handleClick = this.handleClick.bind(this);
     }
 
-    public render() {
+    render() {
         let { props } = this,
-            { children, className, disabled, icon, inline, loading, shape, style, size, type } = props,
-            presetIcon, iconElement;
+            { children, className, activeClassName, title, disabled, icon, outline, clear, block, full, loading, shape, style, size, type: type } = props,
+            iconDefinition, iconElement;
 
         if (loading) {
-            presetIcon = buttonIcons.loading;
+            iconDefinition = buttonIcons.loading;
         } else {
             if (icon) {
                 if (typeof icon === 'string') {
-                    presetIcon = buttonIcons[icon];
+                    iconDefinition = buttonIcons[icon];
                 } else {
                     iconElement = Icon.renderIcon(icon);
                 }
             }
         }
 
-        className = tools.classNames(
-            cssModule.btn,
-            [ type, disabled && 'disabled', inline && 'inline', size, shape ].map(
-                n => n && cssModule[n]
+        let btnClassName = tools.classNames(
+            buttonCSS.btn,
+            [ type, disabled && 'disabled', outline && 'outline', clear && 'clear', block && 'block', full && 'full', size, shape ].map(
+                n => n && buttonCSS[n]
             ),
             className
         );
 
         return (
-            <TouchFeedback activeClassName={cssModule.active} disabled={disabled}>
-                <a style={style} className={className} onClick={this.handleClick}>
+            <TouchFeedback activeClassName={tools.classNames(buttonCSS.active, activeClassName)} disabled={disabled}>
+                <a title={title} style={style} className={btnClassName} onClick={this.handleClick}>
                     {
-                        presetIcon ?  
-                            <Icon icon={presetIcon} className={cssModule.icon} spin={loading} /> : 
-                            iconElement ? 
-                                React.cloneElement<IconProps>(
+                        iconDefinition ?  
+                            <Icon icon={iconDefinition} className={buttonCSS.icon} spin={loading} /> 
+                            : iconElement ? 
+                                React.cloneElement(
                                     iconElement, 
                                     {
-                                        className: tools.classNames(cssModule.icon, iconElement.props.className),
+                                        className: tools.classNames(buttonCSS.icon, iconElement.props.className),
                                     }
-                                ) : null
+                                ) : ''
                     }
-                    {children !== undefined ? <span className={cssModule.content}>{children}</span> : null}
+                    {children ? <span className={buttonCSS.content}>{children}</span> : ''}
                 </a>
             </TouchFeedback>
         );
     }
 
-    public componentDidMount() {
-        //
-    }
-
-    public handleClick(e: React.MouseEvent<HTMLAnchorElement>) {
-        e.preventDefault();
-        e.stopPropagation();
-
+    handleClick(e: React.MouseEvent<HTMLAnchorElement>) {
         let { props } = this,
             { onClick, disabled } = props;
 
@@ -100,9 +137,7 @@ class Button extends React.PureComponent<ButtonProps, any> {
             return;
         }
 
-        if (onClick) {
-            onClick(e);
-        }
+        onClick && onClick(e);
     }
 }
 

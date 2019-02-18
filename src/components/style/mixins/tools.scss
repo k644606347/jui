@@ -3,6 +3,6 @@
         --jui-#{$name}: #{$value};
     }
 }
-@function cssvar($name) { 
+@function cssvar($name) {
     @return var(--jui-#{$name}); 
 }

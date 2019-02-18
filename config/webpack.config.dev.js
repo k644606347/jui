@@ -76,6 +76,7 @@ module.exports = {
                                     camelCase: true,
                                 }
                             },
+                            "postcss-loader",
                             "sass-loader"
                         ]
                     }

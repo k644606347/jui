@@ -24,9 +24,9 @@ export default class Pagination extends React.PureComponent<PaginationProps, any
             { current, total, disabled, prevBtn, nextBtn, prevText, nextText } = props;
 
         return (<div className={tools.classNames(cssModules.pagination, cssModules.disabled)}>
-            {prevBtn ? prevBtn : <Button icon="left" inline={true} onClick={this.handlePrev} disabled={disabled}>{prevText}</Button>}
+            {prevBtn ? prevBtn : <Button icon="left" onClick={this.handlePrev} disabled={disabled}>{prevText}</Button>}
             <div><span className={cssModules.current}>{current}</span> / <span>{total}</span></div>
-            {nextBtn ? nextBtn : <Button icon="right" inline={true} onClick={this.handleNext} disabled={disabled}>{nextText}</Button>}
+            {nextBtn ? nextBtn : <Button icon="right" onClick={this.handleNext} disabled={disabled}>{nextText}</Button>}
         </div>);
     }
     public handlePrev() {

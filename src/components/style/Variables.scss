@@ -106,18 +106,6 @@ $h-spacing-lg: 15 * $hd;
 // $actionsheet-item-height: 50 * $hd;
 // $actionsheet-item-font-size: 18 * $hd;
 
-$primary-button-fill: $primary-color;
-$primary-button-fill-tap: $primary-tap-color;
-
-$ghost-button-color: $primary-color;    // 同时应用于背景、文字颜色、边框色
-$ghost-button-fill-tap: transparentize($primary-color, .6);
-
-$warning-button-fill: #e94f4f;
-$warning-button-fill-tap: #d24747;
-
-$link-button-fill-tap: #ddd;
-$link-button-font-size: 16 * $hd;
-
 // // modal
 // $modal-font-size-heading: 18 * $hd;
 // $modal-button-font-size: 18 * $hd; // 按钮字号

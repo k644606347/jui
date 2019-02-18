@@ -21,6 +21,7 @@ import MenuDemo from './MenuDemo';
 import DefaultPropsDemo from './DefaultPropsDemo';
 import SearchBarDemo from './SearchBarDemo';
 import ActiveFormApp from './activeForm/App';
+import ButtonDemo from './button/ButtonDemo';
 
 class App extends React.Component<any, any> {
     constructor(props: any) {
@@ -29,25 +30,17 @@ class App extends React.Component<any, any> {
     public render() {
         return (
             <JUIApp className={'App'}>
+                <ButtonDemo />
                 <ToastDemo />
                 <NavBarDemo />
                 <SearchBarDemo />
-                <RowTagNestedDemo />
+                {/* <RowTagNestedDemo /> */}
                 <MessageTest />
                 {/* <FormWidgetTest /> */}
                 {/* <FormDemo /> */}
                 <ActiveFormApp />
                 <HTMLForm />
                 <MenuDemo />
-                <Button>btn1</Button>
-                <Button type={'primary'} icon={iconMore}>btn2</Button>
-                <Button type="warning" size="large" loading={true}>btn3</Button>
-                <Button icon={<Icon style={{ marginRight: '20px' }} icon={iconAddCircleOutline} />} disabled={true}>disabled btn</Button>
-                <Button type="dashed" size="small">small btn</Button>
-                <Button size="large">large btn</Button>
-                <Button loading={true} icon='cloud' inline={true}>inline btn</Button>
-                <Button shape="circle" loading={true} inline={true} size="large">btn4</Button>
-                <Button className="body-btn" type={'primary'}>custom className</Button>
                 <Icon icon={iconAlert} rotation={90} flip="vertical" pulse={true} spin={true} />
                 <Icon icon={iconInfo} rotation={90} flip="vertical" pulse={true} spin={true} />
                 <Icon icon={iconAddCircle} rotation={90} flip="vertical" pulse={true} spin={true} />

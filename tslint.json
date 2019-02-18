@@ -30,7 +30,8 @@
     "exclude": [
       "config/**/*.js",
       "node_modules/**/*.ts",
-      "src/demo/*"
+      "src/demo/*",
+      "src/demo/**/*"
     ]
   }
 }

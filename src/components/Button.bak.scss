@@ -1,0 +1,122 @@
+@charset "UTF-8";
+@import './style/Variables';
+@import './style/mixins/Hairline';
+@import './style/mixins/tools.scss';
+
+$button-height-sm: 30 * $hd;
+$button-font-size-sm: 13 * $hd;
+
+$button-height: 47 * $hd;
+$button-font-size: 18 * $hd;
+
+$button-height-lg: 64 * $hd;
+$button-font-size-lg: 24 * $hd;
+
+.btn {
+    @include cssvar(btn-color, $text-color);
+    @include cssvar(btn-border-color, $border-color);
+    @include cssvar(btn-bg-color, $bg-color);
+    display: inline-block;
+    -webkit-appearance: none;
+    box-sizing: border-box;
+    padding: 0 $h-spacing-lg;
+    text-align: center;
+    font-size: $button-font-size;
+    height: $button-height;
+    line-height: $button-height;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    user-select: none;
+    color: cssvar(btn-color);
+    background-color: cssvar(btn-bg-color);
+    border: .5px solid cssvar(btn-border-color);
+    border-radius: $radius-md;
+    .icon, .content {
+        display: inline-block;
+        line-height: inherit;
+    }
+    .icon {
+        & ~ .content {
+            margin-left: .5em;
+        }
+    }
+    &.active {
+        @include cssvar(btn-bg-color, $bg-tap-color);
+    }
+    &.disabled {
+        @include cssvar(btn-color, transparentize($text-color, .3));
+        opacity: 0.6;
+    }
+    &.primary {
+        @include cssvar(btn-color, $text-inverse-color);
+        @include cssvar(btn-bg-color, $primary-color);
+        @include cssvar(btn-border-color, $primary-color);
+
+        &.active {
+            @include cssvar(btn-color, transparentize($text-inverse-color, .3));
+            @include cssvar(btn-bg-color, $primary-tap-color);
+        }
+
+        &.disabled {
+            @include cssvar(btn-color, transparentize($text-inverse-color, .6));
+            opacity: 0.4;
+        }
+    }
+    &.danger {
+        @include cssvar(btn-color, $text-inverse-color);
+        @include cssvar(btn-bg-color, #e94f4f);
+        @include cssvar(btn-border-color, #e94f4f);
+        &.active {
+            @include cssvar(btn-color, transparentize($text-inverse-color, .3));
+            @include cssvar(btn-bg-color, #d24747);
+        }
+
+        &.disabled {
+            @include cssvar(btn-color, transparentize($text-inverse-color, .6));
+            opacity: 0.4;
+        }
+    }
+    &.dark {
+        @include cssvar(btn-color, $text-inverse-color);
+        @include cssvar(btn-bg-color, #222);
+        @include cssvar(btn-border-color, #222);
+        &.active {
+            @include cssvar(btn-color, transparentize($text-inverse-color, .3));
+            @include cssvar(btn-bg-color, #343434);
+        }
+
+        &.disabled {
+            @include cssvar(btn-color, transparentize($text-inverse-color, .6));
+            opacity: 0.4;
+        }
+    }
+    &.full {
+        border-radius: 0;
+        display: block;
+    }
+    &.block {
+        display: block;
+    }
+    &.small {
+        font-size: $button-font-size-sm;
+        height: $button-height-sm;
+        line-height: $button-height-sm;
+    }
+    &.circle {
+        width: $button-height;
+        height: $button-height;
+        border-radius: 50%;
+
+        &.large {
+            width: $button-height-lg;
+            height: $button-height-lg;
+            line-height: $button-height-lg;
+        }
+        &.small {
+            width: $button-height-sm;
+            height: $button-height-sm;
+            line-height: $button-height-sm;
+        }
+    }
+}

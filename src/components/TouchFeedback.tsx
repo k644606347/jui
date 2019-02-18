@@ -6,16 +6,17 @@ export interface TouchProps {
     disabled?: boolean;
     activeClassName?: string;
     activeStyle?: object;
-    children?: any;
+    children?: JSX.Element;
 }
 export interface TouchState {
     active: boolean;
 }
+
 export default class TouchFeedback extends React.PureComponent<TouchProps, TouchState> {
-    public static defaultProps: TouchProps = {
+    static defaultProps: TouchProps = {
         disabled: false,
     };
-    public readonly state: TouchState = {
+    readonly state: TouchState = {
         active: false,
     }
     constructor(props: TouchProps) {
@@ -29,34 +30,34 @@ export default class TouchFeedback extends React.PureComponent<TouchProps, Touch
         this.onMouseUp = this.onMouseUp.bind(this);
         this.onMouseLeave = this.onMouseLeave.bind(this);
     }
-    private onTouchStart(e: any) {
+    private onTouchStart(e) {
         this.triggerEvent('TouchStart', true, e)
     }
-    private onTouchMove(e: any) {
+    private onTouchMove(e) {
         this.triggerEvent('TouchMove', false, e);
     }
-    private onTouchEnd(e: any) {
+    private onTouchEnd(e) {
         this.triggerEvent('TouchEnd', false, e);
     }
-    private onTouchCancel(e: any) {
+    private onTouchCancel(e) {
         this.triggerEvent('TouchCancel', false, e);
     }
-    private onMouseDown(e: any) {
+    private onMouseDown(e) {
         // pc simulate mobile
         this.triggerEvent('MouseDown', true, e);
     }
-    private onMouseUp(e: any) {
+    private onMouseUp(e) {
         this.triggerEvent('MouseUp', false, e);
     }
-    private onMouseLeave(e: any) {
+    private onMouseLeave(e) {
         this.triggerEvent('MouseLeave', false, e);
     }
-    private triggerEvent(type: string, isActive: boolean, e: any) {
+    private triggerEvent(type: string, isActive: boolean, e) {
         let eventType = 'on' + type,
             { children } = this.props,
             { active } = this.state;
 
-        if (children.props[eventType]) {
+        if (children && children.props[eventType]) {
             children.props[eventType](e);
         }
         if (isActive !== active) {
@@ -65,7 +66,7 @@ export default class TouchFeedback extends React.PureComponent<TouchProps, Touch
             });
         }
     }
-    public render() {
+    render() {
         let { props, state } = this,
             { activeClassName, activeStyle, children, disabled } = props,
             { active } = state,
@@ -95,7 +96,7 @@ export default class TouchFeedback extends React.PureComponent<TouchProps, Touch
         }
         return React.cloneElement(child, nextProps);
     }
-    public componentDidUpdate() {
+    componentDidUpdate() {
         if (this.props.disabled && this.state.active) {
             this.setState({
                 active: false

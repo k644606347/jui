@@ -241,7 +241,7 @@ export default class FormDemo extends React.PureComponent<FormTestProps, { initV
                 ]} />
                 <Label>testInput</Label><Input onChange={e => { Log.warn(e); }}/>
                 <Button>block btn</Button>
-                <Button inline={true}>inline btn</Button>
+                <Button>inline btn</Button>
                 <form onSubmit={(e) => {
                     e.stopPropagation();
                     e.preventDefault();

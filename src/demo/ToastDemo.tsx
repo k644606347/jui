@@ -97,11 +97,6 @@ export default class ToastDemo extends React.PureComponent<any, any>{
                         }>
                             success Toast
                         </Button>
-                        <Button type={'warning'} icon={iconAlbums} onClick={
-                            e => Toast.error('error!', 0)
-                        }>
-                            error Toast
-                        </Button>
                         <Button loading onClick={
                             e => Toast.loading('加载中', 0)
                         }>
