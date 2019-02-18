@@ -19,19 +19,19 @@ export default class ToastDemo extends React.PureComponent<any, any>{
                     e => this.setState({ show: false })
                 }>
                     <React.Fragment>
-                        <Button onClick={
+                        <Button full onClick={
                             e => Toast.show({
                                 content: '纯文本toast，默认3秒消失'
                             })
                         }>纯文本Toast</Button>
-                        <Button onClick={
+                        <Button full onClick={
                             e => Toast.show({
                                 content: '这是顶部toast',
                                 position: 'top',
                                 duration: 5000
                             })
                         }>顶部Toast</Button>
-                        <Button onClick={
+                        <Button full onClick={
                             e => Toast.show({
                                 content: '这是底部toast',
                                 position: 'bottom',
@@ -41,7 +41,7 @@ export default class ToastDemo extends React.PureComponent<any, any>{
                                 }
                             })
                         }>底部Toast</Button>
-                        <Button onClick={
+                        <Button full onClick={
                             e => Toast.show({
                                 content: '这是bottom toast',
                                 position: 'bottom',
@@ -52,7 +52,7 @@ export default class ToastDemo extends React.PureComponent<any, any>{
                                 animate: false,
                             })
                         }>无动画效果</Button>
-                        <Button onClick={
+                        <Button full onClick={
                             e => Toast.show({
                                 content: '这是middle toast',
                                 position: 'middle',
@@ -63,7 +63,7 @@ export default class ToastDemo extends React.PureComponent<any, any>{
                                 animate: false,
                             })
                         }>无动画效果2</Button>
-                        <Button onClick={
+                        <Button full onClick={
                             e => Toast.show({
                                 content: '这是top toast',
                                 position: 'top',
@@ -74,7 +74,7 @@ export default class ToastDemo extends React.PureComponent<any, any>{
                                 animate: false,
                             })
                         }>无动画效果3</Button>
-                        <Button onClick={
+                        <Button full onClick={
                             e => Toast.show({
                                 content: '这是top toast',
                                 position: 'top',
@@ -86,28 +86,28 @@ export default class ToastDemo extends React.PureComponent<any, any>{
                                 overlay: true
                             })
                         }>无动画效果4</Button>
-                        <Button onClick={
+                        <Button full onClick={
                             e => Toast.loading('', 0)
                         }>只有图标</Button>
-                        <Button type={'primary'} onClick={
+                        <Button full type={'primary'} onClick={
                             e => Toast.info('info', 0)
                         }>info Toast</Button>
-                        <Button icon={iconNotifications} onClick={
+                        <Button full icon={iconNotifications} onClick={
                             e => Toast.success('success!', 0)
                         }>
                             success Toast
                         </Button>
-                        <Button loading onClick={
+                        <Button full loading onClick={
                             e => Toast.loading('加载中', 0)
                         }>
                             loading Toast
                         </Button>
-                        <Button onClick={
+                        <Button full onClick={
                             e => Toast.isShow() ? Toast.hide() : Toast.show()
                         }>
                             toggle Toast display
                         </Button>
-                        <Button onClick={
+                        <Button full onClick={
                             e => Toast.show({
                                 content: '带蒙层Toast，无法点击其他元素',
                                 overlay: true
@@ -115,7 +115,7 @@ export default class ToastDemo extends React.PureComponent<any, any>{
                         }>
                             带蒙层Toast
                         </Button>
-                        <Button icon={<Icon icon={iconAlarm } />} onClick={
+                        <Button full icon={<Icon icon={iconAlarm } />} onClick={
                             e => Toast.show({
                                 content: 'wechat!',
                                 icon: <Icon icon={iconRedo} />,
@@ -124,7 +124,7 @@ export default class ToastDemo extends React.PureComponent<any, any>{
                         }>
                             自定义Icon的Toast
                         </Button>
-                        <Button onClick={
+                        <Button full onClick={
                             e => Toast.info(
                                 <React.Fragment>
                                     <h1>目录</h1>
@@ -139,7 +139,7 @@ export default class ToastDemo extends React.PureComponent<any, any>{
                                 </React.Fragment>
                             , 0)
                         }>内容为HTML的Toast</Button>
-                        <Button onClick={
+                        <Button full onClick={
                             e => {
                                 let content = (count: number) => <div>倒计时:<span>{count}</span></div>,
                                     startCount = 5,

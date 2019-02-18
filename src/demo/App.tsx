@@ -4,7 +4,7 @@ import './App.scss';
 import Hello from '../components/Hello';
 
 import FormDemo from './FormDemo';
-import { Icon, Tools, Menu, Button, Pagination, List, Log, JUIApp, Toast, FormItem } from '..';
+import { Icon, Tools, Menu, Button, Pagination, List, Log, JUIApp, Toast, FormItem, Input } from '..';
 import { IconProps } from '../components/Icon';
 import MessageTest from './Message.test';
 import MultiContextProvider from './context/MultiContextProvider';
@@ -30,6 +30,7 @@ class App extends React.Component<any, any> {
     public render() {
         return (
             <JUIApp className={'App'}>
+                <Input defaultValue="ddd" />
                 <ButtonDemo />
                 <ToastDemo />
                 <NavBarDemo />

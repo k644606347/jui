@@ -23,18 +23,13 @@ export default class TouchFeedback extends React.PureComponent<TouchProps, Touch
         super(props);
 
         this.onTouchStart = this.onTouchStart.bind(this);
-        this.onTouchMove = this.onTouchMove.bind(this);
         this.onTouchEnd = this.onTouchEnd.bind(this);
         this.onTouchCancel = this.onTouchCancel.bind(this);
         this.onMouseDown = this.onMouseDown.bind(this);
         this.onMouseUp = this.onMouseUp.bind(this);
-        this.onMouseLeave = this.onMouseLeave.bind(this);
     }
     private onTouchStart(e) {
         this.triggerEvent('TouchStart', true, e)
-    }
-    private onTouchMove(e) {
-        this.triggerEvent('TouchMove', false, e);
     }
     private onTouchEnd(e) {
         this.triggerEvent('TouchEnd', false, e);
@@ -48,9 +43,6 @@ export default class TouchFeedback extends React.PureComponent<TouchProps, Touch
     }
     private onMouseUp(e) {
         this.triggerEvent('MouseUp', false, e);
-    }
-    private onMouseLeave(e) {
-        this.triggerEvent('MouseLeave', false, e);
     }
     private triggerEvent(type: string, isActive: boolean, e) {
         let eventType = 'on' + type,
@@ -72,12 +64,10 @@ export default class TouchFeedback extends React.PureComponent<TouchProps, Touch
             { active } = state,
             events = disabled ? undefined : {
                 onTouchStart: this.onTouchStart,
-                onTouchMove: this.onTouchMove,
                 onTouchEnd: this.onTouchEnd,
                 onTouchCancel: this.onTouchCancel,
                 onMouseDown: this.onMouseDown,
                 onMouseUp: this.onMouseUp,
-                onMouseLeave: this.onMouseLeave
             },
             nextProps,
             child = React.Children.only(children);

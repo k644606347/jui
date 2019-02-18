@@ -32,6 +32,7 @@ class ValidateMessage extends React.PureComponent<Props> {
 
         let { level, msg } = fieldReport;
         
+        console.log('ValidateMessage.render');
         if (!msg) {
             return '';
         }

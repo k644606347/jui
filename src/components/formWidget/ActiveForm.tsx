@@ -117,7 +117,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
             { value, validating, isValid, fieldReportMap, validateError, submitting } = state,
             formProps = { name, action, method, target };
 
-        console.log('ActiveForm rerender', JSON.stringify(this.state));
+        // console.log('ActiveForm rerender', JSON.stringify(this.state));
         let UnwrappedElement = children
             ? children({
                     ...state,

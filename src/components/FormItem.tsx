@@ -44,6 +44,7 @@ export default class FormItem extends View<FormItemProps, FormItemState> {
         this.handleFieldBlur = this.handleFieldBlur.bind(this);
     }
     render() {
+        console.log('FormItem.render');
         let { props, state } = this,
             { className, style, label, field, floatingLabel, layout, children } = props,
             { fieldFocused, fieldValue } = state,

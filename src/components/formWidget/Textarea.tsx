@@ -15,9 +15,6 @@ export interface TextareaProps extends FormWidgetProps, Omit<React.TextareaHTMLA
 const tools = Tools.getInstance();
 const omitAttrs = ['validateReport', 'onChange', 'onFocus', 'onBlur'];
 class Textarea extends Widget<TextareaProps> {
-    static defaultProps = {
-        value: ''
-    }
     dataType: DataType = 'string';
     constructor(props: TextareaProps) {
         super(props);
@@ -25,9 +22,13 @@ class Textarea extends Widget<TextareaProps> {
         this.handleChange = this.handleChange.bind(this);
     }
     render() {
-        let { props, state } = this,
+        let { props } = this,
             { className, ...restProps } = props,
             attrs = tools.omit(restProps, omitAttrs);
+
+        if (attrs.defaultValue === undefined && attrs.value === undefined) {
+            attrs.value = '';
+        }
         return (
             <textarea {...attrs}
                 onFocus={this.handleFocus}
