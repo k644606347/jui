@@ -112,18 +112,20 @@ class Button extends React.PureComponent<ButtonProps> {
         return (
             <TouchFeedback activeClassName={tools.classNames(buttonCSS.active, activeClassName)} disabled={disabled}>
                 <a title={title} style={style} className={btnClassName} onClick={this.handleClick}>
-                    {
-                        iconDefinition ?  
-                            <Icon icon={iconDefinition} className={buttonCSS.icon} spin={loading} /> 
-                            : iconElement ? 
-                                React.cloneElement(
-                                    iconElement, 
-                                    {
-                                        className: tools.classNames(buttonCSS.icon, iconElement.props.className),
-                                    }
-                                ) : ''
-                    }
-                    {children ? <span className={buttonCSS.content}>{children}</span> : ''}
+                    <span className={buttonCSS.control}>
+                        {
+                            iconDefinition ?  
+                                <Icon icon={iconDefinition} className={buttonCSS.icon} spin={loading} /> 
+                                : iconElement ? 
+                                    React.cloneElement(
+                                        iconElement, 
+                                        {
+                                            className: tools.classNames(buttonCSS.icon, iconElement.props.className),
+                                        }
+                                    ) : ''
+                        }
+                        {children ? <span className={buttonCSS.content}>{children}</span> : ''}
+                    </span>
                 </a>
             </TouchFeedback>
         );

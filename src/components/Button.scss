@@ -19,24 +19,32 @@ $button-font-size-lg: 24 * $hd;
     -webkit-tap-highlight-color: transparent;
     box-sizing: border-box;
     padding: 0 $h-spacing-lg;
-    text-align: center;
     font-size: $button-font-size;
     height: $button-height;
     line-height: $button-height;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    user-select: none;
     color: $text-color;
     background-color: $bg-color;
     border: .5px solid $border-color;
     border-radius: $radius-md;
-    .icon, .content {
-        display: inline;
-        line-height: inherit;
-    }
-    .icon ~ .content {
-        margin-left: .5em;
+    .control {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: nowrap;
+        .icon {
+            flex: 0 0 auto;
+        }
+        .content {
+            flex: 0 1 auto;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .icon ~ .content {
+            margin-left: .5em;
+        }
     }
     &.active {
         background-color: $bg-tap-color;
