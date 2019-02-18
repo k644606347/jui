@@ -35,7 +35,7 @@ export default class ButtonDemo extends React.PureComponent<any, any>{
                     <Button type="primary" icon="check-circle" full>full btn</Button>
                     <Button type="danger" icon='cloud' block disabled>disabled danger btn</Button>
                     {/* <Button theme="dark" icon='time-circle' block>dark btn</Button> */}
-                    <Button shape="circle" loading block size="large">btn4</Button>
+                    <Button shape="circle" loading size="large"></Button>
                     <Button type="primary" shape="circle" loading block size="large">btn4</Button>
                     <Button type="danger" shape="circle" loading block size="large">btn4</Button>
                     <Button className={demoCSS.btn} activeClassName={demoCSS.active} type={'primary'}>custom className</Button>

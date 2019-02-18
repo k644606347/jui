@@ -23,12 +23,14 @@ $button-font-size-lg: 24 * $hd;
     height: $button-height;
     line-height: $button-height;
     overflow: hidden;
+    user-select: none;
     color: $text-color;
     background-color: $bg-color;
     border: .5px solid $border-color;
     border-radius: $radius-md;
     .control {
         display: flex;
+        height: 100%;
         flex-direction: row;
         justify-content: center;
         align-items: center;
