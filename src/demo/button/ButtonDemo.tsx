@@ -22,7 +22,7 @@ export default class ButtonDemo extends React.PureComponent<any, any>{
                     <h2>空button</h2>
                     <Button></Button>
                     <h2>常规</h2>
-                    <Button icon={<Icon icon={iconAdd} spin />} title="normal btn">normal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btnnormal btn</Button>
+                    <Button icon={<Icon icon={iconAdd} spin />} title="normal btn">normal btn</Button>
                     <Button icon={<Icon icon={iconAdd} pulse />} title="normal btn"><span>normal btn</span></Button>
                     <Button icon={<Icon icon={icon1212} />} title="normal btn">normal btn</Button>
                     <Button type={'primary'} icon={iconMore} block={false}>primary btn</Button>
@@ -32,15 +32,17 @@ export default class ButtonDemo extends React.PureComponent<any, any>{
                     <Button icon={<Icon style={{ marginRight: '20px' }} icon={iconAddCircleOutline} />} disabled>disabled btn</Button>
                     <Button size="large">large btn</Button>
                     <Button size="small">small btn</Button>
-                    {/* <Button theme="dark" icon='time-circle'>dark btn</Button> */}
+                    <Button strong icon="check-circle">字体加粗</Button>
+                    <Button icon={<Icon icon={iconAdd} spin />} title="normal btn">内容超长的inline btn内容超长的inline btn内容超长的inline btn内容超长的inline btn内容超长的inline btn内容超长的inline btn内容超长的inline btn内容超长的inline btn内容超长的inline btn内容超长的inline btn</Button>
                     <Button loading icon='cloud' block>block btn</Button>
-                    <Button type="primary" icon='search' block>block btnblock btnblock btnblock btnblock btnblock btnblock btnblock btnblock btnblock btnblock btnblock btnblock btnblock btnblock btnblock btnblock btnblock btn</Button>
+                    <Button type="primary" icon='search' block>block btn</Button>
                     <Button type="primary" icon="check-circle" full>full btn</Button>
                     <Button type="danger" icon='cloud' block disabled>disabled danger btn</Button>
                     {/* <Button theme="dark" icon='time-circle' block>dark btn</Button> */}
+                    <Button type="primary" icon='search' block>内容超长的block btn内容超长的block btn内容超长的block btn内容超长的block btn内容超长的block btn内容超长的block btn内容超长的block btn内容超长的block btn内容超长的block btn内容超长的block btn内容超长的block btn内容超长的block btn</Button>
                     <Button shape="circle" loading size="large"></Button>
-                    <Button type="primary" shape="circle" loading block size="large">btn4</Button>
-                    <Button type="danger" shape="circle" loading block size="large">btn4</Button>
+                    <Button type="primary" shape="circle" loading block size="large">circle primary btn</Button>
+                    <Button type="danger" shape="circle" loading block size="large">circle danger btn</Button>
                     <Button className={demoCSS.btn} activeClassName={demoCSS.active} type={'primary'}>custom className</Button>
                     <h2>outline</h2>
                     <Button outline>normal btn</Button>

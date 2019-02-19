@@ -40,6 +40,7 @@ export interface ButtonProps {
     disabled?: boolean;
     icon?: IconType | IconDefinition | React.ReactElement<IconProps>;
     loading?: boolean;
+    strong?: boolean;
     block?: boolean;
     full?: boolean;
     shape?: ShapeType;
@@ -86,7 +87,8 @@ class Button extends React.PureComponent<ButtonProps> {
 
     render() {
         let { props } = this,
-            { children, className, activeClassName, title, disabled, icon, outline, clear, block, full, loading, shape, style, size, type: type } = props,
+            { children, className, activeClassName, title, disabled, icon, outline, clear, strong, 
+                block, full, loading, shape, style, size, type: type } = props,
             iconDefinition, iconElement;
 
         if (loading) {
@@ -103,7 +105,14 @@ class Button extends React.PureComponent<ButtonProps> {
 
         let btnClassName = tools.classNames(
             buttonCSS.btn,
-            [ type, disabled && 'disabled', outline && 'outline', clear && 'clear', block && 'block', full && 'full', size, shape ].map(
+            [ type, 
+                disabled && 'disabled', 
+                outline && 'outline', 
+                clear && 'clear', 
+                strong && 'strong',
+                block && 'block', 
+                full && 'full', 
+                size, shape ].map(
                 n => n && buttonCSS[n]
             ),
             className

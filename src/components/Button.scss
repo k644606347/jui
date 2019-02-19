@@ -82,11 +82,14 @@ $button-font-size-lg: 24 * $hd;
             opacity: .6;
         }
     }
-    &.full {
-        border-radius: 0;
-        display: block;
+    &.strong {
+        font-weight: bold;
     }
     &.block {
+        display: block;
+    }
+    &.full {
+        border-radius: 0;
         display: block;
     }
     &.small {
@@ -123,8 +126,8 @@ $button-font-size-lg: 24 * $hd;
             background-color: $primary-tap-color;
         }
         &.outline {
-            background-color: $bg-color;
             color: $primary-color;
+            background-color: $bg-color;
         }
         &.clear {
             color: $primary-color;
@@ -140,8 +143,8 @@ $button-font-size-lg: 24 * $hd;
             background-color: #d24747;
         }
         &.outline {
-            background-color: $bg-color;
             color: #e94f4f;
+            background-color: $bg-color;
         }
         &.clear {
             color: #e94f4f;
