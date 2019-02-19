@@ -30,6 +30,13 @@ class App extends React.Component<any, any> {
     public render() {
         return (
             <JUIApp className={'App'}>
+                <select>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
                 <ButtonDemo />
                 <ToastDemo />
                 <NavBarDemo />
