@@ -204,7 +204,7 @@ export default class Tools {
             }, delay);
         }
     }
-    omit(obj: AnyObject = {}, omitKeys: string[] = []) {
+    omit(obj: AnyObject = {}, omitKeys: string[] = []): AnyObject {
         let result = {};
 
         if(!Array.isArray(omitKeys) || omitKeys.length === 0) {

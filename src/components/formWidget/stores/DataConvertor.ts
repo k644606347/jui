@@ -20,14 +20,14 @@ export default class DataConvertor {
     constructor() {
         //
     }
-    convertTo(data: any, dataType: DataType) {
+    convertTo(data, dataType: DataType) {
         let func = this[`to${tools.upperCaseFirst(String(dataType))}`];
         return func(data);
     }
-    toString(data: any) {
+    toString(data) {
         return tools.isString(data) ? data : data === null || data === undefined ? '' : JSON.stringify(data);
     }
-    toInteger(data: any) {
+    toInteger(data) {
         if (data === null || data === undefined || data === '' || tools.isEmptyObject(data) || (tools.isArray(data) && data.length === 0)) {
             return 0;
         }
@@ -42,7 +42,7 @@ export default class DataConvertor {
         }
         return data;
     }
-    toFloat(data: any) {
+    toFloat(data) {
         if (data === null || data === undefined || data === '' || tools.isEmptyObject(data) || (tools.isArray(data) && data.length === 0)) {
             return 0;
         }
@@ -57,7 +57,7 @@ export default class DataConvertor {
         }
         return data;
     }
-    toBoolean(data: any) {
+    toBoolean(data) {
 			if (tools.isEmptyObject(data) || (tools.isArray(data) && data.length === 0)) {
 				return false;
 			} else if (tools.isString(data)) {
@@ -66,7 +66,7 @@ export default class DataConvertor {
             } else 
                 return !!data;
     }
-    toArray(data: any) {
+    toArray(data) {
         if (tools.isArray(data))
             return data;
         
@@ -83,7 +83,7 @@ export default class DataConvertor {
 
         return data;
     }
-    toObject(data: any) {
+    toObject(data) {
         if (tools.isPlainObject(data))
             return data;
         

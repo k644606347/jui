@@ -1,5 +1,5 @@
 @mixin cssvar($name, $value) {
-    @if $name && $value {
+    @if $name and $value {
         --jui-#{$name}: #{$value};
     }
 }

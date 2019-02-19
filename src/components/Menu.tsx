@@ -85,8 +85,7 @@ export default class Menu extends React.PureComponent<MenuProps, MenuState> {
             { id, label, className, style, icon, items, showItems, level, activeIndex, multiSelect, backdrop, backdropClick } = props,
             { itemsStyle, backdropStyle } = state;
 
-        return <React.Fragment>
-            <div className={cssModules['menu-wrap']}>
+        return <div className={cssModules['menu-wrap']}>
                 <div ref='menuBtn' style={style} className={tools.classNames(cssModules['menu-btn'], className)} onClick={this.handleBtnClick}>{icon && Icon.renderIcon(icon)}{label}</div>
                 <div className={cssModules['menu-items-root']} style={{ display: this.didMount && showItems ? 'block' : 'none' }}>
                     <div style={itemsStyle} className={cssModules['menu-items-wrap']}>
@@ -94,8 +93,7 @@ export default class Menu extends React.PureComponent<MenuProps, MenuState> {
                     </div>
                     {backdrop ? <div className={cssModules['menu-items-wrap-backdrop']} style={backdropStyle} onClick={backdropClick ? this.handleBackdropClick : undefined}></div> : ''}
                 </div>
-            </div>
-        </React.Fragment>;
+            </div>;
     }
     private didMount:boolean = false;
     componentDidMount() {

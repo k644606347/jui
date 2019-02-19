@@ -34,7 +34,6 @@ export default class WidgetStore {
         return this.data;
     }
     setData(data: any) {
-        // TODO 是否拦截异常？
         this.data = this.formatData(data);
     }
     formatData(data: any) {

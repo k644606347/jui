@@ -30,7 +30,6 @@ class App extends React.Component<any, any> {
     public render() {
         return (
             <JUIApp className={'App'}>
-                <Input defaultValue="ddd" />
                 <ButtonDemo />
                 <ToastDemo />
                 <NavBarDemo />

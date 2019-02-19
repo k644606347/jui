@@ -7,7 +7,7 @@ class View<P = {}, S = {}, SS = any> extends React.PureComponent<P, S, SS> {
 
         this.initComponentDidMount();
     }
-    initComponentDidMount() {
+    private initComponentDidMount() {
         let componentDidMount = this.componentDidMount.bind(this),
             proxy = () => {
                 let dom = ReactDOM.findDOMNode(this);
