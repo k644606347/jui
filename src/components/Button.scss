@@ -1,5 +1,5 @@
 @charset "UTF-8";
-@import './style/Variables';
+@import './style/Variables.scss';
 @import './style/mixins/Hairline';
 @import './style/mixins/tools.scss';
 
@@ -55,6 +55,7 @@ $button-font-size-lg: 24 * $hd;
             opacity: .8;
         }
     }
+    // TODO 设置opacity会导致background失效，祖级元素会显示出来
     &.disabled {
         opacity: .6;
         .control {

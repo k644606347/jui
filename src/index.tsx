@@ -1,5 +1,8 @@
+// 页面框架层
 import JUIApp from './components/JUIApp';
+import ScrollView from './components/ScrollView';
 
+// 底层组件层，最细粒度的组件，不依赖或很少依赖其他component
 import TouchFeedback from "./components/TouchFeedback";
 import Icon from "./components/Icon";
 import Button from "./components/Button";
@@ -8,12 +11,14 @@ import Input from "./components/formWidget/Input";
 import Textarea from "./components/formWidget/Textarea";
 import Radio from "./components/Radio";
 import Checkbox from "./components/Checkbox";
+
+// 表单层
 import RadioItems from "./components/formWidget/RadioItems";
 import CheckboxItems from "./components/formWidget/CheckboxItems";
 
 import Message from "./components/Message";
 import NavBar from "./components/NavBar";
-import ToastComponent from "./components/Toast";
+import Toast from "./components/Toast";
 
 import Field from "./components/formWidget/Field";
 import FormItem from "./components/FormItem";
@@ -34,6 +39,7 @@ import Log from './utils/Log';
 
 export {
     JUIApp,
+    ScrollView,
     Form,
     FormItem,
     Field,
@@ -59,5 +65,5 @@ export {
     CheckboxItems,
     NavBar,
     Modal,
-    ToastComponent as Toast,
+    Toast,
 }

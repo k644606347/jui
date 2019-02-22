@@ -28,6 +28,8 @@ class Input extends Widget<InputProps> {
         if (attrs.defaultValue === undefined && attrs.value === undefined) {
             attrs.value = '';
         }
+
+        // TODO autoFocus属性无法生效
         return (
             <input type="text" 
                 {...attrs}

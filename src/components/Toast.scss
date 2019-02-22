@@ -17,6 +17,7 @@
         .toast {
             color: $text-color;
             background-color: $toast-light-bg-color;
+            box-shadow: 0 2px 4px 0 #999;
             .icon {
                 color: #444;
             }
@@ -26,6 +27,7 @@
         .toast {
             color: $text-inverse-color;
             background-color: $toast-dark-bg-color;
+            box-shadow: 0 2px 4px 0 #333;
         }
     }
     .toast {
@@ -51,34 +53,32 @@
             align-self: center;
             opacity: 0;
             &.animate {
-                transition: opacity .15s ease-out;
+                transition: opacity .18s ease-in;
             }
             &.show {
                 opacity: 1;
+                &.animate {
+                    transition-timing-function: ease-out;
+                }
             }
         }
         &.top {
             align-self: flex-start;
-            transform: translate3d(0, -30vh, 0);
-            opacity: 0;
-            &.show {
-                opacity: 1;
-                transform: translate3d(0, 0, 0);
-            }
-            &.animate {
-                transition: transform .15s ease-out, opacity .18s ease-out;
-            }
+            transform: translate3d(0, -100vh, 0);
         }
         &.bottom {
             align-self: flex-end;
-            transform: translate3d(0, 30vh, 0);
-            opacity: 0;
+            transform: translate3d(0, 100vh, 0);
+        }
+        &.top, &.bottom {
+            &.animate {
+                transition: transform .28s ease-in;
+            }
             &.show {
                 transform: translate3d(0, 0, 0);
-                opacity: 1;
-            }
-            &.animate {
-                transition: transform .15s ease-out, opacity .18s ease-out;
+                &.animate {
+                    transition-timing-function: ease-out;
+                }
             }
         }
     }
@@ -86,7 +86,7 @@
         background-color: $toast-overlay-bg-color;
         pointer-events: auto;
         &.overlay-animate {
-            transition: background-color .15s ease-out;
+            transition: background-color .18s ease-out;
         }
     }
 }

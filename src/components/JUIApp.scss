@@ -1,11 +1,23 @@
 @import './style/Variables.scss';
+// body {
+//     position: fixed;
+//     overflow: hidden;
+//     // height: 100vh;
+//     padding: 0;
+//     margin: 0;
+//     top: 0;
+//     left: 0;
+//     right: 0;
+//     bottom: 0;
+// }
 .wrapper {
     font-family: 'PingFang SC', 'Helvetica Neue', 'Hiragino Sans GB', Helvetica,
         'Microsoft YaHei', Arial;
     font-size: 14px;
     line-height: $line-height;
-    -webkit-text-size-adjust: 100%; //在iOS中变更横屏后，防止调整字体大小。
+    text-size-adjust: 100%; //在iOS中变更横屏后，防止调整字体大小。
     margin: 0;
+    padding: 0;
     // a {
     //     -webkit-tap-highlight-color: transparent;
     // }

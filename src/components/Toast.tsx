@@ -6,6 +6,7 @@ import { tools } from "../utils/Tools";
 import { iconInfoCircleOutline, iconLoading, iconCheckCircleOutline, iconCloseCircleOutline, iconAlert } from "./icons/SVGData";
 import toastCSS from './Toast.scss';
 import * as ReactDOM from "react-dom";
+import ScrollView from "./ScrollView";
 
 export interface ToastProps extends CSSAttrs {
     duration?: number;
@@ -31,6 +32,7 @@ const presetIconMap = {
     warn: iconAlert
 }
 class ToastComponent extends View<ToastProps, ToastState> {
+    static componentName =  'Toast';
     static defaultProps: ToastProps = {
         duration: 3000,
         overlay: false,
@@ -41,6 +43,7 @@ class ToastComponent extends View<ToastProps, ToastState> {
         position: 'middle',
         theme: 'dark',
     }
+    private disableScrollTaskID;
     private handleCloseTimer;
     private wrapperRef = React.createRef<any>();
     private toastRef = React.createRef<any>();
@@ -118,10 +121,20 @@ class ToastComponent extends View<ToastProps, ToastState> {
     toggleDisplay() {
         let wrapperEl = this.wrapperRef.current,
             toastEl = this.toastRef.current,
-            { animate } = this.props,
+            { overlay, animate } = this.props,
             { show } = this.state,
             wrapperClassList = wrapperEl.classList,
             toastClassList = toastEl.classList;
+
+        if (overlay) {
+            if (show) {
+                if (!this.disableScrollTaskID)
+                    this.disableScrollTaskID = ScrollView.addDisableTask();
+            } else {
+                ScrollView.removeDisableTask(this.disableScrollTaskID);
+                this.disableScrollTaskID = null;
+            }
+        }
 
         if (show) {
             wrapperClassList.add(toastCSS.wrapperShow);
@@ -162,7 +175,6 @@ class ToastComponent extends View<ToastProps, ToastState> {
         if (e.target.classList.contains(toastCSS.show)) {
             return;
         }
-
         let wrapperEl = this.wrapperRef.current,
             wrapperClassList = wrapperEl.classList,
             { onCloseAnimationEnd } = this.props;
@@ -212,6 +224,14 @@ class StatefulToast extends React.PureComponent<any, State> {
     hide(args?: Partial<State>) {
         this.setState({ ...args, show: false });
         return this;
+    }
+    alert(content: State['content'], duration?: State['duration'], options?: Partial<State>) {
+        return this.show({
+            ...ToastComponent.defaultProps,
+            ...options,
+            content,
+            duration,
+        });
     }
     info(content: State['content'], duration?: State['duration'], options?) {
         return this.show({

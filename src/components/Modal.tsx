@@ -5,6 +5,7 @@ import Tools from "../utils/Tools";
 import { iconArrowBack, iconClose } from "./icons/SVGData";
 import Icon from "./Icon";
 import modalCSS from './Modal.scss';
+import ScrollView from "./ScrollView";
 
 type BtnType = boolean | string | JSX.Element;
 export interface ModalProps extends CSSAttrs {
@@ -34,6 +35,8 @@ export default class Modal extends React.PureComponent<ModalProps, ModalState> {
         cancelBtn: <Icon icon={iconArrowBack} />,
         closeBtn: false,
     };
+    private disableScrollTaskID;
+    private scrollViewRef = React.createRef<ScrollView>();
     constructor(props: ModalProps) {
         super(props);
 
@@ -88,11 +91,26 @@ export default class Modal extends React.PureComponent<ModalProps, ModalState> {
                 >
                     {<div className={modalCSS.title}>{title}</div>}
                 </NavBar>
-                <div className={tools.classNames(modalCSS.body, bodyClassName)} style={bodyStyle}>
+                <ScrollView ref={this.scrollViewRef} className={tools.classNames(modalCSS.body, bodyClassName)} style={bodyStyle}>
                     {children}
-                </div>
+                </ScrollView>
             </div>
         );
+    }
+    componentDidMount() {
+        this.processScroll();
+    }
+    componentDidUpdate() {
+        this.processScroll();
+    }
+    private processScroll() {
+        if (this.props.show) {
+            if (!this.disableScrollTaskID)
+                this.disableScrollTaskID = ScrollView.addDisableTask((scrollView) => scrollView !== this.scrollViewRef.current);
+        } else {
+            ScrollView.removeDisableTask(this.disableScrollTaskID);
+            this.disableScrollTaskID = null;
+        }
     }
     private buildBtn(btn: BtnType, btnProps: AnyObject) {
         if (!btn) {

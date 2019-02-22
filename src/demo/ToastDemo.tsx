@@ -51,7 +51,7 @@ export default class ToastDemo extends React.PureComponent<any, any>{
                                 },
                                 animate: false,
                             })
-                        }>无动画效果</Button>
+                        }>底部Toast(无动画效果)</Button>
                         <Button full onClick={
                             e => Toast.show({
                                 content: '这是middle toast',
@@ -62,7 +62,7 @@ export default class ToastDemo extends React.PureComponent<any, any>{
                                 },
                                 animate: false,
                             })
-                        }>无动画效果2</Button>
+                        }>中部Toast(无动画效果)</Button>
                         <Button full onClick={
                             e => Toast.show({
                                 content: '这是top toast',
@@ -85,7 +85,7 @@ export default class ToastDemo extends React.PureComponent<any, any>{
                                 animate: false,
                                 overlay: true
                             })
-                        }>无动画效果4</Button>
+                        }>顶部Toast(无动画效果)</Button>
                         <Button full onClick={
                             e => Toast.loading('', 0)
                         }>只有图标</Button>
@@ -163,6 +163,23 @@ export default class ToastDemo extends React.PureComponent<any, any>{
                                 setCountDown();
                             }
                         }>倒计时Toast</Button>
+                        <Button full onClick={
+                            e => Toast.show({
+                                content: '这是顶部toast',
+                                position: 'top',
+                                duration: 0,
+                                theme: 'light'
+                            })
+                        }>theme: 'light'</Button>
+                        <Button full onClick={
+                            e => Toast.show({
+                                content: '这是顶部toast',
+                                position: 'bottom',
+                                // duration: 0,
+                                theme: 'light',
+                                overlay: true
+                            })
+                        }>theme: 'light',overlay: true</Button>
                     </React.Fragment>
                 </Modal>
             </React.Fragment>

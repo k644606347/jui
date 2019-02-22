@@ -1,7 +1,6 @@
 import * as React from "react";
 import Tools from "../utils/Tools";
-import Log from "../utils/Log";
-import cssModules from './Label.scss';
+import labelCSS from './Label.scss';
 
 export interface LabelProps extends React.HTMLProps<HTMLLabelElement> {
     onClick?: (e: React.MouseEvent<HTMLLabelElement>) => void;
@@ -23,7 +22,7 @@ export default class Label extends React.PureComponent<LabelProps> {
 
         return (
             <label {...restProps} className={
-                tools.classNames(cssModules.wrapper, required && cssModules.required, className)
+                tools.classNames(labelCSS.wrapper, required && labelCSS.required, className)
             } onClick={this.handleLabelClick}>{children}</label>
         )
     }

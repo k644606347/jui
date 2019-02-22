@@ -40,6 +40,7 @@ class App extends React.Component<any, any> {
                 <ButtonDemo />
                 <ToastDemo />
                 <NavBarDemo />
+                <ModalDemo/>
                 <SearchBarDemo />
                 {/* <RowTagNestedDemo /> */}
                 <MessageTest />
@@ -53,7 +54,6 @@ class App extends React.Component<any, any> {
                 <Icon icon={iconAddCircle} rotation={90} flip="vertical" pulse={true} spin={true} />
                 <Pagination current={1} total={20} disabled={true} />
                 <Pagination current={21} total={20} disabled={true} />
-                <ModalDemo/>
                 <ListDemo/>
                 <a href="www.baidu.com">link1</a>
                 <a onClick={this.link2}>link2</a>

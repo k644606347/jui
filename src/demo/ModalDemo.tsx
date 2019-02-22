@@ -1,4 +1,4 @@
-import { Modal, Button, ActiveForm, Input, CheckboxItems, Checkbox, Toast } from "..";
+import { Modal, Button, ActiveForm, Input, CheckboxItems, Checkbox, Toast, Field, FormItem } from "..";
 import * as React from "react";
 
 export default class ModalDemo extends React.PureComponent<any,any> {
@@ -21,13 +21,13 @@ export default class ModalDemo extends React.PureComponent<any,any> {
         
         return (
             <React.Fragment>
-                <Button onClick={this.handleBtnClick}>toggle a Modal</Button>
+                <Button onClick={this.handleBtnClick} type="primary">simple Modal demo</Button>
                 <Modal 
                     title={'this is a Modal'} 
                     closeBtn={true}
                     onOk={e => {
-                        Toast.info('ok btn clicked!');
                         this.setState({ show: false });
+                        Toast.info('ok btn clicked!', 3000, { overlay: true });
                     }} 
                     onClose={e => {
                         Toast.info('close btn clicked!');
@@ -50,11 +50,14 @@ export default class ModalDemo extends React.PureComponent<any,any> {
     }
     renderActiveForm(args) {
         return <React.Fragment>
-            <Input name={'name'} value={args.value.name} onChange={args.handleChange}/>
-            <Input name={'age'} value={args.value.age}/>
-            <Checkbox name={'vip'} checked={args.value.vip} onChange={(e) => {
-                args.handleChange(e);
-            }} />
+            <div style={{height: '2000px'}}></div>
+            <FormItem label='Name:' field={<Input name={'name'} value={args.value.name}/>}></FormItem>
+            <FormItem label='Age:' field={<Input name={'age'} value={args.value.age}/>}></FormItem>
+            <FormItem label='Vip:' field={
+                <Checkbox name={'vip'} checked={args.value.vip} onChange={(e) => {
+                    args.handleChange(e);
+                }} />
+            }></FormItem>
         </React.Fragment>
     }
     handleFormChange(e) {

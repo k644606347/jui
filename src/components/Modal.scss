@@ -5,8 +5,8 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
+    right: 0;
+    bottom: 0;
     background-color: $bg-color;
     z-index: $modal-zindex;
     &.show {
@@ -27,8 +27,5 @@
         .close-btn {
             margin-left: 10px;
         }
-    }
-    .body {
-        overflow: auto;
     }
 }
