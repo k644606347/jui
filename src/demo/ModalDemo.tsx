@@ -25,6 +25,7 @@ export default class ModalDemo extends React.PureComponent<any,any> {
                 <Modal 
                     title={'this is a Modal'} 
                     closeBtn={true}
+                    okBtn={<Button clear type="primary">ok~!</Button>}
                     onOk={e => {
                         this.setState({ show: false });
                         Toast.info('ok btn clicked!', 3000, { overlay: true });

@@ -1,8 +1,23 @@
-@mixin cssvar($name, $value) {
-    @if $name and $value {
-        --jui-#{$name}: #{$value};
+$var-prefix: --jui;
+
+@mixin cssvar($name-or-map, $value-or-prefix: '', $prefix: '') {
+    $final-prefix: $var-prefix;
+
+    @if type-of($name-or-map) == map {
+        @if $value-or-prefix != '' {
+            $final-prefix: #{$var-prefix}-#{$value-or-prefix};
+        }
+        @each $name, $value in $name-or-map {
+            #{$final-prefix}-#{$name}: #{$value};
+        }
+    } @else {
+        @if $prefix != '' {
+            $final-prefix: #{$var-prefix}-#{$prefix};
+        }
+        #{$final-prefix}-#{$name-or-map}: #{$value-or-prefix};
     }
 }
 @function cssvar($name) {
-    @return var(--jui-#{$name}); 
+    @return var(#{$var-prefix}-#{$name}); 
 }
+$cssvar-ref: get-function("cssvar");

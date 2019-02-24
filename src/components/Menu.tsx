@@ -18,10 +18,10 @@ export default class Menu extends React.PureComponent<MenuProps, MenuState> {
         this.updateLayout();
     }
     static handleScroll() {
-        Menu.instances.forEach(ins => {
-            let { showItems, backdrop } = ins.props,
-                { backdropStyle } = ins.state,
-                nextBackdropStyle = ins.genBackdropStyle(),
+        Menu.instances.forEach(instance => {
+            let { showItems, backdrop } = instance.props,
+                { backdropStyle } = instance.state,
+                nextBackdropStyle = instance.genBackdropStyle(),
                 maxOffset = 10;
 
             if (!showItems || !backdrop) {
@@ -32,7 +32,7 @@ export default class Menu extends React.PureComponent<MenuProps, MenuState> {
             if (Math.abs(Number(backdropStyle.top) - Number(nextBackdropStyle.top)) < maxOffset) {
                 return;
             }
-            ins.setState({ backdropStyle: nextBackdropStyle });
+            instance.setState({ backdropStyle: nextBackdropStyle });
         })
     }
     private static updateLayout(options?: Partial<MenuState>) {

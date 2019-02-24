@@ -19,7 +19,7 @@ interface ToastState extends CSSAttrs {
     onClose?: () => void;
     overlay?: boolean;
     type?: 'info' | 'loading' | 'success' | 'error' | 'warn' | '';
-    icon?: React.ReactElement<IconProps> | boolean;
+    icon?: React.ComponentElement<IconProps, Icon> | boolean;
     content?: React.ReactNode;
     show?: boolean;
     transition?: boolean;

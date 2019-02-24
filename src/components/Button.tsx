@@ -46,7 +46,7 @@ export interface ButtonProps {
     shape?: ShapeType;
     outline?: boolean;
     clear?: boolean;
-    onClick?: React.MouseEventHandler<HTMLAnchorElement>;
+    onClick?: React.MouseEventHandler;
 }
 
 const tools = Tools.getInstance();
@@ -120,7 +120,7 @@ class Button extends React.PureComponent<ButtonProps> {
 
         return (
             <TouchFeedback activeClassName={tools.classNames(buttonCSS.active, activeClassName)} disabled={disabled}>
-                <a title={title} style={style} className={btnClassName} onClick={this.handleClick}>
+                <button title={title} style={style} className={btnClassName} onClick={this.handleClick}>
                     <span className={buttonCSS.control}>
                         {
                             iconDefinition ?  
@@ -135,12 +135,12 @@ class Button extends React.PureComponent<ButtonProps> {
                         }
                         {children ? <span className={buttonCSS.content}>{children}</span> : ''}
                     </span>
-                </a>
+                </button>
             </TouchFeedback>
         );
     }
 
-    handleClick(e: React.MouseEvent<HTMLAnchorElement>) {
+    handleClick(e) {
         let { props } = this,
             { onClick, disabled } = props;
 

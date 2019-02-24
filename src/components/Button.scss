@@ -15,21 +15,17 @@ $button-font-size-lg: 24 * $hd;
     max-width: 100vw;
     display: inline-block;
     appearance: none;
-    -webkit-tap-highlight-color: transparent;
+    outline: none;
+    vertical-align: middle;
     box-sizing: border-box;
     padding: 0 $h-spacing-lg;
-    font-size: $button-font-size;
-    height: $button-height;
-    line-height: $button-height;
     overflow: hidden;
     user-select: none;
-    color: $text-color;
-    background-color: $bg-color;
-    border: .5px solid $btn-border-color;
+    border-width: .5px;
+    border-style: solid;
     border-radius: $radius-md;
     .control {
         display: flex;
-        height: 100%;
         flex-direction: row;
         justify-content: center;
         align-items: center;
@@ -44,16 +40,57 @@ $button-font-size-lg: 24 * $hd;
             white-space: nowrap;
         }
         .icon ~ .content {
-            margin-left: .5em;
+            padding-left: .5em;
         }
     }
+    &.default {
+        font-size: $button-font-size;
+        height: $button-height;
+        line-height: $button-height;
+        color: $text-color;
+        background-color: $bg-color;
+        border-color: $btn-border-color;
+        &.active {
+            background-color: $bg-tap-color;
+        }
+    }
+    &.primary {
+        color: $text-inverse-color;
+        background-color: $primary-color;
+        border-color: $primary-color;
+        &.active {
+            background-color: $primary-tap-color;
+        }
+        &.outline, &.clear {
+            color: $primary-color;
+        }
+    }
+    &.danger {
+        color: $text-inverse-color;
+        background-color: #e94f4f;
+        border-color: #e94f4f;
+        &.active {
+            background-color: #d24747;
+        }
+        &.outline, &.clear {
+            color: #e94f4f;
+        }
+    }
+    &.small {
+        font-size: $button-font-size-sm;
+        height: $button-height-sm;
+        line-height: $button-height-sm;
+    }
+    &.large {
+        font-size: $button-font-size-lg;
+        height: $button-height-lg;
+        line-height: $button-height-lg;
+    }
     &.active {
-        background-color: $bg-tap-color;
         .control {
             opacity: .8;
         }
     }
-    // TODO 设置opacity会导致background失效，祖级元素会显示出来
     &.disabled {
         opacity: .6;
         .control {
@@ -62,9 +99,9 @@ $button-font-size-lg: 24 * $hd;
     }
     &.outline {
         border-width: 1px;
-        border-color: $text-color;
+        background-color: transparent;
         &.active {
-            background-color: $bg-color;
+            background-color: transparent;
             opacity: .6;
         }
         &.disabled {
@@ -76,8 +113,9 @@ $button-font-size-lg: 24 * $hd;
     }
     &.clear {
         border-color: transparent;
+        background-color: transparent;
         &.active {
-            background-color: $bg-color;
+            background-color: transparent;
             opacity: .6;
         }
     }
@@ -90,16 +128,6 @@ $button-font-size-lg: 24 * $hd;
     &.full {
         border-radius: 0;
         display: block;
-    }
-    &.small {
-        font-size: $button-font-size-sm;
-        height: $button-height-sm;
-        line-height: $button-height-sm;
-    }
-    &.large {
-        font-size: $button-font-size-lg;
-        height: $button-height-lg;
-        line-height: $button-height-lg;
     }
     &.circle {
         width: $button-height;
@@ -115,40 +143,6 @@ $button-font-size-lg: 24 * $hd;
             width: $button-height-sm;
             height: $button-height-sm;
             line-height: $button-height-sm;
-        }
-    }
-    &.primary {
-        color: $text-inverse-color;
-        background-color: $primary-color;
-        border-color: $primary-color;
-        &.active {
-            background-color: $primary-tap-color;
-        }
-        &.outline {
-            color: $primary-color;
-            background-color: $bg-color;
-        }
-        &.clear {
-            color: $primary-color;
-            background-color: $bg-color;
-            border-color: transparent;
-        }
-    }
-    &.danger {
-        color: $text-inverse-color;
-        background-color: #e94f4f;
-        border-color: #e94f4f;
-        &.active {
-            background-color: #d24747;
-        }
-        &.outline {
-            color: #e94f4f;
-            background-color: $bg-color;
-        }
-        &.clear {
-            color: #e94f4f;
-            background-color: $bg-color;
-            border-color: transparent;
         }
     }
 }

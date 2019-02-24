@@ -6,6 +6,8 @@ import { iconArrowBack, iconClose } from "./icons/SVGData";
 import Icon from "./Icon";
 import modalCSS from './Modal.scss';
 import ScrollView from "./ScrollView";
+import View from "./View";
+import Button from "./Button";
 
 type BtnType = boolean | string | JSX.Element;
 export interface ModalProps extends CSSAttrs {
@@ -27,7 +29,7 @@ export interface ModalProps extends CSSAttrs {
 export interface ModalState {}
 
 const tools = Tools.getInstance();
-export default class Modal extends React.PureComponent<ModalProps, ModalState> {
+export default class Modal extends View<ModalProps, ModalState> {
     static defaultProps = {
         title: '',
         show: false,
@@ -113,10 +115,12 @@ export default class Modal extends React.PureComponent<ModalProps, ModalState> {
         }
     }
     private buildBtn(btn: BtnType, btnProps: AnyObject) {
-        if (!btn) {
+        if (btn === false) {
             return '';
+        } else if (React.isValidElement(btn)) {
+            return React.cloneElement(btn, btnProps);
         } else {
-            return React.createElement('div', btnProps, btn);
+            return React.createElement(Button, { ...btnProps, clear: true, type: 'primary' }, btn);
         }
     }
     private handleOk(e: React.MouseEvent) {

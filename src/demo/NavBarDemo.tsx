@@ -20,7 +20,7 @@ export default class NavBarDemo extends React.PureComponent<any, any> {
                     <React.Fragment>
                         <NavBar leftContent={
                             <Icon icon={iconReturnLeft} />
-                        } rightContent={'确定'} onLeftClick={
+                        } rightContent={<Button>确定</Button>} onLeftClick={
                             e => Log.log('后退')
                         }>导航栏，浅色主题</NavBar>
                         <NavBar theme={'dark'} leftContent={
