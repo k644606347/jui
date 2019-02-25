@@ -59,7 +59,7 @@ declare namespace ActiveFormType {
         validateRules: ValidateRules;
         onSubmit?(e: SubmitEvent): void | Promise<any>;
         onReset?(): void;
-        // onChange?(e: ActiveFormChangeEvent): void;
+        // onChange?(e: ChangeEvent): void;
         onValid?(e: ValidateReportEvent): void;
         onInvalid?(e: ValidateReportEvent): void;
         onValidating?(e: ValidateReportEvent): void;
@@ -393,27 +393,27 @@ export default class ActiveForm extends View<ActiveFormType.Props, ActiveFormTyp
             });
     }
     private validatePostProcess(validateResult: ActiveFormType.ValidateResult & { action?: ActiveFormType.Action }) {
-        let { name } = this.props,
-            { value } = this.state,
-            { isValid, fieldReportMap, validateError, action } = validateResult,
-            nextState: Partial<ActiveFormType.State> = {
-                isValid,
-                validating: false,
-                validateError,
-                fieldReportMap: { ...this.state.fieldReportMap, ...fieldReportMap },
-            };
-        this.setState(nextState as ActiveFormType.State);
+        let { isValid, fieldReportMap, validateError, action } = validateResult;
 
-        let validateReportEvent = {
-            name,
-            value,
-            action,
+        this.setState({
             isValid,
-            fieldReportMap: nextState.fieldReportMap,
+            validating: false,
             validateError,
-        };
-
-        isValid ? this.handleValid(validateReportEvent) : this.handleInvalid(validateReportEvent);
+            fieldReportMap: { ...this.state.fieldReportMap, ...fieldReportMap },
+        }, () => {
+            let { name } = this.props,
+                { value, fieldReportMap } = this.state,
+                validateReportEvent = {
+                    name,
+                    value,
+                    action,
+                    isValid,
+                    fieldReportMap,
+                    validateError,
+                };
+    
+            isValid ? this.handleValid(validateReportEvent) : this.handleInvalid(validateReportEvent);
+        }); 
     }
     private handleValidate(): Promise<Report[]> {
         let { onValidate } = this.props;
@@ -570,7 +570,7 @@ export default class ActiveForm extends View<ActiveFormType.Props, ActiveFormTyp
         this.props.onValidating && this.props.onValidating(e);
     }
     // private handleChange() {
-    //     let { name = '', onChange } = this.props,
+    //     let { name, onChange } = this.props,
     //         { value } = this.state;
 
     //     onChange && onChange({ name, value });

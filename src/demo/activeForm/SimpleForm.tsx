@@ -13,16 +13,17 @@ export default class SimpleForm extends React.PureComponent {
         }}
         validateOnChange={true}
         // validateOnBlur={true}
-        // validateRules={{
-        //     name: ['required', /\d+/, (value) => {
-        //         return /\d+\w+/.test(value);
-        //     }],
-        // }} 
-        onValidate={() => {
+        validateRules={{
+            name: ['required', /\d+/, (value) => {
+                return /\d+\w+/.test(value);
+            }],
+        }} 
+        onValidate={e => {
             let result: Report[] = [];
 
-            // result.push({fieldName: 'description', isValid: false, msg: 'onValidate called!'});
-            result.push({fieldName: 'description', isValid: false, msg: 'onValidate called!', level: 'info'});
+            if (!/^cms/.test(e.value.description)) {
+                result.push({fieldName: 'description', isValid: false, msg: '必须以cms开头'});
+            }
             return result;
         }}
         onSubmit={this.handleSubmit}>{

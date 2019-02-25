@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <form id="form" method="post">
+        <input type="submit" value="提交" />
+    </form>
+    <form id="form2" method="post">
+        <input type="submit" value="提交" />
+    </form>
+    <a href="javascript:void(0)" id="txtBtn">提交</a>
+    <script>
+    var form =document.getElementById("form"),
+        form2 = document.getElementById('form2'),
+        txtBtn = document.getElementById("txtBtn");
+
+    txtBtn.onclick = function(){        
+        var result;
+        if(form.fireEvent){
+            //IE浏览器
+            result=form.fireEvent('onsubmit');
+        }else{
+            //FIREFOX\CHROME等标准浏览器
+          var evt = document.createEvent('HTMLEvents');  
+          evt.initEvent('submit',false,true);  
+          result=form.dispatchEvent(evt);  
+        }
+        console.log(result);
+        if(result){
+            form.submit();
+        }
+        
+    }
+
+    form.onsubmit = function(e){
+        console.log("form表单提交了");
+        e.preventDefault();
+    }
+    form2.onsubmit = function(e){
+        console.log("form2表单提交了");
+        e.preventDefault();
+    }
+    
+    </script>
+</body>
+</html>
