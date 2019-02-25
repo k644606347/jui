@@ -7,6 +7,8 @@ import Log from "../../utils/Log";
 import Widget, { FormWidgetProps } from "./Widget";
 import Field, { FieldChangeEvent, FieldBlurEvent } from "./Field";
 import activeFormCSS from './ActiveForm.scss';
+import View from "../View";
+import * as ReactDOM from "react-dom";
 
 declare namespace ActiveFormType {
     type Value = {[k in string]: any};
@@ -77,7 +79,7 @@ export { ActiveFormType };
 
 const tools = Tools.getInstance();
 const DEBOUNCE_VALIDATE_DELAY = 500;
-export default class ActiveForm extends React.PureComponent<ActiveFormType.Props, ActiveFormType.State> {
+export default class ActiveForm extends View<ActiveFormType.Props, ActiveFormType.State> {
     static defaultProps = {
         name: '',
         initialValue: {},
@@ -117,7 +119,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
             { value, validating, isValid, fieldReportMap, validateError, submitting } = state,
             formProps = { name, action, method, target };
 
-        // console.log('ActiveForm rerender', JSON.stringify(this.state));
+        console.log('ActiveForm render', JSON.stringify(this.state));
         let UnwrappedElement = children
             ? children({
                     ...state,
@@ -142,16 +144,9 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
                     onFieldBlur: this.handleFieldBlur,
                 }}>
                     { UnwrappedElement }
-                    {action ? 
-                        <form ref={this.formRef} {...formProps} className={activeFormCSS.form}>
-                            {submitting ?
-                                Object.keys(value).map((name, i) => {
-                                    let val = value[name];
-
-                                    return <input key={i} name={name} type="hidden" value={JSON.stringify(val)} />
-                                }) : ''
-                            }
-                        </form> : ''
+                    {
+                        action ? 
+                            <form ref={this.formRef} {...formProps} className={activeFormCSS.form}></form> : ''
                     }
                 </ActiveFormContext.Provider>
             </div>
@@ -260,27 +255,56 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
     private debounceRunFieldValidate = tools.debounce(this.runFieldValidate, DEBOUNCE_VALIDATE_DELAY);
     private runFieldValidate(fieldName: string, { action }: { action?: ActiveFormType.Action } = {}) {
         this.validatePreProcess();
-        return this.validateField(fieldName)
-            .then(report => {
-                let { fieldReportMap } = this.state,
-                    isValid = true;
-
-                if (!report.isValid) {
-                    isValid = false;
-                } else {
-                    for (let name in fieldReportMap) {
-                        if (name !== report.fieldName && !fieldReportMap[name].isValid) {
-                            isValid = false; break;
-                        }
+        return Promise.all([
+            this.validateField(fieldName),
+            this.handleValidate().then(reports => 
+                reports.find(report => report.fieldName === fieldName)
+            ).catch((e: Error) => {
+                Log.error(e);
+                return e;
+            })
+        ]).then((results) => {
+            let firstReport,
+                firstInvalidReport,
+                validateError,
+                fieldIsValid = true,
+                formIsValid = true;
+                
+            results.forEach(result => {
+                if (validator.isValidReport(result)) {
+                    if (firstReport === undefined)
+                        firstReport = result;
+                    if (!result.isValid && firstInvalidReport === undefined) {
+                        firstInvalidReport = result;
+                        fieldIsValid = false;
                     }
                 }
-                this.validatePostProcess({
-                    isValid,
-                    fieldReportMap: { [fieldName]: report },
-                    action
-                });
-                return report;
+                if (tools.isError(result) && validateError === undefined) {
+                    validateError = result;
+                }
             });
+            let report = fieldIsValid ? firstReport : firstInvalidReport,
+                { fieldReportMap } = this.state;
+
+            if (fieldIsValid)
+                for (let name in fieldReportMap) {
+                    let fieldIsValid = fieldReportMap[name].isValid;
+
+                    if (name !== report.fieldName && !fieldIsValid) {
+                        formIsValid = false; break;
+                    }
+                }
+            else 
+                formIsValid = false;
+
+            this.validatePostProcess({
+                isValid: formIsValid,
+                fieldReportMap: { [fieldName]: report },
+                validateError,
+                action
+            });
+            return report;
+        });
     }
     private validatePreProcess({ action }: { action?: ActiveFormType.Action } = {}) {
         let { name } = this.props,
@@ -343,15 +367,13 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
         }
         if (widgetClass && tools.isFunction(widgetClass.validate)) {
             promiseQueue.push(widgetClass.validate(fieldValue));
-            // promiseQueue.push(new Promise(() => {throw new Error('demo Error')}));
         }
 
         return Promise.all(promiseQueue)
             .then((reportArr: Report[]) => {
                 let firstInvalidReport = reportArr.find(report => !report.isValid),
-                    report = firstInvalidReport ? firstInvalidReport : validator.getDefaultReport();
-
-                report.fieldName = fieldName;
+                    report = firstInvalidReport ? firstInvalidReport : reportArr[0];
+                    
                 return report;
             }).catch((result: Report | Error) => {
                 if (tools.isError(result)) {
@@ -361,12 +383,13 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
                         isValid: false,
                         msg: result + '',
                         level: 'error',
-                        fieldName,
                     } as Report;
                 } else {
-                    result.fieldName = fieldName;
                     return result;
                 }
+            }).then(report => {
+                report.fieldName = fieldName;
+                return report;
             });
     }
     private validatePostProcess(validateResult: ActiveFormType.ValidateResult & { action?: ActiveFormType.Action }) {
@@ -417,7 +440,7 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
                         } else {
                             reject(new Error(`onValidate只能返回数组，请检查，
                                 当前返回: ${JSON.stringify(result)},
-                                有效的返回: Array<{ fieldName: string, isValid: boolean, level: 'error' | 'warn', msg: string}>`));
+                                有效的返回: Array<{ fieldName: string, isValid: boolean, level: 'error' | 'warn' | 'info', msg: string}>`));
                         }
                     }
 
@@ -440,8 +463,25 @@ export default class ActiveForm extends React.PureComponent<ActiveFormType.Props
     submit() {
         let { onSubmit, name } = this.props,
             postProcess = (args: AnyObject) => {
-                if (!args.preventDefault) {
-                    this.formRef && this.formRef.current && this.formRef.current.submit();
+                let value = this.getValue(),
+                    formTag = this.formRef && this.formRef.current;
+                    
+                if (!args.preventDefault && formTag) {
+                    ReactDOM.render(
+                        <React.Fragment>
+                            {
+                                Object.keys(value).map((name, i) => {
+                                    let val = value[name];
+    
+                                    return <input key={i} name={name} type="hidden" value={JSON.stringify(val)} />
+                                })
+                            }
+                        </React.Fragment>, 
+                        formTag,
+                        () => {
+                            formTag && formTag.submit();
+                        }
+                    );
                 }
                 this.setState({ submitting: false });
             };

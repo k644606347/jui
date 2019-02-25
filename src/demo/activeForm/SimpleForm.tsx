@@ -1,27 +1,28 @@
 import * as React from "react";
-import { ActiveForm, Input, Field, Textarea, ValidateMessage, Button, FormItem, Toast, CheckboxItems, RadioItems } from "../..";
+import { ActiveForm, Input, Textarea, ValidateMessage, Button, FormItem, Toast, CheckboxItems, RadioItems } from "../..";
 import { Report } from "../../validate/Validator";
 
 export default class SimpleForm extends React.PureComponent {
     render() {
         return <ActiveForm 
-        action="http://www.baidu.com"
+        action="http://cms.pub.sina.com.cn"
         method="post"
         // target="top"
         initialValue={{
             isStudent: '0'
         }}
         validateOnChange={true}
-        validateOnBlur={true}
-        validateRules={{
-            name: ['required', /\d+/, (value) => {
-                return /\d+\w+/.test(value);
-            }],
-        }} 
+        // validateOnBlur={true}
+        // validateRules={{
+        //     name: ['required', /\d+/, (value) => {
+        //         return /\d+\w+/.test(value);
+        //     }],
+        // }} 
         onValidate={() => {
             let result: Report[] = [];
 
             // result.push({fieldName: 'description', isValid: false, msg: 'onValidate called!'});
+            result.push({fieldName: 'description', isValid: false, msg: 'onValidate called!', level: 'info'});
             return result;
         }}
         onSubmit={this.handleSubmit}>{

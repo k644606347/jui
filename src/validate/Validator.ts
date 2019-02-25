@@ -12,7 +12,7 @@ export interface Rule {
 export type RuleParam = Rule | RegExp | AnyFunction | ShorthandRule;
 export interface Report {
     isValid: boolean;
-    level?: 'error' | 'warn';
+    level?: 'error' | 'warn' | 'info';
     msg?: string;
     fieldName?: string;
 }
@@ -40,14 +40,16 @@ class Validator {
 
         return instances.length === 0 ? new Validator() : instances[0];
     }
-    getDefaultLevel(): 'error' {
-        return 'error';
-    }
     getDefaultReport(): Report {
         return {
             isValid: true,
             msg: '',
+            level: 'info',
         }
+    }
+    getDefaultLevelBy(reportOrIsValid: Report | boolean) {
+        let isValid = this.isValidReport(reportOrIsValid) ? reportOrIsValid.isValid : reportOrIsValid;
+        return isValid ? 'info' : 'error';
     }
     isValidRule(rule): rule is Rule {
         if (!tools.isPlainObject(rule)) {
@@ -71,8 +73,8 @@ class Validator {
     }
     compareReport(report: Report, prevReport: Report) {
         let isEqual = true,
-            prevLevel = prevReport.level || this.getDefaultLevel(),
-            level = report.level || this.getDefaultLevel();
+            prevLevel = prevReport.level || this.getDefaultLevelBy(prevReport),
+            level = report.level || this.getDefaultLevelBy(report);
 
         if (prevReport === report) {
             return isEqual;
@@ -118,7 +120,7 @@ class Validator {
             let { level, msg = '' } = hitRule;
             report = Object.assign(report, {
                 isValid: false,
-                level: level || this.getDefaultLevel(),
+                level: level || this.getDefaultLevelBy(false),
                 msg,
             });
 

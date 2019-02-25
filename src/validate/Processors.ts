@@ -1,19 +1,17 @@
 import { Report, validator } from "./Validator";
 import { tools } from "../utils/Tools";
 import Log from "../utils/Log";
-import { AnyFunction } from "../utils/types";
+import { AnyFunction, tuple } from "../utils/types";
 
-export type AllowedRule = 'required' | 'maxLength' | 'minLength' | 'maxZhLength' | 'minZhLength' 
-    | 'regexp' | 'email' | 'url' | 'domain' | 'mobilePhone' | 'date' | 'datetime' | 'callback';
-export type ShorthandRule = 'required' | 'email' | 'url' | 'domain' | 'mobilePhone' | 'date' | 'datetime';
-
-const allowedRules: AllowedRule[] = [
+const allowedRules = tuple(
     'required', 'maxLength', 'minLength', 'maxZhLength', 'minZhLength', 
-    'regexp', 'email', 'url', 'domain', 'mobilePhone', 'date', 'datetime', 'callback'
-];
-const shorthandRules: ShorthandRule[] = [
-    'required', 'email', 'url', 'domain', 'mobilePhone', 'date', 'datetime'
-];
+    'regexp', 'email', 'url', 'domain', 'mobilePhone', 'date', 'datetime', 'callback');
+const shorthandRules = tuple(
+    'required', 'email', 'url', 'domain', 'mobilePhone', 'date', 'datetime');
+
+export type AllowedRule = (typeof allowedRules)[number];
+export type ShorthandRule = (typeof shorthandRules)[number];
+
 type IProcessors = { [k in AllowedRule]: AnyFunction };
 class Processors implements IProcessors {
     required(value) {
@@ -104,7 +102,7 @@ class Processors implements IProcessors {
         } else {
             let errorMsg = `校验函数返回错误，请检查, 
             当前返回: ${JSON.stringify(callbackResult)}, 
-            有效的返回: boolean | { isValid: boolean, level: 'error' | 'warn', msg?: string, fieldName?: string}`;
+            有效的返回: boolean | { isValid: boolean, level: 'error' | 'warn' | 'info', msg?: string, fieldName?: string}`;
 
             throw new Error(errorMsg);
         }

@@ -30,7 +30,7 @@ class ValidateMessage extends React.PureComponent<Props> {
                 fieldReport = fieldReportMap[fieldName];
         }
 
-        let { level, msg } = fieldReport;
+        let { isValid, level, msg } = fieldReport;
         
         console.log('ValidateMessage.render');
         if (!msg) {
@@ -38,7 +38,7 @@ class ValidateMessage extends React.PureComponent<Props> {
         }
 
         if (!level)
-            level = validator.getDefaultLevel();
+            level = validator.getDefaultLevelBy(isValid);
 
         let MessageTag = <Message style={style} 
                             className={tools.classNames(messageCSS.msg, level && messageCSS[level], className)}
