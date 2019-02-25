@@ -63,7 +63,7 @@ declare namespace ActiveFormType {
         onValid?(e: ValidateReportEvent): void;
         onInvalid?(e: ValidateReportEvent): void;
         onValidating?(e: ValidateReportEvent): void;
-        onValidate?(value: ActiveFormType.Value): Promise<Report[]> | Report[];
+        onValidate?(e: Event): Promise<Report[]> | Report[];
     }
     interface State {
         parsedInitialValue: ActiveFormType.Value;
@@ -423,7 +423,10 @@ export default class ActiveForm extends View<ActiveFormType.Props, ActiveFormTyp
                 let result, catched = false;
                 
                 try {
-                    result = onValidate(this.getValue());
+                    result = onValidate({
+                        name: this.props.name,
+                        value: this.getValue(),
+                    });
                 } catch(e) {
                     reject(e);
                     catched = true;
@@ -461,7 +464,8 @@ export default class ActiveForm extends View<ActiveFormType.Props, ActiveFormTyp
 
     // }
     submit() {
-        let { onSubmit, name } = this.props,
+        return new Promise((resolve, reject) => {
+            let { onSubmit, name } = this.props,
             postProcess = (args: AnyObject) => {
                 let value = this.getValue(),
                     formTag = this.formRef && this.formRef.current;
@@ -485,37 +489,51 @@ export default class ActiveForm extends View<ActiveFormType.Props, ActiveFormTyp
                 }
                 this.setState({ submitting: false });
             };
-        this.setState({ submitting: true });
-        this.runValidate({ action: 'submit' }).then((validateResult) => {
-            if (!validateResult.isValid) {
-                this.setState({ submitting: false });
-                return;
-            }
 
-            let preventDefault = false;
-            if (onSubmit) {
-                let result = onSubmit({
-                    name,
-                    value: this.getValue(),
-                    preventDefault: () => {
-                        preventDefault = true;
-                    }
-                });
-
-                if (tools.isPromise(result)) {
-                    result
-                        .then(() => {
-                            postProcess({preventDefault});
-                        })
-                        .catch(() => {
-                            postProcess({preventDefault});
+            this.setState({ submitting: true });
+            this.runValidate({ action: 'submit' }).then((validateResult) => {
+                if (!validateResult.isValid) {
+                    this.setState({ submitting: false });
+                    reject(new Error('未通过校验'));
+                    return;
+                }
+    
+                let preventDefault = false;
+                if (onSubmit) {
+                    let result, catched;
+                    try {
+                        result = onSubmit({
+                            name,
+                            value: this.getValue(),
+                            preventDefault: () => {
+                                preventDefault = true;
+                            }
                         });
+                    } catch(e) {
+                        catched = true;
+                        this.setState({ submitting: false });
+                        reject(e);
+                    }
+
+                    if (catched)
+                        return;
+
+                    if (tools.isPromise(result)) {
+                        result
+                            .then(() => {
+                                postProcess({preventDefault});
+                            })
+                            .catch(() => {
+                                postProcess({preventDefault});
+                            });
+                    } else {
+                        postProcess({preventDefault});
+                    }
                 } else {
                     postProcess({preventDefault});
                 }
-            } else {
-                postProcess({preventDefault});
-            }
+                resolve();
+            });
         });
     }
     reset() {

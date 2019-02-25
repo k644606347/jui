@@ -92,6 +92,12 @@ export default class ButtonDemo extends React.PureComponent<any, any>{
                     <Button disabled shape="circle" loading block size="large">btn4</Button>
                     <Button disabled type="primary" shape="circle" loading block size="large">btn4</Button>
                     <Button disabled type="danger" shape="circle" loading block size="large">btn4</Button>
+                    <Button disabled type="default" outline>normal outline btn</Button>
+                    <Button disabled type="primary" outline>primary outline btn</Button>
+                    <Button disabled type="danger" outline>danger outline btn</Button>
+                    <Button disabled type="default" clear>normal outline btn</Button>
+                    <Button disabled type="primary" clear>primary outline btn</Button>
+                    <Button disabled type="danger" clear>danger outline btn</Button>
                 </Modal>
             </React.Fragment>
         )
