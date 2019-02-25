@@ -43,6 +43,12 @@ export default class SimpleForm extends React.PureComponent {
                                 { label: '否', value: '0' }
                             ]}></RadioItems>
                         }></FormItem>
+                        <h2>子ActiveForm， 父子互不影响</h2>
+                        <ActiveForm initialValue={{
+                            name: 'this is a title',
+                        }}>{() => {
+                            return <FormItem field={<Input name='name' />}></FormItem>
+                        }}</ActiveForm>
                         <ValidateMessage fieldName="isStudent" />
                         <Button type="primary" disabled={!args.isValid} onClick={args.handleSubmit}>submit!</Button>
                         <Button disabled={!args.isValid} onClick={args.handleReset}>reset!</Button>
