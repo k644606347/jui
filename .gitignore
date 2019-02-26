@@ -72,8 +72,8 @@ typings/
 # Serverless directories
 .serverless
 
+/.DS_Store
 .DS_Store
-
 #根目录build/
 /build/
 #过滤jetbrains配置

@@ -24,7 +24,7 @@ export default class List extends View<IListProps> {
     render() {
         let { props } = this,
             { dataSource, style, className } = props,
-            cssModules = this.getCSSModules();
+            cssModules = this.cssModules;
 
         return (<ul style={style} className={tools.classNames(cssModules.list, className)}>{
             dataSource.map((dGroup: any, i) => {
@@ -48,14 +48,14 @@ export default class List extends View<IListProps> {
             headerEl = renderSectionHeader(data),
             bodyEl = renderSectionBody(data);
 
-        return <div className={this.getCSSModules().section}>{headerEl}{bodyEl}</div>;
+        return <div className={this.cssModules.section}>{headerEl}{bodyEl}</div>;
 
         // return renderSectionWrapper ? renderSectionWrapper(headerEl, bodyEl) : <div className={cssModules.section}>{headerEl}{bodyEl}</div>;
     }
     private renderSectionHeader(data: SectionData): JSX.Element {
         let { renderSectionHeader, sectionHeaderSticky } = this.props,
             headerContent = renderSectionHeader ? renderSectionHeader(data) : data.title,
-            cssModules = this.getCSSModules(),
+            cssModules = this.cssModules,
             classNames = tools.classNames(cssModules.sectionHeader, sectionHeaderSticky && cssModules.sectionHeaderSticky);
 
         return headerContent ? <div className={tools.classNames(classNames)}>{ headerContent }</div> : <React.Fragment />;
@@ -63,7 +63,7 @@ export default class List extends View<IListProps> {
     private renderSectionBody(data: SectionData) {
         let { renderSectionBodyWrapper } = this.props,
             { renderRow, renderSeparator } = this,
-            cssModules = this.getCSSModules(),
+            cssModules = this.cssModules,
             children = data.data.map((d, i) => {
                 return <React.Fragment key={i}>{ renderRow(d) }</React.Fragment>
             });
@@ -72,13 +72,13 @@ export default class List extends View<IListProps> {
     }
     private renderRow(data: RowData) {
         let { renderRow } = this.props,
-            cssModules = this.getCSSModules();
+            cssModules = this.cssModules;
 
         return <div className={ cssModules.row }>{ renderRow(data) }</div>
     }
     private renderSeparator(data: RowData) {
         let { renderSeparator } = this.props,
-            cssModules = this.getCSSModules(),
+            cssModules = this.cssModules,
             className = cssModules.rowSeparator;
 
         return renderSeparator ? renderSeparator(data) : <div className={className} />;

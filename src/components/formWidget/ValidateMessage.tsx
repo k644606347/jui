@@ -24,7 +24,7 @@ class ValidateMessage extends View<Props> {
         let { props } = this,
             { fieldName, className, style, popover, activeFormContext } = props,
             fieldReport: Report = validator.getDefaultReport(),
-            cssModules = this.getCSSModules();
+            cssModules = this.cssModules;
         
         if (activeFormContext && activeFormContext.fieldReportMap) {
             let { fieldReportMap } = activeFormContext;

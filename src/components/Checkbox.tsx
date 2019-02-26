@@ -38,7 +38,7 @@ export default class Checkbox extends View<CheckboxProps>{
     render() {
         let { children, checked, disabled, readOnly, className, style, theme, ...restProps } = this.props,
             themeIcon = themeIconMap[theme],
-            cssModules = this.getCSSModules();
+            cssModules = this.cssModules;
 
         return (
             <Label style={style} className={

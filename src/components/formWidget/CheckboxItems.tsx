@@ -32,7 +32,7 @@ class CheckboxItems extends Widget<CheckboxItemsProps> {
     }
     render() {
         let { items, className, style, disabled } = this.props,
-            cssModules = this.getCSSModules();
+            cssModules = this.cssModules;
         
         this.checkboxs = [];
         return (
@@ -46,7 +46,7 @@ class CheckboxItems extends Widget<CheckboxItemsProps> {
     }
     private renderCheckboxItem(item: CheckboxItem, key: string | number) {
         let { name } = this.props,
-            cssModules = this.getCSSModules(),
+            cssModules = this.cssModules,
             value = this.getParsedValue(),
             checkboxID = tools.genID('checkbox_item_'),
             checkboxEl = <Checkbox id={checkboxID} name={name} value={item.value}

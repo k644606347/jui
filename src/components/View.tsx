@@ -6,8 +6,9 @@ import { AnyObject } from "../utils/types";
 abstract class View<P = {}, S = {}, SS = any> extends React.PureComponent<P, S, SS> {
     abstract cssObject: AnyObject;
     cssObjectIsValid = false;
-    styleLoaderIsUseable = false;
+    enableStyleLoaderUseable = false;
     mounted = false;
+    cssModules: AnyObject = {};
     constructor(props) {
         super(props);
 
@@ -43,20 +44,15 @@ abstract class View<P = {}, S = {}, SS = any> extends React.PureComponent<P, S, 
         if (tools.isPlainObject(cssObject)) {
             if (tools.isFunction(cssObject.use)) {// style-loader开启了useable
                 this.cssObject.use();
-                this.styleLoaderIsUseable = true;
+                this.enableStyleLoaderUseable = true;
             }
             this.cssObjectIsValid = true;
+            this.cssModules = tools.getCSSModulesBy(cssObject);
         } else {
             this.cssObject = cssObject = {};
         }
     }
     componentDidMount() {}
-    getCSSModules() {
-        return this.styleLoaderIsUseable ? this.cssObject.locals : this.cssObject;
-    }
-    getCSSModule(key) {
-        return this.getCSSModules()[key];
-    }
     getClass(): any {
         return this.constructor;
     }

@@ -23,7 +23,7 @@ export default class NavBar extends View<NavBarProps> {
     cssObject = navBarCSS;
     render() {
         let { children, leftContent, rightContent, className, style, theme } = this.props,
-            cssModules = this.getCSSModules();
+            cssModules = this.cssModules;
 
         return (
             <div className={tools.classNames(cssModules.wrapper, theme && cssModules[theme], className)} style={style}>

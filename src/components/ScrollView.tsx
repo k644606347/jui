@@ -4,7 +4,7 @@ import { CSSAttrs } from "../utils/types";
 import { tools } from "../utils/Tools";
 import scrollCSS from './ScrollView.scss';
 
-const cssModules = tools.getCSSModules(tools);
+const cssModules = tools.getCSSModulesBy(scrollCSS);
 export interface ContentProps extends CSSAttrs {
     children: any;
 }

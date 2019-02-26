@@ -15,7 +15,7 @@ export default class Form extends View<FormProps> {
     render() {
         let { props } = this,
             { children, style, className, ...restProps } = props,
-            cssModules = this.getCSSModules();
+            cssModules = this.cssModules;
 
         return (
             <form

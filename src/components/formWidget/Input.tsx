@@ -37,7 +37,7 @@ class Input extends Widget<InputProps> {
                 onFocus={this.handleFocus}
                 onBlur={this.handleBlur}
                 onChange={this.handleChange}
-                className={tools.classNames(this.getCSSModules().input, className)}
+                className={tools.classNames(this.cssModules.input, className)}
             />
         );
     }

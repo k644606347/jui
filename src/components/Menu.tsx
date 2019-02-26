@@ -6,7 +6,7 @@ import { MenuProps, MenuState } from "./MenuType";
 import menuCSS from './Menu.scss';
 import View from "./View";
 
-const cssModules = tools.getCSSModules(menuCSS);
+const cssModules = tools.getCSSModulesBy(menuCSS);
 /**
  * 菜单栏组件, 样式定位以<body>元素为基准
  */

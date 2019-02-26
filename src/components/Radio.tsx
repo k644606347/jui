@@ -45,7 +45,7 @@ export default class Radio extends View<RadioProps> {
     render() {
         let { disabled, checked, readOnly, className, style, children, theme, ...restProps } = this.props,
             themeIcon = themeIconMap[theme!],
-            cssModules = this.getCSSModules();
+            cssModules = this.cssModules;
 
         return (
             <Label style={style} className={

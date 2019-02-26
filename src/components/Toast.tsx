@@ -8,7 +8,7 @@ import toastCSS from './Toast.scss';
 import * as ReactDOM from "react-dom";
 import ScrollView from "./ScrollView";
 
-const cssModules = tools.getCSSModules(toastCSS);
+const cssModules = tools.getCSSModulesBy(toastCSS);
 export interface ToastProps extends CSSAttrs {
     duration?: number;
     overlay?: boolean;

@@ -27,7 +27,7 @@ export default class MenuItemGroup extends View<MenuItemGroupProps, MenuItemGrou
     render() {
         let { label, active, className, style, icon } = this.props,
             { clicked } = this.state,
-            cssModules = this.getCSSModules();
+            cssModules = this.cssModules;
 
         return (
             <div className={

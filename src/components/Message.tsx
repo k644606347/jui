@@ -23,7 +23,7 @@ export default class Message extends View<Props> {
     cssObject = messageCSS;
     render() {
         let { type, showIcon, children, style, className } = this.props,
-            cssModules = this.getCSSModules();
+            cssModules = this.cssModules;
 
         return (
             <div

@@ -29,7 +29,7 @@ export default class MenuItem extends View<MenuItemProps, MenuItemState> {
     }
     render() {
         let { label, checked, className, style, icon } = this.props,
-            { clicked } = this.state, cssModules = this.getCSSModules();
+            { clicked } = this.state, cssModules = this.cssModules;
 
         return (
             <div className={
@@ -69,7 +69,7 @@ export default class MenuItem extends View<MenuItemProps, MenuItemState> {
                 name,
                 value,
                 checked,
-                className: tools.classNames(this.getCSSModules().input)
+                className: tools.classNames(this.cssModules.input)
             };
 
         return multiSelect ? <Checkbox {...propsConfig} /> : checked ? <Radio {...propsConfig} theme='checkmark' /> : '';

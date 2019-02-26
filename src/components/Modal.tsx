@@ -54,7 +54,7 @@ export default class Modal extends View<ModalProps, ModalState> {
                 className, bodyClassName, headerClassName, 
                 style, bodyStyle, headerStyle 
             } = props,
-            cssModules = this.getCSSModules();
+            cssModules = this.cssModules;
 
         if (closeBtn === true) {
             closeBtn = <Icon icon={iconClose} />;

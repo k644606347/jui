@@ -33,7 +33,7 @@ export default class MenuItems extends View<MenuItemsProps> {
         let activeItem = items[activeIndex!],
             activeSubItems = (activeItem && tools.isArray((activeItem as MenuItemsProps).items)) ? (activeItem as MenuItemsProps) : undefined,
             inputTagName = `${id}_${tools.genID()}`,
-            cssModules = this.getCSSModules();
+            cssModules = this.cssModules;
 
         // TODO 应为React.ReactElement<MenuItemsProps>
         let subItemsEl: any;

@@ -16,7 +16,7 @@ export class WidgetWrapper extends View<Props> {
         let { props } = this,
             { className, children, validateReport = validator.getDefaultReport() } = props,
             { level = validator.getDefaultLevelBy(validateReport) } = validateReport,
-            cssModules = this.getCSSModules();
+            cssModules = this.cssModules;
 
         return (
             <div className={tools.classNames(cssModules.wrapper, className, cssModules[level])}>

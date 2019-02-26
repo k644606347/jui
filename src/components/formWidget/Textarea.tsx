@@ -34,7 +34,7 @@ class Textarea extends Widget<TextareaProps> {
                 onFocus={this.handleFocus}
                 onBlur={this.handleBlur}
                 onChange={this.handleChange}
-                className={tools.classNames(this.getCSSModules().wrapper, className)}/>
+                className={tools.classNames(this.cssModules.wrapper, className)}/>
         );
     }
     handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {

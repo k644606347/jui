@@ -91,7 +91,7 @@ class Button extends View<ButtonProps> {
             { children, className, activeClassName, title, disabled, icon, outline, clear, strong, 
                 block, full, loading, shape, style, size, type: type } = props,
             iconDefinition, iconElement,
-            cssModules = this.getCSSModules();
+            cssModules = this.cssModules;
 
         if (loading) {
             iconDefinition = buttonIcons.loading;
@@ -122,7 +122,7 @@ class Button extends View<ButtonProps> {
 
         return (
             <TouchFeedback activeClassName={tools.classNames(cssModules.active, activeClassName)} disabled={disabled}>
-                <button title={title} style={style} className={btnClassName} onClick={this.handleClick}>
+                <a title={title} style={style} className={btnClassName} onClick={this.handleClick}>
                     <span className={cssModules.control}>
                         {
                             iconDefinition ?  
@@ -137,7 +137,7 @@ class Button extends View<ButtonProps> {
                         }
                         {children ? <span className={cssModules.content}>{children}</span> : ''}
                     </span>
-                </button>
+                </a>
             </TouchFeedback>
         );
     }

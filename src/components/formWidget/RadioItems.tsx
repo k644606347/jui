@@ -24,7 +24,7 @@ class RadioItems extends Widget<RadioItemsProps> {
     dataType: DataType = 'string';
     render() {
         let { name, items, value, className, style, disabled, readOnly, theme } = this.props,
-            cm = this.getCSSModules();
+            cm = this.cssModules;
         return (
             <div style={style} className={tools.classNames(cm.wrapper, className)}>
                 {

@@ -24,8 +24,10 @@ export default class ButtonDemo extends React.PureComponent<any, any>{
                     <h2>空button</h2>
                     <Button></Button>
                     <h2>常规</h2>
-                    button:<Button title="normal btn">normal btn</Button>
-                    <Button icon={<Icon icon={iconAdd} pulse />} title="normal btn"><span>normal btn</span></Button>
+                    button:
+                    <Button></Button>
+                    <Button title="normal btn">normal btn</Button>
+                    <Button icon={<Icon icon={iconAdd} pulse />} title="normal btn">icon btn</Button>
                     <Button icon={<Icon icon={icon1212} />} title="normal btn">normal btn</Button>
                     <Button type={'primary'} icon={iconMore} block={false}>primary btn</Button>
                     <Button type="danger" size="large" loading>danger btn</Button>

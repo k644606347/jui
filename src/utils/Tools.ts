@@ -218,7 +218,7 @@ export default class Tools {
 
         return result;
     }
-    getCSSModules(cssObject) {
+    getCSSModulesBy(cssObject) {
         if (!this.isPlainObject(cssObject)) {
             return {};
         }

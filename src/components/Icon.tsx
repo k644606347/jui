@@ -5,7 +5,7 @@ import iconCSS from './Icon.scss';
 import { IconDefinition } from "./icons/SVGData";
 import View from "./View";
 
-const cssModules = tools.getCSSModules(iconCSS);
+const cssModules = tools.getCSSModulesBy(iconCSS);
 export interface IconProps extends CSSAttrs {
     icon: IconDefinition;
     spin?: boolean;

@@ -4,7 +4,7 @@ import { tools } from '../utils/Tools';
 import css from './JUIApp.scss';
 import View from './View';
 
-const cssModules = tools.getCSSModules(css);
+const cssModules = tools.getCSSModulesBy(css);
 interface Props extends CSSAttrs {}
 
 export default class JUIApp extends View<Props> {

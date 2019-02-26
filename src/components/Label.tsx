@@ -20,7 +20,7 @@ export default class Label extends View<LabelProps> {
     }
     render() {
         let { required, children, className, onClick, ...restProps } = this.props,
-            cssModules = this.getCSSModules();
+            cssModules = this.cssModules;
 
         return (
             <label {...restProps} className={

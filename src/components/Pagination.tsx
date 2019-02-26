@@ -23,7 +23,7 @@ export default class Pagination extends View<PaginationProps> {
     public render() {
         let { props } = this,
             { current, total, disabled, prevBtn, nextBtn, prevText, nextText } = props,
-            cssModules = this.getCSSModules();
+            cssModules = this.cssModules;
 
         return (<div className={tools.classNames(cssModules.pagination, cssModules.disabled)}>
             {prevBtn ? prevBtn : <Button icon="left" onClick={this.handlePrev} disabled={disabled}>{prevText}</Button>}

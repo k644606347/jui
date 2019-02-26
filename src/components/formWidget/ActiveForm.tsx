@@ -119,7 +119,7 @@ export default class ActiveForm extends View<ActiveFormType.Props, ActiveFormTyp
             { name, children, validateRules, className, style, action, method, target } = props,
             { value, validating, isValid, fieldReportMap, validateError, submitting } = state,
             formProps = { name, action, method, target },
-            cssModules = this.getCSSModules();
+            cssModules = this.cssModules;
 
         console.log('ActiveForm render', JSON.stringify(this.state));
         let UnwrappedElement = children
