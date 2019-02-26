@@ -1,6 +1,10 @@
-import { NavBar, Icon, Log, Button, Modal } from "..";
 import * as React from "react";
 import { iconReturnLeft, iconShare, iconClose, iconSearch, iconList, iconAddCircle } from "../components/icons/SVGData";
+import Button from "../components/Button";
+import Modal from "../components/Modal";
+import NavBar from "../components/NavBar";
+import Icon from "../components/Icon";
+import Log from "../utils/Log";
 
 export default class NavBarDemo extends React.PureComponent<any, any> {
     state = {

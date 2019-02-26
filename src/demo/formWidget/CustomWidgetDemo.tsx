@@ -6,6 +6,7 @@ import bindActiveForm from "../../components/formWidget/bindActiveForm";
 interface Props extends FormWidgetProps {
 }
 class CustomWidgetDemo extends Widget<Props, FormWidgetState> {
+    cssObject = {};
     static defaultProps = {
         id: 'testWidget',
         value: '',

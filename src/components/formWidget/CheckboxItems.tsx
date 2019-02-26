@@ -4,7 +4,7 @@ import * as React from "react";
 import Tools from "../../utils/Tools";
 import { CSSAttrs } from "../../utils/types";
 import { DataType } from "./stores/DataConvertor";
-import cm from './CheckboxItems.scss';
+import checkboxItemsCSS from './CheckboxItems.scss';
 
 interface CheckboxItem extends CSSAttrs {
     label: string;
@@ -20,6 +20,7 @@ export interface CheckboxItemsProps extends FormWidgetProps {
 
 const tools = Tools.getInstance();
 class CheckboxItems extends Widget<CheckboxItemsProps> {
+    cssObject = checkboxItemsCSS;
     static defaultProps = {
         items: [],
         value: [],
@@ -30,11 +31,12 @@ class CheckboxItems extends Widget<CheckboxItemsProps> {
         super(props);
     }
     render() {
-        let { items, className, style, disabled } = this.props;
+        let { items, className, style, disabled } = this.props,
+            cssModules = this.getCSSModules();
         
         this.checkboxs = [];
         return (
-            <div style={style} className={tools.classNames(cm.wrapper, className)}>
+            <div style={style} className={tools.classNames(cssModules.wrapper, className)}>
                 {
                     items.map((item, i) => this.renderCheckboxItem({ disabled, ...item }, i))
                 }
@@ -44,6 +46,7 @@ class CheckboxItems extends Widget<CheckboxItemsProps> {
     }
     private renderCheckboxItem(item: CheckboxItem, key: string | number) {
         let { name } = this.props,
+            cssModules = this.getCSSModules(),
             value = this.getParsedValue(),
             checkboxID = tools.genID('checkbox_item_'),
             checkboxEl = <Checkbox id={checkboxID} name={name} value={item.value}
@@ -58,7 +61,7 @@ class CheckboxItems extends Widget<CheckboxItemsProps> {
                     </Checkbox>;
                     
         this.checkboxs.push(checkboxEl);
-        return <div className={cm.item} key={key}>{ checkboxEl }</div>;
+        return <div className={cssModules.item} key={key}>{ checkboxEl }</div>;
     }
     handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         let { target } = e,

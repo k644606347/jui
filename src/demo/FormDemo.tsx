@@ -1,16 +1,21 @@
 import * as React from "react";
-import { Tools, Icon, Form, Log, FormItem, Pagination, CheckboxItems, Button, Input, RadioItems, Label, Radio, ValidateMessage } from "..";
 import ActiveForm from "../components/formWidget/ActiveForm";
 import Textarea from "../components/formWidget/Textarea";
-import { iconDoneAll, iconCloudDone } from "../components/icons/SVGData";
 import Field from "../components/formWidget/Field";
 import Config, { FormWidgetName } from "./config";
-import { FormItemProps } from "../components/FormItem";
+import FormItem, { FormItemProps } from "../components/FormItem";
 import FormDemoData from "./FormDemoData";
 import { RuleParam } from "../validate/Validator";
+import Log from "../utils/Log";
+import { tools } from "../utils/Tools";
+import ValidateMessage from "../components/formWidget/ValidateMessage";
+import Label from "../components/Label";
+import RadioItems from "../components/formWidget/RadioItems";
+import Input from "../components/formWidget/Input";
+import Button from "../components/Button";
+import CheckboxItems from "../components/formWidget/CheckboxItems";
 
 interface FormTestProps {}
-const tools = Tools.getInstance();
 interface FieldType {
     name: string;
     component: string | JSX.Element;

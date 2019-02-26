@@ -1,10 +1,10 @@
-import { Modal, Button, Icon, Menu, Tools } from "../";
 import * as React from "react";
 import { MenuItemsChangeEvent } from "src/components/MenuItemsType";
 import { MenuItemProps } from "src/components/MenuItemType";
 import { iconCar, iconCalculator, iconHtml5, iconCss3, iconJavascript, iconNodejs, iconPython, iconWindows } from "../components/icons/SVGData";
-
-const tools = Tools.getInstance();
+import Icon from "../components/Icon";
+import Menu from "../components/Menu";
+import { tools } from "../utils/Tools";
 
 export default class MenuDemo extends React.PureComponent<any,any> {
     constructor(props: any) {

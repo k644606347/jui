@@ -80,6 +80,7 @@ export { ActiveFormType };
 const tools = Tools.getInstance();
 const DEBOUNCE_VALIDATE_DELAY = 500;
 export default class ActiveForm extends View<ActiveFormType.Props, ActiveFormType.State> {
+    cssObject = activeFormCSS;
     static defaultProps = {
         name: '',
         initialValue: {},
@@ -117,7 +118,8 @@ export default class ActiveForm extends View<ActiveFormType.Props, ActiveFormTyp
         let { props, state } = this,
             { name, children, validateRules, className, style, action, method, target } = props,
             { value, validating, isValid, fieldReportMap, validateError, submitting } = state,
-            formProps = { name, action, method, target };
+            formProps = { name, action, method, target },
+            cssModules = this.getCSSModules();
 
         console.log('ActiveForm render', JSON.stringify(this.state));
         let UnwrappedElement = children
@@ -130,7 +132,7 @@ export default class ActiveForm extends View<ActiveFormType.Props, ActiveFormTyp
             : '';
 
         return (
-            <div style={style} className={tools.classNames(activeFormCSS.wrapper, className)}>
+            <div style={style} className={tools.classNames(cssModules.wrapper, className)}>
                 <ActiveFormContext.Provider value={{
                     value,
                     validating,
@@ -146,7 +148,7 @@ export default class ActiveForm extends View<ActiveFormType.Props, ActiveFormTyp
                     { UnwrappedElement }
                     {
                         action ? 
-                            <form ref={this.formRef} {...formProps} className={activeFormCSS.form}></form> : ''
+                            <form ref={this.formRef} {...formProps} className={cssModules.form}></form> : ''
                     }
                 </ActiveFormContext.Provider>
             </div>

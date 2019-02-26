@@ -218,6 +218,15 @@ export default class Tools {
 
         return result;
     }
+    getCSSModules(cssObject) {
+        if (!this.isPlainObject(cssObject)) {
+            return {};
+        }
+        if (tools.isFunction(cssObject.use)) {// style-loader启用了useable
+            return cssObject.locals;
+        }
+        return cssObject;
+    }
 }
 
 let tools = Tools.getInstance();

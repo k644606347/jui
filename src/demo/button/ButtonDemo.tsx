@@ -1,8 +1,10 @@
 import * as React from "react";
 
-import { Button, Icon, Modal } from "../..";
 import demoCSS from './ButtonDemo.scss';
 import { iconMore, iconAddCircleOutline, iconClipboard, icon1212, iconAdd } from "../../components/icons/SVGData";
+import Button from "../../components/Button";
+import Modal from "../../components/Modal";
+import Icon from "../../components/Icon";
 
 export default class ButtonDemo extends React.PureComponent<any, any>{
     readonly state = {

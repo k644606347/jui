@@ -4,6 +4,7 @@ import { CSSAttrs } from "../utils/types";
 import { tools } from "../utils/Tools";
 import scrollCSS from './ScrollView.scss';
 
+const cssModules = tools.getCSSModules(tools);
 export interface ContentProps extends CSSAttrs {
     children: any;
 }
@@ -32,8 +33,8 @@ export default class ScrollView extends View<ContentProps, ScrollViewState> {
                 bodyClassList =  bodyTag.classList,
                 scrollTop = bodyTag.scrollTop;
 
-            if (!bodyClassList.contains(scrollCSS.disableBodyScroll)) {
-                bodyClassList.add(scrollCSS.disableBodyScroll);
+            if (!bodyClassList.contains(cssModules.disableBodyScroll)) {
+                bodyClassList.add(cssModules.disableBodyScroll);
                 if (tools.isNumber(scrollTop)) {
                     bodyTag.dataset.scrollTop = scrollTop + '';
                     bodyTag.style.top = -scrollTop + 'px';
@@ -63,7 +64,7 @@ export default class ScrollView extends View<ContentProps, ScrollViewState> {
                 bodyClassList =  bodyTag.classList,
                 scrollTop = Number(bodyTag.dataset.scrollTop);
                 
-            bodyClassList.remove(scrollCSS.disableBodyScroll);
+            bodyClassList.remove(cssModules.disableBodyScroll);
             if (!Number.isNaN(scrollTop)) {
                 bodyTag.scrollTop = scrollTop;
             }
@@ -74,11 +75,7 @@ export default class ScrollView extends View<ContentProps, ScrollViewState> {
     readonly state = {
         scrollable: true,
     }
-    constructor(props) {
-        super(props);
-
-
-    }
+    cssObject = scrollCSS;
     render() {
         let { children, className, style } = this.props,
             { scrollable } = this.state;
@@ -86,7 +83,7 @@ export default class ScrollView extends View<ContentProps, ScrollViewState> {
         console.log('scrollable', scrollable);
         return (
             <div style={style} className={tools.classNames(
-                scrollCSS.wrapper, !scrollable && scrollCSS.disableScroll, className
+                cssModules.wrapper, !scrollable && cssModules.disableScroll, className
             )}>
                 {children}
             </div>

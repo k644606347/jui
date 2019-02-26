@@ -1,8 +1,8 @@
 import { Context1 } from "./Contexts";
 import * as React from "react";
 import MultiContextConsumer from "./MultiContextConsumer";
-import { Button } from "../..";
 import MiddleComponent from "./MiddleComponent";
+import Button from "../../components/Button";
 
 interface Props {
 

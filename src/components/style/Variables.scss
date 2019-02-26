@@ -16,7 +16,6 @@ $primary-tap-color: #0e80d2;
 
 $text-color: #000;
 $text-inverse-color: #fff;
-// $text-tap-inverse-color: #a4a9b0;
 $placeholder-color: #bbb;
 $disabled-color: #bbb;
 
@@ -44,6 +43,15 @@ $toast-overlay-bg-color: rgba(58, 58, 58, 0.4);
 // // 透明度
 // $opacity-disabled: 0.3;   // switch checkbox radio 等组件禁用的透明度
 
+// z-index
+$progress-zindex: 2000;
+$popover-zindex: 1999;
+$toast-zindex: 2999;
+// $action-sheet-zindex: 1000; // actonsheet 会放到 popup / modal 中
+// $picker-zindex: 1000;
+// $popup-zindex: 999;
+$modal-zindex: 999;
+// $tabs-pagination-zindex: 999;
 
 // // 字体尺寸
 // // ---
@@ -165,15 +173,3 @@ $input-color: #000;
 
 // // picker
 // $option-height: 42 * $hd;           // picker 标题的高度
-
-// z-index
-$progress-zindex: 2000;
-$popover-zindex: 1999;
-$toast-zindex: 2999;
-// $action-sheet-zindex: 1000; // actonsheet 会放到 popup / modal 中
-// $picker-zindex: 1000;
-// $popup-zindex: 999;
-$modal-zindex: 999;
-// $tabs-pagination-zindex: 999;
-
-// $error-bg-color: #f5222d;

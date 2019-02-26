@@ -1,5 +1,11 @@
 import * as React from "react";
-import { ActiveForm, Input, Field, Textarea, ValidateMessage, Button, FormItem, Toast } from "../..";
+import ActiveForm from "../../components/formWidget/ActiveForm";
+import FormItem from "../../components/FormItem";
+import Input from "../../components/formWidget/Input";
+import ValidateMessage from "../../components/formWidget/ValidateMessage";
+import Textarea from "../../components/formWidget/Textarea";
+import Button from "../../components/Button";
+import Toast from "../../components/Toast";
 
 export default class FormItemDemo extends React.PureComponent {
     render() {

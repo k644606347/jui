@@ -1,6 +1,6 @@
 
 import * as React from "react";
-import { Message } from "..";
+import Message from "../components/Message";
 
 export default function MessageTest() {
     return <Message type="error" showIcon={true}>

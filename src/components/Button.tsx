@@ -1,9 +1,10 @@
 import * as React from 'react';
 import Icon, { IconProps } from './Icon';
 import TouchFeedback from './TouchFeedback';
-import Tools from '../utils/Tools';
+import { tools } from '../utils/Tools';
 import buttonCSS from './Button.scss';
 import { iconCloud, iconCloudDownload, iconCloudUpload, iconDownload, iconLoading, iconPower, iconSearch, iconCheckCircle, iconCheckCircleOutline, iconTime, iconTimeOutline, iconMoreVertical, iconMore, iconArrowUp, iconArrowForward, iconArrowDown, iconArrowBack, IconDefinition } from './icons/SVGData';
+import View from './View';
 
 export interface PresetIcons {
     cloud: IconDefinition;
@@ -49,7 +50,6 @@ export interface ButtonProps {
     onClick?: React.MouseEventHandler;
 }
 
-const tools = Tools.getInstance();
 const buttonIcons: PresetIcons = {
     cloud: iconCloud,
     'cloud-down': iconCloudDownload,
@@ -69,7 +69,7 @@ const buttonIcons: PresetIcons = {
     'down': iconArrowDown,
     'left': iconArrowBack,
 };
-class Button extends React.PureComponent<ButtonProps> {
+class Button extends View<ButtonProps> {
     static defaultProps: ButtonProps = {
         disabled: false,
         block: false,
@@ -79,6 +79,7 @@ class Button extends React.PureComponent<ButtonProps> {
         size: 'default',
         shape: 'default',
     };
+    cssObject = buttonCSS;
     constructor(props: ButtonProps) {
         super(props);
 
@@ -89,7 +90,8 @@ class Button extends React.PureComponent<ButtonProps> {
         let { props } = this,
             { children, className, activeClassName, title, disabled, icon, outline, clear, strong, 
                 block, full, loading, shape, style, size, type: type } = props,
-            iconDefinition, iconElement;
+            iconDefinition, iconElement,
+            cssModules = this.getCSSModules();
 
         if (loading) {
             iconDefinition = buttonIcons.loading;
@@ -104,7 +106,7 @@ class Button extends React.PureComponent<ButtonProps> {
         }
 
         let btnClassName = tools.classNames(
-            buttonCSS.btn,
+            cssModules.btn,
             [ type, 
                 disabled && 'disabled', 
                 outline && 'outline', 
@@ -113,27 +115,27 @@ class Button extends React.PureComponent<ButtonProps> {
                 block && 'block', 
                 full && 'full', 
                 size, shape ].map(
-                n => n && buttonCSS[n]
+                n => n && cssModules[n]
             ),
             className
         );
 
         return (
-            <TouchFeedback activeClassName={tools.classNames(buttonCSS.active, activeClassName)} disabled={disabled}>
+            <TouchFeedback activeClassName={tools.classNames(cssModules.active, activeClassName)} disabled={disabled}>
                 <button title={title} style={style} className={btnClassName} onClick={this.handleClick}>
-                    <span className={buttonCSS.control}>
+                    <span className={cssModules.control}>
                         {
                             iconDefinition ?  
-                                <Icon icon={iconDefinition} className={buttonCSS.icon} spin={loading} /> 
+                                <Icon icon={iconDefinition} className={cssModules.icon} spin={loading} /> 
                                 : iconElement ? 
                                     React.cloneElement(
                                         iconElement, 
                                         {
-                                            className: tools.classNames(buttonCSS.icon, iconElement.props.className),
+                                            className: tools.classNames(cssModules.icon, iconElement.props.className),
                                         }
                                     ) : ''
                         }
-                        {children ? <span className={buttonCSS.content}>{children}</span> : ''}
+                        {children ? <span className={cssModules.content}>{children}</span> : ''}
                     </span>
                 </button>
             </TouchFeedback>

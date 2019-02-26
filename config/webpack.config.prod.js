@@ -2,7 +2,6 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const path = require('path');
 const params = require('./params');
-
 const mode = 'production';
 
 let analyze;
@@ -13,11 +12,10 @@ if (process.env.npm_config_analyze) {
 module.exports = {
     mode,
     entry: {
-        'jui': params.appIndex
+        jui: params.appIndex
     },
     output: {
         path: params.appBuild,
-        // Add /* filename */ comments to generated require()s in the output.
         pathinfo: true,
         filename: '[name].js',
         chunkFilename: '[name].chunk.js',
@@ -46,7 +44,7 @@ module.exports = {
                             {
                                 loader: 'ts-loader',
                                 options: {
-                                    configFile: path.resolve('./tsconfig.json')
+                                    configFile: path.resolve('./tsconfig.prod.json')
                                 }
                             }
                         ]
@@ -54,7 +52,7 @@ module.exports = {
                         test: /\.scss$/,
                         use: [
                             {
-                                loader: "style-loader"
+                                loader: "style-loader/useable",
                             }, {
                                 loader: "css-loader",
                                 options: {

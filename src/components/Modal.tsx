@@ -1,13 +1,13 @@
 import * as React from "react";
 import NavBar from "./NavBar";
 import { CSSAttrs, NoResultFunction, AnyObject } from "../utils/types";
-import Tools from "../utils/Tools";
 import { iconArrowBack, iconClose } from "./icons/SVGData";
 import Icon from "./Icon";
 import modalCSS from './Modal.scss';
 import ScrollView from "./ScrollView";
 import View from "./View";
 import Button from "./Button";
+import { tools } from "../utils/Tools";
 
 type BtnType = boolean | string | JSX.Element;
 export interface ModalProps extends CSSAttrs {
@@ -27,9 +27,8 @@ export interface ModalProps extends CSSAttrs {
     headerStyle?: React.CSSProperties;
 }
 export interface ModalState {}
-
-const tools = Tools.getInstance();
 export default class Modal extends View<ModalProps, ModalState> {
+    cssObject = modalCSS;
     static defaultProps = {
         title: '',
         show: false,
@@ -54,15 +53,16 @@ export default class Modal extends View<ModalProps, ModalState> {
                 leftContent, rightContent,
                 className, bodyClassName, headerClassName, 
                 style, bodyStyle, headerStyle 
-            } = props;
+            } = props,
+            cssModules = this.getCSSModules();
 
         if (closeBtn === true) {
             closeBtn = <Icon icon={iconClose} />;
         }
         return (
-            <div className={tools.classNames(modalCSS.wrapper, show && modalCSS.show, className)} style={style}>
+            <div className={tools.classNames(cssModules.wrapper, show && cssModules.show, className)} style={style}>
                 <NavBar 
-                    className={tools.classNames(modalCSS.header, headerClassName)} 
+                    className={tools.classNames(cssModules.header, headerClassName)} 
                     style={headerStyle} 
                     leftContent={
                         leftContent ? 
@@ -71,13 +71,13 @@ export default class Modal extends View<ModalProps, ModalState> {
                                 {
                                     this.buildBtn(cancelBtn, {
                                         onClick: this.handleCancel,
-                                        className: modalCSS.cancelBtn,
+                                        className: cssModules.cancelBtn,
                                     })
                                 }
                                 {
                                     this.buildBtn(closeBtn, {
                                         onClick: this.handleClose,
-                                        className: modalCSS.closeBtn,
+                                        className: cssModules.closeBtn,
                                     })
                                 }
                             </React.Fragment>
@@ -87,13 +87,13 @@ export default class Modal extends View<ModalProps, ModalState> {
                             rightContent : 
                             this.buildBtn(okBtn, {
                                 onClick: this.handleOk,
-                                className: modalCSS.okBtn
+                                className: cssModules.okBtn
                             })
                     }
                 >
-                    {<div className={modalCSS.title}>{title}</div>}
+                    {<div className={cssModules.title}>{title}</div>}
                 </NavBar>
-                <ScrollView ref={this.scrollViewRef} className={tools.classNames(modalCSS.body, bodyClassName)} style={bodyStyle}>
+                <ScrollView ref={this.scrollViewRef} className={tools.classNames(cssModules.body, bodyClassName)} style={bodyStyle}>
                     {children}
                 </ScrollView>
             </div>

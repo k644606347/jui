@@ -1,19 +1,24 @@
 import * as React from 'react';
 import { CSSAttrs } from '../utils/types';
-import Tools from '../utils/Tools';
+import { tools } from '../utils/Tools';
 import css from './JUIApp.scss';
+import View from './View';
 
-interface Props extends CSSAttrs {
-    children: any;
-}
+const cssModules = tools.getCSSModules(css);
+interface Props extends CSSAttrs {}
 
-const tools = Tools.getInstance();
-export default (props: Props) => {
-    let { children, className, style } = props;
+export default class JUIApp extends View<Props> {
+    cssObject = css;
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        let { children, className, style } = this.props;
 
-    return (
-        <div className={tools.classNames(css.wrapper, className)} style={style}>
-            {children}
-        </div>
-    );
+        return (
+            <div className={tools.classNames(cssModules.wrapper, className)} style={style}>
+                {children}
+            </div>
+        );
+    }
 }

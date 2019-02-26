@@ -1,17 +1,17 @@
 import * as React from 'react';
 import { IListProps, SectionData, RowData } from './ListType';
-import Tools from '../utils/Tools';
 import listCSS from './List.scss';
+import { tools } from '../utils/Tools';
+import View from './View';
 
 export * from './ListType';
-
-const tools = Tools.getInstance();
-export default class List extends React.PureComponent<IListProps, any> {
-    public static defaultProps: IListProps = {
+export default class List extends View<IListProps> {
+    static defaultProps: IListProps = {
         dataSource: [],
         renderRow: (data) => <React.Fragment>{ JSON.stringify(data) }</React.Fragment>,
         sectionHeaderSticky: true,
     };
+    cssObject = listCSS;
     constructor(props: IListProps) {
         super(props);
 
@@ -21,14 +21,15 @@ export default class List extends React.PureComponent<IListProps, any> {
         this.renderSectionHeader = this.renderSectionHeader.bind(this);
         this.renderSectionBody = this.renderSectionBody.bind(this);
     }
-    public render() {
+    render() {
         let { props } = this,
-            { dataSource, style, className } = props;
+            { dataSource, style, className } = props,
+            cssModules = this.getCSSModules();
 
-        return (<ul style={style} className={tools.classNames(listCSS.list, className)}>{
+        return (<ul style={style} className={tools.classNames(cssModules.list, className)}>{
             dataSource.map((dGroup: any, i) => {
                 let result,
-                    classNames = [listCSS.item];
+                    classNames = [cssModules.item];
                 
                 if (dGroup.type === 'section') {
                     result = this.renderSection(dGroup);
@@ -47,34 +48,38 @@ export default class List extends React.PureComponent<IListProps, any> {
             headerEl = renderSectionHeader(data),
             bodyEl = renderSectionBody(data);
 
-        return <div className={listCSS.section}>{headerEl}{bodyEl}</div>;
+        return <div className={this.getCSSModules().section}>{headerEl}{bodyEl}</div>;
 
         // return renderSectionWrapper ? renderSectionWrapper(headerEl, bodyEl) : <div className={cssModules.section}>{headerEl}{bodyEl}</div>;
     }
     private renderSectionHeader(data: SectionData): JSX.Element {
         let { renderSectionHeader, sectionHeaderSticky } = this.props,
             headerContent = renderSectionHeader ? renderSectionHeader(data) : data.title,
-            classNames = tools.classNames(listCSS.sectionHeader, sectionHeaderSticky && listCSS.sectionHeaderSticky);
+            cssModules = this.getCSSModules(),
+            classNames = tools.classNames(cssModules.sectionHeader, sectionHeaderSticky && cssModules.sectionHeaderSticky);
 
         return headerContent ? <div className={tools.classNames(classNames)}>{ headerContent }</div> : <React.Fragment />;
     }
     private renderSectionBody(data: SectionData) {
         let { renderSectionBodyWrapper } = this.props,
             { renderRow, renderSeparator } = this,
+            cssModules = this.getCSSModules(),
             children = data.data.map((d, i) => {
                 return <React.Fragment key={i}>{ renderRow(d) }</React.Fragment>
             });
 
-        return <div className={listCSS.sectionBody}>{ renderSectionBodyWrapper ? renderSectionBodyWrapper(children) : children }</div>;
+        return <div className={cssModules.sectionBody}>{ renderSectionBodyWrapper ? renderSectionBodyWrapper(children) : children }</div>;
     }
     private renderRow(data: RowData) {
-        let { renderRow } = this.props;
+        let { renderRow } = this.props,
+            cssModules = this.getCSSModules();
 
-        return <div className={ listCSS.row }>{ renderRow(data) }</div>
+        return <div className={ cssModules.row }>{ renderRow(data) }</div>
     }
     private renderSeparator(data: RowData) {
         let { renderSeparator } = this.props,
-            className = listCSS['row-separator'];
+            cssModules = this.getCSSModules(),
+            className = cssModules.rowSeparator;
 
         return renderSeparator ? renderSeparator(data) : <div className={className} />;
     }

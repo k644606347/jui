@@ -40,9 +40,6 @@ export interface FormWidgetProps extends CSSAttrs {
     onChange?: (e: FormWidgetChangeEvent) => void;
     onFocus?: (e: FormWidgetFocusEvent) => void;
     onBlur?: (e: FormWidgetFocusEvent) => void;
-    // onKeyDown?(e: FormWidgetKeyboardEvent): void;
-    // onKeyUp?(e: FormWidgetKeyboardEvent): void;
-    // onKeyPress?(e: FormWidgetKeyboardEvent): void;
     onDidMount?: (e: FormWidgetMountEvent) => void;
     onWillUnmount?: (e: FormWidgetMountEvent) => void;
 }

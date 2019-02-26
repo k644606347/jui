@@ -2,7 +2,7 @@ import * as React from 'react';
 import Tools from '../../utils/Tools';
 import Widget, { FormWidgetProps } from './Widget';
 import inputCSS from './Input.scss';
-import { Omit, AnyObject } from '../../utils/types';
+import { Omit } from '../../utils/types';
 import { DataType } from './stores/DataConvertor';
 
 const tools = Tools.getInstance();
@@ -13,6 +13,7 @@ export interface InputProps extends FormWidgetProps, Omit<React.InputHTMLAttribu
 }
 const omitAttrs = ['validateReport', 'onChange', 'onFocus', 'onBlur'];
 class Input extends Widget<InputProps> {
+    cssObject = inputCSS;
     dataType: DataType = 'string';
     constructor(props: InputProps) {
         super(props);
@@ -36,7 +37,7 @@ class Input extends Widget<InputProps> {
                 onFocus={this.handleFocus}
                 onBlur={this.handleBlur}
                 onChange={this.handleChange}
-                className={tools.classNames(inputCSS.input, className)}
+                className={tools.classNames(this.getCSSModules().input, className)}
             />
         );
     }

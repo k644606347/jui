@@ -1,12 +1,11 @@
 import * as React from "react";
-import Tools from "../utils/Tools";
+import Tools, { tools } from "../utils/Tools";
 import Icon from "./Icon";
 import { Omit } from "../utils/types";
-import cm from './Checkbox.scss';
+import checkboxCSS from './Checkbox.scss';
 import { iconCheckCircle, iconCheckCircleOutline, IconDefinition, iconCheckSquare, iconCheckSquareOutline } from "./icons/SVGData";
 import Label from "./Label";
-
-const tools = Tools.getInstance();
+import View from "./View";
 
 type ThemeType = 'circle' | 'square';
 export interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -24,11 +23,12 @@ const themeIconMap: {[k in ThemeType]: {checked: IconDefinition, unchecked: Icon
         unchecked: iconCheckSquareOutline,
     }
 }
-export default class Checkbox extends React.PureComponent<CheckboxProps>{
+export default class Checkbox extends View<CheckboxProps>{
     static defaultProps = {
         checked: false,
         theme: "circle",
     }
+    cssObject = checkboxCSS;
     constructor(props: CheckboxProps) {
         super(props);
 
@@ -37,23 +37,24 @@ export default class Checkbox extends React.PureComponent<CheckboxProps>{
     }
     render() {
         let { children, checked, disabled, readOnly, className, style, theme, ...restProps } = this.props,
-            themeIcon = themeIconMap[theme];
+            themeIcon = themeIconMap[theme],
+            cssModules = this.getCSSModules();
 
         return (
             <Label style={style} className={
                 tools.classNames(
-                    cm.wrapper,
-                    checked && cm.checked,
-                    disabled && cm.disabled,
-                    readOnly && cm.readOnly,
+                    cssModules.wrapper,
+                    checked && cssModules.checked,
+                    disabled && cssModules.disabled,
+                    readOnly && cssModules.readOnly,
                     className)
             }>
-                <input {...restProps} className={cm.input} type="checkbox" 
+                <input {...restProps} className={cssModules.input} type="checkbox" 
                     checked={checked} disabled={disabled} readOnly={readOnly} 
                     onChange={this.handleChange}
                 />
-                <div className={cm.icon}><Icon icon={checked ? themeIcon.checked : themeIcon.unchecked} /></div>
-                {children !== undefined ? <div className={cm.description}>{children}</div> : ''}
+                <div className={cssModules.icon}><Icon icon={checked ? themeIcon.checked : themeIcon.unchecked} /></div>
+                {children !== undefined ? <div className={cssModules.description}>{children}</div> : ''}
             </Label>
         );
     }

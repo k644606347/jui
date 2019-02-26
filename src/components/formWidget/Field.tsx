@@ -2,7 +2,7 @@ import * as React from "react";
 import { ActiveFormContext, ActiveFormContextType } from "./ActiveFormContext";
 import Widget, { FormWidgetChangeEvent, FormWidgetFocusEvent } from "./Widget";
 import { AnyObject } from "../../utils/types";
-import Tools from "../../utils/Tools";
+import View from "../View";
 
 export interface FieldProps {
     children: JSX.Element;
@@ -10,8 +10,7 @@ export interface FieldProps {
 export type FieldChangeEvent = React.ChangeEvent<any> | FormWidgetChangeEvent;
 export type FieldFocusEvent = FormWidgetFocusEvent | React.FocusEvent<any>;
 export type FieldBlurEvent = FormWidgetFocusEvent | React.FocusEvent<any>;
-const tools = Tools.getInstance();
-class Field extends React.PureComponent<FieldProps>{
+class Field extends View<FieldProps>{
     static getInfoByFieldEvent(e: FieldChangeEvent | FieldFocusEvent | FieldBlurEvent) {
         let result: AnyObject = {
             eventType: e.type,
@@ -41,6 +40,7 @@ class Field extends React.PureComponent<FieldProps>{
 
         return result;
     }
+    cssObject = {};
     private activeformContext: ActiveFormContextType;
     private fieldInstance: React.ReactInstance;
     constructor(props) {

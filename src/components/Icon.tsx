@@ -1,10 +1,11 @@
 import * as React from "react";
-import Tools from "../utils/Tools";
+import { tools } from "../utils/Tools";
 import { CSSAttrs } from "../utils/types";
 import iconCSS from './Icon.scss';
 import { IconDefinition } from "./icons/SVGData";
+import View from "./View";
 
-const tools = Tools.getInstance();
+const cssModules = tools.getCSSModules(iconCSS);
 export interface IconProps extends CSSAttrs {
     icon: IconDefinition;
     spin?: boolean;
@@ -16,13 +17,14 @@ export interface IconProps extends CSSAttrs {
     name?: string;
 }
 export { IconDefinition };
-export default class Icon extends React.PureComponent<IconProps, any> {
+export default class Icon extends View<IconProps> {
     static renderIcon(icon: React.ReactElement<IconProps> | IconDefinition) {
         return this.isIconElement(icon) ? icon : <Icon icon={icon} />;
     }
     static isIconElement(target): target is React.ReactElement<IconProps> {
         return React.isValidElement(target) && target.type === Icon;
     }
+    cssObject = iconCSS;
     constructor(props: IconProps) {
         super(props);
         
@@ -31,10 +33,10 @@ export default class Icon extends React.PureComponent<IconProps, any> {
     render() {
         let { icon, id, name, style, className, spin, pulse, flip } = this.props,
             classNames = tools.classNames(
-                iconCSS.icon,
-                spin && iconCSS.spin,
-                pulse && iconCSS.pulse,
-                flip && iconCSS['flip-' + flip],
+                cssModules.icon,
+                spin && cssModules.spin,
+                pulse && cssModules.pulse,
+                flip && cssModules['flip-' + flip],
                 className
             );
 

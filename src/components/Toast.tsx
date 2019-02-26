@@ -8,6 +8,7 @@ import toastCSS from './Toast.scss';
 import * as ReactDOM from "react-dom";
 import ScrollView from "./ScrollView";
 
+const cssModules = tools.getCSSModules(toastCSS);
 export interface ToastProps extends CSSAttrs {
     duration?: number;
     overlay?: boolean;
@@ -43,6 +44,7 @@ class ToastComponent extends View<ToastProps, ToastState> {
         position: 'middle',
         theme: 'dark',
     }
+    cssObject = toastCSS;
     private disableScrollTaskID;
     private handleCloseTimer;
     private wrapperRef = React.createRef<any>();
@@ -68,21 +70,21 @@ class ToastComponent extends View<ToastProps, ToastState> {
         }
         return (
             <div ref={this.wrapperRef} className={
-                tools.classNames(toastCSS.wrapper, theme && toastCSS[theme], overlay && toastCSS.overlay)
+                tools.classNames(cssModules.wrapper, theme && cssModules[theme], overlay && cssModules.overlay)
                 }>
                 <div ref={this.toastRef} className={
-                    tools.classNames(toastCSS.toast, position && toastCSS[position], className)
+                    tools.classNames(cssModules.toast, position && cssModules[position], className)
                     } style={style}>
                     {
                         iconEl ? 
-                            <div className={tools.classNames(toastCSS.icon)}>
+                            <div className={tools.classNames(cssModules.icon)}>
                                 { iconEl }
                             </div>
                             : ''
                     }
                     {
                         content ? 
-                            <div className={tools.classNames(toastCSS.content)}>{ content }</div>
+                            <div className={tools.classNames(cssModules.content)}>{ content }</div>
                             : ''
                     }
                 </div>
@@ -137,20 +139,20 @@ class ToastComponent extends View<ToastProps, ToastState> {
         }
 
         if (show) {
-            wrapperClassList.add(toastCSS.wrapperShow);
+            wrapperClassList.add(cssModules.wrapperShow);
             if (animate) {
                 window.setTimeout(() => {
-                    toastClassList.add(toastCSS.show);
+                    toastClassList.add(cssModules.show);
                     this.toggleAnimateClass();
                 }, 50);
             } else {
-                toastClassList.add(toastCSS.show);
+                toastClassList.add(cssModules.show);
                 this.toggleAnimateClass();
             }
         } else {
-            toastClassList.remove(toastCSS.show);
+            toastClassList.remove(cssModules.show);
             if (!animate) {
-                wrapperClassList.remove(toastCSS.wrapperShow);
+                wrapperClassList.remove(cssModules.wrapperShow);
             }
             this.toggleAnimateClass();
             this.handleClose();
@@ -164,22 +166,22 @@ class ToastComponent extends View<ToastProps, ToastState> {
             toastClassList = toastEl.classList;
             
         if (animate) {
-            toastClassList.add(toastCSS.animate);
-            overlay && wrapperClassList.add(toastCSS.overlayAnimate);
+            toastClassList.add(cssModules.animate);
+            overlay && wrapperClassList.add(cssModules.overlayAnimate);
         } else {
-            toastClassList.remove(toastCSS.animate);
-            overlay && wrapperClassList.remove(toastCSS.overlayAnimate);
+            toastClassList.remove(cssModules.animate);
+            overlay && wrapperClassList.remove(cssModules.overlayAnimate);
         }
     }
     handleTransitionEnd(e) {
-        if (e.target.classList.contains(toastCSS.show)) {
+        if (e.target.classList.contains(cssModules.show)) {
             return;
         }
         let wrapperEl = this.wrapperRef.current,
             wrapperClassList = wrapperEl.classList,
             { onCloseAnimationEnd } = this.props;
 
-        wrapperClassList.remove(toastCSS.wrapperShow);
+        wrapperClassList.remove(cssModules.wrapperShow);
         onCloseAnimationEnd && onCloseAnimationEnd();
     }
 }

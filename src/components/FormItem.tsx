@@ -1,12 +1,13 @@
 import * as React from "react";
-import Tools from '../utils/Tools';
 import Label, { LabelProps } from "./Label";
 import { CSSAttrs } from "../utils/types";
 import formItemCSS from './FormItem.scss';
 import { ActiveFormContext } from "./formWidget/ActiveFormContext";
 import Field, { FieldProps, FieldFocusEvent, FieldBlurEvent } from "./formWidget/Field";
 import View from "./View";
+import { tools } from "../utils/Tools";
 
+const cssModules = tools.getCSSModules(formItemCSS);
 interface RenderChildrenEvent {
     component: React.ComponentElement<FieldProps, Field> & Field;
     label?: React.ComponentElement<LabelProps, Label> & Label;
@@ -23,13 +24,12 @@ export interface FormItemState {
     fieldFocused: boolean;
     fieldValue: any;
 }
-
-const tools = Tools.getInstance();
 export default class FormItem extends View<FormItemProps, FormItemState> {
     static defaultProps = {
         componentProps: {},
         layout: 'horizontal',
     }
+    cssObject = formItemCSS;
     private activeFormContext;
     constructor(props: FormItemProps) {
         super(props);
@@ -68,12 +68,12 @@ export default class FormItem extends View<FormItemProps, FormItemState> {
                         labelNode = '';
                     } else {
                         let required = this.isRequired(),
-                            classList = [formItemCSS.label];
+                            classList = [cssModules.label];
 
                         if (floatingLabel) {
-                            classList.push(formItemCSS.floatingLabel);
+                            classList.push(cssModules.floatingLabel);
                             if (fieldFocused || fieldValue !== '') {
-                                classList.push(formItemCSS.fieldFocused);
+                                classList.push(cssModules.fieldFocused);
                             }
                         }
                         labelNode = <Label required={required} className={tools.classNames(classList)}>{label}</Label>;
@@ -82,9 +82,9 @@ export default class FormItem extends View<FormItemProps, FormItemState> {
                     return (
                         <div style={style} 
                             className={tools.classNames(
-                                formItemCSS.wrapper,
+                                cssModules.wrapper,
                                 className,
-                                layout && formItemCSS[layout],
+                                layout && cssModules.layout,
                             )}
                         >
                             {
@@ -95,7 +95,7 @@ export default class FormItem extends View<FormItemProps, FormItemState> {
                                     }) : 
                                     <React.Fragment>
                                         { labelNode }
-                                        <div className={formItemCSS.formitemControl}>
+                                        <div className={cssModules.formitemControl}>
                                         { fieldNode }
                                         </div>
                                     </React.Fragment>

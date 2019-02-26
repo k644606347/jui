@@ -1,16 +1,16 @@
 import * as React from "react";
-import Tools from "../utils/Tools";
+import Tools, { tools } from "../utils/Tools";
 import Icon from "./Icon";
 import MenuItems from "./MenuItems";
 import { MenuProps, MenuState } from "./MenuType";
-import cssModules from './Menu.scss';
+import menuCSS from './Menu.scss';
+import View from "./View";
 
-const tools = Tools.getInstance();
-
+const cssModules = tools.getCSSModules(menuCSS);
 /**
  * 菜单栏组件, 样式定位以<body>元素为基准
  */
-export default class Menu extends React.PureComponent<MenuProps, MenuState> {
+export default class Menu extends View<MenuProps, MenuState> {
     static handleLoad() {
         this.updateLayout();
     }
@@ -51,7 +51,7 @@ export default class Menu extends React.PureComponent<MenuProps, MenuState> {
         });
     }
     private static instances: Menu[] = [];
-    static defaultProps: Partial<MenuProps> = {
+    static defaultProps = {
         id: 'menu',
         label: 'menu',
         items: [],
@@ -63,6 +63,7 @@ export default class Menu extends React.PureComponent<MenuProps, MenuState> {
         backdropClick: false,
         backdropCoverage: 'full',
     };
+    cssObject = menuCSS;
     readonly state: MenuState = {
         itemsStyle: {
             top: 0,

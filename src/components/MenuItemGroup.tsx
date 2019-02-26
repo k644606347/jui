@@ -1,20 +1,20 @@
 import * as React from "react";
-import Tools from "../utils/Tools";
 import Icon from "./Icon";
 import { MenuItemGroupProps, MenuItemGroupState } from "./MenuItemGroupType";
-import cssModules from './MenuItem.scss';
+import menuItemCSS from './MenuItem.scss';
 import { iconArrowForward } from "./icons/SVGData";
+import View from "./View";
+import { tools } from "../utils/Tools";
 
-const tools = Tools.getInstance();
-
-export default class MenuItemGroup extends React.PureComponent<MenuItemGroupProps, MenuItemGroupState> {
-    private static defaultProps: Partial<MenuItemGroupProps> = {
+export default class MenuItemGroup extends View<MenuItemGroupProps, MenuItemGroupState> {
+    private static defaultProps: MenuItemGroupProps = {
         id: '',
         label: '',
         active: false,
     };
+    cssObject = menuItemCSS;
     private clickedTimer: number = 0;
-    public readonly state: MenuItemGroupState = {
+    readonly state: MenuItemGroupState = {
         clicked: false,
     }
     constructor(props: MenuItemGroupProps) {
@@ -24,9 +24,10 @@ export default class MenuItemGroup extends React.PureComponent<MenuItemGroupProp
         this.handleTouchEnd = this.handleTouchEnd.bind(this);
         this.handleClick = this.handleClick.bind(this);
     }
-    public render() {
+    render() {
         let { label, active, className, style, icon } = this.props,
-            { clicked } = this.state;
+            { clicked } = this.state,
+            cssModules = this.getCSSModules();
 
         return (
             <div className={

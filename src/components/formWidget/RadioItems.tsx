@@ -2,7 +2,7 @@ import Widget, { FormWidgetProps, FormWidgetChangeEvent } from "./Widget";
 import * as React from "react";
 import Tools from "../../utils/Tools";
 import Radio, { RadioProps } from "../Radio";
-import cm from './RadioItems.scss';
+import radioItemsCSS from './RadioItems.scss';
 import { DataType } from "./stores/DataConvertor";
 interface RadioItem extends RadioProps {
     label: string;
@@ -16,13 +16,15 @@ export interface RadioItemsProps extends FormWidgetProps {
 
 const tools = Tools.getInstance();
 class RadioItems extends Widget<RadioItemsProps> {
+    cssObject = radioItemsCSS;
     static defaultProps = {
         items: [],
         value: '',
     }
     dataType: DataType = 'string';
     render() {
-        let { name, items, value, className, style, disabled, readOnly, theme } = this.props;
+        let { name, items, value, className, style, disabled, readOnly, theme } = this.props,
+            cm = this.getCSSModules();
         return (
             <div style={style} className={tools.classNames(cm.wrapper, className)}>
                 {

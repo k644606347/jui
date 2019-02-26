@@ -1,12 +1,10 @@
+import { JUIApp, Pagination, FormItem } from '..';
 import * as React from 'react';
 
 import './App.scss';
-import Hello from '../components/Hello';
-
-import FormDemo from './FormDemo';
-import { Icon, Tools, Menu, Button, Pagination, List, Log, JUIApp, Toast, FormItem, Input } from '..';
-import { IconProps } from '../components/Icon';
+// import FormDemo from './FormDemo';
 import MessageTest from './Message.test';
+import Icon, { IconProps } from '../components/Icon';
 import MultiContextProvider from './context/MultiContextProvider';
 import HTMLForm from './RawForm';
 import ModalDemo from './ModalDemo';
@@ -57,7 +55,6 @@ class App extends React.Component<any, any> {
                 <ListDemo/>
                 <a href="www.baidu.com">link1</a>
                 <a onClick={this.link2}>link2</a>
-                <Hello name="TypeScript" enthusiasmLevel={10} />
                 <MultiContextProvider />
                 <FormItem label="test" field={<input type="select" />} layout="vertical"></FormItem>
                 <DefaultPropsDemo />

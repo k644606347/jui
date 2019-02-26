@@ -1,14 +1,13 @@
 import * as React from "react";
 import { MenuItemProps, MenuItemState } from "./MenuItemType";
-import cssModules from './MenuItem.scss';
-import Tools from "../utils/Tools";
+import menuItemCSS from './MenuItem.scss';
+import Tools, { tools } from "../utils/Tools";
 import Icon from "./Icon";
 import Checkbox from "./Checkbox";
 import Radio from "./Radio";
+import View from "./View";
 
-const tools = Tools.getInstance();
-
-export default class MenuItem extends React.PureComponent<MenuItemProps, MenuItemState> {
+export default class MenuItem extends View<MenuItemProps, MenuItemState> {
     private static defaultProps: MenuItemProps = {
         value: 'item',
         label: 'item',
@@ -16,8 +15,9 @@ export default class MenuItem extends React.PureComponent<MenuItemProps, MenuIte
         checked: false,
         multiSelect: false,
     };
+    cssObject = menuItemCSS;
     private clickedTimer: number = 0;
-    public readonly state: MenuItemState = {
+    readonly state: MenuItemState = {
         clicked: false,
     }
     constructor(props: MenuItemProps) {
@@ -27,9 +27,9 @@ export default class MenuItem extends React.PureComponent<MenuItemProps, MenuIte
         this.handleTouchEnd = this.handleTouchEnd.bind(this);
         this.handleClick = this.handleClick.bind(this);
     }
-    public render() {
+    render() {
         let { label, checked, className, style, icon } = this.props,
-            { clicked } = this.state;
+            { clicked } = this.state, cssModules = this.getCSSModules();
 
         return (
             <div className={
@@ -69,7 +69,7 @@ export default class MenuItem extends React.PureComponent<MenuItemProps, MenuIte
                 name,
                 value,
                 checked,
-                className: tools.classNames(cssModules.input)
+                className: tools.classNames(this.getCSSModules().input)
             };
 
         return multiSelect ? <Checkbox {...propsConfig} /> : checked ? <Radio {...propsConfig} theme='checkmark' /> : '';

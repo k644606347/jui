@@ -3,11 +3,14 @@ import * as React from "react";
 import NavBar from "./NavBar";
 import searchBarCSS from './SearchBar.scss';
 import Input from "./formWidget/Input";
+import View from "./View";
+import { tools } from "../utils/Tools";
 
 interface BarProps extends CSSAttrs {
     onCancel?(): void;
 }
-export default class SearchBar extends React.PureComponent<BarProps, any> {
+export default class SearchBar extends View<BarProps> {
+    cssObject = searchBarCSS;
     constructor(props: BarProps) {
         super(props);
 

@@ -6,6 +6,7 @@ import { ActiveFormContextType } from "./ActiveFormContext";
 import connectActiveForm from "./connectActiveForm";
 import messageCSS from './ValidateMessage.scss';
 import { validator, Report } from "../../validate/Validator";
+import View from "../View";
 
 interface Props extends CSSAttrs {
     fieldName: string;
@@ -14,14 +15,16 @@ interface Props extends CSSAttrs {
 }
 
 const tools = Tools.getInstance();
-class ValidateMessage extends React.PureComponent<Props> {
+class ValidateMessage extends View<Props> {
     static defaultProps = {
         popover: false,
     }
+    cssObject = messageCSS;
     render() {
         let { props } = this,
             { fieldName, className, style, popover, activeFormContext } = props,
-            fieldReport: Report = validator.getDefaultReport();
+            fieldReport: Report = validator.getDefaultReport(),
+            cssModules = this.getCSSModules();
         
         if (activeFormContext && activeFormContext.fieldReportMap) {
             let { fieldReportMap } = activeFormContext;
@@ -41,7 +44,7 @@ class ValidateMessage extends React.PureComponent<Props> {
             level = validator.getDefaultLevelBy(isValid);
 
         let MessageTag = <Message style={style} 
-                            className={tools.classNames(messageCSS.msg, level && messageCSS[level], className)}
+                            className={tools.classNames(cssModules.msg, level && cssModules[level], className)}
                             type={level} showIcon={false}>{msg}</Message>;
         
                     
@@ -49,7 +52,7 @@ class ValidateMessage extends React.PureComponent<Props> {
             <React.Fragment>
                 {
                     popover ? 
-                        <div className={popover && messageCSS.popover}>
+                        <div className={popover && cssModules.popover}>
                             { MessageTag }
                         </div> : 
                         MessageTag

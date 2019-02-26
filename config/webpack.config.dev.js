@@ -7,11 +7,11 @@ const mode = 'development';
 module.exports = {
     mode,
     entry: {
-        'demo': [
+        demo: [
             params.demoIndex,
             require.resolve('react-dev-utils/webpackHotDevClient'),
         ],
-        'jui': [
+        jui: [
             params.appIndex,
         ]
     },
@@ -63,7 +63,7 @@ module.exports = {
                         test: /\.scss$/,
                         use: [
                             {
-                                loader: "style-loader",
+                                loader: "style-loader/useable",
                                 options: {
                                     singleton: true,
                                 }

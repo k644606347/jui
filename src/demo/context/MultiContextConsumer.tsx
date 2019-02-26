@@ -1,8 +1,8 @@
 import { Context1 } from "./Contexts";
 
-import { Log, Button } from "../..";
-
 import * as React from "react";
+import Button from "../../components/Button";
+import Log from "../../utils/Log";
 
 interface Props {}
 interface State {

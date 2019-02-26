@@ -1,6 +1,13 @@
 import * as React from "react";
-import { ActiveForm, Input, Textarea, ValidateMessage, Button, FormItem, Toast, CheckboxItems, RadioItems } from "../..";
 import { Report } from "../../validate/Validator";
+import ActiveForm from "../../components/formWidget/ActiveForm";
+import FormItem from "../../components/FormItem";
+import Input from "../../components/formWidget/Input";
+import ValidateMessage from "../../components/formWidget/ValidateMessage";
+import Textarea from "../../components/formWidget/Textarea";
+import RadioItems from "../../components/formWidget/RadioItems";
+import Button from "../../components/Button";
+import Toast from "../../components/Toast";
 
 export default class SimpleForm extends React.PureComponent {
     render() {

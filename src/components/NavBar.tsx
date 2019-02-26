@@ -1,9 +1,11 @@
 import * as React from "react";
 import Icon from "./Icon";
 import { CSSAttrs, AnyFunction } from "../utils/types";
-import Tools from "../utils/Tools";
+import { tools } from "../utils/Tools";
 import navBarCSS from './NavBar.scss';
 import { iconArrowBack, iconMore } from "./icons/SVGData";
+import View from "./View";
+
 export interface NavBarProps extends CSSAttrs {
     theme: 'light' | 'dark';
     leftContent: string | React.ReactNode;
@@ -12,23 +14,23 @@ export interface NavBarProps extends CSSAttrs {
     onRightClick?: AnyFunction;
 }
 
-const tools = Tools.getInstance();
-
-export default class NavBar extends React.PureComponent<NavBarProps, any> {
+export default class NavBar extends View<NavBarProps> {
     static defaultProps = {
         theme: 'light',
         leftContent: <Icon icon={iconArrowBack} />,
         rightContent: <Icon icon={iconMore} />,
     };
+    cssObject = navBarCSS;
     render() {
-        let { children, leftContent, rightContent, className, style, theme } = this.props;
+        let { children, leftContent, rightContent, className, style, theme } = this.props,
+            cssModules = this.getCSSModules();
 
         return (
-            <div className={tools.classNames(navBarCSS.wrapper, theme && navBarCSS[theme], className)} style={style}>
-                <div className={navBarCSS.leftContent} onClick={this.handleLeftClick}>{leftContent}</div>
+            <div className={tools.classNames(cssModules.wrapper, theme && cssModules[theme], className)} style={style}>
+                <div className={cssModules.leftContent} onClick={this.handleLeftClick}>{leftContent}</div>
                 {
                     children ? 
-                        <div className={navBarCSS.content}>
+                        <div className={cssModules.content}>
                             <div>
                                 {
                                     tools.isFunction(children) ? children(this.props) : children
@@ -36,7 +38,7 @@ export default class NavBar extends React.PureComponent<NavBarProps, any> {
                             </div>
                         </div> : ''
                 }
-                <div className={navBarCSS.rightContent} onClick={this.handleRightClick}>{rightContent}</div>
+                <div className={cssModules.rightContent} onClick={this.handleRightClick}>{rightContent}</div>
             </div>
         )
     }

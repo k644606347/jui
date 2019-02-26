@@ -1,6 +1,13 @@
-import { Modal, Button, ActiveForm, Input, CheckboxItems, Checkbox, Toast, Field, FormItem, ValidateMessage } from "..";
 import * as React from "react";
 import { Report } from "../validate/Validator";
+import ActiveForm from "../components/formWidget/ActiveForm";
+import Button from "../components/Button";
+import Modal from "../components/Modal";
+import Toast from "../components/Toast";
+import FormItem from "../components/FormItem";
+import Input from "../components/formWidget/Input";
+import ValidateMessage from "../components/formWidget/ValidateMessage";
+import Checkbox from "../components/Checkbox";
 
 export default class ModalDemo extends React.PureComponent<any,any> {
     readonly state = {

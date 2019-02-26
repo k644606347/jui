@@ -1,5 +1,5 @@
 import * as React from "react";
-import { List } from "../index";
+import List from "../components/List";
 
 export default () => <List dataSource={[
     {

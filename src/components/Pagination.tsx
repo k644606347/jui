@@ -1,17 +1,18 @@
 import { PaginationProps, PaginationChangeEvent } from "./PaginationType";
 import * as React from "react";
 import Button from "./Button";
-import Tools from "../utils/Tools";
-import cssModules from './Pagination.scss';
+import { tools } from "../utils/Tools";
+import paginationCSS from './Pagination.scss';
+import View from "./View";
 
-const tools = Tools.getInstance();
-export default class Pagination extends React.PureComponent<PaginationProps, any> {
+export default class Pagination extends View<PaginationProps> {
     public static defaultProps: PaginationProps = {
         current: 1,
         total: 1,
         prevText: '上一页',
         nextText: '下一页',
     };
+    cssObject = paginationCSS;
     constructor(props: PaginationProps) {
         super(props);
 
@@ -21,7 +22,8 @@ export default class Pagination extends React.PureComponent<PaginationProps, any
     }
     public render() {
         let { props } = this,
-            { current, total, disabled, prevBtn, nextBtn, prevText, nextText } = props;
+            { current, total, disabled, prevBtn, nextBtn, prevText, nextText } = props,
+            cssModules = this.getCSSModules();
 
         return (<div className={tools.classNames(cssModules.pagination, cssModules.disabled)}>
             {prevBtn ? prevBtn : <Button icon="left" onClick={this.handlePrev} disabled={disabled}>{prevText}</Button>}

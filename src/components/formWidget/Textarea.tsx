@@ -3,7 +3,6 @@ import Widget, { FormWidgetProps } from "./Widget";
 import textareaCSS from './Textarea.scss';
 import Tools from "../../utils/Tools";
 import { DataType } from "./stores/DataConvertor";
-import bindActiveForm from "./bindActiveForm";
 import { Omit } from "../../utils/types";
 
 type OmitAttrs = 'onChange' | 'onFocus' | 'onBlur';
@@ -15,6 +14,7 @@ export interface TextareaProps extends FormWidgetProps, Omit<React.TextareaHTMLA
 const tools = Tools.getInstance();
 const omitAttrs = ['validateReport', 'onChange', 'onFocus', 'onBlur'];
 class Textarea extends Widget<TextareaProps> {
+    cssObject = textareaCSS;
     dataType: DataType = 'string';
     constructor(props: TextareaProps) {
         super(props);
@@ -34,7 +34,7 @@ class Textarea extends Widget<TextareaProps> {
                 onFocus={this.handleFocus}
                 onBlur={this.handleBlur}
                 onChange={this.handleChange}
-                className={tools.classNames(textareaCSS.wrapper, className)}/>
+                className={tools.classNames(this.getCSSModules().wrapper, className)}/>
         );
     }
     handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {

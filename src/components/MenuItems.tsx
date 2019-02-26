@@ -1,14 +1,14 @@
 import * as React from "react";
 import { MenuItemsProps, MenuItemsChangeEvent } from "./MenuItemsType";
-import cssModules from './MenuItems.scss';
-import Tools from "../utils/Tools";
+import menuItemsCSS from './MenuItems.scss';
+import Tools, { tools } from "../utils/Tools";
 import MenuItem from "./MenuItem";
 import { MenuItemProps, MenuItemChangeEvent } from "./MenuItemType";
 import MenuItemGroup from "./MenuItemGroup";
 import { ClickEvent } from "./MenuItemGroupType";
+import View from "./View";
 
-const tools = Tools.getInstance();
-export default class MenuItems extends React.PureComponent<MenuItemsProps, any> {
+export default class MenuItems extends View<MenuItemsProps> {
     private static defaultProps: MenuItemsProps = {
         id: 'items',
         label: 'items',
@@ -18,6 +18,7 @@ export default class MenuItems extends React.PureComponent<MenuItemsProps, any> 
         level: 1,
         activeIndex: 0,
     };
+    cssObject = menuItemsCSS;
     constructor(props: MenuItemsProps) {
         super(props);
         
@@ -25,13 +26,14 @@ export default class MenuItems extends React.PureComponent<MenuItemsProps, any> 
         this.handleSubItemsChange = this.handleSubItemsChange.bind(this);
         this.handleGroupChange = this.handleGroupChange.bind(this);
     }
-    public render() {
+    render() {
         let { props } = this,
             { id, items, level, activeIndex, multiSelect, className, style } = props;
 
         let activeItem = items[activeIndex!],
             activeSubItems = (activeItem && tools.isArray((activeItem as MenuItemsProps).items)) ? (activeItem as MenuItemsProps) : undefined,
-            inputTagName = `${id}_${tools.genID()}`;
+            inputTagName = `${id}_${tools.genID()}`,
+            cssModules = this.getCSSModules();
 
         // TODO 应为React.ReactElement<MenuItemsProps>
         let subItemsEl: any;

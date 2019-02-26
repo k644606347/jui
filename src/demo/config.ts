@@ -1,4 +1,7 @@
-import { CheckboxItems, RadioItems, Input, Textarea } from "..";
+import CheckboxItems from "../components/formWidget/CheckboxItems";
+import RadioItems from "../components/formWidget/RadioItems";
+import Input from "../components/formWidget/Input";
+import Textarea from "../components/formWidget/Textarea";
 
 // type CClass<P = FormWidgetProps> = React.ComponentClass<P>;
 // type Props = CheckboxItemsProps & RadioItemsProps & InputProps;

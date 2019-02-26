@@ -11,27 +11,15 @@
     }
     &.error {
         color: $error-color;
-        input::placeholder, textarea::placeholder {
-            color: $error-color;
-        }
     }
     &.warn {
         color: $warn-color;
-        input::placeholder, textarea::placeholder {
-            color: $warn-color;
-        }
     }
     &.info {
         color: $info-color;
-        input::placeholder, textarea::placeholder {
-            color: $info-color;
-        }
     }
     &.success {
         color: $success-color;
-        input::placeholder, textarea::placeholder {
-            color: $success-color;
-        }
     }
 }
 .popover {

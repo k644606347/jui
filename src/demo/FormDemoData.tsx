@@ -1,6 +1,6 @@
 import * as React from "react";
-import { Icon } from "..";
 import { iconDoneAll } from "../components/icons/SVGData";
+import Icon from "../components/Icon";
 
 export default [
     {

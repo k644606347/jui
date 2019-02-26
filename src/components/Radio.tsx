@@ -1,13 +1,13 @@
 
 import * as React from 'react';
-import Tools from '../utils/Tools';
+import Tools, { tools } from '../utils/Tools';
 import Icon from './Icon';
 import { Omit } from '../utils/types';
-import cm from './Radio.scss';
+import radioCSS from './Radio.scss';
 import { iconRadioBtnOn, iconRadioBtnOff, IconDefinition, iconCheck } from './icons/SVGData';
 import Label from './Label';
+import View from './View';
 
-const tools = Tools.getInstance();
 type ThemeType = 'circle' | 'checkmark';
 export interface RadioProps extends React.InputHTMLAttributes<HTMLInputElement> {
     theme?: ThemeType;
@@ -27,7 +27,7 @@ const themeIconMap: {[k in ThemeType]: {
         unchecked: iconCheck,
     }
 }
-export default class Radio extends React.PureComponent<RadioProps> {
+export default class Radio extends View<RadioProps> {
     static defaultProps = {
         name: '',
         value: '',
@@ -35,6 +35,7 @@ export default class Radio extends React.PureComponent<RadioProps> {
         disabled: false,
         theme: 'circle',
     };
+    cssObject = radioCSS;
     constructor(props: RadioProps) {
         super(props);
 
@@ -43,26 +44,27 @@ export default class Radio extends React.PureComponent<RadioProps> {
     }
     render() {
         let { disabled, checked, readOnly, className, style, children, theme, ...restProps } = this.props,
-            themeIcon = themeIconMap[theme!];
+            themeIcon = themeIconMap[theme!],
+            cssModules = this.getCSSModules();
 
         return (
             <Label style={style} className={
                 tools.classNames(
-                    cm.wrapper,
-                    checked && cm.checked,
-                    disabled && cm.disabled,
-                    readOnly && cm.readOnly,
-                    cm['theme-' + theme],
+                    cssModules.wrapper,
+                    checked && cssModules.checked,
+                    disabled && cssModules.disabled,
+                    readOnly && cssModules.readOnly,
+                    cssModules['theme-' + theme],
                     className
                 )
             }>
                 <input {...restProps} 
-                    className={cm.input} 
+                    className={cssModules.input} 
                     type="radio" checked={checked} disabled={disabled} readOnly={readOnly}
                     onChange={this.handleChange} 
                 />
-                <div className={cm.icon}><Icon icon={checked ? themeIcon.checked : themeIcon.unchecked} /></div>
-                {children !== undefined ? <div className={cm.description}>{children}</div> : ''}
+                <div className={cssModules.icon}><Icon icon={checked ? themeIcon.checked : themeIcon.unchecked} /></div>
+                {children !== undefined ? <div className={cssModules.description}>{children}</div> : ''}
             </Label>
         );
     }
