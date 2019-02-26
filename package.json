@@ -1,12 +1,11 @@
 {
     "name": "jui",
-    "version": "0.5.0",
+    "version": "1.0.0",
     "private": true,
     "scripts": {
         "start": "webpack-dev-server --open --hot --config ./config/webpack.config.dev.js",
-        "build": "webpack --config ./config/webpack.config.prod.js",
-        "analyze": "npm run build --analyze",
-        "test": "node scripts/test.js --env=jsdom"
+        "build": "webpack --config ./config/webpack.config.prod.js;cp CHANGELOG.md ../jui-release",
+        "analyze": "npm run build --analyze"
     },
     "dependencies": {
         "react": "^16.6.3",
