@@ -301,5 +301,5 @@ let wrapper = document.createElement('div'),
     rootEl = document.body ? document.body : document.documentElement;
 rootEl.appendChild(wrapper);
 
-let Toast = ReactDOM.render(<StatefulToast></StatefulToast>, wrapper) as React.Component<any, State> & StatefulToast;
+let Toast = ReactDOM.render<any>(<StatefulToast></StatefulToast>, wrapper) as React.Component<any, State> & StatefulToast;
 export default Toast;

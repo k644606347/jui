@@ -72,6 +72,9 @@ export default class TouchFeedback extends React.PureComponent<TouchProps, Touch
             nextProps,
             child = React.Children.only(children);
 
+        if (!child) {
+            return child;
+        }
         if (!disabled && active) {
             let { style, className } = child.props;
 
