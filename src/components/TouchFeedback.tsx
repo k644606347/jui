@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Tools from '../utils/Tools';
+import Log from '../utils/Log';
 
 const tools = Tools.getInstance();
 export interface TouchProps {
@@ -11,7 +12,6 @@ export interface TouchProps {
 export interface TouchState {
     active: boolean;
 }
-
 export default class TouchFeedback extends React.PureComponent<TouchProps, TouchState> {
     static defaultProps: TouchProps = {
         disabled: false,
@@ -69,25 +69,27 @@ export default class TouchFeedback extends React.PureComponent<TouchProps, Touch
                 onMouseDown: this.onMouseDown,
                 onMouseUp: this.onMouseUp,
             },
-            nextProps,
-            child = React.Children.only(children);
+            nextProps;
 
-        if (!child) {
-            return child;
-        }
-        if (!disabled && active) {
-            let { style, className } = child.props;
-
-            if (activeStyle) {
-                style = { ...style, ...activeStyle };
+        if (React.Children.count(children) === 1 && React.isValidElement<any>(children)) {
+            let child = children;
+            if (!disabled && active) {
+                let { style, className } = child.props;
+    
+                if (activeStyle) {
+                    style = { ...style, ...activeStyle };
+                }
+                className = tools.classNames(className, activeClassName);
+    
+                nextProps = { className, style, ...events };
+            } else {
+                nextProps = events;
             }
-            className = tools.classNames(className, activeClassName);
-
-            nextProps = { className, style, ...events };
+            return React.cloneElement(child, nextProps);
         } else {
-            nextProps = events;
+            Log.error('[TouchFeedback]children属性只能是一个元素，但当前不是。','children:', children, 'children count:', React.Children.count(children));
+            return children;
         }
-        return React.cloneElement(child, nextProps);
     }
     componentDidUpdate() {
         if (this.props.disabled && this.state.active) {

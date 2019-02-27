@@ -42,12 +42,12 @@ export default class NavBar extends View<NavBarProps> {
             </div>
         )
     }
-    handleLeftClick = (e: React.MouseEvent) => {
+    handleLeftClick = (e) => {
         let { onLeftClick } = this.props;
 
         onLeftClick && onLeftClick(e);
     }
-    handleRightClick = (e: React.MouseEvent) => {
+    handleRightClick = (e) => {
         let { onRightClick } = this.props;
 
         onRightClick && onRightClick(e);

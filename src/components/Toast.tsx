@@ -15,7 +15,7 @@ export interface ToastProps extends CSSAttrs {
     type?: 'info' | 'loading' | 'success' | 'error' | 'warn';
     content?: React.ReactNode;
     animate?: boolean;
-    icon?: React.ReactElement<IconProps> | boolean;
+    icon?: React.ComponentElement<IconProps, Icon> | boolean;
     showOnInit?: boolean;
     onClose?: () => void;
     onCloseAnimationEnd?: () => void;

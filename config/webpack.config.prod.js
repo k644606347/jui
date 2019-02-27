@@ -1,6 +1,7 @@
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const path = require('path');
+const CopyPlugin = require('copy-webpack-plugin');
 const params = require('./params');
 const mode = 'production';
 
@@ -15,7 +16,7 @@ module.exports = {
         jui: params.appIndex
     },
     output: {
-        path: params.appBuild,
+        path: params.appBuildRoot,
         pathinfo: true,
         filename: '[name].js',
         chunkFilename: '[name].chunk.js',
@@ -80,6 +81,10 @@ module.exports = {
                 },
             },
         }),
+        new CopyPlugin([
+            { from: './CHANGELOG.md', to: params.appBuildRoot },
+            // { from: './README.md', to: params.appBuildRoot },
+        ]),
         analyze && new BundleAnalyzerPlugin(),
     ].filter(n => !!n)
 };

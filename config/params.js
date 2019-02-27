@@ -7,6 +7,7 @@ module.exports = {
     appIndex: path.resolve('./src/index.tsx'),
     srcPath: path.resolve('./src'),
     packageJSON: path.resolve('./package.json'),
-    appBuild: path.resolve('../jui-release/lib'),
+    appBuildLib: path.resolve('../jui-release/lib'),
+    appBuildRoot: path.resolve('../jui-release'),
     nodeModulesPath: path.resolve('./node_modules'),
 };
