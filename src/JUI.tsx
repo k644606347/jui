@@ -36,6 +36,7 @@ import Modal from './components/Modal';
 
 import Tools from "./utils/Tools";
 import Log from './utils/Log';
+import View from './components/View';
 
 export {
     JUIApp,
@@ -66,4 +67,5 @@ export {
     NavBar,
     Modal,
     Toast,
+    View,
 }

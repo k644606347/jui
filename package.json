@@ -3,10 +3,17 @@
     "version": "1.0.0",
     "private": true,
     "scripts": {
-        "start": "webpack-dev-server --open --hot --config ./config/webpack.config.dev.js",
-        "build": "webpack --config ./config/webpack.config.prod.js",
-        "analyze": "npm run build --analyze"
+        "start": "webpack-dev-server --open --hot --config ./config/webpack.config.start.js",
+        "dev": "NODE_ENV=development webpack --config ./config/webpack.config.build.js",
+        "prod": "NODE_ENV=production webpack --config ./config/webpack.config.build.js",
+        "build": "npm run dev;npm run prod",
+        "analyze": "npm run prod --analyze"
     },
+    "contributors": [
+        {
+          "name": "jiangyu3"
+        }
+    ],
     "dependencies": {
         "react": "^16.8.3",
         "react-dom": "^16.8.3",

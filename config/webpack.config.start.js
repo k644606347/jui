@@ -1,9 +1,14 @@
+"use strict";
+
 const params = require('./params');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 const path = require('path');
+const cssConfigFile = require('./css.config');
 
 const mode = 'development';
+const cssConfig = cssConfigFile.get(mode);
+
 module.exports = {
     mode,
     entry: {
@@ -46,12 +51,6 @@ module.exports = {
                     }, {
                         test: /\.(ts|tsx)$/,
                         use: [
-                            // {
-                            //     loader: 'babel-loader',
-                            //     options: {
-                            //         cacheDirectory: true,
-                            //     }
-                            // }, 
                             {
                                 loader: 'ts-loader',
                                 options: {
@@ -59,27 +58,8 @@ module.exports = {
                                 }
                             }
                         ]
-                    }, {
-                        test: /\.scss$/,
-                        use: [
-                            {
-                                loader: "style-loader/useable",
-                                options: {
-                                    singleton: true,
-                                }
-                            }, {
-                                loader: "css-loader",
-                                options: {
-                                    localIdentName: params.classNamePrefix + '-' + "[name]-[local]_[hash:base64:3]",
-                                    modules: true,
-                                    sourceMap: true,
-                                    camelCase: true,
-                                }
-                            },
-                            "postcss-loader",
-                            "sass-loader"
-                        ]
-                    }
+                    }, 
+                    cssConfig
                 ]
             }
         ]

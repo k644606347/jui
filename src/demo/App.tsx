@@ -1,4 +1,4 @@
-import { JUIApp, Pagination, FormItem } from '..';
+import { JUIApp, Pagination, FormItem } from '../JUI';
 import * as React from 'react';
 
 import './App.scss';

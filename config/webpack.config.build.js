@@ -1,25 +1,35 @@
+
+"use strict";
+
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 const params = require('./params');
-const mode = 'production';
+const cssConfigFile = require('./css.config');
+
+const mode = process.env.NODE_ENV;
+const cssConfig = cssConfigFile.get(mode);
 
 let analyze;
 if (process.env.npm_config_analyze) {
   analyze = !!JSON.parse(process.env.npm_config_analyze);
 }
-
+if (analyze)
+    mode = 'production';
+    
 module.exports = {
     mode,
     entry: {
         jui: params.appIndex
     },
     output: {
-        path: params.appBuildRoot,
+        path: params.appBuildLib,
         pathinfo: true,
-        filename: '[name].js',
-        chunkFilename: '[name].chunk.js',
+        filename: `[name].${mode}.js`,
+        chunkFilename: `[name].chunk.${mode}.js`,
+        library: '[name]',
+        libraryTarget: 'umd',
     },
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.json', '.jsx']
@@ -43,23 +53,8 @@ module.exports = {
                                 }
                             }
                         ]
-                    }, {
-                        test: /\.scss$/,
-                        use: [
-                            {
-                                loader: "style-loader/useable",
-                            }, {
-                                loader: "css-loader",
-                                options: {
-                                    localIdentName: "[hash:base64:8]",
-                                    modules: true,
-                                    camelCase: true,
-                                }
-                            },
-                            "postcss-loader",
-                            "sass-loader"
-                        ]
-                    }
+                    }, 
+                    cssConfig
                 ]
             }
         ]
@@ -71,16 +66,17 @@ module.exports = {
         'react-is': 'react-is'
     },
     plugins: [
-        new UglifyJsPlugin({
-            parallel: true,
-            cache: true,
-            sourceMap: true,
-            uglifyOptions: {
-                output: {
-                    comments: false
+        mode === 'production' ? 
+            new UglifyJsPlugin({
+                parallel: true,
+                cache: true,
+                sourceMap: true,
+                uglifyOptions: {
+                    output: {
+                        comments: false
+                    },
                 },
-            },
-        }),
+            }) : '',
         new CopyPlugin([
             { from: './CHANGELOG.md', to: params.appBuildRoot },
             // { from: './README.md', to: params.appBuildRoot },
