@@ -8,8 +8,9 @@ const CopyPlugin = require('copy-webpack-plugin');
 const params = require('./params');
 const cssConfigFile = require('./css.config');
 
-const mode = process.env.NODE_ENV;
-const cssConfig = cssConfigFile.get(mode);
+let mode = process.env.NODE_ENV;
+let cssConfig = cssConfigFile.get(mode);
+let isProd = env => env === 'production';
 
 let analyze;
 if (process.env.npm_config_analyze) {
@@ -23,8 +24,8 @@ module.exports = {
     output: {
         path: params.appBuildLib,
         pathinfo: true,
-        filename: `[name].${mode}.js`,
-        chunkFilename: `[name].chunk.${mode}.js`,
+        filename: `[name]${isProd(mode) ? '.min' : ''}.js?[chunkhash:8]`,
+        chunkFilename: `[name].chunk${isProd(mode) ? '.min' : ''}.js?[chunkhash:8]`,
         library: '[name]',
         libraryTarget: 'umd',
     },
