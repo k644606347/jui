@@ -1,4 +1,4 @@
-import { JUIApp, Pagination, FormItem } from '../JUI';
+import { JUIApp, Pagination, FormItem, NavBar } from '../JUI';
 import * as React from 'react';
 
 import './App.scss';
@@ -28,6 +28,7 @@ class App extends React.Component<any, any> {
     public render() {
         return (
             <JUIApp className={'App'}>
+            <NavBar></NavBar>
                 <select>
                     <option>1</option>
                     <option>2</option>

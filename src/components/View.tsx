@@ -20,7 +20,7 @@ abstract class View<P = {}, S = {}, SS = any> extends React.PureComponent<P, S, 
             proxy = () => {
                 if (!this.mounted)
                     this.initCSSObject();
-
+                    
                 return render();
             }
         this.render = proxy.bind(this);

@@ -15,13 +15,45 @@ let analyze;
 if (process.env.npm_config_analyze) {
   analyze = !!JSON.parse(process.env.npm_config_analyze);
 }
-if (analyze)
-    mode = 'production';
     
+let components = [ './components/JUIApp',
+'./components/ScrollView',
+"./components/TouchFeedback",
+"./components/Icon",
+"./components/Button",
+"./components/Label",
+"./components/formWidget/Input",
+"./components/formWidget/Textarea",
+"./components/Radio",
+"./components/Checkbox",
+
+"./components/formWidget/RadioItems",
+"./components/formWidget/CheckboxItems",
+"./components/Message",
+"./components/NavBar",
+"./components/Toast",
+
+"./components/formWidget/Field",
+"./components/FormItem",
+"./components/Form",
+"./components/formWidget/ActiveForm",
+'./components/formWidget/ValidateMessage',
+
+"./components/List",
+"./components/Pagination",
+
+"./components/MenuItem",
+"./components/MenuItemGroup",
+"./components/Menu",
+'./components/Modal',
+
+"./utils/Tools",
+'./utils/Log',
+'./components/View'];
 module.exports = {
     mode,
     entry: {
-        jui: params.appIndex
+        jui: components.map((c)=> path.resolve('./src', c)),
     },
     output: {
         path: params.appBuildLib,

@@ -2,16 +2,18 @@
 
 const params = require('./params');
 const isProd = env => env === 'production';
-const isDev = env => env === 'development';
+// const isDev = env => env === 'development';
 
 function get(env) {
     return {
         test: /\.scss$/,
         use: [
             {
-                loader: "style-loader/useable",
+                loader: "style-loader",
                 options: {
-                    singleton: true,
+                    hmr: !isProd(env),
+                    // insertAt: 'top',
+                    // singleton: true,
                 }
             },
             {

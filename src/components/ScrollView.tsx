@@ -6,7 +6,7 @@ import scrollCSS from './ScrollView.scss';
 
 const cssModules = tools.getCSSModulesBy(scrollCSS);
 export interface ContentProps extends CSSAttrs {
-    children: any;
+    iosNoBounce?: boolean;
 }
 export interface ScrollViewState {
     scrollable: boolean;
@@ -77,13 +77,13 @@ export default class ScrollView extends View<ContentProps, ScrollViewState> {
     }
     cssObject = scrollCSS;
     render() {
-        let { children, className, style } = this.props,
+        let { children, className, style, iosNoBounce } = this.props,
             { scrollable } = this.state;
 
         console.log('scrollable', scrollable);
         return (
             <div style={style} className={tools.classNames(
-                cssModules.wrapper, !scrollable && cssModules.disableScroll, className
+                cssModules.wrapper, !scrollable && cssModules.disableScroll, iosNoBounce && cssModules.iosNoBounce, className
             )}>
                 {children}
             </div>
