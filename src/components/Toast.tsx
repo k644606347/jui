@@ -8,7 +8,7 @@ import toastCSS from './Toast.scss';
 import * as ReactDOM from "react-dom";
 import ScrollView from "./ScrollView";
 
-const cssModules = tools.getCSSModulesBy(toastCSS);
+const cssModules = tools.useCSS(toastCSS);
 export interface ToastProps extends CSSAttrs {
     duration?: number;
     overlay?: boolean;
@@ -32,8 +32,7 @@ const presetIconMap = {
     error: iconCloseCircleOutline,
     warn: iconAlert
 }
-class ToastComponent extends View<ToastProps, ToastState> {
-    static componentName =  'Toast';
+export default class Toast extends View<ToastProps, ToastState> {
     static defaultProps: ToastProps = {
         duration: 3000,
         overlay: false,
@@ -188,8 +187,8 @@ class ToastComponent extends View<ToastProps, ToastState> {
 
 type State = Omit<ToastProps, 'showOnInit'> & ToastState;
 class StatefulToast extends React.PureComponent<any, State> {
-    toastRef = React.createRef<ToastComponent>();
-    Component = ToastComponent;
+    toastRef = React.createRef<Toast>();
+    Component = Toast;
     constructor(props) {
         super(props);
         this.state = {
@@ -198,7 +197,7 @@ class StatefulToast extends React.PureComponent<any, State> {
     }
     render() {
         let { show, ...restState } = this.state;
-        return <ToastComponent ref={this.toastRef} {...restState} showOnInit={show}/>
+        return <Toast ref={this.toastRef} {...restState} showOnInit={show}/>
     }
     componentDidUpdate(prevProps, prevState: State) {
         let { show } = this.state;
@@ -211,7 +210,7 @@ class StatefulToast extends React.PureComponent<any, State> {
     }
     show(args?: Partial<State>) {
         let { onClose } = this.state,
-            nextState = { ...ToastComponent.defaultProps, ...args, show: true, onClose };
+            nextState = { ...Toast.defaultProps, ...args, show: true, onClose };
 
         if (this.isShow()) {
             this.hide({ animate: false, onClose: undefined });
@@ -229,7 +228,7 @@ class StatefulToast extends React.PureComponent<any, State> {
     }
     alert(content: State['content'], duration?: State['duration'], options?: Partial<State>) {
         return this.show({
-            ...ToastComponent.defaultProps,
+            ...Toast.defaultProps,
             ...options,
             content,
             duration,
@@ -237,7 +236,7 @@ class StatefulToast extends React.PureComponent<any, State> {
     }
     info(content: State['content'], duration?: State['duration'], options?) {
         return this.show({
-            ...ToastComponent.defaultProps,
+            ...Toast.defaultProps,
             ...options,
             content,
             duration,
@@ -254,7 +253,7 @@ class StatefulToast extends React.PureComponent<any, State> {
     }
     error(content: State['content'], duration?: State['duration'], options?) {
         return this.show({
-            ...ToastComponent.defaultProps,
+            ...Toast.defaultProps,
             ...options,
             content,
             duration,
@@ -263,7 +262,7 @@ class StatefulToast extends React.PureComponent<any, State> {
     }
     warn(content: State['content'], duration?: State['duration'], options?) {
         return this.show({
-            ...ToastComponent.defaultProps,
+            ...Toast.defaultProps,
             ...options,
             content,
             duration,
@@ -272,7 +271,7 @@ class StatefulToast extends React.PureComponent<any, State> {
     }
     loading(content: State['content'], duration?: State['duration'], options?) {
         return this.show({
-            ...ToastComponent.defaultProps,
+            ...Toast.defaultProps,
             ...options,
             content,
             duration,
@@ -301,5 +300,5 @@ let wrapper = document.createElement('div'),
     rootEl = document.body ? document.body : document.documentElement;
 rootEl.appendChild(wrapper);
 
-let Toast = ReactDOM.render<any>(<StatefulToast></StatefulToast>, wrapper) as React.Component<any, State> & StatefulToast;
-export default Toast;
+let toast = ReactDOM.render<any>(<StatefulToast></StatefulToast>, wrapper) as React.Component<any, State> & StatefulToast;
+export { toast };

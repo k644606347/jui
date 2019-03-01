@@ -3,6 +3,7 @@ import { IListProps, SectionData, RowData } from './ListType';
 import listCSS from './List.scss';
 import { tools } from '../utils/Tools';
 import View from './View';
+tools.useCSS(listCSS);
 
 export * from './ListType';
 export default class List extends View<IListProps> {

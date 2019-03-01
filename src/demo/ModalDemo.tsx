@@ -3,7 +3,7 @@ import { Report } from "../validate/Validator";
 import ActiveForm from "../components/formWidget/ActiveForm";
 import Button from "../components/Button";
 import Modal from "../components/Modal";
-import Toast from "../components/Toast";
+import { toast } from "../components/Toast";
 import FormItem from "../components/FormItem";
 import Input from "../components/formWidget/Input";
 import ValidateMessage from "../components/formWidget/ValidateMessage";
@@ -42,15 +42,15 @@ export default class ModalDemo extends React.PureComponent<any,any> {
                     } disabled={!formIsValid} clear type="primary">ok~!</Button>}
                     onOk={e => {
                         this.setState({ show: false });
-                        Toast.info('ok btn clicked!', 3000, { overlay: true });
+                        toast.info('ok btn clicked!', 3000, { overlay: true });
                     }} 
                     onClose={e => {
-                        Toast.info('close btn clicked!');
+                        toast.info('close btn clicked!');
                         this.setState({ show: false});
                     }}
                     onCancel={e => {
                         this.setState((prevState: any) => {
-                            Toast.info('cancel btn clicked!');
+                            toast.info('cancel btn clicked!');
                             return { show: false };
                         })
                     }} show={show}>

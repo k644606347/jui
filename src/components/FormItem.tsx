@@ -7,7 +7,7 @@ import Field, { FieldProps, FieldFocusEvent, FieldBlurEvent } from "./formWidget
 import View from "./View";
 import { tools } from "../utils/Tools";
 
-const cssModules = tools.getCSSModulesBy(formItemCSS);
+const cssModules = tools.useCSS(formItemCSS);
 interface RenderChildrenEvent {
     component: React.ComponentElement<FieldProps, Field> & Field;
     label?: React.ComponentElement<LabelProps, Label> & Label;

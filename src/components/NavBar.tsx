@@ -2,10 +2,10 @@ import * as React from "react";
 import Icon from "./Icon";
 import { CSSAttrs, AnyFunction } from "../utils/types";
 import { tools } from "../utils/Tools";
-import navBarCSS from './NavBar.scss';
 import { iconArrowBack, iconMore } from "./icons/SVGData";
 import View from "./View";
-
+import navBarCSS from './NavBar.scss';
+tools.useCSS(navBarCSS);
 export interface NavBarProps extends CSSAttrs {
     theme: 'light' | 'dark';
     leftContent: string | React.ReactNode;

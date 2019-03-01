@@ -5,7 +5,7 @@ import Input from "../../components/formWidget/Input";
 import ValidateMessage from "../../components/formWidget/ValidateMessage";
 import Textarea from "../../components/formWidget/Textarea";
 import Button from "../../components/Button";
-import Toast from "../../components/Toast";
+import { toast } from "../../components/Toast";
 
 export default class FormItemDemo extends React.PureComponent {
     render() {
@@ -34,6 +34,6 @@ export default class FormItemDemo extends React.PureComponent {
     }
     handleSubmit = (e) => {
         console.log(e.value);
-        Toast.info('submit data' + JSON.stringify(e.value));
+        toast.info('submit data' + JSON.stringify(e.value));
     }
 }

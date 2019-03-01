@@ -5,6 +5,8 @@ import { tools } from "../utils/Tools";
 import paginationCSS from './Pagination.scss';
 import View from "./View";
 
+tools.useCSS(paginationCSS);
+
 export default class Pagination extends View<PaginationProps> {
     public static defaultProps: PaginationProps = {
         current: 1,

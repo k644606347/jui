@@ -1,12 +1,12 @@
 import * as React from "react";
-import Tools, { tools } from "../utils/Tools";
+import { tools } from "../utils/Tools";
 import Icon from "./Icon";
-import { Omit } from "../utils/types";
 import checkboxCSS from './Checkbox.scss';
 import { iconCheckCircle, iconCheckCircleOutline, IconDefinition, iconCheckSquare, iconCheckSquareOutline } from "./icons/SVGData";
 import Label from "./Label";
 import View from "./View";
 
+tools.useCSS(checkboxCSS);
 type ThemeType = 'circle' | 'square';
 export interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
     theme: ThemeType;

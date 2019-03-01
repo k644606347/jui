@@ -2,7 +2,7 @@ import * as React from "react";
 import labelCSS from './Label.scss';
 import { tools } from "../utils/Tools";
 import View from "./View";
-
+tools.useCSS(labelCSS);
 export interface LabelProps extends React.HTMLProps<HTMLLabelElement> {
     onClick?: (e: React.MouseEvent<HTMLLabelElement>) => void;
     required?: boolean;

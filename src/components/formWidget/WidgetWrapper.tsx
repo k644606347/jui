@@ -2,13 +2,13 @@ import { Report, validator } from "../../validate/Validator";
 import * as React from "react";
 import css from './WidgetWrapper.scss';
 import { CSSAttrs } from "../../utils/types";
-import Tools from "../../utils/Tools";
 import View from "../View";
+import { tools } from "../../utils/Tools";
+
+tools.useCSS(css);
 interface Props extends CSSAttrs {
     validateReport?: Report
 }
-
-const tools = Tools.getInstance();
 
 export class WidgetWrapper extends View<Props> {
     cssObject = css;

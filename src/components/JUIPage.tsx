@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { CSSAttrs } from '../utils/types';
 import { tools } from '../utils/Tools';
-import css from './JUIApp.scss';
+import css from './JUIPage.scss';
 import View from './View';
+const cssModules = tools.useCSS(css);
 
-const cssModules = tools.getCSSModulesBy(css);
 interface Props extends CSSAttrs {}
 
-export default class JUIApp extends View<Props> {
+export default class JUIPage extends View<Props> {
     cssObject = css;
     constructor(props) {
         super(props);

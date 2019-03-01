@@ -5,7 +5,7 @@ import messageCSS from './Message.scss';
 import { iconCloseCircleOutline, iconAlert, iconInfoCircleOutline } from './icons/SVGData';
 import { tools } from '../utils/Tools';
 import View from './View';
-
+tools.useCSS(messageCSS);
 interface Props extends CSSAttrs {
     type: 'error' | 'warn' | 'info';
     showIcon?: boolean;

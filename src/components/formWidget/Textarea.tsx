@@ -1,9 +1,11 @@
 import * as React from "react";
 import Widget, { FormWidgetProps } from "./Widget";
 import textareaCSS from './Textarea.scss';
-import Tools from "../../utils/Tools";
+import { tools } from "../../utils/Tools";
 import { DataType } from "./stores/DataConvertor";
 import { Omit } from "../../utils/types";
+
+tools.useCSS(textareaCSS);
 
 type OmitAttrs = 'onChange' | 'onFocus' | 'onBlur';
 export interface TextareaProps extends FormWidgetProps, Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, OmitAttrs> {
@@ -11,7 +13,6 @@ export interface TextareaProps extends FormWidgetProps, Omit<React.TextareaHTMLA
     defaultValue?: string;
 }
 
-const tools = Tools.getInstance();
 const omitAttrs = ['validateReport', 'onChange', 'onFocus', 'onBlur'];
 class Textarea extends Widget<TextareaProps> {
     cssObject = textareaCSS;

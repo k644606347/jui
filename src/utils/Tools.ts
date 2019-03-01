@@ -227,6 +227,25 @@ export default class Tools {
         }
         return cssObject;
     }
+    useCSS(cssObject) {
+        if (!this.isPlainObject(cssObject)) {
+            return {};
+        }
+        if (tools.isFunction(cssObject.use)) {// style-loader启用了useable
+            cssObject.use();
+            return cssObject.locals;
+        } else {
+            return cssObject;
+        }
+    }
+    unuseCSS(cssObject) {
+        if (!this.isPlainObject(cssObject)) {
+            return;
+        }
+        if (tools.isFunction(cssObject.unuse)) {// style-loader启用了useable
+            cssObject.unuse();
+        }
+    }
 }
 
 let tools = Tools.getInstance();

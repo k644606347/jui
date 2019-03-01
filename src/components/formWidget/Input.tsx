@@ -1,12 +1,11 @@
 import * as React from 'react';
-import Tools from '../../utils/Tools';
+import { tools } from '../../utils/Tools';
 import Widget, { FormWidgetProps } from './Widget';
 import inputCSS from './Input.scss';
 import { Omit } from '../../utils/types';
 import { DataType } from './stores/DataConvertor';
 
-const tools = Tools.getInstance();
-
+tools.useCSS(inputCSS);
 type OmitAttrs = 'onChange' | 'onFocus' | 'onBlur';
 export interface InputProps extends FormWidgetProps, Omit<React.InputHTMLAttributes<HTMLInputElement>, OmitAttrs> {
     value?: string;

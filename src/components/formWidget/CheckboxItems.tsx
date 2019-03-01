@@ -1,11 +1,12 @@
 import Widget, { FormWidgetProps } from "./Widget";
 import Checkbox, { CheckboxProps } from "../Checkbox";
 import * as React from "react";
-import Tools from "../../utils/Tools";
 import { CSSAttrs } from "../../utils/types";
 import { DataType } from "./stores/DataConvertor";
 import checkboxItemsCSS from './CheckboxItems.scss';
+import { tools } from "../../utils/Tools";
 
+tools.useCSS(checkboxItemsCSS);
 interface CheckboxItem extends CSSAttrs {
     label: string;
     value: string;
@@ -17,8 +18,6 @@ export interface CheckboxItemsProps extends FormWidgetProps {
     value: Array<CheckboxItem['value']>;
     theme?: CheckboxProps['theme'];
 }
-
-const tools = Tools.getInstance();
 class CheckboxItems extends Widget<CheckboxItemsProps> {
     cssObject = checkboxItemsCSS;
     static defaultProps = {

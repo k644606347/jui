@@ -12,8 +12,8 @@ function get(env) {
                 loader: "style-loader",
                 options: {
                     hmr: !isProd(env),
-                    // insertAt: 'top',
-                    // singleton: true,
+                    attrs: { 'data-css': 'jui' },
+                    singleton: true,
                 }
             },
             {

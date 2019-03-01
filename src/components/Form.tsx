@@ -4,6 +4,7 @@ import { CSSAttrs } from "../utils/types";
 import formCSS from './Form.scss';
 import View from './View';
 
+tools.useCSS(formCSS);
 export interface FormProps extends CSSAttrs, React.FormHTMLAttributes<HTMLFormElement> {
 }
 export default class Form extends View<FormProps> {

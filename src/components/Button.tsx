@@ -6,6 +6,7 @@ import buttonCSS from './Button.scss';
 import { iconCloud, iconCloudDownload, iconCloudUpload, iconDownload, iconLoading, iconPower, iconSearch, iconCheckCircle, iconCheckCircleOutline, iconTime, iconTimeOutline, iconMoreVertical, iconMore, iconArrowUp, iconArrowForward, iconArrowDown, iconArrowBack, IconDefinition } from './icons/SVGData';
 import View from './View';
 
+tools.useCSS(buttonCSS);
 export interface PresetIcons {
     cloud: IconDefinition;
     'cloud-down': IconDefinition;

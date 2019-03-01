@@ -1,5 +1,5 @@
 import * as React from "react";
-import Tools from "../../utils/Tools";
+import { tools } from "../../utils/Tools";
 import { ActiveFormContext } from "./ActiveFormContext";
 import { validator, Report, RuleParam } from "../../validate/Validator";
 import { CSSAttrs, AnyFunction, AnyObject } from "../../utils/types";
@@ -10,6 +10,7 @@ import activeFormCSS from './ActiveForm.scss';
 import View from "../View";
 import * as ReactDOM from "react-dom";
 
+tools.useCSS(activeFormCSS);
 declare namespace ActiveFormType {
     type Value = {[k in string]: any};
     type Action = 'submit' | 'change' | 'blur';
@@ -77,7 +78,6 @@ declare namespace ActiveFormType {
 }
 export { ActiveFormType };
 
-const tools = Tools.getInstance();
 const DEBOUNCE_VALIDATE_DELAY = 500;
 export default class ActiveForm extends View<ActiveFormType.Props, ActiveFormType.State> {
     cssObject = activeFormCSS;

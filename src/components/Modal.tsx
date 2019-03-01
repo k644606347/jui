@@ -8,7 +8,7 @@ import ScrollView from "./ScrollView";
 import View from "./View";
 import Button from "./Button";
 import { tools } from "../utils/Tools";
-
+tools.useCSS(modalCSS);
 type BtnType = boolean | string | JSX.Element;
 export interface ModalProps extends CSSAttrs {
     title: string | JSX.Element;

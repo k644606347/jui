@@ -7,7 +7,7 @@ import ValidateMessage from "../../components/formWidget/ValidateMessage";
 import Textarea from "../../components/formWidget/Textarea";
 import RadioItems from "../../components/formWidget/RadioItems";
 import Button from "../../components/Button";
-import Toast from "../../components/Toast";
+import { toast } from "../../components/Toast";
 
 export default class SimpleForm extends React.PureComponent {
     render() {
@@ -67,6 +67,6 @@ export default class SimpleForm extends React.PureComponent {
     }
     handleSubmit = (e) => {
         e.preventDefault();
-        Toast.info('submit data' + JSON.stringify(e.value));
+        toast.info('submit data' + JSON.stringify(e.value));
     }
 }

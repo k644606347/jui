@@ -7,7 +7,7 @@ import { MenuItemProps, MenuItemChangeEvent } from "./MenuItemType";
 import MenuItemGroup from "./MenuItemGroup";
 import { ClickEvent } from "./MenuItemGroupType";
 import View from "./View";
-
+tools.useCSS(menuItemsCSS);
 export default class MenuItems extends View<MenuItemsProps> {
     private static defaultProps: MenuItemsProps = {
         id: 'items',

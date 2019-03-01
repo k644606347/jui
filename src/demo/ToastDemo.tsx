@@ -3,7 +3,7 @@ import * as React from "react";
 import { iconNotifications, iconAlbums, iconRedo, iconClipboard, iconAlarm } from "../components/icons/SVGData";
 import Button from "../components/Button";
 import Modal from "../components/Modal";
-import Toast from "../components/Toast";
+import { toast } from "../components/Toast";
 import Icon from "../components/Icon";
 
 export default class ToastDemo extends React.PureComponent<any, any>{
@@ -23,19 +23,19 @@ export default class ToastDemo extends React.PureComponent<any, any>{
                 }>
                     <React.Fragment>
                         <Button full onClick={
-                            e => Toast.show({
+                            e => toast.show({
                                 content: '纯文本toast，默认3秒消失'
                             })
                         }>纯文本Toast</Button>
                         <Button full onClick={
-                            e => Toast.show({
+                            e => toast.show({
                                 content: '这是顶部toast',
                                 position: 'top',
                                 duration: 5000
                             })
                         }>顶部Toast</Button>
                         <Button full onClick={
-                            e => Toast.show({
+                            e => toast.show({
                                 content: '这是底部toast',
                                 position: 'bottom',
                                 duration: 5000,
@@ -45,7 +45,7 @@ export default class ToastDemo extends React.PureComponent<any, any>{
                             })
                         }>底部Toast</Button>
                         <Button full onClick={
-                            e => Toast.show({
+                            e => toast.show({
                                 content: '这是bottom toast',
                                 position: 'bottom',
                                 duration: 5000,
@@ -56,7 +56,7 @@ export default class ToastDemo extends React.PureComponent<any, any>{
                             })
                         }>底部Toast(无动画效果)</Button>
                         <Button full onClick={
-                            e => Toast.show({
+                            e => toast.show({
                                 content: '这是middle toast',
                                 position: 'middle',
                                 duration: 5000,
@@ -67,7 +67,7 @@ export default class ToastDemo extends React.PureComponent<any, any>{
                             })
                         }>中部Toast(无动画效果)</Button>
                         <Button full onClick={
-                            e => Toast.show({
+                            e => toast.show({
                                 content: '这是top toast',
                                 position: 'top',
                                 duration: 5000,
@@ -78,7 +78,7 @@ export default class ToastDemo extends React.PureComponent<any, any>{
                             })
                         }>无动画效果3</Button>
                         <Button full onClick={
-                            e => Toast.show({
+                            e => toast.show({
                                 content: '这是top toast',
                                 position: 'top',
                                 duration: 5000,
@@ -90,28 +90,28 @@ export default class ToastDemo extends React.PureComponent<any, any>{
                             })
                         }>顶部Toast(无动画效果)</Button>
                         <Button full onClick={
-                            e => Toast.loading('', 0)
+                            e => toast.loading('', 0)
                         }>只有图标</Button>
                         <Button full type={'primary'} onClick={
-                            e => Toast.info('info', 0)
+                            e => toast.info('info', 0)
                         }>info Toast</Button>
                         <Button full icon={iconNotifications} onClick={
-                            e => Toast.success('success!', 0)
+                            e => toast.success('success!', 0)
                         }>
                             success Toast
                         </Button>
                         <Button full loading onClick={
-                            e => Toast.loading('加载中', 0)
+                            e => toast.loading('加载中', 0)
                         }>
                             loading Toast
                         </Button>
                         <Button full onClick={
-                            e => Toast.isShow() ? Toast.hide() : Toast.show()
+                            e => toast.isShow() ? toast.hide() : toast.show()
                         }>
                             toggle Toast display
                         </Button>
                         <Button full onClick={
-                            e => Toast.show({
+                            e => toast.show({
                                 content: '带蒙层Toast，无法点击其他元素',
                                 overlay: true
                             })
@@ -119,7 +119,7 @@ export default class ToastDemo extends React.PureComponent<any, any>{
                             带蒙层Toast
                         </Button>
                         <Button full icon={<Icon icon={iconAlarm } />} onClick={
-                            e => Toast.show({
+                            e => toast.show({
                                 content: 'wechat!',
                                 icon: <Icon icon={iconRedo} />,
                                 duration: 0,
@@ -128,7 +128,7 @@ export default class ToastDemo extends React.PureComponent<any, any>{
                             自定义Icon的Toast
                         </Button>
                         <Button full onClick={
-                            e => Toast.info(
+                            e => toast.info(
                                 <React.Fragment>
                                     <h1>目录</h1>
                                     <ul>
@@ -149,16 +149,16 @@ export default class ToastDemo extends React.PureComponent<any, any>{
                                     setCountDown = () => {
                                         let nextCount = startCount--;
                                         if (nextCount === 0) {
-                                            Toast.hide();
+                                            toast.hide();
                                         } else {
-                                            Toast.content(content(nextCount));
+                                            toast.content(content(nextCount));
                                             window.setTimeout(() => {
                                                     setCountDown();
                                             }, 1000);
                                         }
                                     };
 
-                                Toast.show({
+                                toast.show({
                                     content: content(startCount),
                                     overlay: true,
                                     duration: 0,
@@ -167,7 +167,7 @@ export default class ToastDemo extends React.PureComponent<any, any>{
                             }
                         }>倒计时Toast</Button>
                         <Button full onClick={
-                            e => Toast.show({
+                            e => toast.show({
                                 content: '这是顶部toast',
                                 position: 'top',
                                 duration: 0,
@@ -175,7 +175,7 @@ export default class ToastDemo extends React.PureComponent<any, any>{
                             })
                         }>theme: 'light'</Button>
                         <Button full onClick={
-                            e => Toast.show({
+                            e => toast.show({
                                 content: '这是顶部toast',
                                 position: 'bottom',
                                 // duration: 0,

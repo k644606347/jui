@@ -1,4 +1,4 @@
-import { JUIApp, Pagination, FormItem, NavBar } from '../JUI';
+import { JUIPage, Pagination, FormItem, NavBar } from '../JUI';
 import * as React from 'react';
 
 import './App.scss';
@@ -27,7 +27,7 @@ class App extends React.Component<any, any> {
     }
     public render() {
         return (
-            <JUIApp className={'App'}>
+            <JUIPage className={'App'}>
             <NavBar></NavBar>
                 <select>
                     <option>1</option>
@@ -59,7 +59,7 @@ class App extends React.Component<any, any> {
                 <MultiContextProvider />
                 <FormItem label="test" field={<input type="select" />} layout="vertical"></FormItem>
                 <DefaultPropsDemo />
-            </JUIApp>
+            </JUIPage>
         );
     }
     handleFormChange = (e: any) => {

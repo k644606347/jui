@@ -1,20 +1,20 @@
 import * as React from "react";
 import Message from "../Message";
 import { CSSAttrs } from "../../utils/types";
-import Tools from "../../utils/Tools";
+import { tools } from "../../utils/Tools";
 import { ActiveFormContextType } from "./ActiveFormContext";
 import connectActiveForm from "./connectActiveForm";
 import messageCSS from './ValidateMessage.scss';
 import { validator, Report } from "../../validate/Validator";
 import View from "../View";
 
+tools.useCSS(messageCSS);
 interface Props extends CSSAttrs {
     fieldName: string;
     popover: boolean;
     activeFormContext?: ActiveFormContextType;
 }
 
-const tools = Tools.getInstance();
 class ValidateMessage extends View<Props> {
     static defaultProps = {
         popover: false,

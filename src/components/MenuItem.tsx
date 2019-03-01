@@ -6,7 +6,7 @@ import Icon from "./Icon";
 import Checkbox from "./Checkbox";
 import Radio from "./Radio";
 import View from "./View";
-
+tools.useCSS(menuItemCSS);
 export default class MenuItem extends View<MenuItemProps, MenuItemState> {
     private static defaultProps: MenuItemProps = {
         value: 'item',

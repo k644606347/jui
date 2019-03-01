@@ -5,7 +5,7 @@ import menuItemCSS from './MenuItem.scss';
 import { iconArrowForward } from "./icons/SVGData";
 import View from "./View";
 import { tools } from "../utils/Tools";
-
+tools.useCSS(menuItemCSS);
 export default class MenuItemGroup extends View<MenuItemGroupProps, MenuItemGroupState> {
     private static defaultProps: MenuItemGroupProps = {
         id: '',

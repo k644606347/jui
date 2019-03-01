@@ -6,6 +6,7 @@ import Input from "./formWidget/Input";
 import View from "./View";
 import { tools } from "../utils/Tools";
 
+tools.useCSS(searchBarCSS);
 interface BarProps extends CSSAttrs {
     onCancel?(): void;
 }

@@ -8,6 +8,8 @@ import { iconRadioBtnOn, iconRadioBtnOff, IconDefinition, iconCheck } from './ic
 import Label from './Label';
 import View from './View';
 
+tools.useCSS(radioCSS);
+
 type ThemeType = 'circle' | 'checkmark';
 export interface RadioProps extends React.InputHTMLAttributes<HTMLInputElement> {
     theme?: ThemeType;
