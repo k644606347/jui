@@ -23,9 +23,8 @@ module.exports = {
     },
     output: {
         path: params.appBuildLib,
-        pathinfo: true,
-        filename: `[name]${isProd(mode) ? '.min' : ''}.js?[chunkhash:8]`,
-        chunkFilename: `[name].chunk${isProd(mode) ? '.min' : ''}.js?[chunkhash:8]`,
+        filename: `[name].${mode}.js?[chunkhash:8]`,
+        chunkFilename: `[name].chunk.${mode}.js?[chunkhash:8]`,
         library: '[name]',
         libraryTarget: 'umd',
     },
