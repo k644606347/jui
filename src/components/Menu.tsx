@@ -9,7 +9,7 @@ const cssModules = tools.useCSS(menuCSS);
 /**
  * 菜单栏组件, 样式定位以<body>元素为基准
  */
-export default class Menu extends View<MenuProps, MenuState> {
+export default class Menu extends React.PureComponent<MenuProps, MenuState> {
     static handleLoad() {
         this.updateLayout();
     }

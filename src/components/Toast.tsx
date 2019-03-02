@@ -32,7 +32,7 @@ const presetIconMap = {
     error: iconCloseCircleOutline,
     warn: iconAlert
 }
-export default class Toast extends View<ToastProps, ToastState> {
+export default class Toast extends React.PureComponent<ToastProps, ToastState> {
     static defaultProps: ToastProps = {
         duration: 3000,
         overlay: false,

@@ -7,7 +7,7 @@ const cssModules = tools.useCSS(css);
 
 interface Props extends CSSAttrs {}
 
-export default class JUIPage extends View<Props> {
+export default class JUIPage extends React.PureComponent<Props> {
     cssObject = css;
     constructor(props) {
         super(props);

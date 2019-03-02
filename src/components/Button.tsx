@@ -6,7 +6,7 @@ import buttonCSS from './Button.scss';
 import { iconCloud, iconCloudDownload, iconCloudUpload, iconDownload, iconLoading, iconPower, iconSearch, iconCheckCircle, iconCheckCircleOutline, iconTime, iconTimeOutline, iconMoreVertical, iconMore, iconArrowUp, iconArrowForward, iconArrowDown, iconArrowBack, IconDefinition } from './icons/SVGData';
 import View from './View';
 
-tools.useCSS(buttonCSS);
+let cssModules = tools.useCSS(buttonCSS);
 export interface PresetIcons {
     cloud: IconDefinition;
     'cloud-down': IconDefinition;
@@ -70,7 +70,7 @@ const buttonIcons: PresetIcons = {
     'down': iconArrowDown,
     'left': iconArrowBack,
 };
-class Button extends View<ButtonProps> {
+class Button extends React.PureComponent<ButtonProps> {
     static defaultProps: ButtonProps = {
         disabled: false,
         block: false,
@@ -91,8 +91,7 @@ class Button extends View<ButtonProps> {
         let { props } = this,
             { children, className, activeClassName, title, disabled, icon, outline, clear, strong, 
                 block, full, loading, shape, style, size, type: type } = props,
-            iconDefinition, iconElement,
-            cssModules = this.cssModules;
+            iconDefinition, iconElement;
 
         if (loading) {
             iconDefinition = buttonIcons.loading;

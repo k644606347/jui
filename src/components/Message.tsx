@@ -5,7 +5,7 @@ import messageCSS from './Message.scss';
 import { iconCloseCircleOutline, iconAlert, iconInfoCircleOutline } from './icons/SVGData';
 import { tools } from '../utils/Tools';
 import View from './View';
-tools.useCSS(messageCSS);
+let cssModules = tools.useCSS(messageCSS);
 interface Props extends CSSAttrs {
     type: 'error' | 'warn' | 'info';
     showIcon?: boolean;
@@ -16,14 +16,13 @@ const iconMap: { [key in Props['type']]: IconDefinition } = {
     warn: iconAlert,
     info: iconInfoCircleOutline
 };
-export default class Message extends View<Props> {
+export default class Message extends React.PureComponent<Props> {
     static defaultProps = {
         showIcon: true,
     };
     cssObject = messageCSS;
     render() {
-        let { type, showIcon, children, style, className } = this.props,
-            cssModules = this.cssModules;
+        let { type, showIcon, children, style, className } = this.props;
 
         return (
             <div

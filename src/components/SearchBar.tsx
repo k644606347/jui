@@ -10,7 +10,7 @@ tools.useCSS(searchBarCSS);
 interface BarProps extends CSSAttrs {
     onCancel?(): void;
 }
-export default class SearchBar extends View<BarProps> {
+export default class SearchBar extends React.PureComponent<BarProps> {
     cssObject = searchBarCSS;
     constructor(props: BarProps) {
         super(props);

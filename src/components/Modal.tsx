@@ -8,7 +8,9 @@ import ScrollView from "./ScrollView";
 import View from "./View";
 import Button from "./Button";
 import { tools } from "../utils/Tools";
-tools.useCSS(modalCSS);
+
+let cssModules = tools.useCSS(modalCSS);
+
 type BtnType = boolean | string | JSX.Element;
 export interface ModalProps extends CSSAttrs {
     title: string | JSX.Element;
@@ -27,7 +29,7 @@ export interface ModalProps extends CSSAttrs {
     headerStyle?: React.CSSProperties;
 }
 export interface ModalState {}
-export default class Modal extends View<ModalProps, ModalState> {
+export default class Modal extends React.PureComponent<ModalProps, ModalState> {
     cssObject = modalCSS;
     static defaultProps = {
         title: '',
@@ -53,8 +55,7 @@ export default class Modal extends View<ModalProps, ModalState> {
                 leftContent, rightContent,
                 className, bodyClassName, headerClassName, 
                 style, bodyStyle, headerStyle 
-            } = props,
-            cssModules = this.cssModules;
+            } = props;
 
         if (closeBtn === true) {
             closeBtn = <Icon icon={iconClose} />;

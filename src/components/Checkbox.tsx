@@ -6,7 +6,8 @@ import { iconCheckCircle, iconCheckCircleOutline, IconDefinition, iconCheckSquar
 import Label from "./Label";
 import View from "./View";
 
-tools.useCSS(checkboxCSS);
+let cssModules = tools.useCSS(checkboxCSS);
+
 type ThemeType = 'circle' | 'square';
 export interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
     theme: ThemeType;
@@ -23,7 +24,7 @@ const themeIconMap: {[k in ThemeType]: {checked: IconDefinition, unchecked: Icon
         unchecked: iconCheckSquareOutline,
     }
 }
-export default class Checkbox extends View<CheckboxProps>{
+export default class Checkbox extends React.PureComponent<CheckboxProps>{
     static defaultProps = {
         checked: false,
         theme: "circle",
@@ -37,8 +38,7 @@ export default class Checkbox extends View<CheckboxProps>{
     }
     render() {
         let { children, checked, disabled, readOnly, className, style, theme, ...restProps } = this.props,
-            themeIcon = themeIconMap[theme],
-            cssModules = this.cssModules;
+            themeIcon = themeIconMap[theme];
 
         return (
             <Label style={style} className={

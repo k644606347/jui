@@ -5,7 +5,7 @@ import Radio, { RadioProps } from "../Radio";
 import radioItemsCSS from './RadioItems.scss';
 import { DataType } from "./stores/DataConvertor";
 
-tools.useCSS(radioItemsCSS);
+let cssModules = tools.useCSS(radioItemsCSS);
 
 interface RadioItem extends RadioProps {
     label: string;
@@ -25,18 +25,17 @@ class RadioItems extends Widget<RadioItemsProps> {
     }
     dataType: DataType = 'string';
     render() {
-        let { name, items, value, className, style, disabled, readOnly, theme } = this.props,
-            cm = this.cssModules;
+        let { name, items, value, className, style, disabled, readOnly, theme } = this.props;
         return (
-            <div style={style} className={tools.classNames(cm.wrapper, className)}>
+            <div style={style} className={tools.classNames(cssModules.wrapper, className)}>
                 {
                     items && items.map((config, i) => {
                         let radioProps = { theme, disabled, readOnly, ...config };
                         
-                        return <div key={i} className={cm.item}>
+                        return <div key={i} className={cssModules.item}>
                             <Radio {...radioProps} name={name}
                                 checked={value === config.value} 
-                                className={cm.item} 
+                                className={cssModules.item} 
                                 onChange={this.handleChange}>
                                 { radioProps.label }
                             </Radio>

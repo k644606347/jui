@@ -5,8 +5,9 @@ import menuItemCSS from './MenuItem.scss';
 import { iconArrowForward } from "./icons/SVGData";
 import View from "./View";
 import { tools } from "../utils/Tools";
-tools.useCSS(menuItemCSS);
-export default class MenuItemGroup extends View<MenuItemGroupProps, MenuItemGroupState> {
+
+let cssModules = tools.useCSS(menuItemCSS);
+export default class MenuItemGroup extends React.PureComponent<MenuItemGroupProps, MenuItemGroupState> {
     private static defaultProps: MenuItemGroupProps = {
         id: '',
         label: '',
@@ -26,8 +27,7 @@ export default class MenuItemGroup extends View<MenuItemGroupProps, MenuItemGrou
     }
     render() {
         let { label, active, className, style, icon } = this.props,
-            { clicked } = this.state,
-            cssModules = this.cssModules;
+            { clicked } = this.state;
 
         return (
             <div className={

@@ -10,7 +10,8 @@ import activeFormCSS from './ActiveForm.scss';
 import View from "../View";
 import * as ReactDOM from "react-dom";
 
-tools.useCSS(activeFormCSS);
+let cssModules = tools.useCSS(activeFormCSS);
+
 declare namespace ActiveFormType {
     type Value = {[k in string]: any};
     type Action = 'submit' | 'change' | 'blur';
@@ -79,7 +80,7 @@ declare namespace ActiveFormType {
 export { ActiveFormType };
 
 const DEBOUNCE_VALIDATE_DELAY = 500;
-export default class ActiveForm extends View<ActiveFormType.Props, ActiveFormType.State> {
+export default class ActiveForm extends React.PureComponent<ActiveFormType.Props, ActiveFormType.State> {
     cssObject = activeFormCSS;
     static defaultProps = {
         name: '',
@@ -118,8 +119,7 @@ export default class ActiveForm extends View<ActiveFormType.Props, ActiveFormTyp
         let { props, state } = this,
             { name, children, validateRules, className, style, action, method, target } = props,
             { value, validating, isValid, fieldReportMap, validateError, submitting } = state,
-            formProps = { name, action, method, target },
-            cssModules = this.cssModules;
+            formProps = { name, action, method, target };
 
         console.log('ActiveForm render', JSON.stringify(this.state));
         let UnwrappedElement = children

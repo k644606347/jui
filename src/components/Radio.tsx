@@ -6,9 +6,8 @@ import { Omit } from '../utils/types';
 import radioCSS from './Radio.scss';
 import { iconRadioBtnOn, iconRadioBtnOff, IconDefinition, iconCheck } from './icons/SVGData';
 import Label from './Label';
-import View from './View';
 
-tools.useCSS(radioCSS);
+let cssModules = tools.useCSS(radioCSS);
 
 type ThemeType = 'circle' | 'checkmark';
 export interface RadioProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -29,7 +28,7 @@ const themeIconMap: {[k in ThemeType]: {
         unchecked: iconCheck,
     }
 }
-export default class Radio extends View<RadioProps> {
+export default class Radio extends React.PureComponent<RadioProps> {
     static defaultProps = {
         name: '',
         value: '',
@@ -46,8 +45,7 @@ export default class Radio extends View<RadioProps> {
     }
     render() {
         let { disabled, checked, readOnly, className, style, children, theme, ...restProps } = this.props,
-            themeIcon = themeIconMap[theme!],
-            cssModules = this.cssModules;
+            themeIcon = theme && themeIconMap[theme];
 
         return (
             <Label style={style} className={
@@ -65,7 +63,7 @@ export default class Radio extends View<RadioProps> {
                     type="radio" checked={checked} disabled={disabled} readOnly={readOnly}
                     onChange={this.handleChange} 
                 />
-                <div className={cssModules.icon}><Icon icon={checked ? themeIcon.checked : themeIcon.unchecked} /></div>
+                <div className={cssModules.icon}>{ themeIcon ? <Icon icon={checked ? themeIcon.checked : themeIcon.unchecked} /> : '' }</div>
                 {children !== undefined ? <div className={cssModules.description}>{children}</div> : ''}
             </Label>
         );

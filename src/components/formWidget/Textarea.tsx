@@ -5,7 +5,7 @@ import { tools } from "../../utils/Tools";
 import { DataType } from "./stores/DataConvertor";
 import { Omit } from "../../utils/types";
 
-tools.useCSS(textareaCSS);
+let cssModules = tools.useCSS(textareaCSS);
 
 type OmitAttrs = 'onChange' | 'onFocus' | 'onBlur';
 export interface TextareaProps extends FormWidgetProps, Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, OmitAttrs> {
@@ -35,7 +35,7 @@ class Textarea extends Widget<TextareaProps> {
                 onFocus={this.handleFocus}
                 onBlur={this.handleBlur}
                 onChange={this.handleChange}
-                className={tools.classNames(this.cssModules.wrapper, className)}/>
+                className={tools.classNames(cssModules.wrapper, className)}/>
         );
     }
     handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {

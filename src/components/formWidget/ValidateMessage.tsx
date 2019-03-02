@@ -8,14 +8,14 @@ import messageCSS from './ValidateMessage.scss';
 import { validator, Report } from "../../validate/Validator";
 import View from "../View";
 
-tools.useCSS(messageCSS);
+let cssModules = tools.useCSS(messageCSS);
 interface Props extends CSSAttrs {
     fieldName: string;
     popover: boolean;
     activeFormContext?: ActiveFormContextType;
 }
 
-class ValidateMessage extends View<Props> {
+class ValidateMessage extends React.PureComponent<Props> {
     static defaultProps = {
         popover: false,
     }
@@ -23,8 +23,7 @@ class ValidateMessage extends View<Props> {
     render() {
         let { props } = this,
             { fieldName, className, style, popover, activeFormContext } = props,
-            fieldReport: Report = validator.getDefaultReport(),
-            cssModules = this.cssModules;
+            fieldReport: Report = validator.getDefaultReport();
         
         if (activeFormContext && activeFormContext.fieldReportMap) {
             let { fieldReportMap } = activeFormContext;

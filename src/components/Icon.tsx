@@ -17,7 +17,7 @@ export interface IconProps extends CSSAttrs {
     name?: string;
 }
 export { IconDefinition };
-export default class Icon extends View<IconProps> {
+export default class Icon extends React.PureComponent<IconProps> {
     static renderIcon(icon: React.ReactElement<IconProps> | IconDefinition) {
         return this.isIconElement(icon) ? icon : <Icon icon={icon} />;
     }

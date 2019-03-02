@@ -49,7 +49,7 @@ export interface FormWidgetState {
 }
 type Props = FormWidgetProps;
 type State = FormWidgetState;
-export default abstract class Widget<P extends Props = Props, S extends State = State> extends View<P, S> {
+export default abstract class Widget<P extends Props = Props, S extends State = State> extends React.PureComponent<P, S> {
     static convertor = DataConvertor.getInstance();
     static validate(value: any): Promise<Report> {
         return Promise.resolve({...validator.getDefaultReport(), isValid: true});

@@ -4,10 +4,10 @@ import { CSSAttrs } from "../utils/types";
 import formCSS from './Form.scss';
 import View from './View';
 
-tools.useCSS(formCSS);
+let cssModules = tools.useCSS(formCSS);
 export interface FormProps extends CSSAttrs, React.FormHTMLAttributes<HTMLFormElement> {
 }
-export default class Form extends View<FormProps> {
+export default class Form extends React.PureComponent<FormProps> {
     cssObject = formCSS;
     constructor(props: FormProps) {
         super(props);
@@ -15,8 +15,7 @@ export default class Form extends View<FormProps> {
     }
     render() {
         let { props } = this,
-            { children, style, className, ...restProps } = props,
-            cssModules = this.cssModules;
+            { children, style, className, ...restProps } = props;
 
         return (
             <form

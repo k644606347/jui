@@ -10,7 +10,7 @@ export interface FieldProps {
 export type FieldChangeEvent = React.ChangeEvent<any> | FormWidgetChangeEvent;
 export type FieldFocusEvent = FormWidgetFocusEvent | React.FocusEvent<any>;
 export type FieldBlurEvent = FormWidgetFocusEvent | React.FocusEvent<any>;
-class Field extends View<FieldProps>{
+class Field extends React.PureComponent<FieldProps>{
     static getInfoByFieldEvent(e: FieldChangeEvent | FieldFocusEvent | FieldBlurEvent) {
         let result: AnyObject = {
             eventType: e.type,

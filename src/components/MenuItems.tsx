@@ -7,8 +7,9 @@ import { MenuItemProps, MenuItemChangeEvent } from "./MenuItemType";
 import MenuItemGroup from "./MenuItemGroup";
 import { ClickEvent } from "./MenuItemGroupType";
 import View from "./View";
-tools.useCSS(menuItemsCSS);
-export default class MenuItems extends View<MenuItemsProps> {
+
+let cssModules = tools.useCSS(menuItemsCSS);
+export default class MenuItems extends React.PureComponent<MenuItemsProps> {
     private static defaultProps: MenuItemsProps = {
         id: 'items',
         label: 'items',
@@ -32,8 +33,7 @@ export default class MenuItems extends View<MenuItemsProps> {
 
         let activeItem = items[activeIndex!],
             activeSubItems = (activeItem && tools.isArray((activeItem as MenuItemsProps).items)) ? (activeItem as MenuItemsProps) : undefined,
-            inputTagName = `${id}_${tools.genID()}`,
-            cssModules = this.cssModules;
+            inputTagName = `${id}_${tools.genID()}`;
 
         // TODO 应为React.ReactElement<MenuItemsProps>
         let subItemsEl: any;

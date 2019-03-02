@@ -5,7 +5,7 @@ import inputCSS from './Input.scss';
 import { Omit } from '../../utils/types';
 import { DataType } from './stores/DataConvertor';
 
-tools.useCSS(inputCSS);
+let cssModules = tools.useCSS(inputCSS);
 type OmitAttrs = 'onChange' | 'onFocus' | 'onBlur';
 export interface InputProps extends FormWidgetProps, Omit<React.InputHTMLAttributes<HTMLInputElement>, OmitAttrs> {
     value?: string;
@@ -36,7 +36,7 @@ class Input extends Widget<InputProps> {
                 onFocus={this.handleFocus}
                 onBlur={this.handleBlur}
                 onChange={this.handleChange}
-                className={tools.classNames(this.cssModules.input, className)}
+                className={tools.classNames(cssModules.input, className)}
             />
         );
     }

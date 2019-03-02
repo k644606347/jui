@@ -5,7 +5,8 @@ import { tools } from "../utils/Tools";
 import { iconArrowBack, iconMore } from "./icons/SVGData";
 import View from "./View";
 import navBarCSS from './NavBar.scss';
-tools.useCSS(navBarCSS);
+
+let cssModules = tools.useCSS(navBarCSS);
 export interface NavBarProps extends CSSAttrs {
     theme: 'light' | 'dark';
     leftContent: string | React.ReactNode;
@@ -14,7 +15,7 @@ export interface NavBarProps extends CSSAttrs {
     onRightClick?: AnyFunction;
 }
 
-export default class NavBar extends View<NavBarProps> {
+export default class NavBar extends React.PureComponent<NavBarProps> {
     static defaultProps = {
         theme: 'light',
         leftContent: <Icon icon={iconArrowBack} />,
@@ -22,8 +23,7 @@ export default class NavBar extends View<NavBarProps> {
     };
     cssObject = navBarCSS;
     render() {
-        let { children, leftContent, rightContent, className, style, theme } = this.props,
-            cssModules = this.cssModules;
+        let { children, leftContent, rightContent, className, style, theme } = this.props;
 
         return (
             <div className={tools.classNames(cssModules.wrapper, theme && cssModules[theme], className)} style={style}>

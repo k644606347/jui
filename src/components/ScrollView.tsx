@@ -12,7 +12,7 @@ export interface ScrollViewState {
     scrollable: boolean;
 }
 type DisableScrollFilter = (scrollView: ScrollView) => boolean;
-export default class ScrollView extends View<ContentProps, ScrollViewState> {
+export default class ScrollView extends React.PureComponent<ContentProps, ScrollViewState> {
     static instances: ScrollView[] = [];
     private static disableTasks: Array<{ id: number | string, filter?: DisableScrollFilter }> = [];
     static addDisableTask(filter?: DisableScrollFilter) {

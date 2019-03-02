@@ -5,9 +5,9 @@ import { tools } from "../utils/Tools";
 import paginationCSS from './Pagination.scss';
 import View from "./View";
 
-tools.useCSS(paginationCSS);
+let cssModules = tools.useCSS(paginationCSS);
 
-export default class Pagination extends View<PaginationProps> {
+export default class Pagination extends React.PureComponent<PaginationProps> {
     public static defaultProps: PaginationProps = {
         current: 1,
         total: 1,
@@ -24,8 +24,7 @@ export default class Pagination extends View<PaginationProps> {
     }
     public render() {
         let { props } = this,
-            { current, total, disabled, prevBtn, nextBtn, prevText, nextText } = props,
-            cssModules = this.cssModules;
+            { current, total, disabled, prevBtn, nextBtn, prevText, nextText } = props;
 
         return (<div className={tools.classNames(cssModules.pagination, cssModules.disabled)}>
             {prevBtn ? prevBtn : <Button icon="left" onClick={this.handlePrev} disabled={disabled}>{prevText}</Button>}

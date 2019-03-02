@@ -24,7 +24,7 @@ export interface FormItemState {
     fieldFocused: boolean;
     fieldValue: any;
 }
-export default class FormItem extends View<FormItemProps, FormItemState> {
+export default class FormItem extends React.PureComponent<FormItemProps, FormItemState> {
     static defaultProps = {
         componentProps: {},
         layout: 'horizontal',

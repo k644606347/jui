@@ -1,13 +1,13 @@
 import * as React from "react";
 import { MenuItemProps, MenuItemState } from "./MenuItemType";
 import menuItemCSS from './MenuItem.scss';
-import Tools, { tools } from "../utils/Tools";
+import { tools } from "../utils/Tools";
 import Icon from "./Icon";
 import Checkbox from "./Checkbox";
 import Radio from "./Radio";
-import View from "./View";
-tools.useCSS(menuItemCSS);
-export default class MenuItem extends View<MenuItemProps, MenuItemState> {
+
+let cssModules = tools.useCSS(menuItemCSS);
+export default class MenuItem extends React.PureComponent<MenuItemProps, MenuItemState> {
     private static defaultProps: MenuItemProps = {
         value: 'item',
         label: 'item',
@@ -29,7 +29,7 @@ export default class MenuItem extends View<MenuItemProps, MenuItemState> {
     }
     render() {
         let { label, checked, className, style, icon } = this.props,
-            { clicked } = this.state, cssModules = this.cssModules;
+            { clicked } = this.state;
 
         return (
             <div className={
@@ -69,7 +69,7 @@ export default class MenuItem extends View<MenuItemProps, MenuItemState> {
                 name,
                 value,
                 checked,
-                className: tools.classNames(this.cssModules.input)
+                className: tools.classNames(cssModules.input)
             };
 
         return multiSelect ? <Checkbox {...propsConfig} /> : checked ? <Radio {...propsConfig} theme='checkmark' /> : '';
