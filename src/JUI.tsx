@@ -18,7 +18,7 @@ import CheckboxItems from "./components/formWidget/CheckboxItems";
 
 import Message from "./components/Message";
 import NavBar from "./components/NavBar";
-import { toast } from "./components/Toast";
+import Toast, { toast } from "./components/Toast";
 
 import Field from "./components/formWidget/Field";
 import FormItem from "./components/FormItem";
@@ -34,9 +34,10 @@ import MenuItemGroup from "./components/MenuItemGroup";
 import Menu from "./components/Menu";
 import Modal from './components/Modal';
 
-import { tools } from "./utils/Tools";
+import Tools, { tools } from "./utils/Tools";
 import Log from './utils/Log';
 import View from './components/View';
+import Validator, { validator } from './validate/Validator';
 
 export {
     JUIPage,
@@ -57,6 +58,7 @@ export {
     TouchFeedback,
     Message,
     Log,
+    Tools,
     tools,
     ActiveForm,
     ValidateMessage,
@@ -66,6 +68,9 @@ export {
     CheckboxItems,
     NavBar,
     Modal,
+    Toast,
     toast,
     View,
+    Validator,
+    validator,
 }

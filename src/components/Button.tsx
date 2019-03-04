@@ -122,7 +122,7 @@ class Button extends React.PureComponent<ButtonProps> {
 
         return (
             <TouchFeedback activeClassName={tools.classNames(cssModules.active, activeClassName)} disabled={disabled}>
-                <a title={title} style={style} className={btnClassName} onClick={this.handleClick}>
+                <span title={title} style={style} className={btnClassName} onClick={this.handleClick}>
                     <span className={cssModules.control}>
                         {
                             iconDefinition ?  
@@ -137,7 +137,7 @@ class Button extends React.PureComponent<ButtonProps> {
                         }
                         {children ? <span className={cssModules.content}>{children}</span> : ''}
                     </span>
-                </a>
+                </span>
             </TouchFeedback>
         );
     }
