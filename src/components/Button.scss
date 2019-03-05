@@ -5,11 +5,11 @@ $btn-border-color: #bbb;
 $button-height-sm: 30 * $hd;
 $button-font-size-sm: 13 * $hd;
 
-$button-height: 47 * $hd;
-$button-font-size: 18 * $hd;
+$button-height: 45 * $hd;
+$button-font-size: 16 * $hd;
 
-$button-height-lg: 64 * $hd;
-$button-font-size-lg: 24 * $hd;
+$button-height-lg: 60 * $hd;
+$button-font-size-lg: 22 * $hd;
 
 .btn {
     max-width: 100vw;
@@ -31,6 +31,7 @@ $button-font-size-lg: 24 * $hd;
         justify-content: center;
         align-items: center;
         flex-wrap: nowrap;
+        height: 100%;
         .icon {
             flex: 0 0 auto;
         }
@@ -124,9 +125,11 @@ $button-font-size-lg: 24 * $hd;
         font-weight: bold;
     }
     &.block {
+        width: 100%;
         display: block;
     }
     &.full {
+        width: 100%;
         border-radius: 0;
         display: block;
     }

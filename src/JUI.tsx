@@ -1,3 +1,4 @@
+// TODO 类型导出应该增加命名空间，类似react的类型导出方式
 // 页面框架层
 import JUIPage from './components/JUIPage';
 import ScrollView from './components/ScrollView';
@@ -34,11 +35,9 @@ import MenuItemGroup from "./components/MenuItemGroup";
 import Menu from "./components/Menu";
 import Modal from './components/Modal';
 
-import Tools, { tools } from "./utils/Tools";
-import Log from './utils/Log';
+// import Tools, { tools } from "./utils/Tools";
 import View from './components/View';
 import Validator, { validator } from './validate/Validator';
-
 export {
     JUIPage,
     ScrollView,
@@ -57,9 +56,8 @@ export {
     MenuItemGroup,
     TouchFeedback,
     Message,
-    Log,
-    Tools,
-    tools,
+    // Tools,
+    // tools,
     ActiveForm,
     ValidateMessage,
     Input,
