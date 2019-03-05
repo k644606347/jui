@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Log from '../utils/Log';
 import Form, { FormProps } from '../components/Form';
-import Input from '../components/formWidget/Input';
 interface Props extends FormProps {
     forwardedRef?: React.RefObject<any>;
 }
@@ -16,7 +15,7 @@ function HTMLForm(props: Props) {
                 e.preventDefault();
             }}
         >
-            Name: <Input name="usr_name" />
+            Name: <input name="usr_name" />
             <input type="submit" value="提交" />
         </Form>
     );

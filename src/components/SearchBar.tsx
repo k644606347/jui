@@ -2,7 +2,7 @@ import { CSSAttrs } from "../utils/types";
 import * as React from "react";
 import NavBar from "./NavBar";
 import searchBarCSS from './SearchBar.scss';
-import Input from "./formWidget/Input";
+import Input from "./Input";
 import View from "./View";
 import { tools } from "../utils/Tools";
 

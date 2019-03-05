@@ -1,4 +1,4 @@
-import { JUIPage, Pagination, FormItem, NavBar } from '../JUI';
+import { JUIPage, Pagination, NavBar } from '../JUI';
 import * as React from 'react';
 
 import './App.scss';
@@ -7,7 +7,7 @@ import MessageTest from './Message.test';
 import Icon, { IconProps } from '../components/Icon';
 import MultiContextProvider from './context/MultiContextProvider';
 import HTMLForm from './RawForm';
-import ModalDemo from './ModalDemo';
+// import ModalDemo from './ModalDemo';
 // import MenuDemo from './MenuDemo';
 import NavBarDemo from './NavBarDemo';
 import ListDemo from './ListDemo';
@@ -18,7 +18,6 @@ import { iconAddCircle, iconAddCircleOutline, iconAlert, iconInfo, iconMore } fr
 import MenuDemo from './MenuDemo';
 import DefaultPropsDemo from './DefaultPropsDemo';
 import SearchBarDemo from './SearchBarDemo';
-import ActiveFormApp from './activeForm/App';
 import ButtonDemo from './button/ButtonDemo';
 
 class App extends React.Component<any, any> {
@@ -39,13 +38,12 @@ class App extends React.Component<any, any> {
                 <ButtonDemo />
                 <ToastDemo />
                 <NavBarDemo />
-                <ModalDemo/>
+                {/* <ModalDemo/> */}
                 <SearchBarDemo />
                 {/* <RowTagNestedDemo /> */}
                 <MessageTest />
                 {/* <FormWidgetTest /> */}
                 {/* <FormDemo /> */}
-                <ActiveFormApp />
                 <HTMLForm />
                 <MenuDemo />
                 <Icon icon={iconAlert} rotation={90} flip="vertical" pulse={true} spin={true} />
@@ -57,7 +55,7 @@ class App extends React.Component<any, any> {
                 <a href="www.baidu.com">link1</a>
                 <a onClick={this.link2}>link2</a>
                 <MultiContextProvider />
-                <FormItem label="test" field={<input type="select" />} layout="vertical"></FormItem>
+                {/* <FormItem label="test" field={<input type="select" />} layout="vertical"></FormItem> */}
                 <DefaultPropsDemo />
             </JUIPage>
         );
