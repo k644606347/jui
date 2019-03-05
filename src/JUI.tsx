@@ -25,7 +25,6 @@ import MenuItemGroup from "./components/MenuItemGroup";
 import Menu from "./components/Menu";
 import Modal from './components/Modal';
 
-import Validator, { validator } from './validate/Validator';
 import Form from './components/Form';
 export {
     JUIPage,
@@ -49,6 +48,4 @@ export {
     Modal,
     Toast,
     toast,
-    Validator,
-    validator,
 }
