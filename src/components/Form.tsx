@@ -8,7 +8,7 @@ let cssModules = tools.useCSS(formCSS);
 export interface FormProps extends CSSAttrs, React.FormHTMLAttributes<HTMLFormElement> {
 }
 export default class Form extends React.PureComponent<FormProps> {
-    cssObject = formCSS;
+
     constructor(props: FormProps) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);

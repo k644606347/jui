@@ -24,7 +24,7 @@ export default class Icon extends React.PureComponent<IconProps> {
     static isIconElement(target): target is React.ReactElement<IconProps> {
         return React.isValidElement(target) && target.type === Icon;
     }
-    cssObject = iconCSS;
+
     constructor(props: IconProps) {
         super(props);
         

@@ -29,7 +29,7 @@ export default class Checkbox extends React.PureComponent<CheckboxProps>{
         checked: false,
         theme: "circle",
     }
-    cssObject = checkboxCSS;
+
     constructor(props: CheckboxProps) {
         super(props);
 

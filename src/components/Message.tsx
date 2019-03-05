@@ -20,7 +20,7 @@ export default class Message extends React.PureComponent<Props> {
     static defaultProps = {
         showIcon: true,
     };
-    cssObject = messageCSS;
+
     render() {
         let { type, showIcon, children, style, className } = this.props;
 

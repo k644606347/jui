@@ -19,7 +19,7 @@ export default class MenuItems extends React.PureComponent<MenuItemsProps> {
         level: 1,
         activeIndex: 0,
     };
-    cssObject = menuItemsCSS;
+
     constructor(props: MenuItemsProps) {
         super(props);
         

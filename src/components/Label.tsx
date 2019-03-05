@@ -13,7 +13,7 @@ export default class Label extends React.PureComponent<LabelProps> {
     static isLabelElement(el: any): el is React.ReactElement<LabelProps> {
         return React.isValidElement(el) && el.type === Label;
     }
-    cssObject = labelCSS;
+
     constructor(props: LabelProps) {
         super(props);
 

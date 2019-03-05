@@ -14,7 +14,7 @@ export default class Pagination extends React.PureComponent<PaginationProps> {
         prevText: '上一页',
         nextText: '下一页',
     };
-    cssObject = paginationCSS;
+
     constructor(props: PaginationProps) {
         super(props);
 

@@ -43,7 +43,7 @@ export default class Toast extends React.PureComponent<ToastProps, ToastState> {
         position: 'middle',
         theme: 'dark',
     }
-    cssObject = toastCSS;
+
     private disableScrollTaskID;
     private handleCloseTimer;
     private wrapperRef = React.createRef<any>();

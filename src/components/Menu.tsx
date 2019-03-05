@@ -62,7 +62,7 @@ export default class Menu extends React.PureComponent<MenuProps, MenuState> {
         backdropClick: false,
         backdropCoverage: 'full',
     };
-    cssObject = menuCSS;
+
     readonly state: MenuState = {
         itemsStyle: {
             top: 0,

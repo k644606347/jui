@@ -80,7 +80,7 @@ class Button extends React.PureComponent<ButtonProps> {
         size: 'default',
         shape: 'default',
     };
-    cssObject = buttonCSS;
+
     constructor(props: ButtonProps) {
         super(props);
 

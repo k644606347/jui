@@ -13,7 +13,7 @@ export default class MenuItemGroup extends React.PureComponent<MenuItemGroupProp
         label: '',
         active: false,
     };
-    cssObject = menuItemCSS;
+
     private clickedTimer: number = 0;
     readonly state: MenuItemGroupState = {
         clicked: false,

@@ -15,7 +15,7 @@ export default class MenuItem extends React.PureComponent<MenuItemProps, MenuIte
         checked: false,
         multiSelect: false,
     };
-    cssObject = menuItemCSS;
+
     private clickedTimer: number = 0;
     readonly state: MenuItemState = {
         clicked: false,

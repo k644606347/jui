@@ -30,7 +30,7 @@ export interface ModalProps extends CSSAttrs {
 }
 export interface ModalState {}
 export default class Modal extends React.PureComponent<ModalProps, ModalState> {
-    cssObject = modalCSS;
+
     static defaultProps = {
         title: '',
         show: false,

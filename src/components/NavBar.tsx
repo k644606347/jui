@@ -21,7 +21,7 @@ export default class NavBar extends React.PureComponent<NavBarProps> {
         leftContent: <Icon icon={iconArrowBack} />,
         rightContent: <Icon icon={iconMore} />,
     };
-    cssObject = navBarCSS;
+
     render() {
         let { children, leftContent, rightContent, className, style, theme } = this.props;
 

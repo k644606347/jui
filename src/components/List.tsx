@@ -13,7 +13,7 @@ export default class List extends React.PureComponent<IListProps> {
         renderRow: (data) => <React.Fragment>{ JSON.stringify(data) }</React.Fragment>,
         sectionHeaderSticky: true,
     };
-    cssObject = listCSS;
+
     constructor(props: IListProps) {
         super(props);
 

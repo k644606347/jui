@@ -75,7 +75,7 @@ export default class ScrollView extends React.PureComponent<ContentProps, Scroll
     readonly state = {
         scrollable: true,
     }
-    cssObject = scrollCSS;
+
     render() {
         let { children, className, style, iosNoBounce } = this.props,
             { scrollable } = this.state;

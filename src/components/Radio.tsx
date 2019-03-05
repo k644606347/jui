@@ -36,7 +36,7 @@ export default class Radio extends React.PureComponent<RadioProps> {
         disabled: false,
         theme: 'circle',
     };
-    cssObject = radioCSS;
+
     constructor(props: RadioProps) {
         super(props);
 

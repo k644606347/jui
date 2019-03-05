@@ -25,8 +25,6 @@ import MenuItemGroup from "./components/MenuItemGroup";
 import Menu from "./components/Menu";
 import Modal from './components/Modal';
 
-// import Tools, { tools } from "./utils/Tools";
-import View from './components/View';
 import Validator, { validator } from './validate/Validator';
 import Form from './components/Form';
 export {
@@ -51,7 +49,6 @@ export {
     Modal,
     Toast,
     toast,
-    View,
     Validator,
     validator,
 }
