@@ -92,7 +92,7 @@ export default class ScrollView extends React.PureComponent<ContentProps, Scroll
     componentDidMount() {
         ScrollView.instances.push(this);
     }
-    componentDidCatch() {
+    componentWillUnmount() {
         let index = ScrollView.instances.indexOf(this);
 
         if (index !== -1) {
