@@ -6,13 +6,16 @@ import scrollCSS from './ScrollView.scss';
 
 const cssModules = tools.useCSS(scrollCSS);
 export interface ContentProps extends CSSAttrs {
-    iosNoBounce?: boolean;
+    iosBounce?: boolean;
 }
 export interface ScrollViewState {
     scrollable: boolean;
 }
 type DisableScrollFilter = (scrollView: ScrollView) => boolean;
 export default class ScrollView extends React.PureComponent<ContentProps, ScrollViewState> {
+    static defaultProps = {
+        iosBounce: true,
+    }
     static instances: ScrollView[] = [];
     private static disableTasks: Array<{ id: number | string, filter?: DisableScrollFilter }> = [];
     static addDisableTask(filter?: DisableScrollFilter) {
@@ -77,13 +80,13 @@ export default class ScrollView extends React.PureComponent<ContentProps, Scroll
     }
 
     render() {
-        let { children, className, style, iosNoBounce } = this.props,
+        let { children, className, style, iosBounce } = this.props,
             { scrollable } = this.state;
 
         console.log('scrollable', scrollable);
         return (
             <div style={style} className={tools.classNames(
-                cssModules.wrapper, !scrollable && cssModules.disableScroll, iosNoBounce && cssModules.iosNoBounce, className
+                cssModules.wrapper, !scrollable && cssModules.disableScroll, iosBounce && cssModules.iosBounce, className
             )}>
                 {children}
             </div>

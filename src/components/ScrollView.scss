@@ -1,6 +1,6 @@
 .wrapper {
     overflow-y: scroll;
-    &.ios-no-bounce {
+    &.ios-bounce {
         -webkit-overflow-scrolling: touch;
     }
     // position: relative;
