@@ -1,22 +1,25 @@
 @charset "UTF-8";
 @import './style/Variables';
 .wrapper {
-    font-size: $input-font-size;
+    font-size: 18px;
     cursor: pointer;
     .input {
         display: none;
     }
-    .icon {
-        user-select: none;
-        display: inline-block;
-        font-size: 18px;
-        vertical-align: middle;
-        color: #d2d2d2;
-    }
-    .description {
-        user-select: none;
-        display: inline-block;
-        margin-left: 5px;
+    .control {
+        display: flex;
+        align-items: center;
+        .icon {
+            flex: 0 0 auto;
+            user-select: none;
+            font-size: 24px;
+            color: #d2d2d2;
+        }
+        .description {
+            flex: 0 1 auto;
+            user-select: none;
+            margin-left: 5px;
+        }
     }
     &.disabled {
         cursor: not-allowed;

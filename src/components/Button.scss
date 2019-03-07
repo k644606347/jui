@@ -6,10 +6,10 @@ $button-height-sm: 30 * $hd;
 $button-font-size-sm: 13 * $hd;
 
 $button-height: 45 * $hd;
-$button-font-size: 16 * $hd;
+$button-font-size: 18 * $hd;
 
 $button-height-lg: 60 * $hd;
-$button-font-size-lg: 22 * $hd;
+$button-font-size-lg: 24 * $hd;
 
 .btn {
     max-width: 100vw;
@@ -24,7 +24,7 @@ $button-font-size-lg: 22 * $hd;
     user-select: none;
     border-width: .5px;
     border-style: solid;
-    border-radius: $radius-md;
+    border-radius: 5px;
     .control {
         display: flex;
         flex-direction: row;
@@ -45,15 +45,16 @@ $button-font-size-lg: 22 * $hd;
             padding-left: .5em;
         }
     }
+    // 风格类型
     &.default {
-        font-size: $button-font-size;
-        height: $button-height;
-        line-height: $button-height;
         color: $text-color;
         background-color: $bg-color;
         border-color: $btn-border-color;
         &.active {
             background-color: $bg-tap-color;
+        }
+        &.outline {
+            border-color: $text-color;
         }
     }
     &.primary {
@@ -78,12 +79,18 @@ $button-font-size-lg: 22 * $hd;
             color: #e94f4f;
         }
     }
-    &.small {
+    // 大小
+    &.default-size {
+        font-size: $button-font-size;
+        height: $button-height;
+        line-height: $button-height;
+    }
+    &.small-size {
         font-size: $button-font-size-sm;
         height: $button-height-sm;
         line-height: $button-height-sm;
     }
-    &.large {
+    &.large-size {
         font-size: $button-font-size-lg;
         height: $button-height-lg;
         line-height: $button-height-lg;
@@ -133,20 +140,21 @@ $button-font-size-lg: 22 * $hd;
         border-radius: 0;
         display: block;
     }
-    &.circle {
-        width: $button-height;
-        height: $button-height;
-        border-radius: 50%;
 
-        &.large {
+    // 形状
+    &.default-shape {
+    }
+    &.circle-shape {
+        width: $button-height;
+        border-radius: 50%;
+        &.large-size {
             width: $button-height-lg;
-            height: $button-height-lg;
-            line-height: $button-height-lg;
         }
-        &.small {
+        &.small-size {
             width: $button-height-sm;
-            height: $button-height-sm;
-            line-height: $button-height-sm;
+        }
+        .content {
+            text-overflow: clip;
         }
     }
 }

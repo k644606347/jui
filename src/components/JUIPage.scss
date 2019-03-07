@@ -13,22 +13,11 @@
 .wrapper {
     font-family: 'PingFang SC', 'Helvetica Neue', 'Hiragino Sans GB', Helvetica,
         'Microsoft YaHei', Arial;
-    font-size: 14px;
-    line-height: $line-height;
+    font-size: 16px;
+    color: $text-color;
+    background: $bg-color;
     text-size-adjust: 100%; //在iOS中变更横屏后，防止调整字体大小。
     margin: 0;
     padding: 0;
     -webkit-tap-highlight-color: transparent;
-
-    // /**
-    // * 1. Change the font styles in all browsers.
-    // * 2. Remove the margin in Firefox and Safari.
-    // */
-    // button, input, optgroup, select, textarea {
-    //     font-family: inherit; /* 1 */
-    //     font-size: 100%; /* 1 */
-    //     line-height: 1.15; /* 1 */
-    //     margin: 0; /* 2 */
-    //     padding: 0;
-    // }
 }

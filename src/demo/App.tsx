@@ -19,6 +19,8 @@ import MenuDemo from './MenuDemo';
 import DefaultPropsDemo from './DefaultPropsDemo';
 import SearchBarDemo from './SearchBarDemo';
 import ButtonDemo from './button/ButtonDemo';
+import MessageDemo from './message/MessageDemo';
+import FormElementsDemo from './formElements/FormElementsDemo';
 
 class App extends React.Component<any, any> {
     constructor(props: any) {
@@ -27,7 +29,9 @@ class App extends React.Component<any, any> {
     public render() {
         return (
             <JUIPage className={'App'}>
-            <NavBar></NavBar>
+                <MessageDemo></MessageDemo>
+                <FormElementsDemo></FormElementsDemo>
+                <NavBar></NavBar>
                 <select>
                     <option>1</option>
                     <option>2</option>

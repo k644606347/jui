@@ -63,8 +63,10 @@ export default class Radio extends React.PureComponent<RadioProps> {
                     type="radio" checked={checked} disabled={disabled} readOnly={readOnly}
                     onChange={this.handleChange} 
                 />
-                <div className={cssModules.icon}>{ themeIcon ? <Icon icon={checked ? themeIcon.checked : themeIcon.unchecked} /> : '' }</div>
-                {children !== undefined ? <div className={cssModules.description}>{children}</div> : ''}
+                <div className={cssModules.control}>
+                    { themeIcon ? <Icon icon={checked ? themeIcon.checked : themeIcon.unchecked}  className={cssModules.icon} /> : '' }
+                    {children !== undefined ? <span className={cssModules.description}>{children}</span> : ''}
+                </div>
             </Label>
         );
     }

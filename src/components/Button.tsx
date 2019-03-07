@@ -114,7 +114,7 @@ class Button extends React.PureComponent<ButtonProps> {
                 strong && 'strong',
                 block && 'block', 
                 full && 'full', 
-                size, shape ].map(
+                size + '-size', shape + '-shape' ].map(
                 n => n && cssModules[n]
             ),
             className

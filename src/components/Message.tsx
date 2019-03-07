@@ -2,19 +2,20 @@ import * as React from 'react';
 import { CSSAttrs } from '../utils/types';
 import Icon, { IconDefinition } from './Icon';
 import messageCSS from './Message.scss';
-import { iconCloseCircleOutline, iconAlert, iconInfoCircleOutline } from './icons/SVGData';
+import { iconCloseCircleOutline, iconAlert, iconInfoCircleOutline, iconCheckCircleOutline } from './icons/SVGData';
 import { tools } from '../utils/Tools';
 import View from './View';
 let cssModules = tools.useCSS(messageCSS);
 interface Props extends CSSAttrs {
-    type: 'error' | 'warn' | 'info';
+    type: 'error' | 'warn' | 'info' | 'success';
     showIcon?: boolean;
 }
 
 const iconMap: { [key in Props['type']]: IconDefinition } = {
     error: iconCloseCircleOutline,
     warn: iconAlert,
-    info: iconInfoCircleOutline
+    info: iconInfoCircleOutline,
+    success: iconCheckCircleOutline,
 };
 export default class Message extends React.PureComponent<Props> {
     static defaultProps = {

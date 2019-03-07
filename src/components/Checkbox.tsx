@@ -53,8 +53,10 @@ export default class Checkbox extends React.PureComponent<CheckboxProps>{
                     checked={checked} disabled={disabled} readOnly={readOnly} 
                     onChange={this.handleChange}
                 />
-                <div className={cssModules.icon}><Icon icon={checked ? themeIcon.checked : themeIcon.unchecked} /></div>
-                {children !== undefined ? <div className={cssModules.description}>{children}</div> : ''}
+                <div className={cssModules.control}>
+                    <Icon icon={checked ? themeIcon.checked : themeIcon.unchecked} className={cssModules.icon} />
+                    {children !== undefined ? <span className={cssModules.description}>{children}</span> : ''}
+                </div>
             </Label>
         );
     }

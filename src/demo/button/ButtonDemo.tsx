@@ -45,12 +45,20 @@ export default class ButtonDemo extends React.PureComponent<any, any>{
                     {/* <Button theme="dark" icon='time-circle' block>dark btn</Button> */}
                     <Button type="primary" icon='search' block>内容超长的block btn内容超长的block btn内容超长的block btn内容超长的block btn内容超长的block btn内容超长的block btn内容超长的block btn内容超长的block btn内容超长的block btn内容超长的block btn内容超长的block btn内容超长的block btn</Button>
                     <Button shape="circle" loading size="large"></Button>
-                    <Button type="primary" shape="circle" loading block size="large">circle primary btn</Button>
-                    <Button type="danger" shape="circle" loading block size="large">circle danger btn</Button>
+                    <Button shape="circle" size="large">Circle btn</Button>
+                    <Button type="primary" shape="circle" icon="check-circle" size="default"></Button>
+                    <Button type="danger" shape="circle" loading block size="small">circle danger btn</Button>
                     <Button className={demoCSS.btn} activeClassName={demoCSS.active} type={'primary'}>custom className</Button>
                     <h2>outline</h2>
                     <Button outline>normal btn</Button>
-                    <Button type={'primary'} outline icon={iconMore} block={false}>primary btn</Button>
+                    <Button style={{
+                        color: '#52c41a',
+                        borderColor: '#52c41a',
+                    }} type={'primary'} outline icon={iconMore} block={false}>primary btn</Button>
+                    <Button style={{
+                        color: '#32db64',
+                        borderColor: '#32db64',
+                    }} type={'primary'} outline icon={iconMore} block={false}>primary btn</Button>
                     <Button outline type="danger" size="large" loading>danger btn</Button>
                     <Button outline icon={<Icon style={{ marginRight: '20px' }} icon={iconAddCircleOutline} />} disabled>disabled btn</Button>
                     <Button outline size="large">large btn</Button>

@@ -1,18 +1,13 @@
 @charset "UTF-8";
 
-$hd: 1px; // 基本单位
-$line-height: 1.15;
-// copy自antd-mobile(支付宝钱包默认主题)
-// https://github.com/ant-design/ant-design-mobile/wiki/设计变量表及命名规范
-
-// // 全局/品牌色
-$primary-color: #108ee9;
-$primary-tap-color: #0e80d2;
-// $brand-success: #6abf47;
-// $brand-warning: #ffc600;
-// $brand-error: #f4333c;
-// $brand-important: #ff5b05;  // 用于小红点
-// $brand-wait: #108ee9;
+$hd: 1px;
+$primary-color: #488aff;
+$primary-tap-color: #427feb;
+$error-color: #f53d3d;
+$error-tap-color: #e13838;
+$success-color: #32db64;
+$success-tap-color: #2ec95c;
+$warn-color: #faad14;
 
 $text-color: #000;
 $text-inverse-color: #fff;
@@ -24,24 +19,19 @@ $bg-tap-color: #ddd;
 
 $border-color: #ddd;
 
-$error-color: #f5222d;
-$error-border-color: #ffa39e;
+$error-border-color: #ff7e77;
 $error-bg-color: #fff1f0;
-$info-color: #1890ff;
+$info-color: $primary-color;
 $info-border-color: #91d5ff;
 $info-bg-color: #e6f7ff;
-$warn-color: #faad14;
 $warn-border-color: #ffe58f;
 $warn-bg-color: #fffbe6;
-$success-color: #52c41a;
 $success-border-color: #b7eb8f;
 $success-bg-color: #f6ffed;
 
 $toast-light-bg-color: rgb(242, 242, 242);
 $toast-dark-bg-color: rgba(58, 58, 58, 0.9);
 $toast-overlay-bg-color: rgba(58, 58, 58, 0.4);
-// // 透明度
-// $opacity-disabled: 0.3;   // switch checkbox radio 等组件禁用的透明度
 
 // z-index
 $progress-zindex: 2000;
@@ -51,125 +41,8 @@ $toast-zindex: 2999;
 // $picker-zindex: 1000;
 // $popup-zindex: 999;
 $modal-zindex: 999;
-// $tabs-pagination-zindex: 999;
 
-// // 字体尺寸
-// // ---
-// $font-size-icontext: 10 * $hd;
-// $font-size-caption-sm: 12 * $hd;
-// $font-size-base: 14 * $hd;
-// $font-size-subhead: 15 * $hd;
-// $font-size-caption: 16 * $hd;
-// $font-size-heading: 17 * $hd;
-
-// // 圆角
-// // ---
-// $radius-xs: 2 * $hd;
-// $radius-sm: 3 * $hd;
-$radius-md: 5 * $hd;
-// $radius-lg: 7 * $hd;
-// $radius-circle: 50%;
-
-// // 边框尺寸
-// // ---
-// $border-width-sm: 1PX;
-// $border-width-md: 1PX;
-// $border-width-lg: 2 * $hd;
-
-// // 间距
-// // ---
-// // 水平间距
-// $h-spacing-sm: 5 * $hd;
-// $h-spacing-md: 8 * $hd;
 $h-spacing-lg: 15 * $hd;
-
-// // 垂直间距
-// $v-spacing-xs: 3 * $hd;
-// $v-spacing-sm: 6 * $hd;
-// $v-spacing-md: 9 * $hd;
-// $v-spacing-lg: 15 * $hd;
-// $v-spacing-xl: 21 * $hd;
-
-// // 高度
-// // ---
-// $line-height-base: 1;           // 单行行高
-// $line-height-paragraph: 1.5;    // 多行行高
-
-// // 图标尺寸
-// // ---
-// $icon-size-xxs: 15 * $hd;
-// $icon-size-xs: 18 * $hd;
-// $icon-size-sm: 21 * $hd;
-// $icon-size-md: 22 * $hd;       // 导航条上的图标、grid的图标大小
-// $icon-size-lg: 36 * $hd;
-
-// // 动画缓动
-// // ---
-// $ease-in-out-quint: cubic-bezier(.86, 0, .07, 1);
-
-// // 组件变量
-// // ---
-
-// $actionsheet-item-height: 50 * $hd;
-// $actionsheet-item-font-size: 18 * $hd;
-
-// // modal
-// $modal-font-size-heading: 18 * $hd;
-// $modal-button-font-size: 18 * $hd; // 按钮字号
-// $modal-button-height: 50 * $hd; // 按钮高度
-
-// list
-// $list-title-height: 30 * $hd;
-// $list-item-height-sm: 35 * $hd;
-// $list-item-height: 44 * $hd;
 $list-font-size: 16 * $hd;
 $form-font-size: 16 * $hd;
 $input-font-size: 16 * $hd;
-$input-color: #000;
-// $input-color-icon-tap: $primary-color;
-
-// // tabs
-// $tabs-color: $primary-color;
-// $tabs-height: 43.5 * $hd;
-// $tabs-font-size-heading: 15 * $hd;
-// $tabs-ink-bar-height: $border-width-lg;
-
-// // segmented-control
-// $segmented-control-color: $primary-color;  // 同时应用于背景、文字颜色、边框色
-// $segmented-control-height: 27 * $hd;
-// $segmented-control-fill-tap: transparentize($primary-color, 0.1);
-
-// // tab-bar
-// $tab-bar-fill: #ebeeef;
-// $tab-bar-height: 50 * $hd;
-
-// // toast
-// $toast-fill: rgba(58, 58, 58, 0.9); // toast, activity-indicator 的背景颜色
-
-// // search-bar
-// $search-bar-fill: #efeff4;
-// $search-bar-height: 44 * $hd;
-// $search-bar-input-height: 28 * $hd;
-// $search-bar-font-size: 15 * $hd;
-// $search-color-icon: #bbb; // input search icon 的背景色
-
-// // notice-bar
-// $notice-bar-fill: #fefcec;
-// $notice-bar-height: 36 * $hd;
-// $notice-bar-color: #f76a24;
-
-// // switch
-// $switch-fill: #4dd865;
-// $switch-fill-android: $primary-color;
-
-// // tag
-// $tag-height: 25 * $hd;
-// $tag-height-sm: 15 * $hd;
-// $tag-color: $primary-color;
-
-// // keyboard
-// $keyboard-confirm-color: $primary-color;
-// $keyboard-confirm-tap-color: $primary-tap-color;
-
-// // picker
-// $option-height: 42 * $hd;           // picker 标题的高度
