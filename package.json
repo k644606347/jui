@@ -1,6 +1,6 @@
 {
     "name": "jui",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "private": true,
     "scripts": {
         "start": "webpack-dev-server --open --hot --config ./config/webpack.config.start.js",
