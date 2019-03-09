@@ -1,7 +1,3 @@
-/**
- * 图标来自https://gitlab.weibo.cn/cmsjs/jui-icons
- * @author jiangyu3
- */
 export interface IconDefinition {
     name: string;
     viewBox: string;
